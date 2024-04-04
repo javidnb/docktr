@@ -56,7 +56,7 @@
 	<div class="navContent">
 		<a href="./">Ana Səhifə</a>
 		{#if !loggedIn}
-			<a href="login">Daxil Ol</a>
+			<a href="login">Giriş eylə</a>
 		{:else}
 			<a href="./profile">Hesabım</a>
 			<a href="./" on:click={logout}>Çıxış</a>

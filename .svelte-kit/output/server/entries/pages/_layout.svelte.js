@@ -19,7 +19,7 @@ const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   if ($$props.data === void 0 && $$bindings.data && data !== void 0)
     $$bindings.data(data);
   $$result.css.add(css);
-  return `<div class="nav svelte-sk74h3"><div class="brand" data-svelte-h="svelte-e55hrb"><h3>Docktr</h3></div> <div class="navContent svelte-sk74h3"><a href="./" class="svelte-sk74h3" data-svelte-h="svelte-1e0w6gx">Ana Səhifə</a> ${!loggedIn ? `<a href="login" class="svelte-sk74h3" data-svelte-h="svelte-1g198q4">Daxil Ol</a>` : `<a href="./profile" class="svelte-sk74h3" data-svelte-h="svelte-tdxnyr">Hesabım</a> <a href="./" class="svelte-sk74h3" data-svelte-h="svelte-545o7n">Çıxış</a>`}</div></div> ${loading ? `<div data-svelte-h="svelte-v3zdfi">Yüklənir...</div>` : `<div>${slots.default ? slots.default({}) : ``}</div>`}`;
+  return `<div class="nav svelte-sk74h3"><div class="brand" data-svelte-h="svelte-e55hrb"><h3>Docktr</h3></div> <div class="navContent svelte-sk74h3"><a href="./" class="svelte-sk74h3" data-svelte-h="svelte-1e0w6gx">Ana Səhifə</a> ${!loggedIn ? `<a href="login" class="svelte-sk74h3" data-svelte-h="svelte-1l3qlmw">Giriş eylə</a>` : `<a href="./profile" class="svelte-sk74h3" data-svelte-h="svelte-tdxnyr">Hesabım</a> <a href="./" class="svelte-sk74h3" data-svelte-h="svelte-545o7n">Çıxış</a>`}</div></div> ${loading ? `<div data-svelte-h="svelte-v3zdfi">Yüklənir...</div>` : `<div>${slots.default ? slots.default({}) : ``}</div>`}`;
 });
 export {
   Layout as default

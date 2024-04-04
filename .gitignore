@@ -2,13 +2,13 @@
 node_modules
 /node_modules
 /.svelte
+/.svelte-kit
 /build
 /functions
 /.vercel_build_output
 /.netlify
 /workers-site
 *.log
-src
 
 # Ignore the build css
 static/*.css

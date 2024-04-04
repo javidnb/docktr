@@ -9,6 +9,7 @@ node_modules
 /.netlify
 /workers-site
 *.log
+src
 
 # Ignore the build css
 static/*.css

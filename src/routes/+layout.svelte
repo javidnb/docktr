@@ -12,15 +12,50 @@
 	let loggedIn: boolean = false;
 	let currentDate = new Date();
 
+	const monthNames = [
+		'Yanvar',
+		'Fevral',
+		'Mart',
+		'Aprel',
+		'May',
+		'Iyun',
+		'Iyul',
+		'Avqust',
+		'Sentyabr',
+		'Oktyabr',
+		'Noyabr',
+		'Dekabr'
+	];
+
+	// Function to pad a number with leading zeros
+	function padNumber(num: any) {
+		return num.toString().padStart(2, '0');
+	}
+
+	// Function to format the date
+	function formatDate(date: any) {
+		const hours = padNumber(date.getHours());
+		const minutes = padNumber(date.getMinutes());
+		const day = padNumber(date.getDate());
+		const month = monthNames[date.getMonth()];
+		const year = date.getFullYear();
+		return `${day} ${month} ${year}, ${hours}:${minutes}`;
+	}
+
 	session.subscribe((cur: any) => {
 		loading = cur?.loading;
 		loggedIn = cur?.loggedIn;
 	});
 
 	onMount(async () => {
+		setInterval(() => {
+			currentDate = new Date();
+		}, 60000);
+
 		const user: any = await data.getAuthUser();
 
-		const loggedIn = !!user && user?.emailVerified;
+		// const loggedIn = !!user && user?.emailVerified;
+		const loggedIn = user ? true : false;
 		session.update((cur: any) => {
 			loading = false;
 			return {
@@ -51,7 +86,7 @@
 </script>
 
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #a1c398;">
-	<p class="d-flex align-items mb-0 time" style="color: white;">{currentDate.toLocaleString()}</p>
+	<p class="d-flex align-items mb-0 time" style="color: white;">{formatDate(currentDate)}</p>
 	<a class="navbar-brand tac-one-regular mx-auto" href="./">Docktr</a>
 	<button
 		class="navbar-toggler"
@@ -64,7 +99,7 @@
 	>
 		<span class="navbar-toggler-icon"></span>
 	</button>
-	<div class="collapse navbar-collapse" style="flex: none;" id="navbarText">
+	<div class="collapse navbar-collapse" id="navbarText">
 		<ul class="navbar-nav ml-auto">
 			<li class="nav-item active">
 				<a class="nav-link" href="./">Ana Səhifə</a>
@@ -104,7 +139,12 @@
 	}
 	@media screen and (max-width: 769px) {
 		.time {
-			display: none!important;;
+			display: none !important;
+		}
+	}
+	@media screen and (min-width: 992px) {
+		.navbar-collapse {
+			flex: none !important;
 		}
 	}
 </style>

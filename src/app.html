@@ -15,7 +15,11 @@
 			rel="stylesheet"
 		/>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		%sveltekit.head%
+		<svelte:head>
+			<title>Docktr</title>
+			<meta name="description" content="Docktr - Find and connect with doctors around the world" />
+		</svelte:head>
+		<!-- %sveltekit.head% -->
 		<style type="text/css">
 			body {
 				font-family: 'DM Sans', sans-serif;

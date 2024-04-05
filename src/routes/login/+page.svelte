@@ -30,6 +30,7 @@
 						uid: user?.uid
 					}
 				});
+				localStorage.setItem('user', JSON.stringify(user));
 				goto('/');
 			})
 			.catch((error) => {

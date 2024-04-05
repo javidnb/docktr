@@ -10,6 +10,7 @@
 
 	let loading: boolean = true;
 	let loggedIn: boolean = false;
+	let currentDate = new Date();
 
 	session.subscribe((cur: any) => {
 		loading = cur?.loading;
@@ -49,20 +50,41 @@
 	}
 </script>
 
-<div class="nav">
-	<div class="brand">
-		<h3>Docktr</h3>
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #a1c398;">
+	<p class="d-flex align-items mb-0 time" style="color: white;">{currentDate.toLocaleString()}</p>
+	<a class="navbar-brand tac-one-regular mx-auto" href="./">Docktr</a>
+	<button
+		class="navbar-toggler"
+		type="button"
+		data-toggle="collapse"
+		data-target="#navbarText"
+		aria-controls="navbarText"
+		aria-expanded="false"
+		aria-label="Toggle navigation"
+	>
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" style="flex: none;" id="navbarText">
+		<ul class="navbar-nav ml-auto">
+			<li class="nav-item active">
+				<a class="nav-link" href="./">Ana Səhifə</a>
+			</li>
+
+			{#if !loggedIn}
+				<li class="nav-item">
+					<a class="nav-link" href="login">İstifadəçi girişi</a>
+				</li>
+			{:else}
+				<li class="nav-item">
+					<a class="nav-link" href="./profile">Hesabım</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="./" on:click={logout}>Çıxış</a>
+				</li>
+			{/if}
+		</ul>
 	</div>
-	<div class="navContent">
-		<a href="./">Ana Səhifə</a>
-		{#if !loggedIn}
-			<a href="login">İstifadəçi girişi</a>
-		{:else}
-			<a href="./profile">Hesabım</a>
-			<a href="./" on:click={logout}>Çıxış</a>
-		{/if}
-	</div>
-</div>
+</nav>
 
 {#if loading}
 	<div>Yüklənir...</div>
@@ -73,36 +95,16 @@
 {/if}
 
 <style type="text/css">
-	.nav {
-		display: flex;
-		background: #a1c398;
-		color: white;
-		justify-content: space-between;
-		font-family: math;
-		padding-inline: 2rem;
-		align-items: center;
-		border-radius: 20px;
-		box-shadow: 1px 1px 2px 2px #00000017;
+	.tac-one-regular {
+		font-family: 'Tac One', sans-serif;
+		font-weight: 400;
+		font-style: normal;
+		font-size: 2rem;
+		line-height: 1;
 	}
-
-	.nav .navContent {
-		display: flex;
-		font-size: 1.15rem;
-	}
-
-	.navbar-brand * {
-		font-size: 1.3rem;
-		padding-block: 1rem;
-		margin: 0;
-	}
-
-	.nav a {
-		color: #fefded;
-		text-decoration: none;
-		padding: 1rem;
-	}
-
-	.nav a:hover {
-		background-color: rgba(0, 0, 0, 0.432);
+	@media screen and (max-width: 769px) {
+		.time {
+			display: none!important;;
+		}
 	}
 </style>

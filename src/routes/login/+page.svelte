@@ -12,8 +12,12 @@
 
 	let email: string = '';
 	let password: string = '';
+	let buttonText: string = 'Daxil ol';
+	let disabled = false;
 
 	async function loginWithMail() {
+		buttonText = 'Gözləyin..';
+		disabled = true;
 		await signInWithEmailAndPassword(auth, email, password)
 			.then((result) => {
 				const { user }: UserCredential = result;
@@ -57,23 +61,25 @@
 </script>
 
 <div class="login-form">
-	<div>
-		<h1
-			style="color: #A1C398;
-		font-family: math;
-		text-align: center;"
-		>
-			Giriş
-		</h1>
+	<div class="pt-5 pb-4">
 		<form on:submit={loginWithMail}>
 			<input
+				class="form-control"
 				style="padding: .5rem; min-width: 300px"
 				bind:value={email}
 				type="text"
 				placeholder="Email"
 			/>
-			<input style="padding: .5rem;" bind:value={password} type="password" placeholder="Şifrə" />
+			<input
+				class="form-control"
+				style="padding: .5rem;"
+				bind:value={password}
+				type="password"
+				placeholder="Şifrə"
+			/>
 			<button
+				class="btn"
+				{disabled}
 				type="submit"
 				style="padding: 0.5rem;
 			border-radius: 10px;
@@ -81,12 +87,13 @@
 			color: white;
 			border: 0px;
 			font-size: 1.05rem;
-			cursor: pointer;">Daxil Ol</button
+			cursor: pointer;">{buttonText}</button
 			>
 		</form>
 
 		<hr style="margin-top: 1rem" />
 		<button
+			class="btn"
 			on:click={loginWithGoogle}
 			style="margin-block: 0.5rem;
 			padding: 0.4rem;

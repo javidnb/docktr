@@ -17,7 +17,6 @@ const firebaseConfig = {
 	messagingSenderId: '1012984967438',
 	appId: '1:1012984967438:web:9b90eb7220b41970dde75f',
 	measurementId: 'G-0MLDQ5MDM6',
-	useEmulator: import.meta.env.VITE_FIREBASE_USE_EMULATOR === 'true'
 };
 
 export const initializeFirebase = () => {
@@ -27,9 +26,5 @@ export const initializeFirebase = () => {
 	if (!app) {
 		app = initializeApp(firebaseConfig);
 		auth = getAuth(app);
-
-		if (firebaseConfig.useEmulator) {
-			connectAuthEmulator(auth, 'http://127.0.0.1:9099');
-		}
 	}
 };

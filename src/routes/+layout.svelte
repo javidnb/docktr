@@ -4,6 +4,7 @@
 	import { goto } from '$app/navigation';
 	import { signOut } from 'firebase/auth';
 	import { auth } from '$lib/firebase.client';
+	import { formatDate } from '$lib/dateFormatter';
 
 	import type { LayoutData } from './$types';
 	export let data: LayoutData;
@@ -11,36 +12,6 @@
 	let loading: boolean = true;
 	let loggedIn: boolean = false;
 	let currentDate = new Date();
-
-	const monthNames = [
-		'Yanvar',
-		'Fevral',
-		'Mart',
-		'Aprel',
-		'May',
-		'Iyun',
-		'Iyul',
-		'Avqust',
-		'Sentyabr',
-		'Oktyabr',
-		'Noyabr',
-		'Dekabr'
-	];
-
-	// Function to pad a number with leading zeros
-	function padNumber(num: any) {
-		return num.toString().padStart(2, '0');
-	}
-
-	// Function to format the date
-	function formatDate(date: any) {
-		const hours = padNumber(date.getHours());
-		const minutes = padNumber(date.getMinutes());
-		const day = padNumber(date.getDate());
-		const month = monthNames[date.getMonth()];
-		const year = date.getFullYear();
-		return `${day} ${month} ${year}, ${hours}:${minutes}`;
-	}
 
 	session.subscribe((cur: any) => {
 		loading = cur?.loading;
@@ -96,15 +67,17 @@
 		aria-controls="navbarText"
 		aria-expanded="false"
 		aria-label="Toggle navigation"
+		style="position: absolute;
+		right: 1rem;
+		top: 9px;"
 	>
 		<span class="navbar-toggler-icon"></span>
 	</button>
 	<div class="collapse navbar-collapse" id="navbarText">
 		<ul class="navbar-nav ml-auto">
-			<li class="nav-item active">
+			<!-- <li class="nav-item active">
 				<a class="nav-link" href="./">Ana Səhifə</a>
-			</li>
-
+			</li> -->
 			{#if !loggedIn}
 				<li class="nav-item">
 					<a class="nav-link" href="login">İstifadəçi girişi</a>

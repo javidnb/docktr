@@ -37,9 +37,9 @@
 			};
 		});
 
-		if (loggedIn) {
-			goto('/');
-		}
+		// if (!loggedIn) {
+		// 	goto('/');
+		// }
 	});
 
 	function logout() {

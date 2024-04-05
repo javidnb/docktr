@@ -22,6 +22,9 @@
 			<li class="nav-item">
 				<a class="nav-link" href="#">İletişim</a>
 			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="/admin"><i class="fa-solid fa-user-tie"></i></a>
+			</li>
 		</ul>
 	</div>
 </section>

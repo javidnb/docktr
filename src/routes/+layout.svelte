@@ -5,6 +5,7 @@
 	import { signOut } from 'firebase/auth';
 	import { auth } from '$lib/firebase.client';
 	import { formatDate } from '$lib/dateFormatter';
+	import Nav from '$lib/Nav.svelte';
 
 	import type { LayoutData } from './$types';
 	export let data: LayoutData;
@@ -93,6 +94,8 @@
 		</ul>
 	</div>
 </nav>
+
+<Nav />
 
 {#if loading}
 	<div>Yüklənir...</div>

@@ -13,7 +13,16 @@
 	}
 </script>
 
-<h3 class="p-3">Admin Panel</h3>
+<section>
+	<div class="jumbotron" style="padding-top: 2rem; background-color: #e2e9ef">
+		<h1 class="display-4">Admin Panel</h1>
+		<!-- <p>
+			It uses utility classes for typography and spacing to space content out within the larger
+			container.
+		</p> -->
+		<!-- <a class="btn btn-primary btn-lg" href="#" role="button">Doktorlar</a> -->
+	</div>
+</section>
 
 <div class="container-fluid">
 	<div class="row mt-3 justify-content-center">

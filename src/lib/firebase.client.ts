@@ -1,11 +1,11 @@
 import { initializeApp } from 'firebase/app';
-import { connectAuthEmulator, getAuth } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import type { FirebaseApp } from 'firebase/app';
-import type { Firestore } from 'firebase/firestore';
+import { getFirestore, type Firestore, collection, query, getDocs } from 'firebase/firestore';
 import type { Auth } from 'firebase/auth';
 import { browser } from '$app/environment';
 
-export let db: Firestore;
+export let db: any;
 export let app: FirebaseApp;
 export let auth: Auth;
 
@@ -26,5 +26,18 @@ export const initializeFirebase = () => {
 	if (!app) {
 		app = initializeApp(firebaseConfig);
 		auth = getAuth(app);
+		db = getFirestore(app);
 	}
 };
+
+export async function getData(collectionName: string) {
+	if (db) {
+		let result: {}[] = [];
+		const q = query(collection(db, collectionName));
+		const querySnapshot = await getDocs(q);
+		querySnapshot.forEach((doc: any) => {
+			result.push(doc.data());
+		});
+		return result;
+	}
+}

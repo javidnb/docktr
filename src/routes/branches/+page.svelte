@@ -3,24 +3,10 @@
 </script>
 
 <section>
-	<div class="jumbotron" style="padding-block: 3rem; background-color: #e2e9ef">
-		<h1 class="display-4">Sağlık Hizmetlerine Dijital Yaklaşım</h1>
-		<p class="lead">İnternet Üzerinden Doktor Randevuları, Hemen Randevunuzu Alın</p>
-		<div class="input-group input-group-lg mb-3 mt-2 w-50">
-			<input
-				type="text"
-				class="form-control"
-				aria-label="Sizing example input"
-				aria-describedby="inputGroup-sizing-sm"
-				placeholder="Arama yap"
-			/>
-			<span
-				class="input-group-text"
-				style="background: #a1c398;
-			color: white;"><span class="material-symbols-outlined"> search </span></span
-			>
-		</div>
-		<!-- <hr class="my-4" /> -->
+	<div class="jumbotron" style="padding-top: 3rem; background-color: #e2e9ef">
+		<h1 class="display-4">Bölümler</h1>
+		<!-- <p class="lead">We connect you to doctors around the world!</p> -->
+		<hr class="my-4" />
 		<!-- <p>
 			It uses utility classes for typography and spacing to space content out within the larger
 			container.
@@ -56,16 +42,6 @@
 						</div>
 					{/each}
 				</div>
-			</div>
-		</div>
-	</div>
-</section>
-
-<section class="faq py-5" style="background-color: #f9f9f9;">
-	<div class="container">
-		<div class="row">
-			<div class="col">
-				<h5>Sıkça sorulan sorular</h5>
 			</div>
 		</div>
 	</div>

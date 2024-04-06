@@ -29,7 +29,7 @@
 				>
 			</li>
 			<li class="nav-item pcOnly">
-				<a class="nav-link" href="/categories" class:active={currentPage == '/categories'}
+				<a class="nav-link" href="/branches" class:active={currentPage == '/branches'}
 					><span class="material-symbols-outlined"> category </span><span class="pcOnly"
 						>Bölümler</span
 					></a

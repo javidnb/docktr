@@ -121,15 +121,16 @@
 			border-radius: 0px;
 			margin-left: 1px;
 		}
-		.homeNavContainer .active {
-			border-radius: 0;
-		}
-		.nav-item {
-			border-inline: 1px solid #dedede;
+		.nav-item {			
 			margin-left: -1px;
+			border-radius: 40px;
+			overflow: hidden;
+			border-inline: 1px solid #dedede;
 		}
 		.homeNavContainer .nav-item .nav-link {
 			padding: 9px 15px;
+			border-radius: 40px;
+			overflow: hidden;
 		}
 		.homeNavContainer .nav-link .material-symbols-outlined {
 			font-size: 30px;
@@ -142,7 +143,6 @@
 	@media screen and (min-width: 992px) {
 		.nav-link:hover {
 			background-color: #415d3a1c;
-			border-radius: 40px;
 		}
 		.active:hover {
 			background-color: #a1c398;

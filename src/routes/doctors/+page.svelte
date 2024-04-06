@@ -36,43 +36,43 @@
 </section>
 
 <section class="py-5" style="background-color: aliceblue;">
-	<div class="container">
-		<div class="row">
-			<div class="col">
-				<div class="d-flex gap-3">
-					{#if dataLoading}
-						{#each [1, 2] as doctor}
-							<div class="card">
-								<div
-									class="card-body d-flex flex-column align-items-center justify-content-center"
-									style="min-height: 15rem; background-color: #ececec"
-								>
-									Loading
-								</div>
+	<div class="container pb-5">
+		<div class="row row-gap-3">
+			{#if dataLoading}
+				{#each [1, 2] as doctor}
+					<div class="col col-md-6 col-lg-4">
+						<div class="card">
+							<div
+								class="card-body d-flex flex-column align-items-center justify-content-center"
+								style="min-height: 15rem; background-color: #ececec"
+							>
+								Loading
 							</div>
-						{/each}
-					{:else}
-						{#each doctors as doctor, i}
-							<div class="card">
-								<div class="card-body d-flex flex-column align-items-center">
-									<img src={doctor.img} alt="Some Doc" />
-									<a
-										class="card-link"
-										href="./"
-										style="text-decoration: none; text-align: center;
+						</div>
+					</div>
+				{/each}
+			{:else}
+				{#each doctors as doctor, i}
+					<div class="col col-md-6 col-lg-4">
+						<div class="card">
+							<div class="card-body d-flex flex-column align-items-center">
+								<img src={doctor.img} alt="Some Doc" />
+								<a
+									class="card-link"
+									href="./"
+									style="text-decoration: none; text-align: center;
 					margin-block: auto;">{doctor.name}</a
-									>
-									<div class="branch">
-										{#each doctor.branches as br}
-											<span>{getBranchName(br)}</span>
-										{/each}
-									</div>
+								>
+								<div class="branch">
+									{#each doctor.branches as br}
+										<span>{getBranchName(br)}</span>
+									{/each}
 								</div>
 							</div>
-						{/each}
-					{/if}
-				</div>
-			</div>
+						</div>
+					</div>
+				{/each}
+			{/if}
 		</div>
 	</div>
 </section>

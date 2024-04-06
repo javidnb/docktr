@@ -101,10 +101,14 @@
 			position: fixed;
 			width: 100%;
 			bottom: 0;
+			background-color: unset!important;
+			z-index: 99;
+			border-top: 1px solid #dedede;
 		}
 		.homeNavContainer .container {
 			padding: 0;
 			margin: 0;
+			padding-top:0px!important;
 		}
 		.homeNavContainer ul {
 			width: 100vw;
@@ -119,7 +123,7 @@
 			margin-left: -1px;
 		}
 		.homeNavContainer .nav-item .nav-link {
-			padding: 6px 15px;
+			padding: 9px 15px;
 		}
 		.homeNavContainer .nav-link .material-symbols-outlined {
 			font-size: 30px;

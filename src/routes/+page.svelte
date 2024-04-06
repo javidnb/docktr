@@ -5,8 +5,8 @@
 <section>
 	<div class="jumbotron" style="padding-block: 3rem; background-color: #e2e9ef">
 		<h1 class="display-4">Sağlık Hizmetlerine Dijital Yaklaşım</h1>
-		<p class="lead">İnternet Üzerinden Doktor Randevuları, Hemen Randevunuzu Alın</p>
-		<div class="input-group input-group-lg mb-3 mt-2 w-50">
+		<p class="lead">Doktorunuzla İnternet Üzerinden Bağlantı Kurun, Sağlığınızı Şimdi Yönetin</p>
+		<div class="input-group input-group-lg mb-3 mt-2 w-md-50">
 			<input
 				type="text"
 				class="form-control"

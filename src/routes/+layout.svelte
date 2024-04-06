@@ -69,6 +69,9 @@
 			aria-controls="navbarSupportedContent"
 			aria-expanded="false"
 			aria-label="Toggle navigation"
+			style="position: absolute;
+			right: 1rem;
+			top: 9px;"
 		>
 			<span class="navbar-toggler-icon"></span>
 		</button>

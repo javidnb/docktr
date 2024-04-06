@@ -3,7 +3,12 @@
 </script>
 
 <section>
-	<div class="jumbotron" style="padding-block: 3rem; background-color: #e2e9ef">
+	<div
+		class="jumbotron"
+		style="padding-block: 3rem; background-color: #e2e9ef; background-image: url('https://tekoplast.az/img/docktrbg.png');
+    background-size: cover;
+    background-blend-mode: overlay;"
+	>
 		<h1 class="display-4">Sağlık Hizmetlerine Dijital Yaklaşım</h1>
 		<p class="lead">Doktorunuzla İnternet Üzerinden Bağlantı Kurun, Sağlığınızı Şimdi Yönetin</p>
 		<div class="input-group input-group-lg mb-3 mt-2 w-md-50">
@@ -48,7 +53,7 @@
 								</span>
 								<a
 									class="card-link"
-									href="./"
+									href="/branches/{item.slug}"
 									style="text-decoration: none; text-align: center;
 								margin-block: auto;">{item.name}</a
 								>

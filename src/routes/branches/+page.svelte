@@ -33,7 +33,7 @@
 								</span>
 								<a
 									class="card-link"
-									href="./"
+									href="/branches/{item.slug}"
 									style="text-decoration: none; text-align: center;
 								margin-block: auto;">{item.name}</a
 								>
@@ -63,6 +63,7 @@
 		min-height: 10rem;
 		border: 0px;
 		box-shadow: 0px 0px 5px #00000012;
+		border-radius: 20px;
 	}
 
 	/* SCROLLBAR */

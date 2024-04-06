@@ -7,10 +7,10 @@
 	let email: string = '';
 	let password: string = '';
 	let disabled: boolean = false;
-	let buttonText: string = 'Qeydiyyat';
+	let buttonText: string = 'Kayıt ol';
 
 	async function handleRegister() {
-		buttonText = 'Gözləyin..';
+		buttonText = 'Bekleyin..';
 		disabled = true;
 		await createUserWithEmailAndPassword(auth, email, password)
 			.then((result) => {
@@ -32,8 +32,10 @@
 </script>
 
 <section>
-	<div class="jumbotron" style="padding-block: .5rem 1rem; background-color: #e2e9ef;">
-		<h4>Qeydiyyat</h4>
+	<div class="jumbotron" style="padding-top: 3rem; background-color: #e2e9ef">
+		<h1 class="display-4">Kayıt ol</h1>
+		<!-- <p class="lead">We connect you to doctors around the world!</p> -->
+		<hr class="my-4" />
 		<!-- <p>
 			It uses utility classes for typography and spacing to space content out within the larger
 			container.
@@ -44,12 +46,12 @@
 
 <div class="register-form">
 	<div class="container">
-		<div class="row justify-content-center mt-5">
-			<div class="col-md-6 w-100">
+		<div class="row justify-content-center">
+			<div class="col-md-6">
 				<form
 					on:submit={handleRegister}
 					class="d-flex flex-column p-5"
-					style="gap: 1rem; background: #ececec; border-radius: 10px"
+					style="gap: 1rem; background: #e2e9ef; "
 				>
 					<input
 						class="form-control"

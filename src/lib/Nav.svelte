@@ -4,11 +4,17 @@
 	import { navigating } from '$app/stores';
 	import { page } from '$app/stores';
 
-	let loggedIn: boolean = false;
-	session.subscribe((cur: any) => {
-		loggedIn = cur?.loggedIn;
+	// let loggedIn: boolean = false;
+
+	// session.subscribe((cur: any) => {
+	// 	loggedIn = cur?.loggedIn;
+	// });
+	// export let data: any;
+
+	onMount(async () => {
+		// const user: any = await data.getAuthUser();
+		// console.log("user: ", user);
 	});
-	onMount(async () => {});
 	let currentPage: any = '/';
 	navigating.subscribe((r) => (currentPage = $page.route.id));
 </script>
@@ -28,14 +34,14 @@
 					></a
 				>
 			</li>
-			<li class="nav-item pcOnly">
+			<li class="nav-item">
 				<a class="nav-link" href="/branches" class:active={currentPage == '/branches'}
 					><span class="material-symbols-outlined"> category </span><span class="pcOnly"
-						>Bölümler</span
+						>Branşlar</span
 					></a
 				>
 			</li>
-			<li class="nav-item">
+			<li class="nav-item pcOnly">
 				<a class="nav-link" href="/diseases" class:active={currentPage == '/diseases'}
 					><span class="material-symbols-outlined"> microbiology </span>
 					<span class="pcOnly">Hastalıklar</span></a
@@ -60,7 +66,7 @@
 				>
 			</li>
 
-			{#if loggedIn}
+			{#if $session.loggedIn}
 				<li class="nav-item">
 					<a class="nav-link" href="/admin" class:active={currentPage == '/admin'}
 						><span class="material-symbols-outlined"> admin_panel_settings </span>
@@ -101,14 +107,14 @@
 			position: fixed;
 			width: 100%;
 			bottom: 0;
-			background-color: unset!important;
+			background-color: unset !important;
 			z-index: 99;
 			border-top: 1px solid #dedede;
 		}
 		.homeNavContainer .container {
 			padding: 0;
 			margin: 0;
-			padding-top:0px!important;
+			padding-top: 0px !important;
 		}
 		.homeNavContainer ul {
 			width: 100vw;

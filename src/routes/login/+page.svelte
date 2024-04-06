@@ -12,15 +12,16 @@
 
 	let email: string = '';
 	let password: string = '';
-	let buttonText: string = 'Daxil ol';
+	let buttonText: string = 'Giriş yap';
 	let disabled = false;
 
 	async function loginWithMail() {
-		buttonText = 'Gözləyin..';
+		buttonText = 'Bekleyin..';
 		disabled = true;
 		await signInWithEmailAndPassword(auth, email, password)
 			.then((result) => {
 				const { user }: UserCredential = result;
+				localStorage.setItem('user', JSON.stringify(user));
 				session.set({
 					loggedIn: true,
 					user: {
@@ -30,7 +31,6 @@
 						uid: user?.uid
 					}
 				});
-				localStorage.setItem('user', JSON.stringify(user));
 				goto('/');
 			})
 			.catch((error) => {
@@ -43,6 +43,7 @@
 		await signInWithPopup(auth, provider)
 			.then((result) => {
 				const { displayName, email, photoURL, uid } = result?.user;
+				localStorage.setItem('user', JSON.stringify(result?.user));
 				session.set({
 					loggedIn: true,
 					user: {
@@ -62,8 +63,10 @@
 </script>
 
 <section>
-	<div class="jumbotron" style="padding-block: .5rem 1rem; background-color: #e2e9ef;">
-		<h4>İstifadəçi Girişi</h4>
+	<div class="jumbotron" style="padding-top: 3rem; background-color: #e2e9ef">
+		<h1 class="display-4">Giriş Yap</h1>
+		<!-- <p class="lead">We connect you to doctors around the world!</p> -->
+		<hr class="my-4" />
 		<!-- <p>
 			It uses utility classes for typography and spacing to space content out within the larger
 			container.
@@ -116,7 +119,7 @@
 			border: 0px;">Google</button
 		>
 		<div style="display: flex; flex-direction: column; gap: .5rem; align-items: center">
-			Hesabınız yoxdur? <a href="/register"> Qeydiyyat</a>
+			Hesabın yok mu? <a href="/register"> Hemen Kaydol</a>
 		</div>
 	</div>
 </div>

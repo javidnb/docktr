@@ -1,33 +1,30 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { session } from '$lib/session';
-	import { goto } from '$app/navigation';
-	import { signOut } from 'firebase/auth';
 	import { auth } from '$lib/firebase.client';
 	import { formatDate } from '$lib/dateFormatter';
 	import Nav from '$lib/Nav.svelte';
 
 	import type { LayoutData } from './$types';
+	import { browser } from '$app/environment';
 	export let data: LayoutData;
 
 	let loading: boolean = true;
-	let loggedIn: boolean = false;
 	let currentDate = new Date();
-
-	session.subscribe((cur: any) => {
-		loading = cur?.loading;
-		loggedIn = cur?.loggedIn;
-	});
+	let userr: any = null;
 
 	onMount(async () => {
+		if (browser) {
+			userr = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') ?? '') : null;
+		}
 		setInterval(() => {
 			currentDate = new Date();
 		}, 60000);
 
 		const user: any = await data.getAuthUser();
 
-		// const loggedIn = !!user && user?.emailVerified;
 		const loggedIn = user ? true : false;
+
 		session.update((cur: any) => {
 			loading = false;
 			return {
@@ -47,7 +44,9 @@
 		auth
 			.signOut()
 			.then(() => {
-				loggedIn = false;
+				// loggedIn = false;
+				session.set({ user: null });
+				localStorage.removeItem('user');
 				// Redirect or perform any other actions after logout
 				// navigate('/login');
 			})
@@ -58,9 +57,14 @@
 </script>
 
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #a1c398;">
-	<div class="container-fluid">
+	<div
+		class="container-fluid"
+		style="display: flex;flex-wrap: inherit;
+    align-items: center;
+    justify-content: space-between; width:100%"
+	>
 		<p class="d-flex align-items mb-0 time" style="color: white;">{formatDate(currentDate)}</p>
-		<a class="navbar-brand tac-one-regular mx-auto" href="./">Docktr</a>
+		<a class="navbar-brand tac-one-regular mx-auto" style="margin-left: auto;" href="./">Docktr</a>
 		<button
 			class="navbar-toggler"
 			type="button"
@@ -76,20 +80,20 @@
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
-			<ul class="navbar-nav ml-auto">
+			<ul class="navbar-nav ml-auto" style="margin-left: auto;">
 				<!-- <li class="nav-item active">
 					<a class="nav-link" href="./">Ana Səhifə</a>
 				</li> -->
-				{#if !loggedIn}
+				{#if !$session.loggedIn}
 					<li class="nav-item">
-						<a class="nav-link" href="login">İstifadəçi girişi</a>
+						<a class="nav-link" href="login">Giriş yap</a>
 					</li>
 				{:else}
 					<li class="nav-item">
 						<a class="nav-link" href="./profile">Hesabım</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="./" on:click={logout}>Çıxış</a>
+						<a class="nav-link" href="./" on:click={logout}>Çıkış</a>
 					</li>
 				{/if}
 			</ul>
@@ -99,13 +103,9 @@
 
 <Nav />
 
-{#if loading}
-	<div>Yüklənir...</div>
-{:else}
-	<div>
-		<slot />
-	</div>
-{/if}
+<div>
+	<slot />
+</div>
 
 <style type="text/css">
 	.tac-one-regular {

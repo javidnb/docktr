@@ -58,40 +58,39 @@
 </script>
 
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #a1c398;">
-	<p class="d-flex align-items mb-0 time" style="color: white;">{formatDate(currentDate)}</p>
-	<a class="navbar-brand tac-one-regular mx-auto" href="./">Docktr</a>
-	<button
-		class="navbar-toggler"
-		type="button"
-		data-toggle="collapse"
-		data-target="#navbarText"
-		aria-controls="navbarText"
-		aria-expanded="false"
-		aria-label="Toggle navigation"
-		style="position: absolute;
-		right: 1rem;
-		top: 9px;"
-	>
-		<span class="navbar-toggler-icon"></span>
-	</button>
-	<div class="collapse navbar-collapse" id="navbarText">
-		<ul class="navbar-nav ml-auto">
-			<!-- <li class="nav-item active">
-				<a class="nav-link" href="./">Ana Səhifə</a>
-			</li> -->
-			{#if !loggedIn}
-				<li class="nav-item">
-					<a class="nav-link" href="login">İstifadəçi girişi</a>
-				</li>
-			{:else}
-				<li class="nav-item">
-					<a class="nav-link" href="./profile">Hesabım</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="./" on:click={logout}>Çıxış</a>
-				</li>
-			{/if}
-		</ul>
+	<div class="container-fluid">
+		<p class="d-flex align-items mb-0 time" style="color: white;">{formatDate(currentDate)}</p>
+		<a class="navbar-brand tac-one-regular mx-auto" href="./">Docktr</a>
+		<button
+			class="navbar-toggler"
+			type="button"
+			data-bs-toggle="collapse"
+			data-bs-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent"
+			aria-expanded="false"
+			aria-label="Toggle navigation"
+		>
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav ml-auto">
+				<!-- <li class="nav-item active">
+					<a class="nav-link" href="./">Ana Səhifə</a>
+				</li> -->
+				{#if !loggedIn}
+					<li class="nav-item">
+						<a class="nav-link" href="login">İstifadəçi girişi</a>
+					</li>
+				{:else}
+					<li class="nav-item">
+						<a class="nav-link" href="./profile">Hesabım</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="./" on:click={logout}>Çıxış</a>
+					</li>
+				{/if}
+			</ul>
+		</div>
 	</div>
 </nav>
 

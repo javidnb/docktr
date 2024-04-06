@@ -31,6 +31,17 @@
 	}
 </script>
 
+<section>
+	<div class="jumbotron" style="padding-block: .5rem 1rem; background-color: #e2e9ef;">
+		<h4>Qeydiyyat</h4>
+		<!-- <p>
+			It uses utility classes for typography and spacing to space content out within the larger
+			container.
+		</p> -->
+		<!-- <a class="btn btn-primary btn-lg" href="#" role="button">Doktorlar</a> -->
+	</div>
+</section>
+
 <div class="register-form">
 	<div class="container">
 		<div class="row justify-content-center mt-5">

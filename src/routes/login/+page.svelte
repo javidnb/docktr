@@ -61,6 +61,17 @@
 	}
 </script>
 
+<section>
+	<div class="jumbotron" style="padding-block: .5rem 1rem; background-color: #e2e9ef;">
+		<h4>İstifadəçi Girişi</h4>
+		<!-- <p>
+			It uses utility classes for typography and spacing to space content out within the larger
+			container.
+		</p> -->
+		<!-- <a class="btn btn-primary btn-lg" href="#" role="button">Doktorlar</a> -->
+	</div>
+</section>
+
 <div class="login-form">
 	<div class="pt-5 pb-4">
 		<form on:submit={loginWithMail}>

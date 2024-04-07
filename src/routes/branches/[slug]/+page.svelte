@@ -2,11 +2,28 @@
 	import { diseases } from '$lib/diseases';
 	import { page } from '$app/stores';
 	import { doctors } from '$lib/data';
+	import { getData } from '$lib/firebase.client';
+	import { onMount } from 'svelte';
 
 	let dataLoading: boolean = false;
+	let filteredDocs: any = [];
 	let d = diseases.find((d) => d.slug == $page.params.slug);
 	let dId = d?.id;
-	let filteredDocs = $doctors.filter((doc: any) => doc.branches.includes(dId));
+
+	onMount(async () => {
+		if (!$doctors.length) {
+			dataLoading = true;
+			try {
+				let docs = await getData('doctors');
+				doctors.set(docs);
+				dataLoading = false;
+			} catch (error) {
+				console.error('Error fetching data:', error);
+				dataLoading = false;
+			}
+		}
+		filteredDocs = $doctors.filter((doc: any) => doc.branches.includes(dId));
+	});
 
 	function getBranchName(id: number) {
 		let d = diseases.find((d) => d.id == id);

@@ -4,6 +4,7 @@ import type { FirebaseApp } from 'firebase/app';
 import { getFirestore, type Firestore, collection, query, getDocs } from 'firebase/firestore';
 import type { Auth } from 'firebase/auth';
 import { browser } from '$app/environment';
+import type { Doctor } from './interfaces/doctor.interface';
 
 export let db: any;
 export let app: FirebaseApp;
@@ -16,7 +17,7 @@ const firebaseConfig = {
 	storageBucket: 'ddocktr.appspot.com',
 	messagingSenderId: '1012984967438',
 	appId: '1:1012984967438:web:9b90eb7220b41970dde75f',
-	measurementId: 'G-0MLDQ5MDM6',
+	measurementId: 'G-0MLDQ5MDM6'
 };
 
 export const initializeFirebase = () => {
@@ -32,7 +33,7 @@ export const initializeFirebase = () => {
 
 export async function getData(collectionName: string) {
 	if (db) {
-		let result: {}[] = [];
+		let result: Doctor[] = [];
 		const q = query(collection(db, collectionName));
 		const querySnapshot = await getDocs(q);
 		querySnapshot.forEach((doc: any) => {

@@ -1,52 +1,26 @@
 <script lang="ts">
 	import { diseases } from '$lib/diseases';
 	import { page } from '$app/stores';
-	import { doctors } from '$lib/data';
-	import { getData } from '$lib/firebase.client';
-	import { onMount } from 'svelte';
+	import { doctors } from '$lib/dataStore';
+	import DoctorCard from '$lib/components/DoctorCard.svelte';
 
-	let dataLoading: boolean = false;
-	let filteredDocs: any = [];
 	let d = diseases.find((d) => d.slug == $page.params.slug);
 	let dId = d?.id;
 
-	onMount(async () => {
-		if (!$doctors.length) {
-			dataLoading = true;
-			try {
-				let docs = await getData('doctors');
-				doctors.set(docs);
-				dataLoading = false;
-			} catch (error) {
-				console.error('Error fetching data:', error);
-				dataLoading = false;
-			}
-		}
-		filteredDocs = $doctors.filter((doc: any) => doc.branches.includes(dId));
-	});
-
-	function getBranchName(id: number) {
-		let d = diseases.find((d) => d.id == id);
-		return d?.name;
-	}
+	$: filteredDocs = $doctors.filter((doc: any) => doc.branches.includes(dId));
 </script>
 
 <section>
-	<div class="jumbotron" style="padding-top: 3rem; background-color: #e2e9ef">
+	<div class="jumbotron" style="padding-top: 2rem; background-color: #e2e9ef">
 		<h1 class="display-4">{d?.name}</h1>
-		<hr class="my-4" />
-		<!-- <p>
-			It uses utility classes for typography and spacing to space content out within the larger
-			container.
-		</p> -->
-		<!-- <a class="btn btn-primary btn-lg" href="#" role="button">Doktorlar</a> -->
+		<hr />
 	</div>
 </section>
 
 <section class="py-5" style="background-color: aliceblue;">
 	<div class="container pb-5">
 		<div class="row row-gap-3">
-			{#if dataLoading}
+			{#if !$doctors.length}
 				{#each [1, 2] as doctor}
 					<div class="col col-md-6 col-lg-4">
 						<div class="card skeleton">
@@ -60,40 +34,7 @@
 			{:else}
 				{#each filteredDocs as doctor, i}
 					<div class="col col-md-6 col-lg-4">
-						<a href="/doctors/{doctor.slug}" class="card" style="text-decoration: none;">
-							<div class="card-body d-flex flex-column align-items-center">
-								<div class="row">
-									<div class="col-6">
-										<img src={doctor.img} alt="Some Doc" />
-									</div>
-									<div class="col-6 text-center d-flex flex-column">
-										<span
-											style="text-decoration: none; text-align: center;
-						margin-block: auto; font-size: large">{doctor.name}</span
-										>
-										<span style="color: #a1c398" class="d-flex justify-content-center"
-											>5 <span class="material-symbols-outlined"> grade </span> | 0 Yorum</span
-										>
-									</div>
-								</div>
-
-								<div class="row mt-3 w-100">
-									<div class="col">
-										<p>{doctor.details}</p>
-									</div>
-								</div>
-
-								<div class="row w-100">
-									<div class="col">
-										<div class="branch">
-											{#each doctor.branches as br}
-												<span>{getBranchName(br)}</span>
-											{/each}
-										</div>
-									</div>
-								</div>
-							</div>
-						</a>
+						<DoctorCard props={doctor} />
 					</div>
 				{/each}
 			{/if}
@@ -112,18 +53,6 @@
 	}
 	.card:hover {
 		box-shadow: 0px 0px 5px #00000032;
-	}
-	.card img {
-		max-width: 100%;
-		aspect-ratio: 2 / 1;
-		object-fit: cover;
-		object-position: top;
-		border-radius: 10px;
-	}
-	.branch {
-		display: flex;
-		gap: 10px;
-		color: #a1c398;
 	}
 
 	.skeleton {

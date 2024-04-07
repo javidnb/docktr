@@ -63,7 +63,7 @@
 					<a class="nav-link" href="./">Ana Səhifə</a>
 				</li> -->
 				{#if !$session.loggedIn}
-					<li data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" class="nav-item">
+					<li class="nav-item">
 						<a class="nav-link" href="login">Giriş yap</a>
 					</li>
 				{:else}
@@ -76,10 +76,10 @@
 							<span>Admin</span></a
 						>
 					</li>
-					<li data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" class="nav-item">
+					<li class="nav-item">
 						<a class="nav-link" href="./profile">Hesabım</a>
 					</li>
-					<li data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" class="nav-item">
+					<li class="nav-item">
 						<a class="nav-link" href="../" on:click={logout}>Çıkış</a>
 					</li>
 				{/if}

@@ -3,13 +3,14 @@
 	import { session } from '$lib/session';
 	import { getData } from '$lib/firebase.client';
 	import { fade, slide } from 'svelte/transition';
-	import Nav from '$lib/Nav.svelte';
+	import Nav from '$lib/components/Nav.svelte';
 
 	import type { LayoutData } from './$types';
 	import { browser } from '$app/environment';
 	export let data: LayoutData;
-	import { doctors } from '$lib/data';
+	import { doctors } from '$lib/dataStore';
 	import { cubicIn, cubicOut } from 'svelte/easing';
+	import type { Doctor } from '$lib/interfaces/doctor.interface';
 
 	let dataLoading: boolean = true;
 
@@ -36,7 +37,7 @@
 		if (!$doctors.length) {
 			dataLoading = true;
 			try {
-				let docs = await getData('doctors');
+				let docs: Doctor[] = (await getData('doctors')) ?? [];
 				doctors.set(docs);
 				dataLoading = false;
 			} catch (error) {
@@ -50,10 +51,10 @@
 <Nav />
 
 <section style="position: absolute; width: 100%; z-index: -1">
-	<div class="jumbotron" style="padding-top: 3rem; background-color: #e2e9ef">
+	<div class="jumbotron" style="padding-top: 2rem; background-color: #e2e9ef">
 		<h1 class="display-4">&#8203;</h1>
 		<!-- <p class="lead">We connect you to doctors around the world!</p> -->
-		<hr class="my-4" />
+		<hr />
 		<!-- <p>
 			It uses utility classes for typography and spacing to space content out within the larger
 			container.

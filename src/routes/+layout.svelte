@@ -64,7 +64,7 @@
     justify-content: space-between; width:100%"
 	>
 		<p class="d-flex align-items mb-0 time" style="color: white;">{formatDate(currentDate)}</p>
-		<a class="navbar-brand tac-one-regular mx-auto" style="margin-left: auto;" href="./">Docktr</a>
+		<a class="navbar-brand tac-one-regular mx-auto" style="margin-left: auto;" href="../">Docktr</a>
 		<button
 			class="navbar-toggler"
 			type="button"

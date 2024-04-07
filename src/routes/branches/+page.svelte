@@ -21,7 +21,7 @@
 			<div class="col">
 				<div class="branches">
 					{#each diseases as item}
-						<div class="card">
+						<a class="card" href="/branches/{item.slug}" style="text-decoration:none">
 							<div class="card-body d-flex flex-column align-items-center">
 								<span
 									class="material-symbols-outlined"
@@ -38,7 +38,7 @@
 								margin-block: auto;">{item.name}</a
 								>
 							</div>
-						</div>
+						</a>
 					{/each}
 				</div>
 			</div>
@@ -64,6 +64,10 @@
 		border: 0px;
 		box-shadow: 0px 0px 5px #00000012;
 		border-radius: 20px;
+	}
+
+	.card:hover {
+		box-shadow: 0px 0px 5px #00000032;
 	}
 
 	/* SCROLLBAR */

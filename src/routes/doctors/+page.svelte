@@ -37,16 +37,16 @@
 
 <section class="py-5" style="background-color: aliceblue;">
 	<div class="container pb-5">
-		<div class="row row-gap-3">
+		<div class="row row-gap-3">			
 			{#if dataLoading}
 				{#each [1, 2] as doctor}
 					<div class="col col-md-6 col-lg-4">
-						<div class="card">
+						<div class="card skeleton">
 							<div
 								class="card-body d-flex flex-column align-items-center justify-content-center"
-								style="min-height: 15rem; background-color: #ececec"
+								style="min-height: 15rem;"
 							>
-								Loading
+								
 							</div>
 						</div>
 					</div>
@@ -94,5 +94,18 @@
 	.branch {
 		display: flex;
 		gap: 10px;
+	}
+
+	.skeleton {
+		animation: skeleton-loading 1s linear infinite alternate;
+	}
+
+	@keyframes skeleton-loading {
+		0% {
+			background-color: hsl(200deg 21.42% 87.98%);
+		}
+		100% {
+			background-color: hsl(200, 20%, 95%);
+		}
 	}
 </style>

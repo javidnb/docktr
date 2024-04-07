@@ -3,21 +3,90 @@
 	import { session } from '$lib/session';
 	import { navigating } from '$app/stores';
 	import { page } from '$app/stores';
+	import { auth } from '$lib/firebase.client';
+	import { formatDate } from '$lib/dateFormatter';
 
-	// let loggedIn: boolean = false;
+	let currentDate = new Date();
 
-	// session.subscribe((cur: any) => {
-	// 	loggedIn = cur?.loggedIn;
-	// });
-	// export let data: any;
+	function logout() {
+		auth
+			.signOut()
+			.then(() => {
+				// loggedIn = false;
+				session.set({ user: null });
+				localStorage.removeItem('user');
+				// Redirect or perform any other actions after logout
+				// navigate('/login');
+			})
+			.catch((error) => {
+				console.error('Error logging out:', error);
+			});
+	}
 
 	onMount(async () => {
+		setInterval(() => {
+			currentDate = new Date();
+		}, 60000);
 		// const user: any = await data.getAuthUser();
 		// console.log("user: ", user);
 	});
 	let currentPage: any = '/';
 	navigating.subscribe((r) => (currentPage = $page.route.id));
 </script>
+
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #a1c398;">
+	<div
+		class="container-fluid"
+		style="display: flex;flex-wrap: inherit;
+    align-items: center;
+    justify-content: space-between; width:100%"
+	>
+		<p class="d-flex align-items mb-0 time" style="color: white;">{formatDate(currentDate)}</p>
+		<a class="navbar-brand tac-one-regular mx-auto" style="margin-left: auto;" href="../">Docktr</a>
+		<button
+			class="navbar-toggler"
+			type="button"
+			data-bs-toggle="collapse"
+			data-bs-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent"
+			aria-expanded="false"
+			aria-label="Toggle navigation"
+			style="position: absolute;
+			right: 1rem;
+			top: 9px;"
+		>
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav ml-auto" style="margin-left: auto;">
+				<!-- <li class="nav-item active">
+					<a class="nav-link" href="./">Ana Səhifə</a>
+				</li> -->
+				{#if !$session.loggedIn}
+					<li data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" class="nav-item">
+						<a class="nav-link" href="login">Giriş yap</a>
+					</li>
+				{:else}
+					<li
+						data-bs-toggle="collapse"
+						data-bs-target="#navbarSupportedContent"
+						class="nav-item mobileOnly"
+					>
+						<a class="nav-link" href="./admin" class:active={currentPage == '/admin'}>
+							<span>Admin</span></a
+						>
+					</li>
+					<li data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" class="nav-item">
+						<a class="nav-link" href="./profile">Hesabım</a>
+					</li>
+					<li data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" class="nav-item">
+						<a class="nav-link" href="../" on:click={logout}>Çıkış</a>
+					</li>
+				{/if}
+			</ul>
+		</div>
+	</div>
+</nav>
 
 <section class="homeNavContainer" style="background-color: #e2e9ef;">
 	<div class="container pt-3">
@@ -86,6 +155,23 @@
 </section>
 
 <style>
+	.tac-one-regular {
+		font-family: 'Tac One', sans-serif;
+		font-weight: 400;
+		font-style: normal;
+		font-size: 2rem;
+		line-height: 1;
+	}
+	@media screen and (max-width: 769px) {
+		.time {
+			display: none !important;
+		}
+	}
+	@media screen and (min-width: 992px) {
+		.navbar-collapse {
+			flex: none !important;
+		}
+	}
 	.homeNav {
 		/* border-bottom-left-radius: 10px;
 		border-bottom-right-radius: 10px; */
@@ -102,12 +188,14 @@
 		background-color: #a1c398;
 		color: white !important;
 		border-radius: 40px;
+		transition-duration: 0.3s;
 	}
 	.nav-link {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		gap: 0.3rem;
+		transition-duration: 0.3s;
 	}
 	@media screen and (max-width: 992px) {
 		.homeNavContainer {

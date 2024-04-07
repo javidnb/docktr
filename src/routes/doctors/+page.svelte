@@ -59,34 +59,36 @@
 						<a href="/doctors/{doctor.slug}" class="card" style="text-decoration: none;">
 							<div class="card-body d-flex flex-column align-items-center">
 								<div class="row">
-									<div class="col-6">
+									<div class="col-5 d-flex flex-column">
 										<img src={doctor.img} alt="Some Doc" />
+										<span style="color: #rgb(99 141 88)" class="d-flex justify-content-center mt-2"
+											>5 <span class="material-symbols-outlined"> star_rate </span> | 0 Yorum</span
+										>
 									</div>
-									<div class="col-6 text-center d-flex flex-column">
+									<div class="col-7 text-center d-flex flex-column">
 										<span
-											style="text-decoration: none; text-align: center;
-						margin-block: auto; font-size: large">{doctor.name}</span
+											style="text-decoration: none;
+											text-align: center;
+											margin-block: 10px 5px;
+											font-size: large;
+											font-weight: 600;">{doctor.name}</span
 										>
-										<span style="color: #a1c398" class="d-flex justify-content-center"
-											>5 <span class="material-symbols-outlined"> grade </span> | 0 Yorum</span
-										>
-									</div>
-								</div>
-
-								<div class="row mt-3 w-100">
-									<div class="col">
-										<p>{doctor.details}</p>
-									</div>
-								</div>
-
-								<div class="row w-100">
-									<div class="col">
 										<div class="branch">
 											{#each doctor.branches as br}
 												<span>{getBranchName(br)}</span>
 											{/each}
 										</div>
 									</div>
+								</div>
+
+								<div class="row mt-2 w-100">
+									<div class="col">
+										<p>{doctor.details}</p>
+									</div>
+								</div>
+
+								<div class="row w-100">
+									<div class="col"></div>
 								</div>
 							</div>
 						</a>
@@ -111,7 +113,7 @@
 	}
 	.card img {
 		max-width: 100%;
-		aspect-ratio: 2 / 1;
+		aspect-ratio: 2 / 1.5;
 		object-fit: cover;
 		object-position: top;
 		border-radius: 10px;
@@ -119,7 +121,8 @@
 	.branch {
 		display: flex;
 		gap: 10px;
-		color: #a1c398;
+		color: #444444;
+		font-size: small;
 	}
 
 	.skeleton {

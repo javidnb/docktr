@@ -35,7 +35,7 @@
 				>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="/branches" class:active={currentPage == '/branches'}
+				<a class="nav-link" href="/branches" class:active={currentPage.includes('/branches')}
 					><span class="material-symbols-outlined"> category </span><span class="pcOnly"
 						>Branşlar</span
 					></a
@@ -67,7 +67,14 @@
 			</li>
 
 			{#if $session.loggedIn}
-				<li class="nav-item">
+				<li class="nav-item mobileOnly">
+					<a class="nav-link" href="/profile" class:active={currentPage == '/profile'}
+						><span class="material-symbols-outlined"> account_circle </span>
+						<span class="pcOnly">Profile</span></a
+					>
+				</li>
+
+				<li class="nav-item pcOnly">
 					<a class="nav-link" href="/admin" class:active={currentPage == '/admin'}
 						><span class="material-symbols-outlined"> admin_panel_settings </span>
 						<span class="pcOnly">Admin</span></a

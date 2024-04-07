@@ -1,15 +1,16 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { session } from '$lib/session';
-	import { auth } from '$lib/firebase.client';
+	import { auth, getData } from '$lib/firebase.client';
 	import { formatDate } from '$lib/dateFormatter';
 	import Nav from '$lib/Nav.svelte';
 
 	import type { LayoutData } from './$types';
 	import { browser } from '$app/environment';
 	export let data: LayoutData;
+	import { doctors } from '$lib/data';
 
-	let loading: boolean = true;
+	let dataLoading: boolean = true;
 	let currentDate = new Date();
 	let userr: any = null;
 
@@ -26,7 +27,7 @@
 		const loggedIn = user ? true : false;
 
 		session.update((cur: any) => {
-			loading = false;
+			dataLoading = false;
 			return {
 				...cur,
 				user,
@@ -34,6 +35,18 @@
 				loading: false
 			};
 		});
+
+		if (!$doctors.length) {
+			dataLoading = true;
+			try {
+				let docs = await getData('doctors');
+				doctors.set(docs);
+				dataLoading = false;
+			} catch (error) {
+				console.error('Error fetching data:', error);
+				dataLoading = false;
+			}
+		}
 
 		// if (!loggedIn) {
 		// 	goto('/');

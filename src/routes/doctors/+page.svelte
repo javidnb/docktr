@@ -2,17 +2,21 @@
 	import { getData } from '$lib/firebase.client';
 	import { onMount } from 'svelte';
 	import { diseases } from '$lib/diseases';
+	import { doctors } from '$lib/data';
 
-	let dataLoading: boolean = true;
-	let doctors: any = [];
+	let dataLoading: boolean;
 
 	onMount(async () => {
-		try {
-			doctors = await getData('doctors');
-			dataLoading = false;
-			console.log(doctors);
-		} catch (error) {
-			console.error('Error fetching data:', error);
+		if (!$doctors.length) {
+			dataLoading = true;
+			try {
+				let docs = await getData('doctors');
+				doctors.set(docs);
+				dataLoading = false;
+			} catch (error) {
+				console.error('Error fetching data:', error);
+				dataLoading = false;
+			}
 		}
 	});
 
@@ -37,7 +41,7 @@
 
 <section class="py-5" style="background-color: aliceblue;">
 	<div class="container pb-5">
-		<div class="row row-gap-3">			
+		<div class="row row-gap-3">
 			{#if dataLoading}
 				{#each [1, 2] as doctor}
 					<div class="col col-md-6 col-lg-4">
@@ -45,31 +49,47 @@
 							<div
 								class="card-body d-flex flex-column align-items-center justify-content-center"
 								style="min-height: 15rem;"
-							>
-								
-							</div>
+							></div>
 						</div>
 					</div>
 				{/each}
 			{:else}
-				{#each doctors as doctor, i}
+				{#each $doctors as doctor, i}
 					<div class="col col-md-6 col-lg-4">
-						<div class="card">
+						<a href="/doctors/{doctor.slug}" class="card" style="text-decoration: none;">
 							<div class="card-body d-flex flex-column align-items-center">
-								<img src={doctor.img} alt="Some Doc" />
-								<a
-									class="card-link"
-									href="./"
-									style="text-decoration: none; text-align: center;
-					margin-block: auto;">{doctor.name}</a
-								>
-								<div class="branch">
-									{#each doctor.branches as br}
-										<span>{getBranchName(br)}</span>
-									{/each}
+								<div class="row">
+									<div class="col-6">
+										<img src={doctor.img} alt="Some Doc" />
+									</div>
+									<div class="col-6 text-center d-flex flex-column">
+										<span
+											style="text-decoration: none; text-align: center;
+						margin-block: auto; font-size: large">{doctor.name}</span
+										>
+										<span style="color: #a1c398" class="d-flex justify-content-center"
+											>5 <span class="material-symbols-outlined"> grade </span> | 0 Yorum</span
+										>
+									</div>
+								</div>
+
+								<div class="row mt-3 w-100">
+									<div class="col">
+										<p>{doctor.details}</p>
+									</div>
+								</div>
+
+								<div class="row w-100">
+									<div class="col">
+										<div class="branch">
+											{#each doctor.branches as br}
+												<span>{getBranchName(br)}</span>
+											{/each}
+										</div>
+									</div>
 								</div>
 							</div>
-						</div>
+						</a>
 					</div>
 				{/each}
 			{/if}
@@ -84,16 +104,22 @@
 		border: 0px;
 		box-shadow: 0px 0px 5px #00000012;
 		border-radius: 20px;
+		text-decoration: none;
+	}
+	.card:hover {
+		box-shadow: 0px 0px 5px #00000032;
 	}
 	.card img {
-		max-height: 10rem;
+		max-width: 100%;
 		aspect-ratio: 2 / 1;
 		object-fit: cover;
 		object-position: top;
+		border-radius: 10px;
 	}
 	.branch {
 		display: flex;
 		gap: 10px;
+		color: #a1c398;
 	}
 
 	.skeleton {

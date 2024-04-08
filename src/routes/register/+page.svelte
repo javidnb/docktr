@@ -73,7 +73,7 @@
 						type="submit"
 						style="padding: 0.5rem;
 				border-radius: 10px;
-				background: #A1C398;
+				background: var(--primaryColor);
 				color: white;
 				border: 0px;
 				font-size: 1.05rem;

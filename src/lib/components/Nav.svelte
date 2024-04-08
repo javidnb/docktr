@@ -34,7 +34,7 @@
 	navigating.subscribe((r) => (currentPage = $page.route.id));
 </script>
 
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #a1c398;">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primaryColor);">
 	<div
 		class="container-fluid"
 		style="display: flex;flex-wrap: inherit;
@@ -185,7 +185,7 @@
 		padding-block: 15px;
 	}
 	.active {
-		background-color: #a1c398;
+		/* background-color: #a1c398; */
 		color: white !important;
 		border-radius: 40px;
 		transition-duration: 0.3s;
@@ -228,7 +228,7 @@
 		}
 		.homeNavContainer .nav-link .material-symbols-outlined {
 			font-size: 30px;
-			color: #a1c398;
+			color: var(--primaryColor);
 		}
 		.active .material-symbols-outlined {
 			color: white !important;
@@ -240,7 +240,7 @@
 			border-radius: 40px;
 		}
 		.active:hover {
-			background-color: #a1c398;
+			background-color: var(--primaryColor);
 		}
 	}
 </style>

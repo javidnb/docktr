@@ -8,7 +8,7 @@
 			<div class="card-body d-flex flex-column align-items-center">
 				<span
 					class="material-symbols-outlined"
-					style="font-size: 60px; color: #a1c398;     height: 6rem;
+					style="font-size: 60px; color: var(--primaryColor);     height: 6rem;
                 display: flex;
                 align-items: center;"
 				>

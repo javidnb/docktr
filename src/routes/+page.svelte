@@ -1,5 +1,5 @@
 <script lang="ts">
-	import BranchSlider from "$lib/components/BranchSlider.svelte";
+	import BranchSlider from '$lib/components/BranchSlider.svelte';
 </script>
 
 <section>
@@ -9,22 +9,33 @@
     background-size: cover;
     background-blend-mode: overlay;"
 	>
-		<h1 class="display-4">Sağlık Hizmetlerine Dijital Yaklaşım</h1>
-		<p class="lead">Doktorunuzla İnternet Üzerinden Bağlantı Kurun, Sağlığınızı Şimdi Yönetin</p>
-		<div class="input-group input-group-lg mb-3 mt-2 w-md-50">
-			<input
-				type="text"
-				class="form-control"
-				aria-label="Sizing example input"
-				aria-describedby="inputGroup-sizing-sm"
-				placeholder="Arama yap"
-			/>
-			<span
-				class="input-group-text"
-				style="background: #a1c398;
-			color: white;"><span class="material-symbols-outlined"> search </span></span
-			>
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col col-md-8 d-flex align-items-center flex-column text-center">
+					<h1 class="display-4">Sağlık Hizmetlerine Dijital Yaklaşım</h1>
+					<p class="lead">
+						Doktorunuzla İnternet Üzerinden Bağlantı Kurun, Sağlığınızı Şimdi Yönetin
+					</p>
+					<div class="col-12 col-md-10">
+						<div class="input-group input-group-lg mb-3 mt-2">
+							<input
+								type="text"
+								class="form-control"
+								aria-label="Sizing example input"
+								aria-describedby="inputGroup-sizing-sm"
+								placeholder="Arama yap"
+							/>
+							<span
+								class="input-group-text"
+								style="background: var(--primaryColor);
+						color: white;"><span class="material-symbols-outlined"> search </span></span
+							>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
+
 		<!-- <hr class="my-4" /> -->
 		<!-- <p>
 			It uses utility classes for typography and spacing to space content out within the larger

@@ -5,6 +5,7 @@ import { getFirestore, collection, query, getDocs } from 'firebase/firestore';
 import type { Auth } from 'firebase/auth';
 import { browser } from '$app/environment';
 import type { Doctor } from './interfaces/doctor.interface';
+import { session } from '$lib/session';
 
 export let db: any;
 export let app: FirebaseApp;
@@ -41,4 +42,18 @@ export async function getData(collectionName: string) {
 		});
 		return result;
 	}
+}
+
+export function logout() {
+	auth
+		.signOut()
+		.then(() => {
+			session.set({ user: null });
+			localStorage.removeItem('user');
+			// Redirect or perform any other actions after logout
+			// navigate('/login');
+		})
+		.catch((error) => {
+			console.error('Error logging out:', error);
+		});
 }

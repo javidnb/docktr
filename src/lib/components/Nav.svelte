@@ -1,37 +1,18 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { session } from '$lib/session';
-	import { navigating } from '$app/stores';
 	import { page } from '$app/stores';
-	import { auth } from '$lib/firebase.client';
 	import { formatDate } from '$lib/helpers/dateFormatter';
+	import { session } from '$lib/session';
 
 	let currentDate = new Date();
-
-	function logout() {
-		auth
-			.signOut()
-			.then(() => {
-				// loggedIn = false;
-				session.set({ user: null });
-				localStorage.removeItem('user');
-				// Redirect or perform any other actions after logout
-				// navigate('/login');
-			})
-			.catch((error) => {
-				console.error('Error logging out:', error);
-			});
-	}
 
 	onMount(async () => {
 		setInterval(() => {
 			currentDate = new Date();
 		}, 60000);
-		// const user: any = await data.getAuthUser();
-		// console.log("user: ", user);
 	});
-	let currentPage: any = '/';
-	navigating.subscribe((r) => (currentPage = $page.route.id));
+	let curPage: string | null = '/';
+	$: curPage = $page.route.id;
 </script>
 
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primaryColor);">
@@ -59,28 +40,18 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav ml-auto" style="margin-left: auto;">
-				<!-- <li class="nav-item active">
-					<a class="nav-link" href="./">Ana Səhifə</a>
-				</li> -->
 				{#if !$session.loggedIn}
 					<li class="nav-item">
 						<a class="nav-link" href="login">Giriş yap</a>
 					</li>
 				{:else}
-					<li
-						data-bs-toggle="collapse"
-						data-bs-target="#navbarSupportedContent"
-						class="nav-item mobileOnly"
-					>
-						<a class="nav-link" href="./admin" class:icon-fill={currentPage == '/admin'}>
+					<li class="nav-item">
+						<a class="nav-link" href="./admin" class:icon-fill={curPage == '/admin'}>
 							<span>Admin</span></a
 						>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="./profile">Hesabım</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="../" on:click={logout}>Çıkış</a>
 					</li>
 				{/if}
 			</ul>
@@ -92,40 +63,35 @@
 	<div class="container pt-3">
 		<ul class="nav nav-pills nav-fill homeNav">
 			<li class="nav-item">
-				<a class="nav-link" href="../" class:active={currentPage == '/'}
-					><span class="material-symbols-outlined" class:icon-fill={currentPage == '/'}>
-						home
-					</span></a
+				<a style="height: 100%;" class="nav-link" href="../" class:active={curPage == '/'}
+					><span class="material-symbols-outlined" class:icon-fill={curPage == '/'}> home </span></a
 				>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="/doctors" class:active={currentPage == '/doctors'}
-					><span class="material-symbols-outlined" class:icon-fill={currentPage == '/doctors'}>
+				<a class="nav-link" href="/doctors" class:active={curPage == '/doctors'}
+					><span class="material-symbols-outlined" class:icon-fill={curPage == '/doctors'}>
 						physical_therapy
 					</span><span class="pcOnly">Doktorlar</span></a
 				>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="/branches" class:active={currentPage.includes('/branches')}
-					><span
-						class="material-symbols-outlined"
-						class:icon-fill={currentPage.includes('/branches')}
-					>
+				<a class="nav-link" href="/branches" class:active={curPage?.includes('/branches')}
+					><span class="material-symbols-outlined" class:icon-fill={curPage?.includes('/branches')}>
 						category
 					</span><span class="pcOnly">Branşlar</span></a
 				>
 			</li>
 			<li class="nav-item pcOnly">
-				<a class="nav-link" href="/diseases" class:active={currentPage == '/diseases'}
-					><span class="material-symbols-outlined" class:icon-fill={currentPage == '/diseases'}>
+				<a class="nav-link" href="/diseases" class:active={curPage == '/diseases'}
+					><span class="material-symbols-outlined" class:icon-fill={curPage == '/diseases'}>
 						microbiology
 					</span>
 					<span class="pcOnly">Hastalıklar</span></a
 				>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="/appointment" class:active={currentPage == '/appointment'}
-					><span class="material-symbols-outlined" class:icon-fill={currentPage == '/appointment'}>
+				<a class="nav-link" href="/appointment" class:active={curPage == '/appointment'}
+					><span class="material-symbols-outlined" class:icon-fill={curPage == '/appointment'}>
 						local_library
 					</span>
 					<span class="pcOnly">Randevu</span></a
@@ -148,7 +114,7 @@
 				<a class="nav-link" href={$session.loggedIn ? '/profile' : '/login'}
 					><span
 						class="material-symbols-outlined"
-						class:icon-fill={currentPage == ('/profile' || '/login')}
+						class:icon-fill={curPage == '/profile' || curPage == '/login' || curPage == '/register'}
 					>
 						account_circle
 					</span>
@@ -157,9 +123,9 @@
 			</li>
 
 			<!-- {#if $session.loggedIn}
-				<li class="nav-item pcOnly" class:active={currentPage == '/admin'}>
+				<li class="nav-item pcOnly" class:active={curPage == '/admin'}>
 					<a class="nav-link" href="/admin"
-						><span class="material-symbols-outlined"  class:icon-fill={currentPage == '/admin'}> admin_panel_settings </span>
+						><span class="material-symbols-outlined"  class:icon-fill={curPage == '/admin'}> admin_panel_settings </span>
 						<span class="pcOnly">Admin</span></a
 					>
 				</li>
@@ -200,7 +166,7 @@
 		color: white !important;
 		border-radius: 40px;
 		transition-duration: 0.3s;
-		font-weight: 500;
+		font-weight: 450;
 	}
 	.nav-link {
 		display: flex;

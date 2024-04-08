@@ -72,7 +72,7 @@
 						data-bs-target="#navbarSupportedContent"
 						class="nav-item mobileOnly"
 					>
-						<a class="nav-link" href="./admin" class:active={currentPage == '/admin'}>
+						<a class="nav-link" href="./admin" class:icon-fill={currentPage == '/admin'}>
 							<span>Admin</span></a
 						>
 					</li>
@@ -93,32 +93,41 @@
 		<ul class="nav nav-pills nav-fill homeNav">
 			<li class="nav-item">
 				<a class="nav-link" href="../" class:active={currentPage == '/'}
-					><span class="material-symbols-outlined"> home </span></a
+					><span class="material-symbols-outlined" class:icon-fill={currentPage == '/'}>
+						home
+					</span></a
 				>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="/doctors" class:active={currentPage == '/doctors'}
-					><span class="material-symbols-outlined"> physical_therapy </span><span class="pcOnly"
-						>Doktorlar</span
-					></a
+					><span class="material-symbols-outlined" class:icon-fill={currentPage == '/doctors'}>
+						physical_therapy
+					</span><span class="pcOnly">Doktorlar</span></a
 				>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="/branches" class:active={currentPage.includes('/branches')}
-					><span class="material-symbols-outlined"> category </span><span class="pcOnly"
-						>Branşlar</span
-					></a
+					><span
+						class="material-symbols-outlined"
+						class:icon-fill={currentPage.includes('/branches')}
+					>
+						category
+					</span><span class="pcOnly">Branşlar</span></a
 				>
 			</li>
 			<li class="nav-item pcOnly">
 				<a class="nav-link" href="/diseases" class:active={currentPage == '/diseases'}
-					><span class="material-symbols-outlined"> microbiology </span>
+					><span class="material-symbols-outlined" class:icon-fill={currentPage == '/diseases'}>
+						microbiology
+					</span>
 					<span class="pcOnly">Hastalıklar</span></a
 				>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="/appointment" class:active={currentPage == '/appointment'}
-					><span class="material-symbols-outlined"> local_library </span>
+					><span class="material-symbols-outlined" class:icon-fill={currentPage == '/appointment'}>
+						local_library
+					</span>
 					<span class="pcOnly">Randevu</span></a
 				>
 			</li>
@@ -136,23 +145,25 @@
 			</li>
 
 			<li class="nav-item mobileOnly">
-				<a
-					class="nav-link"
-					href={$session.loggedIn ? '/profile' : '/login'}
-					class:active={currentPage == ('/profile' || '/login')}
-					><span class="material-symbols-outlined"> account_circle </span>
+				<a class="nav-link" href={$session.loggedIn ? '/profile' : '/login'}
+					><span
+						class="material-symbols-outlined"
+						class:icon-fill={currentPage == ('/profile' || '/login')}
+					>
+						account_circle
+					</span>
 					<span class="pcOnly">Profile</span></a
 				>
 			</li>
 
-			{#if $session.loggedIn}
-				<li class="nav-item pcOnly">
-					<a class="nav-link" href="/admin" class:active={currentPage == '/admin'}
-						><span class="material-symbols-outlined"> admin_panel_settings </span>
+			<!-- {#if $session.loggedIn}
+				<li class="nav-item pcOnly" class:active={currentPage == '/admin'}>
+					<a class="nav-link" href="/admin"
+						><span class="material-symbols-outlined"  class:icon-fill={currentPage == '/admin'}> admin_panel_settings </span>
 						<span class="pcOnly">Admin</span></a
 					>
 				</li>
-			{/if}
+			{/if} -->
 		</ul>
 	</div>
 </section>
@@ -176,8 +187,6 @@
 		}
 	}
 	.homeNav {
-		/* border-bottom-left-radius: 10px;
-		border-bottom-right-radius: 10px; */
 		border-radius: 40px;
 		background: white;
 		flex-wrap: nowrap;
@@ -188,10 +197,10 @@
 		padding-block: 15px;
 	}
 	.active {
-		/* background-color: #a1c398; */
 		color: white !important;
 		border-radius: 40px;
 		transition-duration: 0.3s;
+		font-weight: 500;
 	}
 	.nav-link {
 		display: flex;
@@ -221,10 +230,10 @@
 		}
 		.homeNavContainer .active {
 			border-radius: 0;
+			background-color: unset;
 		}
-		.homeNav .nav-item {
-			border-inline: 1px solid #dedede;
-			margin-left: -1px;
+		.homeNav .nav-item:not(:last-child) {
+			border-right: 1px solid #dedede;
 		}
 		.homeNavContainer .nav-item .nav-link {
 			padding: 9px 15px;
@@ -232,9 +241,6 @@
 		.homeNavContainer .nav-link .material-symbols-outlined {
 			font-size: 30px;
 			color: var(--primaryColor);
-		}
-		.active .material-symbols-outlined {
-			color: white !important;
 		}
 		.nav-item,
 		.active,

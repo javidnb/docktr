@@ -2,22 +2,15 @@
 	import BranchSlider from '$lib/components/BranchSlider.svelte';
 </script>
 
-<style>
-	.categories {
-		background-color: aliceblue;
-	}
-	.jumbotron {
-		padding-block: 3rem;
+<section>
+	<div
+		class="jumbotron"
+		style="padding-block: 3rem;
 		background-color: #e2e9ef;
 		background-image: url('https://tekoplast.az/img/docktrbg.png');
 		background-size: cover;
-		background-blend-mode: overlay;
-	}
-</style>
-
-
-<section>
-	<div class="jumbotron">
+		background-blend-mode: overlay;"
+	>
 		<div class="container">
 			<div class="row justify-content-center">
 				<div class="col col-md-8 d-flex align-items-center flex-column text-center">
@@ -44,13 +37,6 @@
 				</div>
 			</div>
 		</div>
-
-		<!-- <hr class="my-4" /> -->
-		<!-- <p>
-			It uses utility classes for typography and spacing to space content out within the larger
-			container.
-		</p> -->
-		<!-- <a class="btn btn-primary btn-lg" href="#" role="button">Doktorlar</a> -->
 	</div>
 </section>
 
@@ -74,3 +60,16 @@
 		</div>
 	</div>
 </section>
+
+<style>
+	.categories {
+		background-color: aliceblue;
+	}
+	.jumbotron {
+		padding-block: 3rem;
+		background-color: #e2e9ef;
+		background-image: url('https://tekoplast.az/img/docktrbg.png');
+		background-size: cover;
+		background-blend-mode: overlay;
+	}
+</style>

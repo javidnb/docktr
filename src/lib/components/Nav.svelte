@@ -44,7 +44,7 @@
 		<p class="d-flex align-items mb-0 time" style="color: white;">{formatDate(currentDate)}</p>
 		<a class="navbar-brand tac-one-regular mx-auto" style="margin-left: auto;" href="../">Docktr</a>
 		<button
-			class="navbar-toggler"
+			class="navbar-toggler d-none"
 			type="button"
 			data-bs-toggle="collapse"
 			data-bs-target="#navbarSupportedContent"
@@ -135,14 +135,17 @@
 				>
 			</li>
 
-			{#if $session.loggedIn}
-				<li class="nav-item mobileOnly">
-					<a class="nav-link" href="/profile" class:active={currentPage == '/profile'}
-						><span class="material-symbols-outlined"> account_circle </span>
-						<span class="pcOnly">Profile</span></a
-					>
-				</li>
+			<li class="nav-item mobileOnly">
+				<a
+					class="nav-link"
+					href={$session.loggedIn ? '/profile' : '/login'}
+					class:active={currentPage == ('/profile' || '/login')}
+					><span class="material-symbols-outlined"> account_circle </span>
+					<span class="pcOnly">Profile</span></a
+				>
+			</li>
 
+			{#if $session.loggedIn}
 				<li class="nav-item pcOnly">
 					<a class="nav-link" href="/admin" class:active={currentPage == '/admin'}
 						><span class="material-symbols-outlined"> admin_panel_settings </span>
@@ -219,7 +222,7 @@
 		.homeNavContainer .active {
 			border-radius: 0;
 		}
-		.nav-item {
+		.homeNav .nav-item {
 			border-inline: 1px solid #dedede;
 			margin-left: -1px;
 		}
@@ -232,6 +235,11 @@
 		}
 		.active .material-symbols-outlined {
 			color: white !important;
+		}
+		.nav-item,
+		.active,
+		.nav-link {
+			border-radius: 0px !important;
 		}
 	}
 	@media screen and (min-width: 992px) {

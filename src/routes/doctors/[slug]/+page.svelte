@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { doctors } from '$lib/dataStore';
+	import { doctors } from '$lib/store/dataStore';
 
 	$: doctor = $doctors.find((d) => d.slug == $page.params.slug);
 </script>

@@ -8,6 +8,10 @@
 				--primaryColor: #a1c398;
 				--bs-nav-pills-link-active-bg: var(--primaryColor) !important;
 			}
+			html,
+			body {
+				scrollbar-gutter: stable;
+			}
 			.homeNav .active {
 				background-color: var(--primaryColor) !important;
 				border-radius: 40px;
@@ -52,6 +56,10 @@
 			@media screen and (min-width: 992px) {
 				.navbar-collapse {
 					flex: none !important;
+				}
+				.nav-item {
+					border-radius: 40px;
+					overflow: hidden;
 				}
 			}
 		</style>

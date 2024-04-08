@@ -4,7 +4,7 @@
 	import { navigating } from '$app/stores';
 	import { page } from '$app/stores';
 	import { auth } from '$lib/firebase.client';
-	import { formatDate } from '$lib/dateFormatter';
+	import { formatDate } from '$lib/helpers/dateFormatter';
 
 	let currentDate = new Date();
 
@@ -241,6 +241,10 @@
 		}
 		.active:hover {
 			background-color: var(--primaryColor);
+		}
+		.nav-item {
+			border-radius: 40px;
+			overflow: hidden;
 		}
 	}
 </style>

@@ -1,5 +1,5 @@
 <script async script lang="ts">
-	import { doctors } from '$lib/dataStore';
+	import { doctors } from '$lib/store/dataStore';
 	import DoctorCard from '$lib/components/DoctorCard.svelte';
 </script>
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { diseases } from '$lib/diseases';
+	import { diseases } from '$lib/store/diseases';
 	function handleSubmit(e: SubmitEvent) {
 		const formData = new FormData(e.target as HTMLFormElement);
 		const data: any = {};

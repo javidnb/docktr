@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { diseases } from '$lib/diseases';
+	import { diseases } from '$lib/store/diseases';
 	import { page } from '$app/stores';
-	import { doctors } from '$lib/dataStore';
+	import { doctors } from '$lib/store/dataStore';
 	import DoctorCard from '$lib/components/DoctorCard.svelte';
 
 	let d = diseases.find((d) => d.slug == $page.params.slug);

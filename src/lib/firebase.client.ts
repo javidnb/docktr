@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import type { FirebaseApp } from 'firebase/app';
-import { getFirestore, type Firestore, collection, query, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, query, getDocs } from 'firebase/firestore';
 import type { Auth } from 'firebase/auth';
 import { browser } from '$app/environment';
 import type { Doctor } from './interfaces/doctor.interface';

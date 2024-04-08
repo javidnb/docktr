@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { diseases } from '$lib/diseases';
+	import { diseases } from '$lib/store/diseases';
 	import type { Doctor } from '$lib/interfaces/doctor.interface';
 	export let props: Doctor;
 

@@ -8,7 +8,7 @@
 	import type { LayoutData } from './$types';
 	import { browser } from '$app/environment';
 	export let data: LayoutData;
-	import { doctors } from '$lib/dataStore';
+	import { doctors } from '$lib/store/dataStore';
 	import { cubicIn, cubicOut } from 'svelte/easing';
 	import type { Doctor } from '$lib/interfaces/doctor.interface';
 

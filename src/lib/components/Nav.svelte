@@ -46,12 +46,12 @@
 					</li>
 				{:else}
 					<li class="nav-item">
-						<a class="nav-link" href="./admin" class:icon-fill={curPage == '/admin'}>
+						<a class="nav-link" href="../admin" class:icon-fill={curPage == '/admin'}>
 							<span>Admin</span></a
 						>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="./profile">Hesabım</a>
+						<a class="nav-link" href="../profile">Hesabım</a>
 					</li>
 				{/if}
 			</ul>

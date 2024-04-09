@@ -1,5 +1,12 @@
 <script lang="ts">
 	import { diseases } from '$lib/store/diseases';
+	import { session } from '$lib/session';
+	import { goto } from '$app/navigation';
+
+	if (!$session.loggedIn) {
+		goto('./');
+	}
+
 	function handleSubmit(e: SubmitEvent) {
 		const formData = new FormData(e.target as HTMLFormElement);
 		const data: any = {};
@@ -17,7 +24,7 @@
 	<div class="jumbotron" style="padding-top: 2rem; background-color: #e2e9ef">
 		<h1 class="display-4">Admin Panel</h1>
 		<!-- <p class="lead">We connect you to doctors around the world!</p> -->
-		<hr/>
+		<hr />
 		<!-- <p>
 			It uses utility classes for typography and spacing to space content out within the larger
 			container.

@@ -1,9 +1,3 @@
 <section>
-	<div class="container">
-		<div class="row">
-			<div class="col">
-				<h3>Hastalık Geçmişi</h3>
-			</div>
-		</div>
-	</div>
+	<h5>Hastalık Geçmişi</h5>
 </section>

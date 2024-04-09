@@ -157,6 +157,7 @@
 		background: white;
 		flex-wrap: nowrap;
 		overflow: hidden;
+		box-shadow: 0px 0px 5px #00000012;
 	}
 	.homeNav a {
 		color: #415d3a;

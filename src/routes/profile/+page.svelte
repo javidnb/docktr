@@ -96,8 +96,10 @@
 								class="list-group-item mt-auto bg-secondary text-white"
 								on:click={logout}
 								href="../"
+								style="margin: 1rem; border-radius: 10px"
 							>
-								<span class="material-symbols-outlined"> logout </span>Çıkış
+								<span class="material-symbols-outlined"> logout </span>
+								<span class="mx-auto" style="padding-right: 1rem;">Çıkış</span>
 							</a>
 						</ul>
 						<ul class="list-group mobileList mobileOnly w-100">
@@ -226,15 +228,15 @@
 			box-shadow: unset;
 		}
 		.pcOnly {
-			display: none!important;
+			display: none !important;
 		}
 	}
 	@media screen and (min-width: 768px) {
 		.pcOnly {
-			display: inline-block!important;
+			display: inline-block;
 		}
 		.mobileOnly {
-			display: none!important;
+			display: none !important;
 		}
 	}
 </style>

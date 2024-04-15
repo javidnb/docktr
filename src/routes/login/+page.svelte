@@ -9,29 +9,91 @@
 		type UserCredential
 	} from 'firebase/auth';
 	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
 
 	let email: string = '';
 	let password: string = '';
 	let buttonText: string = 'Giriş yap';
 	let disabled = false;
 
+	onMount(async () => {
+		if ($session.loggedIn) {
+			goto('./profile');
+		}
+	});
+
+	async function postData(userData: any) {
+		console.log('user add data: ', JSON.stringify(userData));
+		const response = await fetch('https://tekoplast.az/docktr/api.php/records/users/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ ...userData }),
+			cache: 'no-cache'
+		});
+
+		if (response.ok) {
+			session.set({
+				user: userData,
+				loggedIn: true,
+				loading: false
+			});
+			console.log('Data posted successfully: ', $session);
+		} else {
+			// Handle error response
+			console.error('Failed to post data');
+			session.set({
+				user: userData,
+				loggedIn: true,
+				loading: false
+			});
+		}
+	}
+
+	async function getUser(user: UserCredential) {
+		try {
+			const response = await fetch(
+				'https://tekoplast.az/docktr/api.php/records/users/' + user.user.uid,
+				{
+					cache: 'no-cache'
+				}
+			);
+			if (!response.ok) {
+				console.log('add user to db');
+				let usr = user.user;
+				let data = {
+					uid: usr.uid,
+					displayName: usr.displayName,
+					email: usr.email,
+					phoneNumber: usr.phoneNumber,
+					photoURL: usr.photoURL
+				};
+				postData(data);
+				return;
+			}
+			const data = await response.json();
+			console.log('user exists', data);
+			session.set({
+				user: data,
+				loggedIn: true,
+				loading: false
+			});
+			return data;
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
 	async function loginWithMail() {
 		buttonText = 'Bekleyin..';
 		disabled = true;
 		await signInWithEmailAndPassword(auth, email, password)
-			.then((result) => {
+			.then(async (result) => {
 				const { user }: UserCredential = result;
 				localStorage.setItem('user', JSON.stringify(user));
-				session.set({
-					loggedIn: true,
-					user: {
-						displayName: user?.displayName,
-						email: user?.email,
-						photoURL: user?.photoURL,
-						uid: user?.uid
-					}
-				});
 				goto('/');
+				await getUser(result);
 			})
 			.catch((error) => {
 				return error;
@@ -41,20 +103,11 @@
 	async function loginWithGoogle() {
 		const provider = new GoogleAuthProvider();
 		await signInWithPopup(auth, provider)
-			.then((result) => {
+			.then(async (result) => {
 				const { displayName, email, photoURL, uid } = result?.user;
 				localStorage.setItem('user', JSON.stringify(result?.user));
-				session.set({
-					loggedIn: true,
-					user: {
-						displayName,
-						email,
-						photoURL,
-						uid
-					}
-				});
-
 				goto('/');
+				await getUser(result);
 			})
 			.catch((error) => {
 				return error;
@@ -65,13 +118,7 @@
 <section>
 	<div class="jumbotron" style="padding-top: 2rem; background-color: #e2e9ef">
 		<h1 class="display-4">Giriş Yap</h1>
-		<!-- <p class="lead">We connect you to doctors around the world!</p> -->
-		<hr/>
-		<!-- <p>
-			It uses utility classes for typography and spacing to space content out within the larger
-			container.
-		</p> -->
-		<!-- <a class="btn btn-primary btn-lg" href="#" role="button">Doktorlar</a> -->
+		<hr />
 	</div>
 </section>
 

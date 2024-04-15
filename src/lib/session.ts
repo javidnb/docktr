@@ -5,7 +5,10 @@ type User = {
 	email?: string | null;
 	displayName?: string | null;
 	photoURL?: string | null;
+	phoneNumber?:any;
 	uid?: string | null;
+	doctor?: boolean;
+	admin?: boolean;
 };
 
 export type SessionState = {

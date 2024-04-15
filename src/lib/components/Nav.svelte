@@ -23,7 +23,8 @@
     justify-content: space-between; width:100%"
 	>
 		<p class="d-flex align-items mb-0 time" style="color: white;">{formatDate(currentDate)}</p>
-		<a class="navbar-brand tac-one-regular mx-auto" style="margin-left: auto;" href="../">Docktr</a>
+		<a class="navbar-brand mx-auto" style="margin-left: auto;" href="../">Səhiyyə</a
+		>
 		<button
 			class="navbar-toggler d-none"
 			type="button"
@@ -135,8 +136,8 @@
 </section>
 
 <style>
-	.tac-one-regular {
-		font-family: 'Tac One', sans-serif;
+	.navbar-brand {
+		font-family: "Alumni Sans", sans-serif;
 		font-weight: 400;
 		font-style: normal;
 		font-size: 2rem;

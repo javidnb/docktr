@@ -13,7 +13,7 @@
 	<div class="card-body d-flex flex-column align-items-center">
 		<div class="row">
 			<div class="col-5 d-flex flex-column">
-				<img src={props.img} alt="Some Doc" />
+				<img src={props.img} alt="Some Doc" style="max-width: max(150px,100%)" />
 				<span style="color: #rgb(99 141 88)" class="d-flex justify-content-center mt-2"
 					>5 <span class="material-symbols-outlined"> star_rate </span> | 0 Yorum</span
 				>

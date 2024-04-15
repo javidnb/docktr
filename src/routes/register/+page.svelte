@@ -3,11 +3,18 @@
 	import { createUserWithEmailAndPassword } from 'firebase/auth';
 	import { goto } from '$app/navigation';
 	import { session } from '$lib/session';
+	import { onMount } from 'svelte';
 
 	let email: string = '';
 	let password: string = '';
 	let disabled: boolean = false;
 	let buttonText: string = 'Kayıt ol';
+
+	onMount(async () => {
+		if ($session.loggedIn) {
+			goto('./profile');
+		}
+	});
 
 	async function handleRegister() {
 		buttonText = 'Bekleyin..';

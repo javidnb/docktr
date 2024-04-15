@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { session } from '$lib/session';
-	import { getData } from '$lib/firebase.client';
 	import { fade, slide } from 'svelte/transition';
 	import Nav from '$lib/components/Nav.svelte';
 
@@ -9,10 +8,16 @@
 	import { browser } from '$app/environment';
 	export let data: LayoutData;
 	import { doctors } from '$lib/store/dataStore';
-	import { cubicIn, cubicOut } from 'svelte/easing';
-	import type { Doctor } from '$lib/interfaces/doctor.interface';
+	import { cubicIn } from 'svelte/easing';
 
 	let dataLoading: boolean = true;
+	if (data.doctors.length) {
+		const dooc = data.doctors.map((item: any) => ({
+			...item,
+			branches: JSON.parse(item.branches)
+		}));
+		doctors.set(dooc);
+	}
 
 	let userr: any = null;
 
@@ -33,22 +38,9 @@
 				loading: false
 			};
 		});
-
-		if (!$doctors.length) {
-			dataLoading = true;
-			try {
-				let docs: Doctor[] = (await getData('doctors')) ?? [];
-				doctors.set(docs);
-				dataLoading = false;
-			} catch (error) {
-				console.error('Error fetching data:', error);
-				dataLoading = false;
-			}
-		}
+		console.log('session: ', $session);
 	});
 </script>
-
-<style src="$lib/style/style.css"></style>
 
 <Nav />
 
@@ -70,3 +62,5 @@
 		<slot />
 	</div>
 {/key}
+
+<style src="$lib/style/style.css"></style>

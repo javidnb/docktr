@@ -3,6 +3,9 @@
 import { initializeFirebase, auth } from '$lib/firebase.client';
 import { browser } from '$app/environment';
 import { onAuthStateChanged } from 'firebase/auth';
+import { doctors } from '$lib/store/dataStore.js';
+
+let gotDs: boolean = false;
 
 export async function load({ url }) {
 	if (browser) {
@@ -19,8 +22,22 @@ export async function load({ url }) {
 		});
 	}
 
+	async function getDoctors() {
+		if (!gotDs) {
+			console.log('get data');
+			const docs = await fetch('https://tekoplast.az/docktr/api.php/records/doctors');
+			const result: any = docs.json();
+			const res = await result;
+			gotDs = true;
+			return res.records;
+		} else {
+			return [];
+		}
+	}
+
 	return {
 		getAuthUser: getAuthUser,
+		doctors: await getDoctors(),
 		url: url.pathname
 	};
 }

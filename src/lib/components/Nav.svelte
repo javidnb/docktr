@@ -12,6 +12,8 @@
 			currentDate = new Date();
 		}, 60000);
 	});
+	console.log('page: ', $page);
+	let websiteName = $page.url.host;
 	let curPage: string | null = '/';
 	$: curPage = $page.route.id;
 </script>
@@ -30,7 +32,11 @@
     justify-content: space-between; width:100%"
 	>
 		<p class="d-flex align-items mb-0 time" style="color: white;">{formatDate(currentDate)}</p>
-		<a class="navbar-brand mx-auto" style="margin-left: auto;" href="../">Səhiyyə</a>
+		<a class="navbar-brand mx-auto" style="margin-left: auto;" href="../"
+			>Səhiyyə<span style="font-size: x-large; color: rgb(0 0 0 / 70%)"
+				>.{websiteName.endsWith('.net') ? 'net' : 'online'}</span
+			></a
+		>
 		<button
 			class="navbar-toggler d-none"
 			type="button"

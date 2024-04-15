@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import { formatDate } from '$lib/helpers/dateFormatter';
 	import { session } from '$lib/session';
+	import { dataLoading } from '$lib/store/dataStore';
 
 	let currentDate = new Date();
 
@@ -15,6 +16,12 @@
 	$: curPage = $page.route.id;
 </script>
 
+{#if $dataLoading}
+	<div class="progress-bar">
+		<div class="progress-animation"></div>
+	</div>
+{/if}
+
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primaryColor);">
 	<div
 		class="container-fluid"
@@ -23,8 +30,7 @@
     justify-content: space-between; width:100%"
 	>
 		<p class="d-flex align-items mb-0 time" style="color: white;">{formatDate(currentDate)}</p>
-		<a class="navbar-brand mx-auto" style="margin-left: auto;" href="../">Səhiyyə</a
-		>
+		<a class="navbar-brand mx-auto" style="margin-left: auto;" href="../">Səhiyyə</a>
 		<button
 			class="navbar-toggler d-none"
 			type="button"
@@ -137,7 +143,7 @@
 
 <style>
 	.navbar-brand {
-		font-family: "Alumni Sans", sans-serif;
+		font-family: 'Alumni Sans', sans-serif;
 		font-weight: 400;
 		font-style: normal;
 		font-size: 2rem;
@@ -227,6 +233,30 @@
 		.nav-item {
 			border-radius: 40px;
 			overflow: hidden;
+		}
+	}
+
+	.progress-bar {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 1011;
+	}
+
+	.progress-animation {
+		width: 30%; /* width of the line */
+		height: 3px; /* adjust height as needed */
+		background-color: #007bff; /* adjust color as needed */
+		animation: progress 2.5s linear infinite;
+	}
+
+	@keyframes progress {
+		0% {
+			transform: translateX(-100%);
+		}
+		100% {
+			transform: translateX(300%);
 		}
 	}
 </style>

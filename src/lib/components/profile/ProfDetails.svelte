@@ -2,6 +2,7 @@
 	import { session } from '$lib/session';
 	import { getAuth, updateProfile } from 'firebase/auth';
 	import { onMount } from 'svelte';
+	import { dataLoading } from '$lib/store/dataStore';
 
 	$: userData = $session;
 	let dialog: any; // Reference to the dialog tag
@@ -10,6 +11,7 @@
 	})
 
 	function formSubmit(e: SubmitEvent) {
+		dataLoading.set(true);
 		const formData = new FormData(e.target as HTMLFormElement);
 		const data: any = {};
 		for (let field of formData) {
@@ -25,9 +27,11 @@
 			}).then(
 				() => {
 					console.log('yo');
+					dataLoading.set(false);
 				},
 				function (error) {
 					console.log(error);
+					dataLoading.set(false);
 				}
 			);
 		}

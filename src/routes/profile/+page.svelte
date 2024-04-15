@@ -58,7 +58,7 @@
 			<div class="row mt-3 pb-5">
 				<div class="col-12 col-md-4 col-lg-3 col-xxl-2">
 					{#if !mobileComponent}
-						<ul class="list-group pcOnly w-100 h-100 bg-white d-flex" style="min-height: 400px;">
+						<ul class="list-group pcOnly w-100 h-100 bg-white d-flex pcOnly" style="min-height: 400px;">
 							<button
 								class="list-group-item w-100"
 								on:click={() => {
@@ -143,7 +143,7 @@
 				</div>
 
 				{#if mobileComponent}
-					<div class="col-md-9 col-lg-9 kont px-0">
+					<div class="col-md-9 col-lg-9 kont px-0 mobileOnly">
 						<div class="container">
 							<div class="row">
 								<div class="col-12 mobileOnly" style="background-color: unset">

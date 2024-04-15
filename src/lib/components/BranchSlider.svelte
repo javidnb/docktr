@@ -13,19 +13,21 @@
 			<div
 				class="card"
 				style="flex: 1;
-			min-width: 10rem;
-			min-height: 10rem;
-			border: 0px;
-			box-shadow: 0px 0px 5px #00000012;
-			border-radius: 20px;
-			cursor: pointer; text-decoration:none"
-			>
+					min-width: 10rem;
+					min-height: 10rem;
+					border: 0px;
+					box-shadow: 0px 0px 5px #00000012;
+					border-radius: 20px;
+					cursor: auto;
+					text-decoration:none"
+				>
 				<div class="card-body d-flex flex-column align-items-center">
 					<span
 						class="material-symbols-outlined"
-						style="font-size: 60px; color: var(--primaryColor);     height: 4rem;
-                display: flex;
-                align-items: center;"
+						style="
+						font-size: 45px; color: var(--primaryColor); height: 3rem;
+						display: flex;
+						align-items: center;"
 					>
 						biotech
 					</span>
@@ -75,11 +77,10 @@
 		border: 0px;
 		box-shadow: 0px 0px 5px #00000012;
 		border-radius: 20px;
-		cursor: pointer;
 	}
 
 	.card:hover {
-		box-shadow: 0px 0px 5px #00000032;
+		box-shadow: 0px 0px 5px #00000032!important;
 	}
 
 	/* SCROLLBAR */

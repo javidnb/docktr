@@ -1,27 +1,52 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { diseases } from '$lib/store/diseases';
+
+	function routeTo(id: any) {
+		console.log('yo');
+	}
 </script>
 
 <div class="branches">
 	{#each diseases as item}
-		<a class="card" href="/branches/{item.slug}" style="text-decoration: none;">
-			<div class="card-body d-flex flex-column align-items-center">
-				<span
-					class="material-symbols-outlined"
-					style="font-size: 60px; color: var(--primaryColor);     height: 6rem;
+		{#if item.id}
+			<div
+				class="card"
+				style="flex: 1;
+			min-width: 10rem;
+			min-height: 10rem;
+			border: 0px;
+			box-shadow: 0px 0px 5px #00000012;
+			border-radius: 20px;
+			cursor: pointer; text-decoration:none"
+			>
+				<div class="card-body d-flex flex-column align-items-center">
+					<span
+						class="material-symbols-outlined"
+						style="font-size: 60px; color: var(--primaryColor);     height: 4rem;
                 display: flex;
                 align-items: center;"
-				>
-					biotech
-				</span>
-				<a
-					class="card-link"
-					href="/branches/{item.slug}"
-					style="text-decoration: none; text-align: center;
-                margin-block: auto;">{item.name}</a
-				>
+					>
+						biotech
+					</span>
+					<a
+						class="card-link"
+						href="/branches/{item.slug}"
+						style="text-decoration: none; text-align: center;
+                margin-block: auto; color: black; font-weight: 600">{item.name}</a
+					>
+					<button
+						class="btn btn-primary btnBranch"
+						style="	background-color: white;
+						border: 1px solid var(--primaryColor);
+						color: var(--primaryColor);"
+						on:click={() => goto(`./branches/${item.slug}`)}
+					>
+						Həkimlər
+					</button>
+				</div>
 			</div>
-		</a>
+		{/if}
 	{/each}
 </div>
 
@@ -32,6 +57,16 @@
 		overflow-x: scroll;
 		padding-block: 1rem;
 		padding-left: 3px;
+	}
+	.btnBranch {
+		background-color: white;
+		border: 1px solid var(--primaryColor);
+		color: var(--primaryColor);
+		transition-duration: 0.2s;
+	}
+	.btnBranch:hover {
+		background-color: var(--primaryColor)!important;
+		color: white!important;;
 	}
 	.card {
 		flex: 1;

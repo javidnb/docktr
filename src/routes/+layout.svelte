@@ -11,7 +11,7 @@
 	import { cubicIn } from 'svelte/easing';
 
 	let dataLoading: boolean = true;
-	if (data.doctors.length) {
+	if (data?.doctors?.length) {
 		const dooc = data.doctors.map((item: any) => ({
 			...item,
 			branches: JSON.parse(item.branches)

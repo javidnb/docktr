@@ -1,14 +1,22 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { diseases } from '$lib/store/diseases';
+	import { doctors } from '$lib/store/dataStore';
 
 	function routeTo(id: any) {
 		console.log('yo');
 	}
+
+	let branches = diseases.map((branch) => {
+		const doctorCount = $doctors.filter((doctor) => doctor.branches.includes(branch.id)).length;
+		return { ...branch, doctorCount };
+	});
+
+	branches.sort((a, b) => b.doctorCount - a.doctorCount);
 </script>
 
 <div class="branches">
-	{#each diseases as item}
+	{#each branches as item}
 		{#if item.id}
 			<div
 				class="card"
@@ -20,7 +28,7 @@
 					border-radius: 20px;
 					cursor: auto;
 					text-decoration:none"
-				>
+			>
 				<div class="card-body d-flex flex-column align-items-center">
 					<span
 						class="material-symbols-outlined"
@@ -44,7 +52,7 @@
 						color: var(--primaryColor);"
 						on:click={() => goto(`./branches/${item.slug}`)}
 					>
-						Həkimlər
+						{item.doctorCount} həkim
 					</button>
 				</div>
 			</div>
@@ -67,8 +75,8 @@
 		transition-duration: 0.2s;
 	}
 	.btnBranch:hover {
-		background-color: var(--primaryColor)!important;
-		color: white!important;;
+		background-color: var(--primaryColor) !important;
+		color: white !important;
 	}
 	.card {
 		flex: 1;
@@ -80,7 +88,7 @@
 	}
 
 	.card:hover {
-		box-shadow: 0px 0px 5px #00000032!important;
+		box-shadow: 0px 0px 5px #00000032 !important;
 	}
 
 	/* SCROLLBAR */

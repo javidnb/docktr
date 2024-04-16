@@ -26,12 +26,12 @@ export async function load({ url }) {
 		if (!gotDs) {
 			dataLoading.set(true);
 			console.log('get data');
-			const docs = await fetch('https://tekoplast.az/docktr/api/?doctors');
+			const docs = await fetch('https://tekoplast.az/docktr/api.php/records/doctors');
 			const result: any = docs.json();
 			const res = await result;
 			gotDs = true;
 			dataLoading.set(false);
-			return res;
+			return res.records;
 		} else {
 			return [];
 		}

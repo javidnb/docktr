@@ -10,6 +10,7 @@
 	} from 'firebase/auth';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import { dataLoading } from '$lib/store/dataStore';
 
 	let email: string = '';
 	let password: string = '';
@@ -53,12 +54,9 @@
 
 	async function getUser(user: UserCredential) {
 		try {
-			const response = await fetch(
-				'https://tekoplast.az/docktr/api.php/records/users/' + user.user.uid,
-				{
-					cache: 'no-cache'
-				}
-			);
+			const response = await fetch('https://tekoplast.az/docktr/api/?user&id=' + user.user.uid, {
+				cache: 'no-cache'
+			});
 			if (!response.ok) {
 				console.log('add user to db');
 				let usr = user.user;
@@ -73,7 +71,6 @@
 				return;
 			}
 			const data = await response.json();
-			console.log('user exists', data);
 			session.set({
 				user: data,
 				loggedIn: true,
@@ -86,30 +83,36 @@
 	}
 
 	async function loginWithMail() {
+		dataLoading.set(true);
 		buttonText = 'Bekleyin..';
 		disabled = true;
 		await signInWithEmailAndPassword(auth, email, password)
 			.then(async (result) => {
 				const { user }: UserCredential = result;
 				localStorage.setItem('user', JSON.stringify(user));
-				goto('/');
 				await getUser(result);
+				goto('/');
+				dataLoading.set(false);
 			})
 			.catch((error) => {
+				dataLoading.set(false);
 				return error;
 			});
 	}
 
 	async function loginWithGoogle() {
+		dataLoading.set(true);
 		const provider = new GoogleAuthProvider();
 		await signInWithPopup(auth, provider)
 			.then(async (result) => {
 				const { displayName, email, photoURL, uid } = result?.user;
 				localStorage.setItem('user', JSON.stringify(result?.user));
-				goto('/');
 				await getUser(result);
+				goto('/');
+				dataLoading.set(false);
 			})
 			.catch((error) => {
+				dataLoading.set(false);
 				return error;
 			});
 	}

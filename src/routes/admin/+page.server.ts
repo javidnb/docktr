@@ -1,6 +1,7 @@
-const users = await fetch('https://tekoplast.az/docktr/api.php/records/doctors');
-const result = users.json();
+// let time = new Date().getTime();
+// const users = await fetch(`https://tekoplast.az/docktr/api/?doctors&t=${time}`);
+// const result = users.json();
 
-export const load = async () => {
-	return result;
-};
+// export const load = async () => {
+// 	return result;
+// };

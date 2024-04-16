@@ -8,7 +8,7 @@
 	console.log(data);
 
 	onMount(async () => {
-		if (!$session.loggedIn) {
+		if (!$session?.loggedIn) {
 			goto('./login');
 		}
 	});
@@ -20,13 +20,13 @@
 			const [key, value] = field;
 			data[key] = value;
 		}
-		console.log(data);
-		let profession = diseases.find((d) => d.name == data.profession);
-		console.log(profession?.id);
+		// console.log(data);
+		// let profession = diseases.find((d) => d.name == data.profession);
+		// console.log(profession?.id);
 	}
 </script>
 
-{#if $session.loggedIn}
+{#if $session?.loggedIn}
 	<section>
 		<div class="jumbotron" style="padding-top: 2rem; background-color: #e2e9ef">
 			<h1 class="display-4">Admin Panel</h1>

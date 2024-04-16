@@ -25,13 +25,13 @@ export async function load({ url }) {
 	async function getDoctors() {
 		if (!gotDs) {
 			dataLoading.set(true);
-			console.log('get data');
-			const docs = await fetch('https://tekoplast.az/docktr/api.php/records/doctors');
+			let time = new Date().getTime();
+			const docs = await fetch(`https://tekoplast.az/docktr/api/?doctors&t=${time}`);
 			const result: any = docs.json();
 			const res = await result;
 			gotDs = true;
 			dataLoading.set(false);
-			return res.records;
+			return res;
 		} else {
 			return [];
 		}

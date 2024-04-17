@@ -2,13 +2,13 @@
 	import { session } from '$lib/session';
 
 	async function postData(userData: any) {
-		console.log('user add data: ', JSON.stringify(userData));
-		const response = await fetch('https://tekoplast.az/docktr/api.php/records/users/', {
+		let dataToPost = { table: 'users', data: { ...userData } };
+		const response = await fetch('https://tekoplast.az/docktr/api/?postData', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify(userData),
+			body: JSON.stringify({ ...dataToPost }),
 			cache: 'no-cache'
 		});
 
@@ -21,7 +21,7 @@
 					loading: false
 				};
 			});
-			console.log('Data posted successfully');
+			console.log('Data posted successfully', response);
 		} else {
 			// Handle error response
 			console.error('Failed to post data');
@@ -37,7 +37,7 @@
 	}
 
 	function handleClick() {
-		// postData({id:null,uid:1, name:'Cavka'})
+		// postData({ uid: 1, displayName: 'Cavka' });
 	}
 </script>
 

@@ -11,6 +11,7 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { dataLoading } from '$lib/store/dataStore';
+	import firebase from 'firebase/compat/app';
 
 	let email: string = '';
 	let password: string = '';
@@ -24,13 +25,14 @@
 	});
 
 	async function postData(userData: any) {
-		console.log('user add data: ', JSON.stringify(userData));
-		const response = await fetch('https://tekoplast.az/docktr/api.php/records/users/', {
+		console.log('adding data: ', userData);
+		let dataToPost = { table: 'users', data: { ...userData } };
+		const response = await fetch('https://tekoplast.az/docktr/api/?postData', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ ...userData }),
+			body: JSON.stringify({ ...dataToPost }),
 			cache: 'no-cache'
 		});
 
@@ -54,29 +56,31 @@
 
 	async function getUser(user: UserCredential) {
 		try {
-			const response = await fetch('https://tekoplast.az/docktr/api/?user&id=' + user.user.uid, {
-				cache: 'no-cache'
-			});
-			if (!response.ok) {
+			let time = new Date().getTime();
+			const response = await fetch(
+				`https://tekoplast.az/docktr/api/?user&id=${user.user.uid}&t=${time}`
+			);
+			const result = await response.json();
+			console.log('response: ', result);
+			if (!result) {
 				console.log('add user to db');
 				let usr = user.user;
 				let data = {
 					uid: usr.uid,
 					displayName: usr.displayName,
 					email: usr.email,
-					phoneNumber: usr.phoneNumber,
+					phoneNumber: usr.phoneNumber || null,
 					photoURL: usr.photoURL
 				};
 				postData(data);
 				return;
 			}
-			const data = await response.json();
 			session.set({
-				user: data,
+				user: result,
 				loggedIn: true,
 				loading: false
 			});
-			return data;
+			return response;
 		} catch (error) {
 			console.error(error);
 		}
@@ -114,6 +118,35 @@
 			.catch((error) => {
 				dataLoading.set(false);
 				return error;
+			});
+	}
+
+	function gogil() {
+		const provider = new GoogleAuthProvider();
+		firebase
+			.auth()
+			.signInWithPopup(provider)
+			.then((result) => {
+				/** @type {firebase.auth.OAuthCredential} */
+				var credential = result.credential;
+
+				// This gives you a Google Access Token. You can use it to access the Google API.
+				var token = credential?.toJSON;
+				console.log(token);
+				// The signed-in user info.
+				var user = result.user;
+				// IdP data available in result.additionalUserInfo.profile.
+				// ...
+			})
+			.catch((error) => {
+				// Handle Errors here.
+				var errorCode = error.code;
+				var errorMessage = error.message;
+				// The email of the user's account used.
+				var email = error.email;
+				// The firebase.auth.AuthCredential type that was used.
+				var credential = error.credential;
+				// ...
 			});
 	}
 </script>
@@ -159,7 +192,7 @@
 		<hr style="margin-top: 1rem" />
 		<button
 			class="btn"
-			on:click={loginWithGoogle}
+			on:click={gogil}
 			style="margin-block: 0.5rem;
 			padding: 0.4rem;
 			border-radius: 10px;

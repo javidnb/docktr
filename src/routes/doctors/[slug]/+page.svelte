@@ -39,28 +39,27 @@
 		<div class="row">
 			<div class="col-12">
 				<div class="row">
-					<div class="col-12 col-md-3">
+					<div class="col-3 col-md-2">
 						<img
 							src={doctor?.img}
 							alt={doctor?.name}
-							style="width: max(170px , 100%);
+							style="width: max(100%);
 							aspect-ratio: 1/1;
 							object-fit: cover;
 							object-position: top;
 							border-radius: 100%;"
 						/>
 					</div>
-					<div class="col-12 col-md-9">
+					<div class="col-9 col-md-10 d-flex flex-column align-items-center">
 						{#if doctor?.branches}
-							<div class="branch d-flex gap-3">
+							<div class="branch d-flex flex-wrap column-gap-3">
 								{#each doctor.branches as br}
 									<span>{getBranchName(br)}</span>
 								{/each}
 							</div>
 						{/if}
 						<button
-							class="btn btn-outline-primary d-flex justify-content-center align-items-center py-3 mt-3"
-							style="min-width: 250px; border-radius: 20px; font-size: large"
+							class="btn btn-outline-primary d-flex justify-content-center align-items-center py-3 btnRandevu"
 							><span class="material-symbols-outlined">local_library</span><span
 								style="margin-inline: auto;">Randevu Al</span
 							></button
@@ -137,5 +136,16 @@
 		border: 0px;
 		background: none;
 		color: var(--primaryColor);
+	}
+	.btnRandevu {
+		min-width: 250px;
+		border-radius: 20px;
+		font-size: large;
+		margin-block: auto;
+		background: white;
+		padding-inline: 2rem;
+	}
+	.btnRandevu:hover {
+		background-color: var(--primaryColor);
 	}
 </style>

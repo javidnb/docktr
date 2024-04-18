@@ -7,6 +7,10 @@
 		let d = diseases.find((d) => d.id == id);
 		return d?.name;
 	}
+
+	function truncateString(str: string, maxLength: number) {
+		return str.length > maxLength ? str.slice(0, maxLength) + '...' : str;
+	}
 </script>
 
 <a href="/doctors/{props.slug}" class="card" style="text-decoration: none;">
@@ -36,7 +40,7 @@
 
 		<div class="row mt-2 w-100">
 			<div class="col">
-				<p>{props.details}</p>
+				<p>{truncateString(props.details, 100)}</p>
 			</div>
 		</div>
 
@@ -45,7 +49,6 @@
 		</div>
 	</div>
 </a>
-
 
 <style>
 	.card {
@@ -68,8 +71,9 @@
 	}
 	.branch {
 		display: flex;
-		gap: 10px;
+		column-gap: 10px;
 		color: #444444;
 		font-size: small;
+		flex-wrap: wrap;
 	}
 </style>

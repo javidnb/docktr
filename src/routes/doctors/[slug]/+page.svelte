@@ -7,6 +7,7 @@
 	import Appointment from '$lib/components/Appointment.svelte';
 	import Modal from '$lib/helpers/Modal.svelte';
 	import { dataLoading } from '$lib/store/dataStore';
+	import { writable } from 'svelte/store';
 
 	$: doctor = $doctors.find((d) => d.slug == $page.params.slug);
 	// $: console.log('brenc: ', doctor?.branches);
@@ -15,25 +16,33 @@
 	let truncate: boolean = true;
 	let selectedStarPoint: number = 0;
 	let showModal: boolean = false;
-	let comments: any = [];
-	let alreadyCommented: boolean = false; // to allow commenting only once
+	let commentsLoading: boolean = true;
+	let comments: any = writable<any>([]);
+	export const alreadyCommented = writable<boolean>(false);
 
 	onMount(async () => {
 		getComments();
 	});
 
+	$: {
+		if ($comments.find((c: any) => c.userId == $session.user?.uid)) {
+			alreadyCommented.set(true);
+			console.log('commented');
+		}
+	}
+
 	async function getComments() {
 		try {
+			commentsLoading = true;
 			let time = new Date().getTime();
 			const response = await fetch(
 				`https://tekoplast.az/docktr/api/?comments&doctor=${doctor?.id}&t=${time}`
 			);
 			const result = await response.json();
-			comments = result;
-			if (comments.find((c: any) => c.userId == $session.user?.uid)) alreadyCommented = true;
-			console.log('comments: ', result);
+			comments.set(result);
+			commentsLoading = false;
 		} catch (error) {
-			console.error(error);
+			commentsLoading = false;
 		}
 	}
 
@@ -167,10 +176,11 @@
 						</div>
 					</div>
 				</div>
+
 				<div class="row mt-3">
 					<div class="card p-3">
 						<div class="card-title">Şərhlər</div>
-						{#if $session.loggedIn && !alreadyCommented}
+						{#if $session.loggedIn && !$alreadyCommented}
 							<div class="col-12 col-md-8">
 								<form class="d-flex flex-column" on:submit|preventDefault={postComment}>
 									<span
@@ -199,14 +209,63 @@
 								</form>
 							</div>
 						{/if}
-						<div class="card-body">
-							{#each comments as comment}
-								<div class="card p-3">
-									<p>{comment.userId} - {comment.star}*</p>
-									<p>{comment.comment}</p>
+
+						{#if commentsLoading}
+							<div class="d-flex mt-3 ps-5" style="color: var(--primaryColor)!important;">
+								<div class="lds-roller">
+									<div></div>
+									<div></div>
+									<div></div>
+									<div></div>
+									<div></div>
+									<div></div>
+									<div></div>
+									<div></div>
 								</div>
-							{/each}
-						</div>
+							</div>
+						{:else}
+							<div class="d-flex flex-column gap-3 pt-3">
+								{#each $comments as comment}
+									{#if comment.status == null && comment.userId == $session.user?.uid}
+										<div class="card p-3" style="background-color: rgb(243 243 243);">
+											<div>
+												<span>{comment.displayName || comment.email || 'Adsız İstifadəçi'}</span>
+												<div class="d-flex">
+													{#each Array.from({ length: comment.star }) as _}
+														<span class="material-symbols-outlined icon-fill star"> star </span>
+													{/each}
+													{#each Array.from({ length: 5 - comment.star }) as _}
+														<span class="material-symbols-outlined star"> star </span>
+													{/each}
+												</div>
+											</div>
+											<p>{@html comment.comment}</p>
+											<span style="font-style: italic; font-size: small"
+												>Şərhiniz təsdiq gözləyir ..</span
+											>
+										</div>
+									{/if}
+									{#if comment.status !== null}
+										<div class="card p-3">
+											<div>
+												<span>{comment.displayName || comment.email || 'Adsız İstifadəçi'}</span>
+												<div class="d-flex">
+													{#each Array.from({ length: comment.star }) as _}
+														<span class="material-symbols-outlined icon-fill star"> star </span>
+													{/each}
+													{#each Array.from({ length: 5 - comment.star }) as _}
+														<span class="material-symbols-outlined star"> star </span>
+													{/each}
+												</div>
+											</div>
+											<p>{@html comment.comment}</p>
+										</div>
+									{/if}
+								{/each}
+								{#if !$comments.length}
+									<span>Həkim haqqında şərh yoxdur</span>
+								{/if}
+							</div>{/if}
 					</div>
 				</div>
 			</div>
@@ -239,6 +298,96 @@
 	@media screen and (max-width: 992px) {
 		.btnRandevu {
 			padding-block: 0.5rem;
+		}
+	}
+
+	.lds-roller,
+	.lds-roller div,
+	.lds-roller div:after {
+		box-sizing: border-box;
+	}
+	.lds-roller {
+		display: inline-block;
+		position: relative;
+		width: 80px;
+		height: 80px;
+	}
+	.lds-roller div {
+		animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+		transform-origin: 40px 40px;
+	}
+	.lds-roller div:after {
+		content: ' ';
+		display: block;
+		position: absolute;
+		width: 7.2px;
+		height: 7.2px;
+		border-radius: 50%;
+		background: currentColor;
+		margin: -3.6px 0 0 -3.6px;
+	}
+	.lds-roller div:nth-child(1) {
+		animation-delay: -0.036s;
+	}
+	.lds-roller div:nth-child(1):after {
+		top: 62.62742px;
+		left: 62.62742px;
+	}
+	.lds-roller div:nth-child(2) {
+		animation-delay: -0.072s;
+	}
+	.lds-roller div:nth-child(2):after {
+		top: 67.71281px;
+		left: 56px;
+	}
+	.lds-roller div:nth-child(3) {
+		animation-delay: -0.108s;
+	}
+	.lds-roller div:nth-child(3):after {
+		top: 70.90963px;
+		left: 48.28221px;
+	}
+	.lds-roller div:nth-child(4) {
+		animation-delay: -0.144s;
+	}
+	.lds-roller div:nth-child(4):after {
+		top: 72px;
+		left: 40px;
+	}
+	.lds-roller div:nth-child(5) {
+		animation-delay: -0.18s;
+	}
+	.lds-roller div:nth-child(5):after {
+		top: 70.90963px;
+		left: 31.71779px;
+	}
+	.lds-roller div:nth-child(6) {
+		animation-delay: -0.216s;
+	}
+	.lds-roller div:nth-child(6):after {
+		top: 67.71281px;
+		left: 24px;
+	}
+	.lds-roller div:nth-child(7) {
+		animation-delay: -0.252s;
+	}
+	.lds-roller div:nth-child(7):after {
+		top: 62.62742px;
+		left: 17.37258px;
+	}
+	.lds-roller div:nth-child(8) {
+		animation-delay: -0.288s;
+	}
+	.lds-roller div:nth-child(8):after {
+		top: 56px;
+		left: 12.28719px;
+	}
+	@keyframes lds-roller {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
 		}
 	}
 </style>

@@ -13,7 +13,7 @@
 	}
 </script>
 
-<a href="/doctors/{props.slug}" class="card" style="text-decoration: none;">
+<a href="/doctors/{props.slug}" class="card h-100" style="text-decoration: none;">
 	<div class="card-body d-flex flex-column align-items-center">
 		<div class="row">
 			<div class="col-5 d-flex flex-column">

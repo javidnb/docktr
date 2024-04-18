@@ -35,7 +35,7 @@ export async function load({ url }) {
 		} else {
 			return [];
 		}
-	}
+	}	
 
 	return {
 		getAuthUser: getAuthUser,

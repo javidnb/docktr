@@ -8,7 +8,7 @@
 	let dialog: any; // Reference to the dialog tag
 	onMount(() => {
 		dialog = document.getElementById('confirmation-dialog');
-	})
+	});
 
 	function formSubmit(e: SubmitEvent) {
 		dataLoading.set(true);
@@ -45,7 +45,7 @@
 		id="displayName"
 		type="text"
 		class="form-control"
-		value={userData?.user?.displayName}
+		value={userData?.user?.displayName ?? ''}
 	/>
 	<label for="email">Email</label>
 	<input id="email" type="email" readonly class="form-control" value={userData?.user?.email} />
@@ -55,7 +55,7 @@
 		id="phone"
 		type="number"
 		class="form-control"
-		value={userData?.user?.phoneNumber}
+		value={userData?.user?.phoneNumber ?? ''}
 	/>
 	<label for="photoURL">Photo</label>
 	{#if userData?.user?.photoURL}
@@ -64,15 +64,26 @@
 			alt="Profile Pic"
 			style="max-width: 100px; border-radius: 100%"
 		/>
+	{:else}
+		<div
+			style="width: 100px; 
+			height: 100px;
+			color: var(--primaryColor);
+			border-radius: 100%;
+			border: 3px solid var(--primaryColor);
+			display: flex; align-items: center; justify-content: center;"
+		>
+			<span class="material-symbols-outlined icon-fill" style="font-size: 4rem"> person </span>
+		</div>
 	{/if}
 	<input
 		name="photoURL"
 		id="photoURL"
 		type="text"
 		class="form-control"
-		value={userData?.user?.photoURL}
+		value={userData?.user?.photoURL ?? ''}
 	/>
-	<button class="btn btn-primary mt-auto">Yenilə</button>
+	<button class="btn btn-primary mt-3">Yenilə</button>
 </form>
 
 <dialog

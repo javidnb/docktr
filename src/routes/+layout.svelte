@@ -21,6 +21,29 @@
 
 	let userr: any = null;
 
+	async function getUser(user: any) {
+		try {
+			console.log(user);
+			let time = new Date().getTime();
+			const response = await fetch(
+				`https://tekoplast.az/docktr/api/?user&id=${user.uid}&t=${time}`
+			);
+			const result = await response.json();
+			if (result) {
+				session.set({
+					user: result,
+					loggedIn: true,
+					loading: false
+				});
+				return null;
+			}
+			return response;
+		} catch (error) {
+			console.error(error);
+			return null;
+		}
+	}
+
 	onMount(async () => {
 		if (browser) {
 			userr = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') ?? '') : null;
@@ -29,16 +52,9 @@
 		const user: any = await data.getAuthUser();
 		const loggedIn = user ? true : false;
 
-		session.update((cur: any) => {
-			dataLoading = false;
-			return {
-				...cur,
-				user,
-				loggedIn,
-				loading: false
-			};
-		});
-		console.log('session: ', $session);
+		if (loggedIn) {
+			getUser(user);
+		}
 	});
 </script>
 

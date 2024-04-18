@@ -4,17 +4,25 @@
 	import { diseases } from '$lib/store/diseases';
 	import { onMount } from 'svelte';
 	import { session } from '$lib/session';
+	import Appointment from '$lib/components/Appointment.svelte';
+	import Modal from '$lib/helpers/Modal.svelte';
 
 	$: doctor = $doctors.find((d) => d.slug == $page.params.slug);
 	// $: console.log('brenc: ', doctor?.branches);
 	let truncate: boolean = true;
 	let selectedStarPoint: number;
+	let showModal: boolean = false;
 
 	onMount(async () => {});
 
 	function getBranchName(id: number) {
 		let d = diseases.find((d) => d.id == id);
 		return d?.name;
+	}
+
+	function getBranchSlug(id: number) {
+		let d = diseases.find((d) => d.id == id);
+		return d?.slug;
 	}
 
 	function truncateString(str: string, maxLength: number) {
@@ -33,6 +41,14 @@
 		<!-- <a class="btn btn-primary btn-lg" href="#" role="button">Doktorlar</a> -->
 	</div>
 </section>
+
+<Modal bind:showModal>
+	<h2 slot="header">Randevu</h2>
+
+	<ol class="px-0">
+		<Appointment />
+	</ol>
+</Modal>
 
 <section class="my-3">
 	<div class="container">
@@ -54,12 +70,15 @@
 						{#if doctor?.branches}
 							<div class="branch d-flex flex-wrap column-gap-3">
 								{#each doctor.branches as br}
-									<span>{getBranchName(br)}</span>
+									<a style="color: var(--primaryColor)" href="../branches/{getBranchSlug(br)}"
+										>{getBranchName(br)}</a
+									>
 								{/each}
 							</div>
 						{/if}
 						<button
 							class="btn btn-outline-primary d-flex justify-content-center align-items-center py-3 btnRandevu"
+							on:click={() => (showModal = true)}
 							><span class="material-symbols-outlined">local_library</span><span
 								style="margin-inline: auto;">Randevu Al</span
 							></button

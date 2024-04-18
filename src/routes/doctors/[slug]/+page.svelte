@@ -32,18 +32,18 @@
 		<div class="row">
 			<div class="col-md-8">
 				<div class="row">
-					<div class="col col-md-4">
+					<div class="col-12 col-md-3">
 						<img
 							src={doctor?.img}
 							alt={doctor?.name}
-							style="max-width: 250px;
-							aspect-ratio: 2 / 1.5;
+							style="width: max(170px , 100%);
+							aspect-ratio: 1/1;
 							object-fit: cover;
 							object-position: top;
-							border-radius: 10px;"
+							border-radius: 100%;"
 						/>
 					</div>
-					<div class="col col-md-8">
+					<div class="col-12 col-md-9">
 						{#if doctor?.branches}
 							<div class="branch d-flex gap-3">
 								{#each doctor.branches as br}

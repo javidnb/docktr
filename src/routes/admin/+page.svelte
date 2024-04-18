@@ -4,8 +4,7 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 
-	export let data;
-	console.log(data);
+	// export let data;
 
 	onMount(async () => {
 		if (!$session?.loggedIn) {
@@ -26,7 +25,7 @@
 	}
 </script>
 
-{#if $session?.loggedIn}
+{#if $session?.loggedIn && $session?.user?.admin}
 	<section>
 		<div class="jumbotron" style="padding-top: 2rem; background-color: #e2e9ef">
 			<h1 class="display-4">Admin Panel</h1>

@@ -72,7 +72,7 @@
 		class="form-control"
 		value={userData?.user?.photoURL}
 	/>
-	<button class="btn btn-primary mt-3">Yenilə</button>
+	<button class="btn btn-primary mt-auto">Yenilə</button>
 </form>
 
 <dialog

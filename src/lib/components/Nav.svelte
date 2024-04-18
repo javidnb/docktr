@@ -58,11 +58,13 @@
 						<a class="nav-link" href="login">Giriş yap</a>
 					</li>
 				{:else}
-					<li class="nav-item">
-						<a class="nav-link" href="../admin" class:icon-fill={curPage == '/admin'}>
-							<span>Admin</span></a
-						>
-					</li>
+					{#if $session.user?.admin}
+						<li class="nav-item">
+							<a class="nav-link" href="../admin" class:icon-fill={curPage == '/admin'}>
+								<span>Admin</span></a
+							>
+						</li>
+					{/if}
 					<li class="nav-item">
 						<a class="nav-link" href="../profile">Hesabım</a>
 					</li>

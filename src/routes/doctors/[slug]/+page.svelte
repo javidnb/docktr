@@ -43,7 +43,7 @@
 </section>
 
 <Modal bind:showModal>
-	<h2 slot="header">Randevu</h2>
+	<h4 slot="header">Randevu</h4>
 
 	<ol class="px-0">
 		<Appointment />

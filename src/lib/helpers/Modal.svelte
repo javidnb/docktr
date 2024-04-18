@@ -12,14 +12,21 @@
 	on:close={() => (showModal = false)}
 	on:click|self={() => dialog.close()}
 >
+	<button
+		class="btn btn-outline-primary d-flex justify-content-center"
+		style="position: absolute;
+		right: 0;
+		width: 40px !important;
+		background: rgb(161 11 11);
+		color: white;
+		border-radius: 0px;"
+		on:click={() => dialog.close()}><span class="material-symbols-outlined"> close </span></button
+	>
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div on:click|stopPropagation>
 		<slot name="header" />
-		<hr />
 		<slot />
-		<hr />
 		<!-- svelte-ignore a11y-autofocus -->
-		<button class="btn btn-outline-primary w-100" autofocus on:click={() => dialog.close()}>Bağla</button>
 	</div>
 </dialog>
 
@@ -29,6 +36,7 @@
 		border-radius: 0.2em;
 		border: none;
 		padding: 0;
+		min-width: min(30em, 100%);
 	}
 	dialog::backdrop {
 		background: rgba(0, 0, 0, 0.3);

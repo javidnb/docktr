@@ -78,7 +78,6 @@
 			comment: data.comment,
 			star: selectedStarPoint,
 			date: formatDate(today, true),
-			status: !data.comment.length ? 1 : null
 		};
 
 		console.log(postData);

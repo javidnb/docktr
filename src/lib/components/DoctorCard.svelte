@@ -38,21 +38,30 @@
 				<span
 					style="text-decoration: none;
                     text-align: center;
-                    margin-block: 10px 5px;
+                    margin-block: 0px;
                     font-size: large;
                     font-weight: 600;">{props.name}</span
 				>
-				<p class="docDetails" style="font-size: medium;">{truncateString(props.details, 100)}</p>
+				<p
+					class="docDetails"
+					style="font-size: medium;
+						line-height: 1.3;
+						text-align: center;
+						color: #575757;"
+				>
+					{truncateString(props.details, 120)}
+				</p>
 			</div>
 		</div>
 
-		<div class="row w-100" style="margin-top: auto">
-			<div class="col">
-				<div class="branch">
-					{#each props.branches as br}
-						<span>{getBranchName(br)}</span>
-					{/each}
-				</div>
+		<div class="row w-100 mt-1" style="margin-top: auto">
+			<div class="branch">
+				{#each props.branches as br, i}
+					<span style="min-width: max-content;">{getBranchName(br)}</span>
+					{#if i !== props.branches.length - 1}
+						,
+					{/if}
+				{/each}
 			</div>
 		</div>
 
@@ -83,10 +92,15 @@
 	}
 	.branch {
 		display: flex;
-		column-gap: 10px;
-		color: #444444;
+		column-gap: 3px;
 		font-size: small;
-		flex-wrap: wrap;
+		flex-wrap: nowrap;
+		border: 1px solid #ececec;
+		padding: 5px 10px;
+		border-radius: 10px;
+		background: aliceblue;
+		color: black;
+		overflow: hidden;
 	}
 	.star {
 		color: var(--primaryColor);

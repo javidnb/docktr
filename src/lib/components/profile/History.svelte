@@ -37,11 +37,13 @@
 							} else {
 								// Show permission request UI
 								console.log('No registration token available. Request permission to generate one.');
+								cmToken = 'error';
 								// ...
 							}
 						})
 						.catch((err) => {
 							console.log(err);
+							cmToken = 'error';
 							// ...
 						});
 				}

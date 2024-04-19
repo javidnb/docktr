@@ -19,7 +19,13 @@ function padNumber(num: any) {
 }
 
 // Function to format the date
-export function formatDate(date: any) {
+export function formatDate(date: any, dateOnly?: boolean) {
+	if (dateOnly) {
+		const day = padNumber(date.getDate());
+		const month = padNumber(date.getMonth());
+		const year = date.getFullYear();
+		return `${year}-${month}-${day}`;
+	}
 	const hours = padNumber(date.getHours());
 	const minutes = padNumber(date.getMinutes());
 	const day = padNumber(date.getDate());

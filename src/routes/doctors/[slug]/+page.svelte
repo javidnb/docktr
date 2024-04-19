@@ -8,6 +8,7 @@
 	import Modal from '$lib/helpers/Modal.svelte';
 	import { dataLoading } from '$lib/store/dataStore';
 	import { writable } from 'svelte/store';
+	import { formatDate } from '$lib/helpers/dateFormatter';
 
 	$: doctor = $doctors.find((d) => d.slug == $page.params.slug);
 	// $: console.log('brenc: ', doctor?.branches);
@@ -20,6 +21,7 @@
 	let comments: any = writable<any>([]);
 	export const alreadyCommented = writable<boolean>(false);
 
+	const today = new Date();
 	onMount(async () => {
 		getComments();
 	});
@@ -74,8 +76,11 @@
 			userId: $session.user?.uid,
 			doctorId: doctor?.id,
 			comment: data.comment,
-			star: selectedStarPoint
+			star: selectedStarPoint,
+			date: formatDate(today, true)
 		};
+
+		console.log(postData);
 
 		let dataToPost = { table: 'comments', data: { ...postData } };
 		const response = await fetch('https://tekoplast.az/docktr/api/?postData', {
@@ -96,6 +101,11 @@
 			btnCommentText = 'Xəta :(';
 			dataLoading.set(false);
 		}
+	}
+
+	function changeDateFormat(dateString: string) {
+		const parts = dateString.split('-');
+		return `${parts[2]}-${parts[1]}-${parts[0]}`;
 	}
 </script>
 
@@ -177,38 +187,10 @@
 					</div>
 				</div>
 
+				<!-- COMMENTS CONTAINER -->
 				<div class="row mt-3">
 					<div class="card p-3">
 						<div class="card-title">Şərhlər</div>
-						{#if $session.loggedIn && !$alreadyCommented}
-							<div class="col-12 col-md-8">
-								<form class="d-flex flex-column" on:submit|preventDefault={postComment}>
-									<span
-										>{$session.user?.displayName ||
-											$session.user?.email ||
-											$session.user?.phoneNumber}</span
-									>
-									<div class="d-flex">
-										{#each [1, 2, 3, 4, 5] as star, index}
-											<button
-												on:click|preventDefault={() => (selectedStarPoint = index + 1)}
-												class="material-symbols-outlined star"
-												class:icon-fill={selectedStarPoint >= star}
-											>
-												star
-											</button>
-										{/each}
-									</div>
-									<label for="comment">Şərhiniz</label>
-									<textarea class="form-control" name="comment" id="comment" />
-									<button
-										class="btn btn-outline-primary mt-3"
-										type="submit"
-										disabled={btnCommentDisabled || selectedStarPoint == 0}>{btnCommentText}</button
-									>
-								</form>
-							</div>
-						{/if}
 
 						{#if commentsLoading}
 							<div class="d-flex mt-3 ps-5" style="color: var(--primaryColor)!important;">
@@ -224,20 +206,59 @@
 								</div>
 							</div>
 						{:else}
+							<!-- POST COMMENT -->
+							{#if $session.loggedIn && !$alreadyCommented}
+								<div class="col-12 col-md-8">
+									<form class="d-flex flex-column" on:submit|preventDefault={postComment}>
+										<span
+											>{$session.user?.displayName ||
+												$session.user?.email ||
+												$session.user?.phoneNumber}</span
+										>
+										<div class="d-flex">
+											{#each [1, 2, 3, 4, 5] as star, index}
+												<button
+													on:click|preventDefault={() => (selectedStarPoint = index + 1)}
+													class="material-symbols-outlined star"
+													class:icon-fill={selectedStarPoint >= star}
+												>
+													star
+												</button>
+											{/each}
+										</div>
+										<label for="comment">Şərhiniz</label>
+										<textarea class="form-control" name="comment" id="comment" />
+										<button
+											class="btn btn-outline-primary mt-3"
+											type="submit"
+											disabled={btnCommentDisabled || selectedStarPoint == 0}
+											>{btnCommentText}</button
+										>
+									</form>
+								</div>
+							{/if}
+							<!-- COMMENTS -->
 							<div class="d-flex flex-column gap-3 pt-3">
 								{#each $comments as comment}
 									{#if comment.status == null && comment.userId == $session.user?.uid}
 										<div class="card p-3" style="background-color: rgb(243 243 243);">
 											<div>
-												<span>{comment.displayName || comment.email || 'Adsız İstifadəçi'}</span>
-												<div class="d-flex">
-													{#each Array.from({ length: comment.star }) as _}
-														<span class="material-symbols-outlined icon-fill star"> star </span>
-													{/each}
-													{#each Array.from({ length: 5 - comment.star }) as _}
-														<span class="material-symbols-outlined star"> star </span>
-													{/each}
+												<div class="d-flex gap-2">
+													<span>{comment.displayName || comment.email || 'Adsız İstifadəçi'}</span>
+													<!-- DOCTOR POINT / STARS-->
+													<div class="d-flex">
+														{#each Array.from({ length: comment.star }) as _}
+															<span class="material-symbols-outlined icon-fill star"> star </span>
+														{/each}
+														{#each Array.from({ length: 5 - comment.star }) as _}
+															<span class="material-symbols-outlined star"> star </span>
+														{/each}
+													</div>
 												</div>
+
+												<span class="text-secondary" style="font-size: small"
+													>{changeDateFormat(comment.date)}</span
+												>
 											</div>
 											<p>{@html comment.comment}</p>
 											<span style="font-style: italic; font-size: small"
@@ -248,15 +269,21 @@
 									{#if comment.status !== null}
 										<div class="card p-3">
 											<div>
-												<span>{comment.displayName || comment.email || 'Adsız İstifadəçi'}</span>
-												<div class="d-flex">
-													{#each Array.from({ length: comment.star }) as _}
-														<span class="material-symbols-outlined icon-fill star"> star </span>
-													{/each}
-													{#each Array.from({ length: 5 - comment.star }) as _}
-														<span class="material-symbols-outlined star"> star </span>
-													{/each}
+												<div class="d-flex gap-2">
+													<span>{comment.displayName || comment.email || 'Adsız İstifadəçi'}</span>
+													<div class="d-flex">
+														{#each Array.from({ length: comment.star }) as _}
+															<span class="material-symbols-outlined icon-fill star"> star </span>
+														{/each}
+														{#each Array.from({ length: 5 - comment.star }) as _}
+															<span class="material-symbols-outlined star"> star </span>
+														{/each}
+													</div>
 												</div>
+
+												<span class="text-secondary" style="font-size: small"
+													>{changeDateFormat(comment.date)}</span
+												>
 											</div>
 											<p>{@html comment.comment}</p>
 										</div>

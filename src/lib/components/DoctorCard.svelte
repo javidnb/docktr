@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { diseases } from '$lib/store/diseases';
 	import type { Doctor } from '$lib/interfaces/doctor.interface';
+	import { doctors } from '$lib/store/dataStore';
 	export let props: Doctor;
 
 	function getBranchName(id: number) {
@@ -18,9 +19,22 @@
 		<div class="row">
 			<div class="col-5 d-flex flex-column">
 				<img src={props.img} alt="Some Doc" style="max-width: max(150px,100%)" />
-				<span style="color: #rgb(99 141 88)" class="d-flex justify-content-center mt-2"
-					>5 <span class="material-symbols-outlined"> star_rate </span> | 0 Yorum</span
+				<div
+					style="color: #rgb(99 141 88)"
+					class="d-flex flex-column justify-content-center align-items-center mt-2"
 				>
+					<!-- DOCTOR POINT / STARS-->
+					<div class="d-flex">
+						{#each Array.from({ length: props.star }) as _}
+							<span class="material-symbols-outlined icon-fill star"> star </span>
+						{/each}
+						{#each Array.from({ length: 5 - props.star }) as _}
+							<span class="material-symbols-outlined star"> star </span>
+						{/each}
+					</div>
+					<span class="text-secondary" style="font-size: small">{props.comments || 0} Şərh</span>
+					
+				</div>
 			</div>
 			<div class="col-7 text-center d-flex flex-column">
 				<span
@@ -75,5 +89,8 @@
 		color: #444444;
 		font-size: small;
 		flex-wrap: wrap;
+	}
+	.star {
+		color: var(--primaryColor);
 	}
 </style>

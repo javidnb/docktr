@@ -19,7 +19,8 @@
 		width: 40px !important;
 		background: rgb(161 11 11);
 		color: white;
-		border-radius: 0px;"
+		border-radius: 0px;
+		border-bottom-left-radius: 0.2em"
 		on:click={() => dialog.close()}><span class="material-symbols-outlined"> close </span></button
 	>
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -37,6 +38,7 @@
 		border: none;
 		padding: 0;
 		min-width: min(30em, 100%);
+		box-shadow: 0px 0px 8px #00000047;
 	}
 	dialog::backdrop {
 		background: rgba(0, 0, 0, 0.3);

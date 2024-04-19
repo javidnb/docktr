@@ -5,5 +5,7 @@ export type Doctor = {
 	branches: number[];
     slug: string;
     details: string;
+    star: number;
+    comments: number;
     [key: string]: any;
 };

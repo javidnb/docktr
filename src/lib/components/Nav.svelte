@@ -84,8 +84,8 @@
 				</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="/doctors" class:active={curPage == '/doctors'}
-					><span class="material-symbols-outlined" class:icon-fill={curPage == '/doctors'}>
+				<a class="nav-link" href="/doctors" class:active={curPage?.includes('/doctors')}
+					><span class="material-symbols-outlined" class:icon-fill={curPage?.includes('/doctors')}>
 						physical_therapy
 					</span><span class="navLinkText">Doktorlar</span></a
 				>
@@ -228,7 +228,7 @@
 			color: var(--primaryColor);
 		}
 		.nav-item {
-			flex:1!important;
+			flex: 1 !important;
 		}
 		.nav-item,
 		.active,

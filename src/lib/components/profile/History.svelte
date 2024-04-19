@@ -16,13 +16,12 @@
 
 	function registerCM() {
 		navigator.serviceWorker
-			.register('/service-worker.js', {
+			.register('/firebase-messaging-sw.js', {
 				type: 'module'
 			})
 			.then((registration) => {
-				console.log(registration);
+				console.log('sw: ', registration);
 				getToken(messaging, {
-					serviceWorkerRegistration: registration,
 					vapidKey:
 						'BJmtPB9yoTqRrplyE77d1lPptyYd1nn-1evh8lqs2QIg28Kb4Hlq-8qUa1zglHUhgT0VP6dJ3C2bm_pQyQWa79Y'
 				})

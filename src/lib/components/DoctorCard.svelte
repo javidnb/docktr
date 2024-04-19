@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { diseases } from '$lib/store/diseases';
 	import type { Doctor } from '$lib/interfaces/doctor.interface';
-	import { doctors } from '$lib/store/dataStore';
 	export let props: Doctor;
 
 	function getBranchName(id: number) {

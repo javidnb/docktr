@@ -77,7 +77,8 @@
 			doctorId: doctor?.id,
 			comment: data.comment,
 			star: selectedStarPoint,
-			date: formatDate(today, true)
+			date: formatDate(today, true),
+			status: !data.comment.length ? 1 : null
 		};
 
 		console.log(postData);
@@ -285,7 +286,9 @@
 													>{changeDateFormat(comment.date)}</span
 												>
 											</div>
-											<p>{@html comment.comment}</p>
+											{#if comment.comment.length}
+												<p>{@html comment.comment}</p>
+											{/if}
 										</div>
 									{/if}
 								{/each}

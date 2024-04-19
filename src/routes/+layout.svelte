@@ -9,13 +9,14 @@
 	export let data: LayoutData;
 	import { doctors } from '$lib/store/dataStore';
 	import { cubicIn } from 'svelte/easing';
-
-	let dataLoading: boolean = true;
+	
 	if (data?.doctors?.length) {
-		const dooc = data.doctors.map((item: any) => ({
-			...item,
-			branches: JSON.parse(item.branches)
-		}));
+		const dooc = data.doctors
+			.map((item: any) => ({
+				...item,
+				branches: JSON.parse(item.branches)
+			}))
+			.sort((a: any, b: any) => b.star - a.star);
 		doctors.set(dooc);
 	}
 

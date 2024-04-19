@@ -159,14 +159,15 @@
 		line-height: 1;
 	}
 	@media screen and (max-width: 769px) {
-		.time, .pcOnly {
+		.time,
+		.pcOnly {
 			display: none !important;
 		}
 	}
 	@media screen and (min-width: 992px) {
 		.navbar-collapse {
 			flex: none !important;
-		}		
+		}
 	}
 	.homeNav {
 		border-radius: 40px;
@@ -219,12 +220,15 @@
 			border-right: 1px solid #dedede;
 		}
 		.homeNavContainer .nav-item .nav-link {
-			padding: 3px 0px 0px 0px!important;
-			gap:0;
+			padding: 5px 0px !important;
+			gap: 0;
 		}
 		.homeNavContainer .nav-link .material-symbols-outlined {
 			font-size: 30px;
 			color: var(--primaryColor);
+		}
+		.nav-item {
+			flex:1!important;
 		}
 		.nav-item,
 		.active,
@@ -236,14 +240,15 @@
 		.navLinkText {
 			font-size: x-small;
 			color: var(--primaryColor);
-			margin-top: -4px;
-		}
-		.active .navLinkText {
-			font-weight: 500;
-			color: #6b8964;
+			margin-top: 0px;
 		}
 		.material-symbols-outlined {
-			font-size: 25px!important;
+			font-size: 25px !important;
+		}
+		.icon-fill {
+			background: #f3f3f3;
+			border-radius: 10px;
+			padding: 0px 7px;
 		}
 	}
 	@media screen and (min-width: 992px) {

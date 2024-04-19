@@ -15,7 +15,7 @@
 			goto('./login');
 		}
 		const user: any = await data.getAuthUser();
-		userEmail = user.email;
+		userEmail = user.email;		
 	});
 
 	let component = ProfDetails;

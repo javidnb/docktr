@@ -4,13 +4,14 @@
 	import { diseases } from '$lib/store/diseases';
 	import { onMount } from 'svelte';
 	import { session } from '$lib/session';
-	import Appointment from '$lib/components/Appointment.svelte';
-	import Modal from '$lib/helpers/Modal.svelte';
 	import { dataLoading } from '$lib/store/dataStore';
 	import { writable } from 'svelte/store';
 	import { formatDate } from '$lib/helpers/dateFormatter';
+	import Appointment from '$lib/components/Appointment.svelte';
+	import Modal from '$lib/helpers/Modal.svelte';
 
 	$: doctor = $doctors.find((d) => d.slug == $page.params.slug);
+	const doc = writable<any>(doctor);
 	// $: console.log('brenc: ', doctor?.branches);
 	let btnCommentText: string = 'Göndər';
 	let btnCommentDisabled: boolean = false;
@@ -29,7 +30,6 @@
 	$: {
 		if ($comments.find((c: any) => c.userId == $session.user?.uid)) {
 			alreadyCommented.set(true);
-			console.log('commented');
 		}
 	}
 
@@ -43,6 +43,10 @@
 			const result = await response.json();
 			comments.set(result);
 			commentsLoading = false;
+
+			//TODO yorumlari burdan cek, her defe fetch olunmamasi ucun
+			doc.set({ ...doctor, userComments: result });
+			console.log('doc: ', $doc);
 		} catch (error) {
 			commentsLoading = false;
 		}
@@ -77,7 +81,7 @@
 			doctorId: doctor?.id,
 			comment: data.comment,
 			star: selectedStarPoint,
-			date: formatDate(today, true),
+			date: formatDate(today, true)
 		};
 
 		console.log(postData);
@@ -153,16 +157,16 @@
 								style="margin-inline: auto;">Randevu Al</span
 							></button
 						>
-						{#if doctor?.branches}
-							<div class="branch d-flex flex-wrap column-gap-3 justify-content-center">
-								{#each doctor.branches as br}
-									<a style="color: var(--primaryColor)" href="../branches/{getBranchSlug(br)}"
-										>{getBranchName(br)}</a
-									>
-								{/each}
-							</div>
-						{/if}
 					</div>
+				</div>
+				<div class="row mt-3">
+					{#if doctor?.branches}
+						<div class="branch d-flex flex-wrap gap-2">
+							{#each doctor.branches as br}
+								<a href="../branches/{getBranchSlug(br)}">{getBranchName(br)}</a>
+							{/each}
+						</div>
+					{/if}
 				</div>
 				<div class="row mt-3">
 					<div class="card p-3">
@@ -323,6 +327,15 @@
 	}
 	.btnRandevu:hover {
 		background-color: var(--primaryColor);
+	}
+	.branch a {
+		color: var(--primaryColor);
+		background: white;
+		text-decoration: none;
+		border-radius: 10px;
+		padding: 3px 13px;
+		border: 1px solid;
+		font-size: small;
 	}
 	@media screen and (max-width: 992px) {
 		.btnRandevu {

@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import type { FirebaseApp } from 'firebase/app';
 import { getFirestore, collection, query, getDocs } from 'firebase/firestore';
+
 import type { Auth } from 'firebase/auth';
 import { browser } from '$app/environment';
 import type { Doctor } from './interfaces/doctor.interface';
@@ -28,7 +29,7 @@ export const initializeFirebase = () => {
 	if (!app) {
 		app = initializeApp(firebaseConfig);
 		auth = getAuth(app);
-		db = getFirestore(app);
+		db = getFirestore(app);		
 	}
 };
 

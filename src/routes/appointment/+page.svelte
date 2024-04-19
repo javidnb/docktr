@@ -10,3 +10,15 @@
 		<!-- <a class="btn btn-primary btn-lg" href="#" role="button">Doktorlar</a> -->
 	</div>
 </section>
+
+<div class="container">
+	<div class="card mt-3 p-3">
+		<p>Yaxınlaşan görüş yoxdur ..</p>
+	</div>
+</div>
+
+<style>
+	.card {
+		cursor: auto;
+	}
+</style>

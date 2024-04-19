@@ -21,7 +21,7 @@
 				<img src={props.img} alt="Some Doc" style="max-width: max(150px,100%)" />
 				<div
 					style="color: #rgb(99 141 88)"
-					class="d-flex flex-column justify-content-center align-items-center mt-2"
+					class="d-flex flex-column justify-content-center align-items-center mt-1"
 				>
 					<!-- DOCTOR POINT / STARS-->
 					<div class="d-flex">
@@ -33,7 +33,6 @@
 						{/each}
 					</div>
 					<span class="text-secondary" style="font-size: small">{props.comments || 0} Şərh</span>
-					
 				</div>
 			</div>
 			<div class="col-7 text-center d-flex flex-column">
@@ -44,17 +43,17 @@
                     font-size: large;
                     font-weight: 600;">{props.name}</span
 				>
+				<p class="docDetails" style="font-size: medium;">{truncateString(props.details, 100)}</p>
+			</div>
+		</div>
+
+		<div class="row w-100" style="margin-top: auto">
+			<div class="col">
 				<div class="branch">
 					{#each props.branches as br}
 						<span>{getBranchName(br)}</span>
 					{/each}
 				</div>
-			</div>
-		</div>
-
-		<div class="row mt-2 w-100">
-			<div class="col">
-				<p>{truncateString(props.details, 100)}</p>
 			</div>
 		</div>
 

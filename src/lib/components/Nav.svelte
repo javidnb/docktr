@@ -79,21 +79,22 @@
 		<ul class="nav nav-pills nav-fill homeNav">
 			<li class="nav-item">
 				<a style="height: 100%;" class="nav-link" href="../" class:active={curPage == '/'}
-					><span class="material-symbols-outlined" class:icon-fill={curPage == '/'}> home </span></a
-				>
+					><span class="material-symbols-outlined" class:icon-fill={curPage == '/'}> home </span>
+					<span class="mobileOnly navLinkText">Ana Səhifə</span>
+				</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="/doctors" class:active={curPage == '/doctors'}
 					><span class="material-symbols-outlined" class:icon-fill={curPage == '/doctors'}>
 						physical_therapy
-					</span><span class="pcOnly">Doktorlar</span></a
+					</span><span class="navLinkText">Doktorlar</span></a
 				>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="/branches" class:active={curPage?.includes('/branches')}
 					><span class="material-symbols-outlined" class:icon-fill={curPage?.includes('/branches')}>
 						category
-					</span><span class="pcOnly">Branşlar</span></a
+					</span><span class="navLinkText">Branşlar</span></a
 				>
 			</li>
 			<li class="nav-item pcOnly">
@@ -101,7 +102,7 @@
 					><span class="material-symbols-outlined" class:icon-fill={curPage == '/diseases'}>
 						microbiology
 					</span>
-					<span class="pcOnly">Hastalıklar</span></a
+					<span class="navLinkText">Hastalıklar</span></a
 				>
 			</li>
 			<li class="nav-item">
@@ -109,19 +110,19 @@
 					><span class="material-symbols-outlined" class:icon-fill={curPage == '/appointment'}>
 						local_library
 					</span>
-					<span class="pcOnly">Randevu</span></a
+					<span class="navLinkText">Randevu</span></a
 				>
 			</li>
 			<li class="nav-item pcOnly">
 				<a class="nav-link" href="/"
 					><span class="material-symbols-outlined"> rss_feed </span>
-					<span class="pcOnly">Blog</span></a
+					<span class="navLinkText">Blog</span></a
 				>
 			</li>
 			<li class="nav-item pcOnly">
 				<a class="nav-link" href="/"
 					><span class="material-symbols-outlined"> dialpad </span>
-					<span class="pcOnly">İletişim</span></a
+					<span class="navLinkText">İletişim</span></a
 				>
 			</li>
 
@@ -133,7 +134,7 @@
 					>
 						account_circle
 					</span>
-					<span class="pcOnly">Profile</span></a
+					<span class="navLinkText">Hesabım</span></a
 				>
 			</li>
 
@@ -158,14 +159,14 @@
 		line-height: 1;
 	}
 	@media screen and (max-width: 769px) {
-		.time {
+		.time, .pcOnly {
 			display: none !important;
 		}
 	}
 	@media screen and (min-width: 992px) {
 		.navbar-collapse {
 			flex: none !important;
-		}
+		}		
 	}
 	.homeNav {
 		border-radius: 40px;
@@ -207,9 +208,8 @@
 			padding-top: 0px !important;
 		}
 		.homeNavContainer ul {
-			width: 100vw;
+			width: 100%;
 			border-radius: 0px;
-			margin-left: 1px;
 		}
 		.homeNavContainer .active {
 			border-radius: 0;
@@ -219,7 +219,8 @@
 			border-right: 1px solid #dedede;
 		}
 		.homeNavContainer .nav-item .nav-link {
-			padding: 9px 15px;
+			padding: 3px 0px 0px 0px!important;
+			gap:0;
 		}
 		.homeNavContainer .nav-link .material-symbols-outlined {
 			font-size: 30px;
@@ -229,6 +230,20 @@
 		.active,
 		.nav-link {
 			border-radius: 0px !important;
+			display: flex;
+			flex-direction: column;
+		}
+		.navLinkText {
+			font-size: x-small;
+			color: var(--primaryColor);
+			margin-top: -4px;
+		}
+		.active .navLinkText {
+			font-weight: 500;
+			color: #6b8964;
+		}
+		.material-symbols-outlined {
+			font-size: 25px!important;
 		}
 	}
 	@media screen and (min-width: 992px) {

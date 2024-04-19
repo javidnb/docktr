@@ -5,6 +5,7 @@
 	import { app } from '$lib/firebase.client';
 
 	const messaging = getMessaging(app);
+	let cmToken = '';
 
 	onMount(async () => {
 		if ('serviceWorker' in navigator) {
@@ -16,30 +17,34 @@
 
 	function registerCM() {
 		navigator.serviceWorker
-			.register('/firebase-messaging-sw.js', {
+			.register('/service-worker.js', {
 				type: 'module'
 			})
 			.then((registration) => {
 				console.log('sw: ', registration);
-				getToken(messaging, {
-					vapidKey:
-						'BJmtPB9yoTqRrplyE77d1lPptyYd1nn-1evh8lqs2QIg28Kb4Hlq-8qUa1zglHUhgT0VP6dJ3C2bm_pQyQWa79Y'
-				})
-					.then((currentToken) => {
-						if (currentToken) {
-							console.log('Token is: ' + currentToken);
-							// Send the token to your server and update the UI if necessary
-							// ...
-						} else {
-							// Show permission request UI
-							console.log('No registration token available. Request permission to generate one.');
-							// ...
-						}
+				if (registration.active) {
+					getToken(messaging, {
+						vapidKey:
+							'BJmtPB9yoTqRrplyE77d1lPptyYd1nn-1evh8lqs2QIg28Kb4Hlq-8qUa1zglHUhgT0VP6dJ3C2bm_pQyQWa79Y',
+						serviceWorkerRegistration: registration
 					})
-					.catch((err) => {
-						console.log(err);
-						// ...
-					});
+						.then((currentToken) => {
+							if (currentToken) {
+								console.log('Token is: ' + currentToken);
+								cmToken = currentToken;
+								// Send the token to your server and update the UI if necessary
+								// ...
+							} else {
+								// Show permission request UI
+								console.log('No registration token available. Request permission to generate one.');
+								// ...
+							}
+						})
+						.catch((err) => {
+							console.log(err);
+							// ...
+						});
+				}
 			});
 	}
 
@@ -97,4 +102,5 @@
 <section>
 	<h5>Hastalık Geçmişi</h5>
 	<button class="btn btn-primary w-50" on:click={handleClick}>Post</button>
+	<input type="text" class="form-control mt-3" bind:value={cmToken} />
 </section>

@@ -245,52 +245,117 @@
 							<div class="d-flex flex-column gap-3 pt-3">
 								{#each $comments as comment}
 									{#if comment.status == null && comment.userId == $session.user?.uid}
-										<div class="card p-3" style="background-color: rgb(243 243 243);">
-											<div>
-												<div class="d-flex gap-2">
-													<span>{comment.displayName || comment.email || 'Adsız İstifadəçi'}</span>
-													<!-- DOCTOR POINT / STARS-->
-													<div class="d-flex">
-														{#each Array.from({ length: comment.star }) as _}
-															<span class="material-symbols-outlined icon-fill star"> star </span>
-														{/each}
-														{#each Array.from({ length: 5 - comment.star }) as _}
-															<span class="material-symbols-outlined star"> star </span>
-														{/each}
-													</div>
+										<div class="card commentCard p-3" style="background-color: rgb(243 243 243);">
+											<div class="d-flex gap-3 align-items-center">
+												<div>
+													{#if comment?.photoURL}
+														<img
+															src={comment?.photoURL}
+															alt="Profile Pic"
+															style="max-width: 40px; border-radius: 100%; aspect-ratio: 1/1; object-fit: cover;"
+														/>
+													{:else}
+														<div
+															style="width: 40px; 
+																	height: 40px;
+																	color: var(--primaryColor);
+																	border-radius: 100%;
+																	border: 3px solid var(--primaryColor);
+																	display: flex; align-items: center; 
+																	justify-content: center;"
+														>
+															<span
+																class="material-symbols-outlined icon-fill"
+																style="font-size: 1.8rem"
+															>
+																person
+															</span>
+														</div>
+													{/if}
 												</div>
+												<div>
+													<div class="d-flex gap-2">
+														<span>{comment.displayName || comment.email || 'Adsız İstifadəçi'}</span
+														>
+														<div class="d-flex">
+															{#each Array.from({ length: comment.star }) as _}
+																<span class="material-symbols-outlined icon-fill star"> star </span>
+															{/each}
+															{#each Array.from({ length: 5 - comment.star }) as _}
+																<span class="material-symbols-outlined star"> star </span>
+															{/each}
+														</div>
+													</div>
 
-												<span class="text-secondary" style="font-size: small"
-													>{changeDateFormat(comment.date)}</span
-												>
+													<span class="text-secondary" style="font-size: small"
+														>{changeDateFormat(comment.date)}</span
+													>
+												</div>
 											</div>
-											<p>{@html comment.comment}</p>
+
+											{#if comment.comment.length}
+												<p style="margin-top: 1rem; padding-left: 3.5rem">
+													{@html comment.comment}
+												</p>
+											{/if}
 											<span style="font-style: italic; font-size: small"
 												>Şərhiniz təsdiq gözləyir ..</span
 											>
 										</div>
 									{/if}
 									{#if comment.status !== null}
-										<div class="card p-3">
-											<div>
-												<div class="d-flex gap-2">
-													<span>{comment.displayName || comment.email || 'Adsız İstifadəçi'}</span>
-													<div class="d-flex">
-														{#each Array.from({ length: comment.star }) as _}
-															<span class="material-symbols-outlined icon-fill star"> star </span>
-														{/each}
-														{#each Array.from({ length: 5 - comment.star }) as _}
-															<span class="material-symbols-outlined star"> star </span>
-														{/each}
-													</div>
+										<div class="card commentCard p-3">
+											<div class="d-flex gap-3 align-items-center">
+												<div>
+													{#if comment?.photoURL}
+														<img
+															src={comment?.photoURL}
+															alt="Profile Pic"
+															style="max-width: 40px; border-radius: 100%;  aspect-ratio: 1/1; object-fit: cover;"
+														/>
+													{:else}
+														<div
+															style="width: 40px; 
+																	height: 40px;
+																	color: var(--primaryColor);
+																	border-radius: 100%;
+																	border: 3px solid var(--primaryColor);
+																	display: flex; align-items: center; 
+																	justify-content: center;"
+														>
+															<span
+																class="material-symbols-outlined icon-fill"
+																style="font-size: 1.8rem"
+															>
+																person
+															</span>
+														</div>
+													{/if}
 												</div>
+												<div>
+													<div class="d-flex gap-2">
+														<span>{comment.displayName || comment.email || 'Adsız İstifadəçi'}</span
+														>
+														<div class="d-flex">
+															{#each Array.from({ length: comment.star }) as _}
+																<span class="material-symbols-outlined icon-fill star"> star </span>
+															{/each}
+															{#each Array.from({ length: 5 - comment.star }) as _}
+																<span class="material-symbols-outlined star"> star </span>
+															{/each}
+														</div>
+													</div>
 
-												<span class="text-secondary" style="font-size: small"
-													>{changeDateFormat(comment.date)}</span
-												>
+													<span class="text-secondary" style="font-size: small"
+														>{changeDateFormat(comment.date)}</span
+													>
+												</div>
 											</div>
+
 											{#if comment.comment.length}
-												<p>{@html comment.comment}</p>
+												<p style="margin-top: 1rem; padding-left: 3.5rem">
+													{@html comment.comment}
+												</p>
 											{/if}
 										</div>
 									{/if}
@@ -311,6 +376,10 @@
 		cursor: auto;
 		min-height: auto;
 	}
+	.commentCard {
+		background-color: #fbfbfb;
+	}
+
 	.star {
 		border: 0px;
 		background: none;

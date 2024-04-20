@@ -47,7 +47,7 @@
 		<img
 			src={userData?.user?.photoURL}
 			alt="Profile Pic"
-			style="max-width: 100px; border-radius: 100%"
+			style="max-width: 100px; border-radius: 100%; aspect-ratio: 1/1; object-fit: cover;"
 		/>
 	{:else}
 		<div

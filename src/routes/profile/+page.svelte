@@ -15,7 +15,7 @@
 			goto('./login');
 		}
 		const user: any = await data.getAuthUser();
-		userEmail = user.email;		
+		userEmail = user.email;
 	});
 
 	let component = ProfDetails;
@@ -172,7 +172,7 @@
 	</section>
 {/if}
 
-<style>
+<style>	
 	.kont {
 		background-color: white;
 		border-radius: 10px;

@@ -54,7 +54,7 @@
 		}
 	}
 
-	async function getUser(user: UserCredential) {
+	async function getUser(user: any) {
 		try {
 			let time = new Date().getTime();
 			const response = await fetch(
@@ -70,7 +70,8 @@
 					displayName: usr.displayName,
 					email: usr.email,
 					phoneNumber: usr.phoneNumber || null,
-					photoURL: usr.photoURL
+					photoURL: usr.photoURL,
+					fcmToken: usr.fcmToken
 				};
 				postData(data);
 				return;

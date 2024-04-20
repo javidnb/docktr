@@ -10,6 +10,7 @@
 	export let data: LayoutData;
 	import { doctors } from '$lib/store/dataStore';
 	import { cubicIn } from 'svelte/easing';
+	import type { User } from 'firebase/auth';
 
 	if (data?.doctors?.length) {
 		const dooc = data.doctors
@@ -23,7 +24,7 @@
 
 	let userr: any = null;
 
-	async function getUser(user: any) {
+	async function getUser(user: User) {
 		try {
 			let time = new Date().getTime();
 			const response = await fetch(

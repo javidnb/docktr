@@ -38,26 +38,12 @@
 </script>
 
 <form class="d-flex flex-column gap-1" on:submit|preventDefault={formSubmit}>
-	<label for="displayName">Adınız</label>
-	<input
-		name="displayName"
-		id="displayName"
-		type="text"
-		class="form-control"
-		value={userData?.user?.displayName ?? ''}
-	/>
-	<label for="email">Email</label>
-	<input id="email" type="email" readonly class="form-control" value={userData?.user?.email} />
-	<label for="phone">Tel</label>
-	<input
-		name="phoneNumber"
-		id="phone"
-		type="number"
-		class="form-control"
-		value={userData?.user?.phoneNumber ?? ''}
-	/>
-	<label for="photoURL">Photo</label>
-	<div style="position: relative; width: fit-content">
+	<!-- USER PHOTO-->
+	<div
+		style="position: relative;
+    justify-content: center;
+    display: flex;"
+	>
 		{#if userData?.user?.photoURL || avatar}
 			<img
 				src={avatar ? avatar : userData?.user?.photoURL}
@@ -95,7 +81,6 @@
 			display: flex;
 			justify-content: end;cursor: pointer"
 		>
-			
 		</label>
 		<input
 			class="form-control d-none"
@@ -106,6 +91,25 @@
 			bind:this={fileInput}
 		/>
 	</div>
+	<!-- END PHOTO-->
+	<label for="displayName">Adınız</label>
+	<input
+		name="displayName"
+		id="displayName"
+		type="text"
+		class="form-control"
+		value={userData?.user?.displayName ?? ''}
+	/>
+	<label for="email">Email</label>
+	<input id="email" type="email" readonly class="form-control" value={userData?.user?.email} />
+	<label for="phone">Tel</label>
+	<input
+		name="phoneNumber"
+		id="phone"
+		type="number"
+		class="form-control"
+		value={userData?.user?.phoneNumber ?? ''}
+	/>
 	<button class="btn btn-primary mt-3">Yenilə</button>
 </form>
 

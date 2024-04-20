@@ -5,10 +5,11 @@ type User = {
 	email?: string | null;
 	displayName?: string | null;
 	photoURL?: string | null;
-	phoneNumber?:any;
+	phoneNumber?: any;
 	uid?: string | null;
 	doctor?: boolean;
 	admin?: boolean;
+	fcmToken?: string;
 };
 
 export type SessionState = {

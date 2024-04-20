@@ -2,6 +2,8 @@
 	import { onMount } from 'svelte';
 	import { getMessaging, getToken } from 'firebase/messaging';
 	import { app } from '$lib/firebase.client';
+	import { session } from '$lib/session';
+	import { dataLoading, putData } from '$lib/store/dataStore';
 
 	const messaging = getMessaging(app);
 	let cmToken = '';
@@ -15,6 +17,7 @@
 	});
 
 	function registerCM() {
+		dataLoading.set(true);
 		navigator.serviceWorker
 			.register('/service-worker.js', {
 				type: 'module'
@@ -27,16 +30,30 @@
 							'BJmtPB9yoTqRrplyE77d1lPptyYd1nn-1evh8lqs2QIg28Kb4Hlq-8qUa1zglHUhgT0VP6dJ3C2bm_pQyQWa79Y',
 						serviceWorkerRegistration: registration
 					})
-						.then((currentToken) => {
+						.then(async (currentToken) => {
 							if (currentToken) {
 								console.log('Token is: ' + currentToken);
+
+								let tokens: any = $session.user?.fcmToken
+									? JSON.parse($session.user?.fcmToken)
+									: [];
+								console.log(tokens);
+								if (!tokens?.includes(currentToken) && $session.user?.uid) {
+									console.log('yo');
+									tokens.push(currentToken);
+									await putData('users', 'uid', $session.user?.uid, {
+										fcmToken: JSON.stringify(tokens)
+									});
+								}
 								cmToken = currentToken;
+								dataLoading.set(false);
 								// Send the token to your server and update the UI if necessary
 								// ...
 							} else {
 								// Show permission request UI
 								console.log('No registration token available. Request permission to generate one.');
 								cmToken = 'error';
+								dataLoading.set(false);
 								// ...
 							}
 						})

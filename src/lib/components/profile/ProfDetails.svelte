@@ -10,6 +10,20 @@
 		dialog = document.getElementById('confirmation-dialog');
 	});
 
+	let fileInput, avatar: any;
+
+	const onFileSelected = (e: any) => {
+		let image = e.target.files[0];
+		let reader = new FileReader();
+		reader.readAsDataURL(image);
+		reader.onload = (e) => {
+			if (e.target) {
+				avatar = e.target.result;
+				console.log(avatar);
+			}
+		};
+	};
+
 	async function formSubmit(e: SubmitEvent) {
 		dataLoading.set(true);
 		const formData = new FormData(e.target as HTMLFormElement);
@@ -45,7 +59,7 @@
 	<label for="photoURL">Photo</label>
 	{#if userData?.user?.photoURL}
 		<img
-			src={userData?.user?.photoURL}
+			src={avatar ? avatar : userData?.user?.photoURL}
 			alt="Profile Pic"
 			style="max-width: 100px; border-radius: 100%; aspect-ratio: 1/1; object-fit: cover;"
 		/>
@@ -67,6 +81,13 @@
 		type="text"
 		class="form-control"
 		value={userData?.user?.photoURL ?? ''}
+	/>
+	<input
+		class="form-control"
+		type="file"
+		accept=".jpg, .jpeg, .png"
+		on:change={(e) => onFileSelected(e)}
+		bind:this={fileInput}
 	/>
 	<button class="btn btn-primary mt-3">Yenilə</button>
 </form>

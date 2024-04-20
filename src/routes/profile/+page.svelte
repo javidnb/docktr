@@ -6,9 +6,12 @@
 
 	import ProfDetails from '$lib/components/profile/ProfDetails.svelte';
 	import History from '$lib/components/profile/History.svelte';
+	import { dataLoading } from '$lib/store/dataStore.js';
 
 	export let data;
 	let userEmail: any = '';
+
+	$: dataLoading.set($session.loggedIn ? false : true);
 
 	onMount(async () => {
 		if (!$session.loggedIn) {
@@ -172,7 +175,7 @@
 	</section>
 {/if}
 
-<style>	
+<style>
 	.kont {
 		background-color: white;
 		border-radius: 10px;

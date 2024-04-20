@@ -57,38 +57,55 @@
 		value={userData?.user?.phoneNumber ?? ''}
 	/>
 	<label for="photoURL">Photo</label>
-	{#if userData?.user?.photoURL}
-		<img
-			src={avatar ? avatar : userData?.user?.photoURL}
-			alt="Profile Pic"
-			style="max-width: 100px; border-radius: 100%; aspect-ratio: 1/1; object-fit: cover;"
-		/>
-	{:else}
-		<div
-			style="width: 100px; 
-			height: 100px;
-			color: var(--primaryColor);
-			border-radius: 100%;
-			border: 3px solid var(--primaryColor);
-			display: flex; align-items: center; justify-content: center;"
-		>
-			<span class="material-symbols-outlined icon-fill" style="font-size: 4rem"> person </span>
-		</div>
-	{/if}
-	<input
+	<div style="position: relative; width: fit-content">
+		{#if userData?.user?.photoURL || avatar}
+			<img
+				src={avatar ? avatar : userData?.user?.photoURL}
+				alt="Profile Pic"
+				style="max-width: 100px; border-radius: 100%; aspect-ratio: 1/1; object-fit: cover;"
+			/>
+		{:else}
+			<div
+				style="width: 100px; 
+				height: 100px;
+				color: var(--primaryColor);
+				border-radius: 100%;
+				border: 3px solid var(--primaryColor);
+				display: flex; align-items: center; justify-content: center;"
+			>
+				<span class="material-symbols-outlined icon-fill" style="font-size: 4rem"> person </span>
+			</div>
+		{/if}
+		<!-- <input
 		name="photoURL"
 		id="photoURL"
 		type="text"
 		class="form-control"
 		value={userData?.user?.photoURL ?? ''}
-	/>
-	<input
-		class="form-control"
-		type="file"
-		accept=".jpg, .jpeg, .png"
-		on:change={(e) => onFileSelected(e)}
-		bind:this={fileInput}
-	/>
+	/> -->
+		<label
+			for="fileInput"
+			style="
+			position: absolute;
+			top: -7px;
+			right: -7px;
+			color: var(--primaryColor);
+			width: 100%;
+			height: 100%;
+			display: flex;
+			justify-content: end;cursor: pointer"
+		>
+			
+		</label>
+		<input
+			class="form-control d-none"
+			id="fileInput"
+			type="file"
+			accept=".jpg, .jpeg, .png"
+			on:change={(e) => onFileSelected(e)}
+			bind:this={fileInput}
+		/>
+	</div>
 	<button class="btn btn-primary mt-3">Yenilə</button>
 </form>
 

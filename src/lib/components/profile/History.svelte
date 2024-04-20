@@ -4,17 +4,12 @@
 	import { app } from '$lib/firebase.client';
 	import { session } from '$lib/session';
 	import { dataLoading, putData } from '$lib/store/dataStore';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	const messaging = getMessaging(app);
-	let cmToken = '';
+	let hideBtn: boolean = false;
 
-	onMount(async () => {
-		if ('serviceWorker' in navigator) {
-			addEventListener('load', function () {
-				console.log('yo');
-			});
-		}
-	});
+	onMount(async () => {});
 
 	function registerCM() {
 		dataLoading.set(true);
@@ -37,29 +32,40 @@
 								let tokens: any = $session.user?.fcmToken
 									? JSON.parse($session.user?.fcmToken)
 									: [];
-								console.log(tokens);
 								if (!tokens?.includes(currentToken) && $session.user?.uid) {
-									console.log('yo');
 									tokens.push(currentToken);
 									await putData('users', 'uid', $session.user?.uid, {
 										fcmToken: JSON.stringify(tokens)
 									});
+									hideBtn = true;
 								}
-								cmToken = currentToken;
 								dataLoading.set(false);
 								// Send the token to your server and update the UI if necessary
 								// ...
 							} else {
 								// Show permission request UI
-								console.log('No registration token available. Request permission to generate one.');
-								cmToken = 'error';
+								toast.push('Xəta!', {
+									duration: 2000,
+									theme: {
+										'--toastColor': 'mintcream',
+										'--toastBackground': 'rgb(176 24 24)',
+										'--toastBarBackground': '#5b1010'
+									}
+								});
 								dataLoading.set(false);
 								// ...
 							}
 						})
 						.catch((err) => {
 							console.log(err);
-							cmToken = 'error';
+							toast.push('Xəta!', {
+								duration: 2000,
+								theme: {
+									'--toastColor': 'mintcream',
+									'--toastBackground': 'rgb(176 24 24)',
+									'--toastBarBackground': '#5b1010'
+								}
+							});
 							// ...
 						});
 				}
@@ -85,11 +91,12 @@
 <section>
 	<h5>Hastalık Geçmişi</h5>
 	<button class="btn btn-primary w-50" on:click={handleClick}>push token</button>
-	<input type="text" class="form-control mt-3 w-50" bind:value={cmToken} />
 
 	{#if Notification.permission !== 'granted'}
-		<button class="btn btn-primary w-50 mt-3" on:click={requestNotificationPermission}
-			>Notification Perm</button
+		<button
+			class="btn btn-primary w-50 mt-3"
+			class:d-none={hideBtn}
+			on:click={requestNotificationPermission}>Notification Perm</button
 		>
 	{/if}
 </section>

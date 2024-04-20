@@ -12,7 +12,6 @@
 			currentDate = new Date();
 		}, 60000);
 	});
-	console.log('page: ', $page);
 	let websiteName = $page.url.host;
 	let curPage: string | null = '/';
 	$: curPage = $page.route.id;
@@ -55,7 +54,7 @@
 			<ul class="navbar-nav ml-auto" style="margin-left: auto;">
 				{#if !$session.loggedIn}
 					<li class="nav-item">
-						<a class="nav-link" href="login">Giriş yap</a>
+						<a class="nav-link" href="../login">Giriş yap</a>
 					</li>
 				{:else}
 					{#if $session.user?.admin}
@@ -127,7 +126,7 @@
 			</li>
 
 			<li class="nav-item mobileOnly">
-				<a class="nav-link" href={$session.loggedIn ? '/profile' : '/login'}
+				<a class="nav-link" href={$session.loggedIn ? '../profile' : '../login'}
 					><span
 						class="material-symbols-outlined"
 						class:icon-fill={curPage == '/profile' || curPage == '/login' || curPage == '/register'}
@@ -276,7 +275,7 @@
 	.progress-animation {
 		width: 30%; /* width of the line */
 		height: 3px; /* adjust height as needed */
-		background-color: #007bff; /* adjust color as needed */
+		background-color: #597153; /* adjust color as needed */
 		animation: progress 2.5s linear infinite;
 	}
 

@@ -3,13 +3,14 @@
 	import { session } from '$lib/session';
 	import { fade, slide } from 'svelte/transition';
 	import Nav from '$lib/components/Nav.svelte';
+	import { SvelteToast } from '@zerodevx/svelte-toast';
 
 	import type { LayoutData } from './$types';
 	import { browser } from '$app/environment';
 	export let data: LayoutData;
 	import { doctors } from '$lib/store/dataStore';
 	import { cubicIn } from 'svelte/easing';
-	
+
 	if (data?.doctors?.length) {
 		const dooc = data.doctors
 			.map((item: any) => ({
@@ -24,7 +25,6 @@
 
 	async function getUser(user: any) {
 		try {
-			console.log(user);
 			let time = new Date().getTime();
 			const response = await fetch(
 				`https://tekoplast.az/docktr/api/?user&id=${user.uid}&t=${time}`
@@ -73,6 +73,8 @@
 		<!-- <a class="btn btn-primary btn-lg" href="#" role="button">Doktorlar</a> -->
 	</div>
 </section>
+
+<SvelteToast />
 
 {#key data.url}
 	<div in:fade={{ duration: 100, easing: cubicIn }}>

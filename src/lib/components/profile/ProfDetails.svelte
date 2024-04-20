@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { session } from '$lib/session';
-	import { getAuth, updateProfile } from 'firebase/auth';
 	import { onMount } from 'svelte';
 	import { dataLoading } from '$lib/store/dataStore';
+	import { putData } from '$lib/store/dataStore';
 
 	$: userData = $session;
 	let dialog: any; // Reference to the dialog tag
@@ -10,7 +10,7 @@
 		dialog = document.getElementById('confirmation-dialog');
 	});
 
-	function formSubmit(e: SubmitEvent) {
+	async function formSubmit(e: SubmitEvent) {
 		dataLoading.set(true);
 		const formData = new FormData(e.target as HTMLFormElement);
 		const data: any = {};
@@ -18,23 +18,8 @@
 			const [key, value] = field;
 			data[key] = value;
 		}
-
-		const auth = getAuth();
-		if (auth.currentUser) {
-			updateProfile(auth.currentUser, {
-				displayName: data.displayName,
-				photoURL: data.photoURL
-			}).then(
-				() => {
-					console.log('yo');
-					dataLoading.set(false);
-				},
-				function (error) {
-					console.log(error);
-					dataLoading.set(false);
-				}
-			);
-		}
+		if (userData.user?.uid) await putData('users', 'uid', userData.user?.uid, { ...data });
+		$session.user = { ...$session.user, ...data };
 	}
 </script>
 
@@ -51,7 +36,7 @@
 	<input id="email" type="email" readonly class="form-control" value={userData?.user?.email} />
 	<label for="phone">Tel</label>
 	<input
-		name="phone"
+		name="phoneNumber"
 		id="phone"
 		type="number"
 		class="form-control"

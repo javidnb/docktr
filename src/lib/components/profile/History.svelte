@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { session } from '$lib/session';
 	import { onMount } from 'svelte';
 	import { getMessaging, getToken } from 'firebase/messaging';
 	import { app } from '$lib/firebase.client';
@@ -58,41 +57,6 @@
 		});
 	}
 
-	async function postData(userData: any) {
-		let dataToPost = { table: 'users', data: { ...userData } };
-		const response = await fetch('https://tekoplast.az/docktr/api/?postData', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ ...dataToPost }),
-			cache: 'no-cache'
-		});
-
-		if (response.ok) {
-			session.update((cur: any) => {
-				return {
-					...cur,
-					userData,
-					loggedIn: true,
-					loading: false
-				};
-			});
-			console.log('Data posted successfully', response);
-		} else {
-			// Handle error response
-			console.error('Failed to post data');
-			session.update((cur: any) => {
-				return {
-					...cur,
-					userData,
-					loggedIn: true,
-					loading: false
-				};
-			});
-		}
-	}
-
 	function handleClick() {
 		// postData({ uid: 1, displayName: 'Cavka' });
 		// registerSw();
@@ -103,6 +67,12 @@
 
 <section>
 	<h5>Hastalık Geçmişi</h5>
-	<button class="btn btn-primary w-50" on:click={handleClick}>Post</button>
-	<input type="text" class="form-control mt-3" bind:value={cmToken} />
+	<button class="btn btn-primary w-50" on:click={handleClick}>push token</button>
+	<input type="text" class="form-control mt-3 w-50" bind:value={cmToken} />
+
+	{#if Notification.permission !== 'granted'}
+		<button class="btn btn-primary w-50 mt-3" on:click={requestNotificationPermission}
+			>Notification Perm</button
+		>
+	{/if}
 </section>

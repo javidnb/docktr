@@ -32,8 +32,21 @@
 			const [key, value] = field;
 			data[key] = value;
 		}
+		console.log(data);
 		if (userData.user?.uid) await putData('users', 'uid', userData.user?.uid, { ...data });
 		$session.user = { ...$session.user, ...data };
+	}
+
+	function formatPhoneNumber(phoneNumber: any) {
+		const cleaned = ('' + phoneNumber).replace(/\D/g, '');
+		const regex = /^(\d{3})(\d{3})(\d{4})$/;
+		const match = cleaned.match(regex);
+
+		if (match) {
+			return '(' + match[1] + ') ' + match[2] + '-' + match[3];
+		}
+
+		return phoneNumber;
 	}
 </script>
 
@@ -106,7 +119,7 @@
 	<input
 		name="phoneNumber"
 		id="phone"
-		type="number"
+		type="text"
 		class="form-control"
 		value={userData?.user?.phoneNumber ?? ''}
 	/>

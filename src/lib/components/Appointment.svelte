@@ -29,7 +29,11 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<form class="d-flex flex-column row-gap-3" on:submit|preventDefault={handleSubmit}>
+				<form
+					class="d-flex flex-column row-gap-3"
+					style="min-width: 30em;"
+					on:submit|preventDefault={handleSubmit}
+				>
 					<label for="date">Tarix</label>
 					<input
 						name="date"

@@ -4,8 +4,11 @@
 	import { formatDate } from '$lib/helpers/dateFormatter';
 	import { session } from '$lib/session';
 	import { dataLoading } from '$lib/store/dataStore';
+	import Modal from '$lib/helpers/Modal.svelte';
+	import Login from './login/Login.svelte';
 
 	let currentDate = new Date();
+	let showModal: boolean = false;
 
 	onMount(async () => {
 		setInterval(() => {
@@ -54,7 +57,11 @@
 			<ul class="navbar-nav ml-auto" style="margin-left: auto;">
 				{#if !$session.loggedIn}
 					<li class="nav-item">
-						<a class="nav-link" href="../login">Giriş yap</a>
+						<a
+							class="nav-link"
+							href="../login"
+							on:click|preventDefault={() => (showModal = !showModal)}>Giriş yap</a
+						>
 					</li>
 				{:else}
 					{#if $session.user?.admin}
@@ -148,6 +155,10 @@
 		</ul>
 	</div>
 </section>
+
+<Modal bind:showModal>
+	<Login />
+</Modal>
 
 <style>
 	.navbar-brand {

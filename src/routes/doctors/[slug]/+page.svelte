@@ -126,7 +126,7 @@
 </section>
 
 <Modal bind:showModal>
-	<h4 slot="header">Randevu</h4>
+	<h4 slot="header" class="px-3 pt-2">Randevu</h4>
 
 	<ol class="px-0">
 		<Appointment />

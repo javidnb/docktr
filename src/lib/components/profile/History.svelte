@@ -11,7 +11,6 @@
 	let inputToken = '';
 
 	onMount(async () => {
-		console.log($session);
 	});
 
 	function registerCM() {
@@ -75,36 +74,6 @@
 			});
 	}
 
-	const subscribeUserToTopic = async (userId: any, topic: any) => {
-		try {
-			navigator.serviceWorker
-				.register('/service-worker.js', {
-					type: 'module'
-				})
-				.then((registration) => {
-					getToken(messaging, {
-						vapidKey:
-							'BJmtPB9yoTqRrplyE77d1lPptyYd1nn-1evh8lqs2QIg28Kb4Hlq-8qUa1zglHUhgT0VP6dJ3C2bm_pQyQWa79Y',
-						serviceWorkerRegistration: registration
-					}).then(async (currentToken) => {
-						await fetch(
-							`https://iid.googleapis.com/iid/v1/${currentToken}/rel/topics/${topic}/${userId}`,
-							{
-								method: 'POST',
-								headers: {
-									'Content-Type': 'application/json',
-									Authorization: 'key=YOUR_SERVER_KEY' // Replace with your Firebase server key
-								}
-							}
-						);
-						console.log(`User ${userId} subscribed to topic ${topic} successfully`);
-					});
-				});
-		} catch (error) {
-			console.error(`Failed to subscribe user ${userId} to topic ${topic}:`, error);
-		}
-	};
-
 	async function sendMsg() {
 		let requestData = {
 			tokens: JSON.stringify($session.user?.fcmToken),
@@ -148,18 +117,11 @@
 			}
 		});
 	}
-
-	function handleClick() {
-		// postData({ uid: 1, displayName: 'Cavka' });
-		// registerSw();
-		// requestPermission();
-		registerCM();
-	}
 </script>
 
 <section>
 	<h5>Hastalık Geçmişi</h5>
-	<button class="btn btn-primary w-50" class:d-none={hideBtn} on:click={handleClick}
+	<button class="btn btn-primary w-50" class:d-none={hideBtn} on:click={registerCM}
 		>push token</button
 	>
 	<input class="form-control mt-3 w-50" type="text" bind:value={inputToken} />

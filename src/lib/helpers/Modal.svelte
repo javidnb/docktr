@@ -12,7 +12,7 @@
 	on:close={() => (showModal = false)}
 	on:click|self={() => dialog.close()}
 >
-	<button
+	<!-- <button
 		class="btn btn-outline-primary d-flex justify-content-center"
 		style="position: absolute;
 		right: 0;
@@ -22,7 +22,7 @@
 		border-radius: 0px;
 		border-bottom-left-radius: 0.2em"
 		on:click={() => dialog.close()}><span class="material-symbols-outlined"> close </span></button
-	>
+	> -->
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div on:click|stopPropagation>
 		<slot name="header" />
@@ -37,14 +37,14 @@
 		border-radius: 0.2em;
 		border: none;
 		padding: 0;
-		min-width: min(30em, 100%);
+		/* min-width: min(30em, 100%); */
 		box-shadow: 0px 0px 8px #00000047;
 	}
 	dialog::backdrop {
 		background: rgba(0, 0, 0, 0.3);
 	}
 	dialog > div {
-		padding: 1em;
+		padding: 0em;
 	}
 	dialog[open] {
 		animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);

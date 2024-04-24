@@ -107,7 +107,10 @@
 
 	async function sendMsg() {
 		let requestData = {
-			tokens: JSON.stringify($session.user?.fcmToken)
+			tokens: JSON.stringify($session.user?.fcmToken),
+			title: null,
+			body: null,
+			url: null
 		};
 		const response = await fetch(`https://tekoplast.az/docktr/api/?test`, {
 			method: 'POST',
@@ -115,10 +118,7 @@
 			body: JSON.stringify({ ...requestData })
 		});
 
-		// const jsonData = await response.json();
-
 		if (response.ok) {
-			// console.log(jsonData);
 			toast.push('Uğurlu!', {
 				duration: 2000,
 				theme: {

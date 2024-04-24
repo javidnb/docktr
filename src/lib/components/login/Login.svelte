@@ -220,7 +220,7 @@
 
 		<hr style="margin-top: 1rem" />
 		<div
-			style="display: flex; flex-direction: column; gap: 1rem; align-items: center; padding-inline:0"
+			style="display: flex; flex-direction: column; gap: 1rem; align-items: center; padding:0"
 		>
 			Hesabın yoxdur? <a href="/register" class="btn btn-outline-primary w-100">Qeydiyyat</a>
 		</div>

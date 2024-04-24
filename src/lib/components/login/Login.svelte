@@ -16,7 +16,7 @@
 
 	let email: string = '';
 	let password: string = '';
-	let buttonText: string = 'Giriş yap';
+	let buttonText: string = 'Giriş';
 	let disabled = false;
 
 	onMount(async () => {
@@ -194,6 +194,7 @@
 				bind:value={email}
 				type="text"
 				placeholder="Email"
+				required
 			/>
 			<input
 				class="form-control"
@@ -201,6 +202,7 @@
 				bind:value={password}
 				type="password"
 				placeholder="Şifrə"
+				required
 			/>
 			<button
 				class="btn"
@@ -217,8 +219,10 @@
 		</form>
 
 		<hr style="margin-top: 1rem" />
-		<div style="display: flex; flex-direction: column; gap: 1rem; align-items: center; padding-inline:0">
-			Hesabın yok mu? <a href="/register" class="btn btn-outline-primary w-100"> Hemen Kaydol</a>
+		<div
+			style="display: flex; flex-direction: column; gap: 1rem; align-items: center; padding-inline:0"
+		>
+			Hesabın yoxdur? <a href="/register" class="btn btn-outline-primary w-100">Qeydiyyat</a>
 		</div>
 	</div>
 </div>

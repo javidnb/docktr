@@ -10,7 +10,9 @@
 	let hideBtn: boolean = false;
 	let inputToken = '';
 
-	onMount(async () => {});
+	onMount(async () => {
+		console.log($session);
+	});
 
 	function registerCM() {
 		dataLoading.set(true);
@@ -104,20 +106,19 @@
 	};
 
 	async function sendMsg() {
-		let postData = {};
-		let time = new Date().getTime();
-		const response = await fetch(`https://tekoplast.az/docktr/fcm/send.php?t=${time}`, {
+		let requestData = {
+			tokens: JSON.stringify($session.user?.fcmToken)
+		};
+		const response = await fetch(`https://tekoplast.az/docktr/api/?test`, {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ ...postData }),
-			cache: 'no-cache'
+			cache: 'no-store',
+			body: JSON.stringify({ ...requestData })
 		});
 
-		console.log("res: ",response);
+		// const jsonData = await response.json();
 
 		if (response.ok) {
+			// console.log(jsonData);
 			toast.push('Uğurlu!', {
 				duration: 2000,
 				theme: {

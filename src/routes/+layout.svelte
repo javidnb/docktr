@@ -24,7 +24,7 @@
 
 	let userr: any = null;
 
-	async function getUser(user: User) {
+	async function getUser(user: any) {
 		try {
 			let time = new Date().getTime();
 			const response = await fetch(
@@ -33,7 +33,7 @@
 			const result = await response.json();
 			if (result) {
 				session.set({
-					user: result,
+					user: { ...result, token: user.accessToken },
 					loggedIn: true,
 					loading: false
 				});
@@ -52,6 +52,7 @@
 		}
 
 		const user: any = await data.getAuthUser();
+		console.log(user);
 		const loggedIn = user ? true : false;
 
 		if (loggedIn) {

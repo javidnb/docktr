@@ -31,15 +31,15 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('push', (event) => {
-	const notif = event.data.json().notification;
+	const notif = event.data.json();
 	console.log('notification received: ', notif);
 
 	event.waitUntil(
-		self.registration.showNotification(notif.title, {
-			body: notif.body,
-			icon: notif.image || null,
+		self.registration.showNotification(notif.notification.title, {
+			body: notif.notification.body,
+			icon: notif.notification.image || null,
 			data: {
-				url: notif.click_action || null
+				url: notif.data.click_action || null
 			}
 		})
 	);

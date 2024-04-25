@@ -1,9 +1,12 @@
 <script lang="ts">
-	export let showModal: any; // boolean
-
-	let dialog: any; // HTMLDialogElement
-
+	import { modul } from '$lib/store/dataStore';
+	export let showModal: boolean; // boolean
+	let dialog: HTMLDialogElement; // HTMLDialogElement
 	$: if (dialog && showModal) dialog.showModal();
+
+	$: if ($modul || !$modul) {
+		dialog?.close();
+	}
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
@@ -68,7 +71,7 @@
 			opacity: 1;
 		}
 	}
-	button {
+	/* button {
 		display: block;
-	}
+	} */
 </style>

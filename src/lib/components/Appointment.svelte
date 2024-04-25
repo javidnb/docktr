@@ -30,8 +30,7 @@
 		<div class="row">
 			<div class="col">
 				<form
-					class="d-flex flex-column row-gap-3"
-					style="min-width: 30em;"
+					class="d-flex flex-column row-gap-3 p-3"
 					on:submit|preventDefault={handleSubmit}
 				>
 					<label for="date">Tarix</label>

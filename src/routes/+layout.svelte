@@ -4,13 +4,15 @@
 	import { fade, slide } from 'svelte/transition';
 	import Nav from '$lib/components/Nav.svelte';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
-
 	import type { LayoutData } from './$types';
 	import { browser } from '$app/environment';
-	export let data: LayoutData;
 	import { doctors } from '$lib/store/dataStore';
 	import { cubicIn } from 'svelte/easing';
-	import type { User } from 'firebase/auth';
+	export let data: LayoutData;
+
+	console.log('data: ', data);
+
+	doctors.set(data.doctors);
 
 	if (data?.doctors?.length) {
 		const dooc = data.doctors

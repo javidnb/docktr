@@ -4,24 +4,30 @@
 	import { auth } from '$lib/firebase.client';
 	import {
 		GoogleAuthProvider,
-		signInWithPopup,
 		signInWithEmailAndPassword,
 		type UserCredential,
-		initializeAuth
+		signInWithRedirect,
+		getAuth
 	} from 'firebase/auth';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import { dataLoading } from '$lib/store/dataStore';
-	import firebase from 'firebase/compat/app';
+	import { dataLoading, showModal } from '$lib/store/dataStore';
+	import { modul } from '$lib/store/dataStore';
 
 	let email: string = '';
 	let password: string = '';
 	let buttonText: string = 'Giriş';
 	let disabled = false;
 
+	function closeModal() {
+		modul.set(!$modul);
+		buttonText = 'Giriş';
+		disabled = false;
+	}
+
 	onMount(async () => {
 		if ($session.loggedIn) {
-			goto('./profile');
+			// goto('./profile');
 		}
 	});
 
@@ -90,14 +96,14 @@
 
 	async function loginWithMail() {
 		dataLoading.set(true);
-		buttonText = 'Bekleyin..';
+		buttonText = 'Gözləyin..';
 		disabled = true;
 		await signInWithEmailAndPassword(auth, email, password)
 			.then(async (result) => {
 				const { user }: UserCredential = result;
 				localStorage.setItem('user', JSON.stringify(user));
 				await getUser(result);
-				goto('/');
+				closeModal();
 				dataLoading.set(false);
 			})
 			.catch((error) => {
@@ -107,14 +113,16 @@
 	}
 
 	async function loginWithGoogle() {
-		dataLoading.set(true);
 		const provider = new GoogleAuthProvider();
-		await signInWithPopup(auth, provider)
-			.then(async (result) => {
-				const { displayName, email, photoURL, uid } = result?.user;
+		const auuth = getAuth();
+		await signInWithRedirect(auuth, provider)
+			.then(async (result: any) => {
+				console.log(result);
+				// const { displayName, email, photoURL, uid } = result?.user;
 				localStorage.setItem('user', JSON.stringify(result?.user));
 				await getUser(result);
-				goto('/');
+				showModal.set(true);
+				closeModal();
 				dataLoading.set(false);
 			})
 			.catch((error) => {
@@ -122,47 +130,18 @@
 				return error;
 			});
 	}
-
-	function gogil() {
-		const provider = new GoogleAuthProvider();
-		firebase
-			.auth()
-			.signInWithPopup(provider)
-			.then((result) => {
-				/** @type {firebase.auth.OAuthCredential} */
-				var credential = result.credential;
-
-				// This gives you a Google Access Token. You can use it to access the Google API.
-				var token = credential?.toJSON;
-				console.log(token);
-				// The signed-in user info.
-				var user = result.user;
-				// IdP data available in result.additionalUserInfo.profile.
-				// ...
-			})
-			.catch((error) => {
-				// Handle Errors here.
-				var errorCode = error.code;
-				var errorMessage = error.message;
-				// The email of the user's account used.
-				var email = error.email;
-				// The firebase.auth.AuthCredential type that was used.
-				var credential = error.credential;
-				// ...
-			});
-	}
 </script>
 
 <div class="login-form">
-	<div class="pt-5 pb-4" style="margin-top: 0; min-width: min(30em, 100%);">
-		<div class="d-flex px-0 pt-1 gap-2 socials w-100">
+	<div class="col pb-4" style="margin-top: 0; padding-top:0">
+		<div class="d-flex px-0 gap-2 socials w-100" style="padding: 1.5rem;">
 			<button class="btn btn-outline-primary active"
 				><span class="material-symbols-outlined icon-fill"> call </span></button
 			>
-			<button class="btn btn-outline-primary"
+			<button class="btn btn-outline-primary bg-white"
 				><span class="material-symbols-outlined icon-fill"> mail </span></button
 			>
-			<button class="btn btn-outline-primary" on:click={gogil}
+			<button class="btn btn-outline-primary bg-white" on:click={loginWithGoogle}
 				><svg
 					xmlns="http://www.w3.org/2000/svg"
 					x="0px"
@@ -187,6 +166,7 @@
 				</svg></button
 			>
 		</div>
+		<hr style="margin-top: 0;" />
 		<form on:submit={loginWithMail}>
 			<input
 				class="form-control"
@@ -219,9 +199,7 @@
 		</form>
 
 		<hr style="margin-top: 1rem" />
-		<div
-			style="display: flex; flex-direction: column; gap: 1rem; align-items: center; padding:0"
-		>
+		<div style="display: flex; flex-direction: column; gap: 1rem; align-items: center; padding:0">
 			Hesabın yoxdur? <a href="/register" class="btn btn-outline-primary w-100">Qeydiyyat</a>
 		</div>
 	</div>
@@ -250,7 +228,8 @@
 		align-items: center;
 		justify-content: center;
 	}
-	.active {
-		background-color: var(--primaryColor);
+	.active,
+	.socials button:hover {
+		background-color: var(--primaryColor) !important;
 	}
 </style>

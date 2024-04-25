@@ -14,7 +14,7 @@
 	<div class="container pb-5">
 		<div class="row row-gap-3">
 			{#if !$doctors.length}
-				{#each [1, 2] as doctor}
+				{#each [1, 2, 3] as doctor}
 					<div class="col col-md-6 col-lg-4">
 						<div class="card skeleton">
 							<div

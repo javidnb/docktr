@@ -10,6 +10,9 @@
 	import Appointment from '$lib/components/Appointment.svelte';
 	import Modal from '$lib/helpers/Modal.svelte';
 
+	export let data;
+	const { ...commentss } = data;
+
 	$: doctor = $doctors.find((d) => d.slug == $page.params.slug);
 	const doc = writable<any>(doctor);
 	// $: console.log('brenc: ', doctor?.branches);

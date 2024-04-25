@@ -4,6 +4,8 @@ import { toast } from '@zerodevx/svelte-toast';
 
 export const doctors = writable<Doctor[]>([]);
 export const dataLoading = writable<boolean>(false);
+export const showModal = writable(false);
+export const modul = writable(false);
 
 export async function putData(table: string, colId: string, id: string | number, data: any) {
 	dataLoading.set(true);

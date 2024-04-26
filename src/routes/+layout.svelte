@@ -10,10 +10,6 @@
 	import { cubicIn } from 'svelte/easing';
 	export let data: LayoutData;
 
-	console.log('data: ', data);
-
-	doctors.set(data.doctors);
-
 	if (data?.doctors?.length) {
 		const dooc = data.doctors
 			.map((item: any) => ({

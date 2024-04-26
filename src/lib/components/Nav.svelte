@@ -14,6 +14,7 @@
 		setInterval(() => {
 			currentDate = new Date();
 		}, 60000);
+		// console.log(VERSION);
 	});
 	let websiteName = $page.url.host;
 	let curPage: string | null = '/';

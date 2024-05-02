@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { selectedAppointmentDate } from '$lib/store/dataStore';
 	// Function to get dates starting from tomorrow
 	function getDatesFromTomorrow(numDays: any) {
 		const daysOfWeek = [];
@@ -36,6 +37,7 @@
 
 	function selectTime(day: any, time: any) {
 		selectedTime = { day, time };
+		selectedAppointmentDate.set(selectedTime);
 		console.log(selectedTime);
 	}
 </script>
@@ -55,7 +57,7 @@
 							<span>{date}</span>
 						</div>
 						<div>
-							<div class="d-flex flex-column row-gap-2">
+							<div class="d-flex flex-column row-gap-2 pb-2">
 								{#each Array.from({ length: 10 }, (_, i) => i + 9) as hour}
 									{#each [0, 30] as minute}
 										{#if !(hour === 18 && minute === 30)}

@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { dataLoading } from '$lib/store/dataStore';
 	import { toast } from '@zerodevx/svelte-toast';
-	import { modul } from '$lib/store/dataStore';
+	import { modul, selectedAppointmentDate } from '$lib/store/dataStore';
 	import DatePicker from '$lib/helpers/DatePicker.svelte';
 
 	const currentDate = new Date();
@@ -48,7 +48,7 @@
 
 <section>
 	<div class="container-fluid">
-		<div class="row">
+		<!-- <div class="row">
 			<div class="col">
 				<form
 					class="d-flex flex-column row-gap-3 p-3"
@@ -96,11 +96,31 @@
 					<button type="submit" class="btn btn-primary" disabled={btnDisabled}>{btnText}</button>
 				</form>
 			</div>
-		</div>
+		</div> -->
 
-		<div class="row">
-			<DatePicker/>
-		</div>
+		{#if !$selectedAppointmentDate.day}
+			<div class="row">
+				<DatePicker />
+			</div>
+		{:else}
+			<div class="row d-flex">
+				<div class="d-flex flex-column ps-3">
+					<span>Seçdiyiniz tarix:</span>
+					<span> {$selectedAppointmentDate.day} - {$selectedAppointmentDate.time}</span>
+				</div>
+
+				<div class="d-flex gap-3 mt-3">
+					<button
+						class="btn btn-secondary w-100"
+						on:click={() => selectedAppointmentDate.set({ day: null, time: null })}>Dəyişdir</button
+					>
+					<button
+						class="btn btn-primary w-100"
+						on:click={() => selectedAppointmentDate.set({ day: null, time: null })}>Təsdiqlə</button
+					>
+				</div>
+			</div>
+		{/if}
 	</div>
 </section>
 

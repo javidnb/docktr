@@ -4,7 +4,7 @@
 	import { diseases } from '$lib/store/diseases';
 	import { onMount } from 'svelte';
 	import { session } from '$lib/session';
-	import { dataLoading } from '$lib/store/dataStore';
+	import { dataLoading, selectedAppointmentDate } from '$lib/store/dataStore';
 	import { writable } from 'svelte/store';
 	import { formatDate } from '$lib/helpers/dateFormatter';
 	import Appointment from '$lib/components/Appointment.svelte';
@@ -114,6 +114,11 @@
 		const parts = dateString.split('-');
 		return `${parts[2]}-${parts[1]}-${parts[0]}`;
 	}
+
+	function openModal() {
+		showModal = true;
+		selectedAppointmentDate.set({ day: null, time: null });
+	}
 </script>
 
 <section>
@@ -155,7 +160,7 @@
 					<div class="col-9 col-md-10 d-flex flex-column align-items-center">
 						<button
 							class="btn btn-outline-primary d-flex justify-content-center align-items-center btnRandevu"
-							on:click={() => (showModal = true)}
+							on:click={openModal}
 							><span class="material-symbols-outlined">local_library</span><span
 								style="margin-inline: auto;">Randevu Al</span
 							></button

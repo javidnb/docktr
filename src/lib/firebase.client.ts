@@ -2,6 +2,8 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import type { FirebaseApp } from 'firebase/app';
 import { getFirestore, collection, query, getDocs } from 'firebase/firestore';
+import { getMessaging, getToken, type Messaging } from 'firebase/messaging';
+import { appointments } from './store/dataStore';
 
 import type { Auth } from 'firebase/auth';
 import { browser } from '$app/environment';
@@ -11,6 +13,7 @@ import { session } from '$lib/session';
 export let db: any;
 export let app: FirebaseApp;
 export let auth: Auth;
+export let messaging: Messaging;
 
 const firebaseConfig = {
 	apiKey: 'AIzaSyDv8kOrp_AL6mudWmsiYr53yR8cAn4hAYg',
@@ -29,7 +32,8 @@ export const initializeFirebase = () => {
 	if (!app) {
 		app = initializeApp(firebaseConfig);
 		auth = getAuth(app);
-		db = getFirestore(app);		
+		db = getFirestore(app);
+		messaging = getMessaging(app);
 	}
 };
 
@@ -50,6 +54,8 @@ export function logout() {
 		.signOut()
 		.then(() => {
 			session.set({ user: null });
+			appointments.set([]);
+
 			localStorage.removeItem('user');
 			// Redirect or perform any other actions after logout
 			// navigate('/login');

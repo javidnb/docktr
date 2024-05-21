@@ -1,10 +1,15 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { doctors } from '$lib/store/dataStore';
+	import { doctors, loginModal } from '$lib/store/dataStore';
 	import { diseases } from '$lib/store/diseases';
 	import { onMount } from 'svelte';
 	import { session } from '$lib/session';
-	import { dataLoading, selectedAppointmentDate } from '$lib/store/dataStore';
+	import {
+		dataLoading,
+		selectedAppointmentDate,
+		appointmentModal,
+		appointments
+	} from '$lib/store/dataStore';
 	import { writable } from 'svelte/store';
 	import { formatDate } from '$lib/helpers/dateFormatter';
 	import Appointment from '$lib/components/Appointment.svelte';
@@ -15,6 +20,14 @@
 
 	$: doctor = $doctors.find((d) => d.slug == $page.params.slug);
 	const doc = writable<any>(doctor);
+
+	let existingAppointment: any;
+	$: if (doctor?.id)
+		existingAppointment = $appointments.find(
+			(ap) => ap.doctorId == doctor.id && new Date(ap.startTime) > new Date()
+		);
+	$: console.log('next appointment: ', existingAppointment);
+
 	// $: console.log('brenc: ', doctor?.branches);
 	let btnCommentText: string = 'Göndər';
 	let btnCommentDisabled: boolean = false;
@@ -24,6 +37,9 @@
 	let commentsLoading: boolean = true;
 	let comments: any = writable<any>([]);
 	export const alreadyCommented = writable<boolean>(false);
+
+	$: showModal = !!$appointmentModal;
+	$: if (showModal == false) appointmentModal.set(false);
 
 	const today = new Date();
 	onMount(async () => {
@@ -116,8 +132,8 @@
 	}
 
 	function openModal() {
-		showModal = true;
-		selectedAppointmentDate.set({ day: null, time: null });
+		appointmentModal.set(true);
+		selectedAppointmentDate.set({ day: null, time: null, start: null, end: null });
 	}
 </script>
 
@@ -137,7 +153,7 @@
 	<h4 slot="header" class="px-3 pt-2">Randevu</h4>
 
 	<ol class="px-0">
-		<Appointment />
+		<Appointment doc={$doc} />
 	</ol>
 </Modal>
 
@@ -157,15 +173,21 @@
 							border-radius: 100%;"
 						/>
 					</div>
-					<div class="col-9 col-md-10 d-flex flex-column align-items-center">
-						<button
-							class="btn btn-outline-primary d-flex justify-content-center align-items-center btnRandevu"
-							on:click={openModal}
-							><span class="material-symbols-outlined">local_library</span><span
-								style="margin-inline: auto;">Randevu Al</span
-							></button
-						>
-					</div>
+					{#if !$session?.user?.doctor}
+						<div class="col-9 col-md-10 d-flex flex-column align-items-center">
+							{#if !existingAppointment}
+								<button
+									class="btn btn-outline-primary d-flex justify-content-center align-items-center btnRandevu"
+									on:click={openModal}
+									><span class="material-symbols-outlined">local_library</span><span
+										style="margin-inline: auto;">Randevu Al</span
+									></button
+								>
+							{:else}
+								<span>Planlaşdırılan görüş: </span> <span>{existingAppointment.startTime}</span>
+							{/if}
+						</div>
+					{/if}
 				</div>
 				<div class="row mt-3">
 					{#if doctor?.branches}

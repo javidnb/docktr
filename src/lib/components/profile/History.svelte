@@ -10,8 +10,7 @@
 	let hideBtn: boolean = false;
 	let inputToken = '';
 
-	onMount(async () => {
-	});
+	onMount(async () => {});
 
 	function registerCM() {
 		dataLoading.set(true);

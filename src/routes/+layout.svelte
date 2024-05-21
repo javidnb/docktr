@@ -6,10 +6,9 @@
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import type { LayoutData } from './$types';
 	import { browser } from '$app/environment';
-	import { doctors } from '$lib/store/dataStore';
+	import { doctors, appointments } from '$lib/store/dataStore';
 	import { cubicIn } from 'svelte/easing';
 	export let data: LayoutData;
-
 
 	if (data?.doctors?.length) {
 		const dooc = data.doctors
@@ -30,12 +29,43 @@
 				`https://tekoplast.az/docktr/api/?user&id=${user.uid}&t=${time}`
 			);
 			const result = await response.json();
+			console.log('user: ', result);
 			if (result) {
+				getAppointments(result);
+
 				session.set({
 					user: { ...result, token: user.accessToken },
 					loggedIn: true,
 					loading: false
 				});
+				return null;
+			}
+			return response;
+		} catch (error) {
+			console.error(error);
+			return null;
+		}
+	}
+
+	async function getAppointments(user: any) {
+		try {
+			let time = new Date().getTime();
+			let response;
+			console.log("user doktor id: ",user.doctor);
+			if (user.doctor) {
+				response = await fetch(
+					`https://tekoplast.az/docktr/api/?appointments&id=${user.doctor}&type=doctor&t=${time}`
+				);
+			} else {
+				response = await fetch(
+					`https://tekoplast.az/docktr/api/?appointments&id=${user.uid}&t=${time}`
+				);
+			}
+
+			const result = await response.json();
+			if (result) {
+				console.log('appointments: ', result);
+				appointments.set(result);
 				return null;
 			}
 			return response;
@@ -51,7 +81,6 @@
 		}
 
 		const user: any = await data.getAuthUser();
-		console.log(user);
 		const loggedIn = user ? true : false;
 
 		if (loggedIn) {

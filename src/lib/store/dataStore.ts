@@ -3,17 +3,25 @@ import type { Doctor } from '../interfaces/doctor.interface';
 import { toast } from '@zerodevx/svelte-toast';
 
 export const doctors = writable<Doctor[]>([]);
+export const appointments = writable<any[]>([]);
 export const dataLoading = writable<boolean>(false);
-export const showModal = writable(false);
-export const modul = writable(false);
-export const selectedAppointmentDate = writable({day:null, time: null});
+export const showModalSig = writable(false);
+export const loginModal = writable(false);
+export const appointmentModal = writable(false);
+export const confirmationModal = writable(false);
+export const selectedAppointmentDate = writable({ day: null, time: null, start: null, end: null });
 
-export async function putData(table: string, colId: string, id: string | number, data: any) {
+export async function putData(
+	table: string,
+	primaryColName: string,
+	id: string | number,
+	data: any
+) {
 	dataLoading.set(true);
 
 	let requestData = {
 		table,
-		colId,
+		primaryColName,
 		id,
 		data: { ...data }
 	};
@@ -27,15 +35,16 @@ export async function putData(table: string, colId: string, id: string | number,
 	});
 
 	if (response.ok) {
-		toast.push('Uğurlu!', {
-			duration: 2000,
-			theme: {
-				'--toastColor': 'mintcream',
-				'--toastBackground': 'rgb(91 144 77)',
-				'--toastBarBackground': '#1d5b3c'
-			}
-		});
+		// toast.push('Uğurlu!', {
+		// 	duration: 2000,
+		// 	theme: {
+		// 		'--toastColor': 'mintcream',
+		// 		'--toastBackground': 'rgb(91 144 77)',
+		// 		'--toastBarBackground': '#1d5b3c'
+		// 	}
+		// });
 		dataLoading.set(false);
+		return 'ok';
 	} else {
 		toast.push('Xəta!', {
 			duration: 2000,
@@ -46,5 +55,26 @@ export async function putData(table: string, colId: string, id: string | number,
 			}
 		});
 		dataLoading.set(false);
+		return 'error';
+	}
+}
+
+export async function postData(table: string, data: any) {
+	let dataToPost = { table: table, data: { ...data } };
+	const response = await fetch('https://tekoplast.az/docktr/api/?postData', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ ...dataToPost }),
+		cache: 'no-cache'
+	});
+
+	if (response.ok) {
+		dataLoading.set(false);
+		return 'ok';
+	} else {
+		dataLoading.set(false);
+		return 'error';
 	}
 }

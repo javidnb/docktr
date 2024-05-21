@@ -1,103 +1,71 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { dataLoading } from '$lib/store/dataStore';
-	import { toast } from '@zerodevx/svelte-toast';
-	import { modul, selectedAppointmentDate } from '$lib/store/dataStore';
+	import {
+		loginModal,
+		selectedAppointmentDate,
+		appointmentModal,
+		postData,
+		appointments
+	} from '$lib/store/dataStore';
+	import { session } from '$lib/session';
 	import DatePicker from '$lib/helpers/DatePicker.svelte';
+	import { jsDateToSQL } from '$lib/helpers/dateFormatter';
+	import { toast } from '@zerodevx/svelte-toast';
+
+	export let doc: any;
 
 	const currentDate = new Date();
 	currentDate.setDate(currentDate.getDate() + 1);
-	const year = currentDate.getFullYear();
-	const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-	const day = String(currentDate.getDate()).padStart(2, '0');
-	const tomorrow = `${year}-${month}-${day}`;
-	let btnText: string = 'Randevu al';
-	let btnDisabled: boolean = false;
+	let init = true;
+	let disabled: boolean = false;
 
-	onMount(async () => {});
+	onMount(async () => {
+		init = true;
+		selectedAppointmentDate.set({ day: null, time: null, start: null, end: null });
+		appointmentModal.set(false);
+	});
 
-	function handleSubmit(e: SubmitEvent) {
-		dataLoading.set(true);
-		btnDisabled = true;
-		btnText = 'Gözləyin ..';
-		const formData = new FormData(e.target as HTMLFormElement);
-		const data: any = {};
-		for (let field of formData) {
-			const [key, value] = field;
-			data[key] = value;
+	// after user logs in launches appointment modal again, if it was launched earlier
+	$: if ($session.user && $selectedAppointmentDate.day && !init) {
+		appointmentModal.set(true);
+	}
+
+	async function postAppointment() {
+		init = false;
+		if (!$session.user) {
+			console.log('login');
+			appointmentModal.set(false);
+			loginModal.set(true);
+			return;
 		}
-		console.log(data);
-		setTimeout(() => {
-			dataLoading.set(false);
-			modul.set(!$modul);
-			toast.push('Uğurlu!', {
-				duration: 2000,
-				theme: {
-					'--toastColor': 'mintcream',
-					'--toastBackground': 'rgb(91 144 77)',
-					'--toastBarBackground': '#1d5b3c'
-				}
-			});
-			btnText = 'Randevu al';
-			btnDisabled = false;
-		}, 3000);
-		// let profession = diseases.find((d) => d.name == data.profession);
-		// console.log(profession?.id);
+		if ($loginModal == false) {
+			disabled = true;
+			let data = {
+				userId: $session.user.uid,
+				doctorId: doc.id,
+				startTime: jsDateToSQL($selectedAppointmentDate.start),
+				endTime: jsDateToSQL($selectedAppointmentDate.end),
+				status: 1
+			};
+			let post = await postData('appointments', data);
+			if (post == 'ok') {
+				appointments.set([...$appointments, data]);
+				appointmentModal.set(false);
+				toast.push('Randevu qeydə alındı!', {
+					duration: 2000,
+					theme: {
+						'--toastColor': 'mintcream',
+						'--toastBackground': 'rgb(91 144 77)',
+						'--toastBarBackground': '#1d5b3c'
+					}
+				});
+			}
+		}
 	}
 </script>
 
 <section>
 	<div class="container-fluid">
-		<!-- <div class="row">
-			<div class="col">
-				<form
-					class="d-flex flex-column row-gap-3 p-3"
-					on:submit|preventDefault={handleSubmit}
-					style="min-width: min(420px, 100vw);"
-				>
-					<label for="date">Tarix</label>
-					<input
-						name="date"
-						class="form-control cursor-pointer"
-						type="date"
-						id="date"
-						value={tomorrow}
-						min={tomorrow}
-						required
-					/>
-					<div class="d-flex gap-3">
-						<div class="d-flex flex-column flex-1">
-							<label for="startTime">Başlanğıc saatı</label>
-							<input
-								name="startTime"
-								class="form-control w-100 cursor-pointer"
-								type="time"
-								id="startTime"
-								min="09:00"
-								max="21:00"
-								required
-								data-errormessage-value-missing="Please input something"
-							/>
-						</div>
-						<div class=" d-flex flex-column flex-1">
-							<label for="endTime">Bitiş saatı</label>
-							<input
-								name="endTime"
-								class="form-control w-100 cursor-pointer"
-								type="time"
-								id="endTime"
-								min="09:00"
-								max="21:00"
-								required
-							/>
-						</div>
-					</div>
-
-					<button type="submit" class="btn btn-primary" disabled={btnDisabled}>{btnText}</button>
-				</form>
-			</div>
-		</div> -->
-
 		{#if !$selectedAppointmentDate.day}
 			<div class="row">
 				<DatePicker />
@@ -111,13 +79,17 @@
 
 				<div class="d-flex gap-3 mt-3">
 					<button
-						class="btn btn-secondary w-100"
-						on:click={() => selectedAppointmentDate.set({ day: null, time: null })}>Dəyişdir</button
+						{disabled}
+						class="btn btn-secondary w-100 d-flex"
+						on:click={() =>
+							selectedAppointmentDate.set({ day: null, time: null, start: null, end: null })}
+						><span class="material-symbols-outlined"> replay </span>
+						<span class="mx-auto">Dəyişdir</span></button
 					>
-					<button
-						class="btn btn-primary w-100"
-						on:click={() => selectedAppointmentDate.set({ day: null, time: null })}>Təsdiqlə</button
-					>
+					<button {disabled} class="btn btn-primary w-100 d-flex" on:click={postAppointment}
+						><span class="material-symbols-outlined"> check </span>
+						<span class="mx-auto">Təsdiqlə</span>
+					</button>
 				</div>
 			</div>
 		{/if}

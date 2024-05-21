@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { selectedAppointmentDate } from '$lib/store/dataStore';
+	export let showDatePicker: boolean = false;
 	// Function to get dates starting from tomorrow
 	function getDatesFromTomorrow(numDays: any) {
 		const daysOfWeek = [];
@@ -33,12 +34,17 @@
 	}
 
 	let daysOfWeek = getDatesFromTomorrow(7); // Get dates starting from tomorrow
-	let selectedTime = null;
+	let selectedTime: any = null;
 
-	function selectTime(day: any, time: any) {
-		selectedTime = { day, time };
+	function selectTime(day: any, time: any, startDate?: any, endDate?: any) {
+		const currentYear = new Date().getFullYear();
+		const start = new Date(`${startDate} ${currentYear}`);
+		const end = endDate
+			? new Date(`${endDate} ${currentYear}`)
+			: new Date(start.getTime() + 30 * 60000);
+		selectedTime = { day, time, start, end };
 		selectedAppointmentDate.set(selectedTime);
-		console.log(selectedTime);
+		showDatePicker = false;
 	}
 </script>
 
@@ -66,7 +72,8 @@
 												on:click={() =>
 													selectTime(
 														`${day} - ${date}`,
-														`${hour.toString().padStart(2, '0')}:${minute === 0 ? '00' : '30'}`
+														`${hour.toString().padStart(2, '0')}:${minute === 0 ? '00' : '30'}`,
+														`${date} ${hour}:${minute}`
 													)}
 											>
 												{hour.toString().padStart(2, '0')}:{minute === 0 ? '00' : '30'}

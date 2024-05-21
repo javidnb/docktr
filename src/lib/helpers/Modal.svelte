@@ -1,19 +1,26 @@
 <script lang="ts">
-	import { modul } from '$lib/store/dataStore';
 	export let showModal: boolean; // boolean
 	let dialog: HTMLDialogElement; // HTMLDialogElement
-	$: if (dialog && showModal) dialog.showModal();
 
-	$: if ($modul || !$modul) {
-		dialog?.close();
+	$: if (showModal) {
+		if (dialog) dialog.showModal();
+	} else {
+		showModal = false;
+		if (dialog) dialog.close();
 	}
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
 <dialog
 	bind:this={dialog}
-	on:close={() => (showModal = false)}
-	on:click|self={() => dialog.close()}
+	on:close={() => {
+		showModal = false;
+		dialog.close();
+	}}
+	on:click|self={() => {
+		showModal = false;
+		dialog.close();
+	}}
 >
 	<!-- <button
 		class="btn btn-outline-primary d-flex justify-content-center"

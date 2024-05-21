@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import { formatDate } from '$lib/helpers/dateFormatter';
 	import { session } from '$lib/session';
-	import { dataLoading } from '$lib/store/dataStore';
+	import { dataLoading, loginModal } from '$lib/store/dataStore';
 	import Modal from '$lib/helpers/Modal.svelte';
 	import Login from './login/Login.svelte';
 
@@ -14,11 +14,14 @@
 		setInterval(() => {
 			currentDate = new Date();
 		}, 60000);
-		// console.log(VERSION);
 	});
 	let websiteName = $page.url.host;
 	let curPage: string | null = '/';
 	$: curPage = $page.route.id;
+
+	$: showModal = !!$loginModal;
+
+	$: if (showModal == false) loginModal.set(false);
 </script>
 
 {#if $dataLoading}
@@ -58,10 +61,8 @@
 			<ul class="navbar-nav ml-auto" style="margin-left: auto;">
 				{#if !$session.loggedIn}
 					<li class="nav-item">
-						<a
-							class="nav-link"
-							href="../login"
-							on:click|preventDefault={() => (showModal = !showModal)}>Giriş yap</a
+						<a class="nav-link" href="../login" on:click|preventDefault={() => loginModal.set(true)}
+							>Giriş yap</a
 						>
 					</li>
 				{:else}

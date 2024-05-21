@@ -1,7 +1,7 @@
 <script lang="ts">
 	// login/+page.svelte
 	import { session } from '$lib/session';
-	import { auth } from '$lib/firebase.client';
+	import { auth, messaging } from '$lib/firebase.client';
 	import {
 		GoogleAuthProvider,
 		signInWithEmailAndPassword,
@@ -9,10 +9,12 @@
 		signInWithRedirect,
 		getAuth
 	} from 'firebase/auth';
+	import { getToken } from 'firebase/messaging';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import { dataLoading, showModal } from '$lib/store/dataStore';
-	import { modul } from '$lib/store/dataStore';
+	import { dataLoading, loginModal, putData } from '$lib/store/dataStore';
+	import { toast } from '@zerodevx/svelte-toast';
+	import { appointments } from '$lib/store/dataStore';
 
 	let email: string = '';
 	let password: string = '';
@@ -20,7 +22,7 @@
 	let disabled = false;
 
 	function closeModal() {
-		modul.set(!$modul);
+		loginModal.set(false);
 		buttonText = 'Giriş';
 		disabled = false;
 	}
@@ -49,15 +51,16 @@
 				loggedIn: true,
 				loading: false
 			});
+			registerCM();
 			console.log('Data posted successfully: ', $session);
 		} else {
 			// Handle error response
 			console.error('Failed to post data');
-			session.set({
-				user: userData,
-				loggedIn: true,
-				loading: false
-			});
+			// session.set({
+			// 	user: userData,
+			// 	loggedIn: true,
+			// 	loading: false
+			// });
 		}
 	}
 
@@ -82,6 +85,10 @@
 				};
 				postData(data);
 				return;
+			} else {
+				console.log('this part');
+				getAppointments(user.user);
+				registerCM();
 			}
 			session.set({
 				user: result,
@@ -121,7 +128,7 @@
 				// const { displayName, email, photoURL, uid } = result?.user;
 				localStorage.setItem('user', JSON.stringify(result?.user));
 				await getUser(result);
-				showModal.set(true);
+				loginModal.set(true);
 				closeModal();
 				dataLoading.set(false);
 			})
@@ -129,6 +136,76 @@
 				dataLoading.set(false);
 				return error;
 			});
+	}
+
+	function registerCM() {
+		dataLoading.set(true);
+		navigator.serviceWorker
+			.register('/service-worker.js', {
+				type: 'module'
+			})
+			.then((registration) => {
+				if (registration.active) {
+					getToken(messaging, {
+						vapidKey:
+							'BJmtPB9yoTqRrplyE77d1lPptyYd1nn-1evh8lqs2QIg28Kb4Hlq-8qUa1zglHUhgT0VP6dJ3C2bm_pQyQWa79Y',
+						serviceWorkerRegistration: registration
+					})
+						.then(async (currentToken) => {
+							if (currentToken) {
+								console.log('Notification token: ' + currentToken);
+
+								let tokens: any = $session.user?.fcmToken
+									? JSON.parse($session.user?.fcmToken)
+									: [];
+
+								console.log('tokens: ', tokens);
+								if (!tokens?.includes(currentToken) && $session.user?.uid) {
+									console.log('current token exists? ', tokens?.includes(currentToken));
+									console.log('pushing token');
+									tokens.push(currentToken);
+									await putData('users', 'uid', $session.user?.uid, {
+										fcmToken: JSON.stringify(tokens)
+									});
+								}
+								dataLoading.set(false);
+							} else {
+								dataLoading.set(false);
+								console.log('error');
+							}
+						})
+						.catch((err) => {
+							console.log(err);
+						});
+				}
+			});
+	}
+
+	async function getAppointments(user: any) {
+		try {
+			let time = new Date().getTime();
+			let response;
+			if (user.doctor) {
+				response = await fetch(
+					`https://tekoplast.az/docktr/api/?appointments&id=${user.doctor}&type=doctor&t=${time}`
+				);
+			} else {
+				response = await fetch(
+					`https://tekoplast.az/docktr/api/?appointments&id=${user.uid}&t=${time}`
+				);
+			}
+
+			const result = await response.json();
+			if (result) {
+				console.log('appointments: ', result);
+				appointments.set(result);
+				return null;
+			}
+			return response;
+		} catch (error) {
+			console.error(error);
+			return null;
+		}
 	}
 </script>
 

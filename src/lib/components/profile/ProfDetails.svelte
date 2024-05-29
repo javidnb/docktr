@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import { dataLoading } from '$lib/store/dataStore';
 	import { putData } from '$lib/store/dataStore';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	$: userData = $session;
 	let dialog: any; // Reference to the dialog tag
@@ -25,6 +26,7 @@
 	};
 
 	async function formSubmit(e: SubmitEvent) {
+		let result;
 		dataLoading.set(true);
 		const formData = new FormData(e.target as HTMLFormElement);
 		const data: any = {};
@@ -32,7 +34,17 @@
 			const [key, value] = field;
 			data[key] = value;
 		}
-		if (userData.user?.uid) await putData('users', 'uid', userData.user?.uid, { ...data });
+		if (userData.user?.uid) result = await putData('users', 'uid', userData.user?.uid, { ...data });
+		if (result) {
+			toast.push('Uğurlu!', {
+				duration: 2000,
+				theme: {
+					'--toastColor': 'mintcream',
+					'--toastBackground': 'rgb(91 144 77)',
+					'--toastBarBackground': '#1d5b3c'
+				}
+			});
+		}
 		$session.user = { ...$session.user, ...data };
 
 		// const auth = getAuth();

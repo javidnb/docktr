@@ -25,6 +25,7 @@ export async function putData(
 		id,
 		data: { ...data }
 	};
+	console.log('request data: ', requestData);
 	const response = await fetch('https://tekoplast.az/docktr/api/?putData', {
 		method: 'PUT',
 		headers: {
@@ -55,6 +56,7 @@ export async function putData(
 			}
 		});
 		dataLoading.set(false);
+		console.log('response: ', response.json());
 		return 'error';
 	}
 }

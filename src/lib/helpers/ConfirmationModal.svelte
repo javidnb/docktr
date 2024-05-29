@@ -1,8 +1,10 @@
 <script lang="ts">
 	import Modal from '$lib/helpers/Modal.svelte';
-	import { confirmationModal } from '$lib/store/dataStore';
+	import { appointments, confirmationModal } from '$lib/store/dataStore';
 	import DatePicker from './DatePicker.svelte';
 	import { createEventDispatcher } from 'svelte';
+	import { monthNames } from '$lib/helpers/dateFormatter';
+	import { selectedAppointmentDate } from '$lib/store/dataStore';
 
 	const dispatch = createEventDispatcher();
 
@@ -12,9 +14,34 @@
 	$: if (showModal == false) {
 		confirmationModal.set(false);
 	}
-	// $: if (confirmationData.showDatePicker !== undefined) {
-	// 	showDatePicker = confirmationData.showDatePicker == true ? true : false;
-	// }
+
+	$: if ($selectedAppointmentDate.start && $selectedAppointmentDate.end) {
+		console.log($selectedAppointmentDate);
+		let data = `${new Date($selectedAppointmentDate.end).getDate()}
+		${monthNames[new Date($selectedAppointmentDate.end).getMonth()]}
+		 , 
+			${new Date($selectedAppointmentDate.start).getHours()}:${
+				new Date($selectedAppointmentDate.start).getMinutes() > 9
+					? new Date($selectedAppointmentDate.start).getMinutes()
+					: new Date($selectedAppointmentDate.start).getMinutes() + '0'
+			}
+		- ${new Date($selectedAppointmentDate.end).getHours()}:${
+			new Date($selectedAppointmentDate.end).getMinutes() > 9
+				? new Date($selectedAppointmentDate.end).getMinutes()
+				: new Date($selectedAppointmentDate.end).getMinutes() + '0'
+		}`;
+		data += '<br/> tarixli randevunu təsdiq edirsiniz?';
+
+		confirmationData = {
+			text: data,
+			data: {
+				startTime: $selectedAppointmentDate.start,
+				endTime: $selectedAppointmentDate.end,
+				appointmentId: confirmationData.data.appointmentId,
+				changed: true
+			}
+		};
+	}
 </script>
 
 <Modal bind:showModal>
@@ -30,7 +57,13 @@
 							><span class="material-symbols-outlined"> replay </span>
 							<span class="mx-auto">{confirmationData.button1 ?? 'Dəyişdir'}</span></button
 						>
-						<button class="btn btn-primary w-100 d-flex" on:click={() => dispatch('confirmed')}
+						<button
+							class="btn btn-primary w-100 d-flex"
+							on:click={() =>
+								dispatch('confirmed', {
+									text: confirmationData.text,
+									data: confirmationData.data ?? null
+								})}
 							><span class="material-symbols-outlined"> check </span>
 							<span class="mx-auto">{confirmationData.button2 ?? 'Təsdiqlə'}</span>
 						</button>

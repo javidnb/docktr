@@ -86,8 +86,8 @@
 				postData(data);
 				return;
 			} else {
-				console.log('this part');
-				getAppointments(user.user);
+				console.log('getting appointments and registering for notifications');
+				getAppointments(result);
 				registerCM();
 			}
 			session.set({
@@ -111,7 +111,6 @@
 				localStorage.setItem('user', JSON.stringify(user));
 				await getUser(result);
 				closeModal();
-				dataLoading.set(false);
 			})
 			.catch((error) => {
 				dataLoading.set(false);
@@ -130,7 +129,6 @@
 				await getUser(result);
 				loginModal.set(true);
 				closeModal();
-				dataLoading.set(false);
 			})
 			.catch((error) => {
 				dataLoading.set(false);
@@ -168,13 +166,13 @@
 										fcmToken: JSON.stringify(tokens)
 									});
 								}
-								dataLoading.set(false);
 							} else {
 								dataLoading.set(false);
 								console.log('error');
 							}
 						})
 						.catch((err) => {
+							dataLoading.set(false);
 							console.log(err);
 						});
 				}
@@ -183,6 +181,7 @@
 
 	async function getAppointments(user: any) {
 		try {
+			console.log(user);
 			let time = new Date().getTime();
 			let response;
 			if (user.doctor) {
@@ -197,13 +196,14 @@
 
 			const result = await response.json();
 			if (result) {
-				console.log('appointments: ', result);
 				appointments.set(result);
+				dataLoading.set(false);
 				return null;
 			}
 			return response;
 		} catch (error) {
 			console.error(error);
+			dataLoading.set(false);
 			return null;
 		}
 	}

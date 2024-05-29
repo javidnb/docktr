@@ -6,7 +6,7 @@
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import type { LayoutData } from './$types';
 	import { browser } from '$app/environment';
-	import { doctors, appointments } from '$lib/store/dataStore';
+	import { doctors, appointments, dataLoading } from '$lib/store/dataStore';
 	import { cubicIn } from 'svelte/easing';
 	export let data: LayoutData;
 
@@ -40,9 +40,11 @@
 				});
 				return null;
 			}
+			dataLoading.set(false);
 			return response;
 		} catch (error) {
 			console.error(error);
+			dataLoading.set(false);
 			return null;
 		}
 	}
@@ -51,7 +53,7 @@
 		try {
 			let time = new Date().getTime();
 			let response;
-			console.log("user doktor id: ",user.doctor);
+			console.log('user doktor id: ', user.doctor);
 			if (user.doctor) {
 				response = await fetch(
 					`https://tekoplast.az/docktr/api/?appointments&id=${user.doctor}&type=doctor&t=${time}`
@@ -66,11 +68,13 @@
 			if (result) {
 				console.log('appointments: ', result);
 				appointments.set(result);
+				dataLoading.set(false);
 				return null;
 			}
 			return response;
 		} catch (error) {
 			console.error(error);
+			dataLoading.set(false);
 			return null;
 		}
 	}
@@ -84,6 +88,7 @@
 		const loggedIn = user ? true : false;
 
 		if (loggedIn) {
+			dataLoading.set(true);
 			getUser(user);
 		}
 	});

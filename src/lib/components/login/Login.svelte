@@ -10,16 +10,19 @@
 		getAuth
 	} from 'firebase/auth';
 	import { getToken } from 'firebase/messaging';
-	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { dataLoading, loginModal, putData } from '$lib/store/dataStore';
-	import { toast } from '@zerodevx/svelte-toast';
 	import { appointments } from '$lib/store/dataStore';
 
 	let email: string = '';
 	let password: string = '';
+	let phoneNumber: string = '';
 	let buttonText: string = 'Giriş';
+	let displayName: string;
 	let disabled = false;
+
+	let type: string = 'login';
+	let method: string = 'mobile';
 
 	function closeModal() {
 		loginModal.set(false);
@@ -136,6 +139,7 @@
 			});
 	}
 
+	// REGISTER FOR PUSH NOTIFICATIONS
 	function registerCM() {
 		dataLoading.set(true);
 		navigator.serviceWorker
@@ -179,6 +183,7 @@
 			});
 	}
 
+	// RETRIEVE EXISTING APPOINTMENTS OF LOGGED IN USER
 	async function getAppointments(user: any) {
 		try {
 			console.log(user);
@@ -212,10 +217,16 @@
 <div class="login-form">
 	<div class="col pb-4" style="margin-top: 0; padding-top:0">
 		<div class="d-flex px-0 gap-2 socials w-100" style="padding: 1.5rem;">
-			<button class="btn btn-outline-primary active"
+			<button
+				on:click={() => (method = 'mobile')}
+				class="btn btn-outline-primary"
+				class:active={method == 'mobile'}
 				><span class="material-symbols-outlined icon-fill"> call </span></button
 			>
-			<button class="btn btn-outline-primary bg-white"
+			<button
+				on:click={() => (method = 'email')}
+				class="btn btn-outline-primary bg-white"
+				class:active={method == 'email'}
 				><span class="material-symbols-outlined icon-fill"> mail </span></button
 			>
 			<button class="btn btn-outline-primary bg-white" on:click={loginWithGoogle}
@@ -243,16 +254,37 @@
 				</svg></button
 			>
 		</div>
-		<hr style="margin-top: 0;" />
 		<form on:submit={loginWithMail}>
-			<input
-				class="form-control"
-				style="padding: .5rem; min-width: 300px"
-				bind:value={email}
-				type="text"
-				placeholder="Email"
-				required
-			/>
+			<h5 class="text-center mb-0">{type == 'login' ? 'Hesaba giriş' : 'Qeydiyyat'}</h5>
+			{#if type == 'register'}
+				<input
+					class="form-control"
+					style="padding: .5rem; min-width: 300px"
+					bind:value={displayName}
+					type="text"
+					placeholder="Ad Soyad"
+					required
+				/>
+			{/if}
+			{#if method == 'email'}
+				<input
+					class="form-control"
+					style="padding: .5rem; min-width: 300px"
+					bind:value={email}
+					type="text"
+					placeholder="Email"
+					required
+				/>
+			{:else if method == 'mobile'}
+				<input
+					class="form-control"
+					style="padding: .5rem; min-width: 300px"
+					bind:value={phoneNumber}
+					type="number"
+					placeholder="Mobil"
+					required
+				/>
+			{/if}
 			<input
 				class="form-control"
 				style="padding: .5rem;"
@@ -271,13 +303,19 @@
 			color: white;
 			border: 0px;
 			font-size: 1.05rem;
-			cursor: pointer;">{buttonText}</button
+			cursor: pointer;">{type == 'login' ? 'Giriş' : 'Qeydiyyat'}</button
 			>
 		</form>
 
 		<hr style="margin-top: 1rem" />
 		<div style="display: flex; flex-direction: column; gap: 1rem; align-items: center; padding:0">
-			Hesabın yoxdur? <a href="/register" class="btn btn-outline-primary w-100">Qeydiyyat</a>
+			<span>{type == 'login' ? 'Hesabın yoxdur? ' : 'Hesabınız var? '}</span>
+			<button
+				on:click={() => (type = type == 'login' ? 'register' : 'login')}
+				class="btn btn-outline-primary w-100"
+			>
+				{type == 'login' ? 'Qeydiyyat' : 'Hesaba giriş'}
+			</button>
 		</div>
 	</div>
 </div>

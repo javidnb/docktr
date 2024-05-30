@@ -51,6 +51,7 @@
 			if (post == 'ok') {
 				appointments.set([...$appointments, data]);
 				appointmentModal.set(false);
+				sendNotification(doc.id);
 				toast.push('Randevu qeydə alındı!', {
 					duration: 2000,
 					theme: {
@@ -61,6 +62,27 @@
 				});
 			}
 		}
+	}
+
+	async function sendNotification(doctorId: any) {
+		let time = new Date().getTime();
+		const fcmToken = await fetch(
+			`https://tekoplast.az/docktr/api/?getTokens&uid=${doctorId}&type=doctor&t=${time}`
+		);
+		const fcmTokens = await fcmToken.json();
+
+		let requestData = {
+			tokens: JSON.stringify(fcmTokens[0].fcmToken),
+			title: null,
+			body: 'Yeni randevu',
+			url: 'https://sehiyye.online/appointment'
+		};
+
+		const response = await fetch(`https://tekoplast.az/docktr/api/?pushNotification`, {
+			method: 'POST',
+			cache: 'no-store',
+			body: JSON.stringify({ ...requestData })
+		});
 	}
 </script>
 

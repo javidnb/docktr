@@ -16,6 +16,9 @@
 
 	let confirmationData: any = {};
 	let showDatePicker: boolean = false;
+	let upcomingAppointments;
+
+	$: upcomingAppointments = $appointments.filter((ap) => new Date(ap.startTime) > new Date());
 
 	onMount(async () => {
 		console.log('appointment: ', $appointments);
@@ -103,12 +106,12 @@
 			tokens: JSON.stringify(fcmTokens[0].fcmToken),
 			title: null,
 			body: appointment.changed
-				? 'Randevu yeni saata təyin edilib.'
+				? 'Randevu yeni saata keçirilib.'
 				: 'Randevu saatınız həkim tərəfindən təsdiq edilib',
 			url: 'https://sehiyye.online/appointment'
 		};
 
-		const response = await fetch(`https://tekoplast.az/docktr/api/?test`, {
+		const response = await fetch(`https://tekoplast.az/docktr/api/?pushNotification`, {
 			method: 'POST',
 			cache: 'no-store',
 			body: JSON.stringify({ ...requestData })
@@ -131,8 +134,8 @@
 
 <div class="container">
 	<div class="row">
-		{#if $appointments.length}
-			{#each $appointments as appointment}
+		{#if upcomingAppointments.length}
+			{#each upcomingAppointments as appointment}
 				<div class="col col-md-6 col-lg-4">
 					{#if $session?.user?.doctor}
 						<!-- APPOINTMENTS OF A DOCTOR -->
@@ -209,7 +212,7 @@
 										</span>
 										<span
 											>{appointment.changed
-												? 'Randevu yeni saata təyin edilib.'
+												? 'Randevu yeni saata keçirilib.'
 												: 'Randevu saatı təsdiq edilib.'}</span
 										>
 									</span>
@@ -293,21 +296,33 @@
 
 									<span
 										>{appointment.changed
-											? 'Randevu yeni saata təyin edilib.'
+											? 'Randevu yeni saata keçirilib.'
 											: 'Randevu saatı təsdiq edilib.'}</span
 									>
 								</span>
 							{/if}
 							<!-- PAYMENT -->
-							<div class="d-flex align-items-center gap-1 mt-2" style="color: #c00909">
-								<span class="material-symbols-outlined"> payments </span>
-								<span>Ödəniş edilməmişdir</span>
+							<div
+								class="d-flex align-items-center gap-1 mt-2"
+								style="color: {appointment.purchased ? 'green' : '#c00909'}"
+							>
+								<span class="material-symbols-outlined">
+									{appointment.purchased ? 'check' : 'error'}
+								</span>
+								<span>{appointment.purchased ? 'Ödəniş edilib' : 'Ödəniş edilməmişdir'}</span>
 							</div>
 
-							<button class="btn btn-outline-primary mt-3 d-flex align-items-center">
-								<span class="material-symbols-outlined"> shopping_cart </span>
-								<span class="mx-auto">Ödəniş et</span>
-							</button>
+							{#if !appointment.purchased}
+								<button class="btn btn-outline-primary mt-3 d-flex align-items-center">
+									<span class="material-symbols-outlined"> shopping_cart </span>
+									<span class="mx-auto">Ödəniş et</span>
+								</button>
+							{:else}
+								<button class="btn btn-outline-primary mt-3 d-flex align-items-center">
+									<span class="material-symbols-outlined"> schedule </span>
+									<span class="mx-auto">Randevu saatını gözləyin</span>
+								</button>
+							{/if}
 						</div>
 					{/if}
 				</div>

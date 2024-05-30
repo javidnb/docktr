@@ -80,7 +80,7 @@
 			body: null,
 			url: null
 		};
-		const response = await fetch(`https://tekoplast.az/docktr/api/?test`, {
+		const response = await fetch(`https://tekoplast.az/docktr/api/?pushNotification`, {
 			method: 'POST',
 			cache: 'no-store',
 			body: JSON.stringify({ ...requestData })

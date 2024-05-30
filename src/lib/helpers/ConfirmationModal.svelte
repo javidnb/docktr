@@ -37,7 +37,7 @@
 			data: {
 				startTime: $selectedAppointmentDate.start,
 				endTime: $selectedAppointmentDate.end,
-				appointmentId: confirmationData.data.appointmentId,
+				appointmentId: confirmationData?.data?.appointmentId ?? null,
 				changed: true
 			}
 		};

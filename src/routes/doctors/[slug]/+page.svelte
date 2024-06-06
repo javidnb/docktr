@@ -150,9 +150,9 @@
 </section>
 
 <Modal bind:showModal>
-	<h4 slot="header" class="px-3 pt-2">Randevu</h4>
+	<!-- <h4 slot="header" class="px-3 pt-2">Görüş</h4> -->
 
-	<ol class="px-0">
+	<ol class="px-0 mt-3">
 		<Appointment doc={$doc} />
 	</ol>
 </Modal>
@@ -180,7 +180,7 @@
 									class="btn btn-outline-primary d-flex justify-content-center align-items-center btnRandevu"
 									on:click={openModal}
 									><span class="material-symbols-outlined">local_library</span><span
-										style="margin-inline: auto;">Randevu Al</span
+										style="margin-inline: auto;">Görüş Al</span
 									></button
 								>
 							{:else}

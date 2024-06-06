@@ -11,6 +11,7 @@
 	import DatePicker from '$lib/helpers/DatePicker.svelte';
 	import { jsDateToSQL } from '$lib/helpers/dateFormatter';
 	import { toast } from '@zerodevx/svelte-toast';
+	import { monthNames } from '$lib/helpers/dateFormatter';
 
 	export let doc: any;
 
@@ -94,24 +95,78 @@
 			</div>
 		{:else}
 			<div class="row d-flex">
-				<div class="d-flex flex-column ps-3">
-					<span>Seçdiyiniz tarix:</span>
-					<span> {$selectedAppointmentDate.day} - {$selectedAppointmentDate.time}</span>
-				</div>
-
-				<div class="d-flex gap-3 mt-3">
-					<button
-						{disabled}
-						class="btn btn-secondary w-100 d-flex"
-						on:click={() =>
-							selectedAppointmentDate.set({ day: null, time: null, start: null, end: null })}
-						><span class="material-symbols-outlined"> replay </span>
-						<span class="mx-auto">Dəyişdir</span></button
+				<div class="d-flex flex-column ps-3" style="width: fit-content;">
+					<div
+						class="d-flex justify-content-center flex-column"
+						style="font-size: large;
+						background: rgb(243, 243, 243);
+						border-radius: 6px;
+						padding: 0px 15px;
+						color: #6f8769;
+						box-shadow: 0px 0px 7px 0px #6f876954;"
 					>
-					<button {disabled} class="btn btn-primary w-100 d-flex" on:click={postAppointment}
-						><span class="material-symbols-outlined"> check </span>
-						<span class="mx-auto">Təsdiqlə</span>
-					</button>
+						<div class="d-flex align-items-center gap-2 mt-3 mb-1">
+							<span class="material-symbols-outlined"> schedule </span>
+							<div>
+								<span
+									>{new Date($selectedAppointmentDate.start ?? '').getHours()}:{new Date(
+										$selectedAppointmentDate.start ?? ''
+									).getMinutes() > 9
+										? new Date($selectedAppointmentDate.start ?? '').getMinutes()
+										: new Date($selectedAppointmentDate.start ?? '').getMinutes() + '0'}</span
+								>
+								-
+								<span
+									>{new Date($selectedAppointmentDate.end ?? '').getHours()}:{new Date(
+										$selectedAppointmentDate.end ?? ''
+									).getMinutes() > 9
+										? new Date($selectedAppointmentDate.end ?? '').getMinutes()
+										: new Date($selectedAppointmentDate.end ?? '').getMinutes() + '0'}</span
+								>
+							</div>
+						</div>
+						<div class="d-flex align-items-center gap-2 mb-3">
+							<span class="material-symbols-outlined"> calendar_month </span>
+							<span
+								><span
+									>{new Date($selectedAppointmentDate.end ?? '').getDate()}
+									{monthNames[new Date($selectedAppointmentDate.end ?? '').getMonth()]}</span
+								></span
+							>
+						</div>
+					</div>
+
+					<div class="d-flex flex-column mt-3" style="font-size: small; width: fit-content">
+						<span style="color: #bc0000;"
+							>* Nəzərinizə çatdırırıq ki, görüş tarixi həkim tərəfindən dəyişdirilə bilər</span
+						>
+						<span
+							>* Pasientlər və həkimlərin arasında olan bütün dialoq və məlumatların ötürülməsi
+							konfidensialdır.
+						</span>
+						<span
+							>* Həkimlərin yazdığı dərman vasitələri və müalicə üsulları onların öz
+							məsuliyyətindədir.</span
+						><span style="padding-left: 10px;"
+							>Platformamız bu müalicə üsulları və dərmanların təsirinə və ya təsirsizliyinə görə
+							hər hansı məsuliyyət daşımamaqdadır.</span
+						>
+					</div>
+
+					<div class="d-flex gap-3 mt-3">
+						<button
+							{disabled}
+							class="btn btn-secondary w-100 d-flex"
+							on:click={() =>
+								selectedAppointmentDate.set({ day: null, time: null, start: null, end: null })}
+							><span class="material-symbols-outlined"> replay </span>
+							<span class="mx-auto">Dəyişdir</span></button
+						>
+						<button {disabled} class="btn btn-primary w-100 d-flex" on:click={postAppointment}
+							><span class="material-symbols-outlined"> check </span>
+							<span class="mx-auto">Təsdiqlə</span>
+						</button>
+					</div>
 				</div>
 			</div>
 		{/if}

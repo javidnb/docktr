@@ -33,6 +33,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@daily-co/daily-js": "^0.65.0",
 		"@vercel/speed-insights": "^1.0.10",
 		"firebase": "^10.10.0"
 	}

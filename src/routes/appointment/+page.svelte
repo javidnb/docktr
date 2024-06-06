@@ -13,6 +13,7 @@
 	import ConfirmationModal from '$lib/helpers/ConfirmationModal.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { jsDateToSQL } from '$lib/helpers/dateFormatter';
+	import VideoCall from '$lib/components/VideoCall.svelte';
 
 	let confirmationData: any = {};
 	let showDatePicker: boolean = false;
@@ -351,6 +352,8 @@
 </div>
 
 <ConfirmationModal bind:confirmationData {showDatePicker} on:confirmed={appointmentConfirmed} />
+
+<VideoCall />
 
 <style>
 	.card {

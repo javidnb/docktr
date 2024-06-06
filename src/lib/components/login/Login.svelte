@@ -1,5 +1,4 @@
 <script lang="ts">
-	// login/+page.svelte
 	import { session } from '$lib/session';
 	import { auth, messaging } from '$lib/firebase.client';
 	import {
@@ -7,12 +6,12 @@
 		signInWithEmailAndPassword,
 		type UserCredential,
 		signInWithRedirect,
-		getAuth
+		RecaptchaVerifier,
+		signInWithPhoneNumber
 	} from 'firebase/auth';
 	import { getToken } from 'firebase/messaging';
 	import { onMount } from 'svelte';
-	import { dataLoading, loginModal, putData } from '$lib/store/dataStore';
-	import { appointments } from '$lib/store/dataStore';
+	import { dataLoading, loginModal, putData, appointments } from '$lib/store/dataStore';
 
 	let email: string = '';
 	let password: string = '';
@@ -20,6 +19,7 @@
 	let buttonText: string = 'Giriş';
 	let displayName: string;
 	let disabled = false;
+	let recaptchaVerify: RecaptchaVerifier;
 
 	let type: string = 'login';
 	let method: string = 'mobile';
@@ -34,6 +34,26 @@
 		if ($session.loggedIn) {
 			// goto('./profile');
 		}
+		recaptchaVerify = new RecaptchaVerifier(auth, 'btnLogin', {
+			size: 'invisible',
+			callback: (response: any) => {
+				// reCAPTCHA solved, allow signInWithPhoneNumber.
+				console.log(response);
+				signInWithPhoneNumber(auth, phoneNumber, recaptchaVerify)
+					.then((confirmationResult) => {
+						// SMS sent. Prompt user to type the code from the message, then sign the
+						// user in with confirmationResult.confirm(code).
+						let result = confirmationResult;
+						console.log(result);
+						// ...
+					})
+					.catch((error) => {
+						// Error; SMS not sent
+						// ...
+						console.log(error);
+					});
+			}
+		});
 	});
 
 	async function postData(userData: any) {
@@ -104,7 +124,24 @@
 		}
 	}
 
-	async function loginWithMail() {
+	async function login() {
+		if (method == 'mobile') {
+			console.log(phoneNumber);
+			signInWithPhoneNumber(auth, phoneNumber, recaptchaVerify)
+				.then((confirmationResult) => {
+					// SMS sent. Prompt user to type the code from the message, then sign the
+					// user in with confirmationResult.confirm(code).
+					let result = confirmationResult;
+					console.log(result);
+					// ...
+				})
+				.catch((error) => {
+					// Error; SMS not sent
+					// ...
+					console.log(error);
+				});
+			return;
+		}
 		dataLoading.set(true);
 		buttonText = 'Gözləyin..';
 		disabled = true;
@@ -123,8 +160,7 @@
 
 	async function loginWithGoogle() {
 		const provider = new GoogleAuthProvider();
-		const auuth = getAuth();
-		await signInWithRedirect(auuth, provider)
+		await signInWithRedirect(auth, provider)
 			.then(async (result: any) => {
 				console.log(result);
 				// const { displayName, email, photoURL, uid } = result?.user;
@@ -214,7 +250,7 @@
 	}
 </script>
 
-<div class="login-form">
+<div class="login-form" style="max-width: 100%; overflow-x:hidden">
 	<div class="col pb-4" style="margin-top: 0; padding-top:0">
 		<div class="d-flex px-0 gap-2 socials w-100" style="padding: 1.5rem;">
 			<button
@@ -254,7 +290,7 @@
 				</svg></button
 			>
 		</div>
-		<form on:submit={loginWithMail}>
+		<form on:submit={login}>
 			<h5 class="text-center mb-0">{type == 'login' ? 'Hesaba giriş' : 'Qeydiyyat'}</h5>
 			{#if type == 'register'}
 				<input
@@ -295,6 +331,7 @@
 			/>
 			<button
 				class="btn"
+				id="btnLogin"
 				{disabled}
 				type="submit"
 				style="padding: 0.5rem;

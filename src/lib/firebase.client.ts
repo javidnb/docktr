@@ -1,16 +1,11 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import type { FirebaseApp } from 'firebase/app';
-import { getFirestore, collection, query, getDocs } from 'firebase/firestore';
-import { getMessaging, getToken, type Messaging } from 'firebase/messaging';
+import { initializeApp, type FirebaseApp } from 'firebase/app';
+import { getAuth, type Auth } from 'firebase/auth';
+import { getMessaging, type Messaging } from 'firebase/messaging';
+
+import { browser } from '$app/environment';
+import { session } from '$lib/session';
 import { appointments } from './store/dataStore';
 
-import type { Auth } from 'firebase/auth';
-import { browser } from '$app/environment';
-import type { Doctor } from './interfaces/doctor.interface';
-import { session } from '$lib/session';
-
-export let db: any;
 export let app: FirebaseApp;
 export let auth: Auth;
 export let messaging: Messaging;
@@ -32,22 +27,9 @@ export const initializeFirebase = () => {
 	if (!app) {
 		app = initializeApp(firebaseConfig);
 		auth = getAuth(app);
-		db = getFirestore(app);
 		messaging = getMessaging(app);
 	}
 };
-
-export async function getData(collectionName: string) {
-	if (db) {
-		let result: Doctor[] = [];
-		const q = query(collection(db, collectionName));
-		const querySnapshot = await getDocs(q);
-		querySnapshot.forEach((doc: any) => {
-			result.push(doc.data());
-		});
-		return result;
-	}
-}
 
 export function logout() {
 	auth

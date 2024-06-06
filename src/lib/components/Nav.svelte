@@ -6,6 +6,7 @@
 	import { dataLoading, loginModal } from '$lib/store/dataStore';
 	import Modal from '$lib/helpers/Modal.svelte';
 	import Login from './login/Login.svelte';
+	import { goto } from '$app/navigation';
 
 	let currentDate = new Date();
 	let showModal: boolean = false;
@@ -61,8 +62,8 @@
 			<ul class="navbar-nav ml-auto" style="margin-left: auto;">
 				{#if !$session.loggedIn}
 					<li class="nav-item">
-						<a class="nav-link" href="../login" on:click|preventDefault={() => loginModal.set(true)}
-							>Giriş yap</a
+						<button class="nav-link" on:click|preventDefault={() => loginModal.set(true)}
+							>Giriş yap</button
 						>
 					</li>
 				{:else}
@@ -135,14 +136,16 @@
 			</li>
 
 			<li class="nav-item mobileOnly">
-				<a class="nav-link" href={$session.loggedIn ? '../profile' : '../login'}
+				<button
+					class="nav-link"
+					on:click={() => ($session.loggedIn ? goto('/profile') : loginModal.set(true))}
 					><span
 						class="material-symbols-outlined"
 						class:icon-fill={curPage == '/profile' || curPage == '/login' || curPage == '/register'}
 					>
 						account_circle
 					</span>
-					<span class="navLinkText">Hesabım</span></a
+					<span class="navLinkText">Hesabım</span></button
 				>
 			</li>
 

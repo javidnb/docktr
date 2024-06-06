@@ -359,7 +359,14 @@
 			{/if}
 		</div>
 	{:else}
+		<!-- <div class="row">
+			<div class="col col-md-8 col-lg-9"> -->
 		<VideoCall />
+		<!-- </div>
+			<div class="col col-md-4 col-lg-3">
+				<div class="card h-100 my-2 p-2">Chat</div>
+			</div>
+		</div> -->
 	{/if}
 </div>
 

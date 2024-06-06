@@ -13,10 +13,12 @@
 		callFrame = DailyIframe.createFrame(videoContainer, {
 			showLeaveButton: true,
 			iframeStyle: {
-				position: 'relative',
-				width: '100%',
-				height: '500px',
-				border: 'none'
+				position: 'absolute',
+				width: '100vw',
+				height: 'calc(100dvh - 50px)',
+				border: 'none',
+				top: '50px',
+				left: '0px'
 			}
 		});
 
@@ -79,7 +81,7 @@
 	.video-container {
 		width: 100%;
 		height: 100%;
-        min-height: 300px;
+		min-height: 300px;
 		margin: 10px;
 	}
 </style>

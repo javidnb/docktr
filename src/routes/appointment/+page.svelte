@@ -22,9 +22,22 @@
 
 	$: upcomingAppointments = $appointments.filter((ap) => new Date(ap.startTime) > new Date());
 
-	onMount(async () => {
-		console.log('appointment: ', $appointments);
-		console.log('session: ', $session);
+	onMount(() => {
+		const updateRemainingTime = () => {
+			appointments.set(
+				$appointments.map((appointment) => {
+					return {
+						...appointment,
+						remainingTime: checkTime(appointment)
+					};
+				})
+			);
+		};
+
+		updateRemainingTime();
+		const interval = setInterval(updateRemainingTime, 1000);
+
+		return () => clearInterval(interval);
 	});
 
 	function openAppConfirmModal(appointment: any, showDP?: boolean) {
@@ -118,6 +131,29 @@
 			cache: 'no-store',
 			body: JSON.stringify({ ...requestData })
 		});
+	}
+
+	function joinVideoCall() {
+		joinCall = true;
+	}
+
+	function checkTime(appointment: any) {
+		const now: any = new Date();
+		const startTime: any = new Date(appointment.startTime);
+		const timeDifference = startTime - now;
+
+		const seconds = Math.floor((timeDifference / 1000) % 60);
+		const minutes = Math.floor((timeDifference / 1000 / 60) % 60);
+		const hours = Math.floor((timeDifference / 1000 / 60 / 60) % 24);
+		const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+
+		return {
+			total: timeDifference,
+			days,
+			hours,
+			minutes,
+			seconds
+		};
 	}
 </script>
 
@@ -320,17 +356,29 @@
 										<span class="material-symbols-outlined"> shopping_cart </span>
 										<span class="mx-auto">Ödəniş et</span>
 									</button>
+									<!-- {:else if appointment?.remainingTime?.total > 0}
+									<button class="btn btn-outline-primary mt-3 d-flex align-items-center">
+										<span class="material-symbols-outlined"> schedule </span>
+										<span class="mx-auto"
+											>{appointment.remainingTime.days +
+												' gün ' +
+												appointment.remainingTime.hours +
+												' saat ' +
+												appointment.remainingTime.minutes +
+												' deq ' +
+												appointment.remainingTime.seconds +
+												' san qalıb'}</span
+										>
+									</button> -->
 								{:else}
-									<!-- <button class="btn btn-outline-primary mt-3 d-flex align-items-center">
-									<span class="material-symbols-outlined"> schedule </span>
-									<span class="mx-auto">Randevu saatını gözləyin</span>
-								</button> -->
 									<button
-										on:click={() => (joinCall = true)}
+										on:click={joinVideoCall}
 										class="btn btn-outline-primary mt-3 d-flex align-items-center"
+										style="background: var(--primaryColor);
+										color: white;"
 									>
 										<span class="material-symbols-outlined"> schedule </span>
-										<span class="mx-auto">Vİdeo görüşə qoşul</span>
+										<span class="mx-auto">Video görüşə qoşul</span>
 									</button>
 								{/if}
 							</div>

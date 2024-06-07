@@ -11,13 +11,14 @@
 
 	onMount(() => {
 		callFrame = DailyIframe.createFrame(videoContainer, {
-			showLeaveButton: true,
+			showLeaveButton: false,
+			showFullscreenButton: true,
 			iframeStyle: {
 				position: 'absolute',
 				width: '100vw',
-				height: 'calc(100dvh - 50px)',
+				height: 'calc(100dvh - 28px)',
 				border: 'none',
-				top: '50px',
+				top: '28px',
 				left: '0px'
 			}
 		});

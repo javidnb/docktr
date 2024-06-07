@@ -31,7 +31,7 @@
 	</div>
 {/if}
 
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primaryColor);">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primaryColor); z-index: 99">
 	<div
 		class="container-fluid"
 		style="display: flex;flex-wrap: inherit;

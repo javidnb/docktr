@@ -276,6 +276,43 @@
 										<span class="mx-auto">Təsdiq et</span>
 									</button>
 								{/if}
+
+								{#if appointment?.remainingTime?.total > 0}
+									<!-- <button class="btn btn-outline-primary mt-3 d-flex align-items-center">
+										<span class="material-symbols-outlined"> schedule </span>
+										<span class="mx-auto"
+											>{appointment.remainingTime.days +
+												' gün ' +
+												appointment.remainingTime.hours +
+												' saat ' +
+												appointment.remainingTime.minutes +
+												' deq ' +
+												appointment.remainingTime.seconds +
+												' san qalıb'}</span
+										>
+									</button> -->
+
+									<!-- ALTDAKINI SIL, USTDEKINI KOMMENTDEN CIXART -->
+									<button
+										on:click={() => joinVideoCall(appointment)}
+										class="btn btn-outline-primary mt-3 d-flex align-items-center"
+										style="background: var(--primaryColor);
+										color: white;"
+									>
+										<span class="material-symbols-outlined"> schedule </span>
+										<span class="mx-auto">Video görüşə qoşul</span>
+									</button>
+								{:else}
+									<button
+										on:click={() => joinVideoCall(appointment)}
+										class="btn btn-outline-primary mt-3 d-flex align-items-center"
+										style="background: var(--primaryColor);
+										color: white;"
+									>
+										<span class="material-symbols-outlined"> schedule </span>
+										<span class="mx-auto">Video görüşə qoşul</span>
+									</button>
+								{/if}
 							</div>
 						{:else}
 							<!-- APPOINTMENTS OF A USER -->

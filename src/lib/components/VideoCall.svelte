@@ -36,9 +36,26 @@
 			);
 
 			const result = await response.json();
+
 			if (result?.roomId) {
-				roomUrl += result.roomId;
-				launchVideoChatUI();
+				let dre = await fetch(`https://api.daily.co/v1/rooms/${result.roomId}`, {
+					method: 'GET',
+					headers: {
+						Authorization: `Bearer ${API_KEY}`,
+						'Content-Type': 'application/json'
+					}
+				});
+
+				const dailyRoomExits = await dre.json();
+
+				if (dailyRoomExits?.id) {
+					roomUrl += result.roomId;
+					launchVideoChatUI();
+				} else {
+					createRoom();
+				}
+
+				// launchVideoChatUI();
 			} else {
 				createRoom();
 			}

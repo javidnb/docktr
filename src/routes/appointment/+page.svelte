@@ -19,6 +19,7 @@
 	let showDatePicker: boolean = false;
 	let upcomingAppointments;
 	let joinCall: boolean = false;
+	let appointmentId: any = null;
 
 	$: upcomingAppointments = $appointments.filter((ap) => new Date(ap.startTime) > new Date());
 
@@ -133,7 +134,9 @@
 		});
 	}
 
-	function joinVideoCall() {
+	function joinVideoCall(appointment: any) {
+		dataLoading.set(true);
+		appointmentId = appointment.id;
 		joinCall = true;
 	}
 
@@ -372,7 +375,7 @@
 									</button> -->
 								{:else}
 									<button
-										on:click={joinVideoCall}
+										on:click={() => joinVideoCall(appointment)}
 										class="btn btn-outline-primary mt-3 d-flex align-items-center"
 										style="background: var(--primaryColor);
 										color: white;"
@@ -409,7 +412,7 @@
 	{:else}
 		<!-- <div class="row">
 			<div class="col col-md-8 col-lg-9"> -->
-		<VideoCall />
+		<VideoCall {appointmentId} />
 		<!-- </div>
 			<div class="col col-md-4 col-lg-3">
 				<div class="card h-100 my-2 p-2">Chat</div>

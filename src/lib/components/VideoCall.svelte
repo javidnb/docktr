@@ -53,7 +53,8 @@
 	export async function createRoom() {
 		const roomConfig = {
 			properties: {
-				exp: Math.floor(Date.now() / 1000) + 3600
+				exp: Math.floor(Date.now() / 1000) + 3600,
+				max_participants: 2
 			}
 		};
 

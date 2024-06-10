@@ -11,13 +11,13 @@ export let auth: Auth;
 export let messaging: Messaging;
 
 const firebaseConfig = {
-	apiKey: 'AIzaSyDv8kOrp_AL6mudWmsiYr53yR8cAn4hAYg',
-	authDomain: 'ddocktr.firebaseapp.com',
-	projectId: 'ddocktr',
-	storageBucket: 'ddocktr.appspot.com',
-	messagingSenderId: '1012984967438',
-	appId: '1:1012984967438:web:9b90eb7220b41970dde75f',
-	measurementId: 'G-0MLDQ5MDM6'
+	apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+	authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+	projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+	storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+	messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+	appId: import.meta.env.VITE_FIREBASE_APP_ID,
+	measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 export const initializeFirebase = () => {

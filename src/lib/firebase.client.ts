@@ -1,5 +1,5 @@
 import { initializeApp, type FirebaseApp } from 'firebase/app';
-import { getAuth, type Auth } from 'firebase/auth';
+import { getAuth, type Auth, GoogleAuthProvider } from 'firebase/auth';
 import { getMessaging, type Messaging } from 'firebase/messaging';
 
 import { browser } from '$app/environment';
@@ -9,6 +9,7 @@ import { appointments } from './store/dataStore';
 export let app: FirebaseApp;
 export let auth: Auth;
 export let messaging: Messaging;
+export let provider: GoogleAuthProvider;
 
 const firebaseConfig = {
 	apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -28,6 +29,7 @@ export const initializeFirebase = () => {
 		app = initializeApp(firebaseConfig);
 		auth = getAuth(app);
 		messaging = getMessaging(app);
+		provider = new GoogleAuthProvider();
 	}
 };
 

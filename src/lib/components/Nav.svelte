@@ -3,13 +3,14 @@
 	import { page } from '$app/stores';
 	import { formatDate } from '$lib/helpers/dateFormatter';
 	import { session } from '$lib/session';
-	import { dataLoading, loginModal } from '$lib/store/dataStore';
+	import { dataLoading, loginModal, appointments } from '$lib/store/dataStore';
 	import Modal from '$lib/helpers/Modal.svelte';
 	import Login from './login/Login.svelte';
 	import { goto } from '$app/navigation';
 
 	let currentDate = new Date();
 	let showModal: boolean = false;
+	$: upcomingAppointments = $appointments.filter((ap) => new Date(ap.startTime) > new Date());
 
 	onMount(async () => {
 		setInterval(() => {
@@ -31,7 +32,10 @@
 	</div>
 {/if}
 
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primaryColor); z-index: 99">
+<nav
+	class="navbar navbar-expand-lg navbar-dark"
+	style="background-color: var(--primaryColor); z-index: 99"
+>
 	<div
 		class="container-fluid"
 		style="display: flex;flex-wrap: inherit;
@@ -119,8 +123,18 @@
 					><span class="material-symbols-outlined" class:icon-fill={curPage == '/appointment'}>
 						local_library
 					</span>
-					<span class="navLinkText">Randevu</span></a
-				>
+					<span class="navLinkText">Randevu</span>
+					{#if upcomingAppointments.length && curPage !== '/appointment'}
+						<span
+							class="redDot"
+							style="background: rgb(196, 15, 15);
+									width: 7px;
+									height: 7px;
+									border-radius: 50%;
+									align-self: baseline;"
+						></span>
+					{/if}
+				</a>
 			</li>
 			<li class="nav-item pcOnly">
 				<a class="nav-link" href="/"

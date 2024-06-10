@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { session } from '$lib/session';
-	import { auth, messaging } from '$lib/firebase.client';
+	import { auth, messaging, provider } from '$lib/firebase.client';
 	import {
-		GoogleAuthProvider,
 		signInWithEmailAndPassword,
 		type UserCredential,
 		signInWithRedirect,
@@ -16,9 +15,9 @@
 	let email: string = '';
 	let password: string = '';
 	let phoneNumber: string = '';
-	let buttonText: string = 'Giriş';
 	let displayName: string;
 	let disabled = false;
+	let showError: boolean = false;
 	let recaptchaVerify: RecaptchaVerifier;
 
 	let type: string = 'login';
@@ -26,11 +25,17 @@
 
 	function closeModal() {
 		loginModal.set(false);
-		buttonText = 'Giriş';
 		disabled = false;
+		showError = false;
+	}
+
+	$: if ($loginModal == false) {
+		disabled = false;
+		showError = false;
 	}
 
 	onMount(async () => {
+		showError = false;
 		if ($session.loggedIn) {
 			// goto('./profile');
 		}
@@ -125,7 +130,9 @@
 	}
 
 	async function login() {
+		showError = false;
 		if (method == 'mobile') {
+			dataLoading.set(true);
 			console.log(phoneNumber);
 			signInWithPhoneNumber(auth, phoneNumber, recaptchaVerify)
 				.then((confirmationResult) => {
@@ -133,17 +140,19 @@
 					// user in with confirmationResult.confirm(code).
 					let result = confirmationResult;
 					console.log(result);
+					dataLoading.set(false);
 					// ...
 				})
 				.catch((error) => {
 					// Error; SMS not sent
 					// ...
 					console.log(error);
+					showError = true;
+					dataLoading.set(false);
 				});
 			return;
 		}
 		dataLoading.set(true);
-		buttonText = 'Gözləyin..';
 		disabled = true;
 		await signInWithEmailAndPassword(auth, email, password)
 			.then(async (result) => {
@@ -153,26 +162,19 @@
 				closeModal();
 			})
 			.catch((error) => {
+				disabled = false;
+				showError = true;
 				dataLoading.set(false);
 				return error;
 			});
 	}
 
 	async function loginWithGoogle() {
-		const provider = new GoogleAuthProvider();
-		await signInWithRedirect(auth, provider)
-			.then(async (result: any) => {
-				console.log(result);
-				// const { displayName, email, photoURL, uid } = result?.user;
-				localStorage.setItem('user', JSON.stringify(result?.user));
-				await getUser(result);
-				loginModal.set(true);
-				closeModal();
-			})
-			.catch((error) => {
-				dataLoading.set(false);
-				return error;
-			});
+		try {
+			await signInWithRedirect(auth, provider);
+		} catch (error) {
+			console.error('Error logging in with Google', error);
+		}
 	}
 
 	// REGISTER FOR PUSH NOTIFICATIONS
@@ -329,6 +331,11 @@
 				placeholder="Şifrə"
 				required
 			/>
+			{#if showError}
+				<span style="color:#c40f0f"
+					>Xəta! İstifadəçi adı vəya şifrə yanlışdır. <br />Zəhmət olmasa yenidən cəhd edin</span
+				>
+			{/if}
 			<button
 				class="btn"
 				id="btnLogin"
@@ -340,8 +347,12 @@
 			color: white;
 			border: 0px;
 			font-size: 1.05rem;
-			cursor: pointer;">{type == 'login' ? 'Giriş' : 'Qeydiyyat'}</button
-			>
+			cursor: pointer;"
+				>{type == 'login' ? 'Giriş' : 'Qeydiyyat'}
+				{#if $dataLoading}
+					<div class="loader"></div>
+				{/if}
+			</button>
 		</form>
 
 		<hr style="margin-top: 1rem" />
@@ -383,5 +394,29 @@
 	.active,
 	.socials button:hover {
 		background-color: var(--primaryColor) !important;
+	}
+
+	/* LOADER */
+	.loader {
+		width: 25px;
+		padding: 8px !important;
+		aspect-ratio: 1;
+		border-radius: 50%;
+		background: #25b09b;
+		--_m: conic-gradient(#0000 10%, #000), linear-gradient(#000 0 0) content-box;
+		-webkit-mask: var(--_m);
+		mask: var(--_m);
+		-webkit-mask-composite: source-out;
+		mask-composite: subtract;
+		animation: l3 1s infinite linear;
+		display: inline-block;
+		margin-left: 1rem;
+		position: absolute;
+		right: 3rem;
+	}
+	@keyframes l3 {
+		to {
+			transform: rotate(1turn);
+		}
 	}
 </style>

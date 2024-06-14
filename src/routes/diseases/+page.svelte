@@ -14,20 +14,18 @@
 		<!-- <a class="btn btn-primary btn-lg" href="#" role="button">Doktorlar</a> -->
 	</div>
 </section>
-<div class="container-fluid mt-3">
-	<ul class="nav nav-pills nav-fill" style="gap: 1rem">
+<div class="container-fluid my-3">
+	<div class="container d-flex flex-wrap" style="gap: 1rem">
 		{#each diseases as item}
-			<li class="nav-item"><a href="./">{item.name}</a></li>
+			<a class="card p-3" href="/branches/{item.slug}" style="min-width: max-content; text-decoration: none">
+				<h4>{item.name}</h4>
+				{#each item.conditions as condition}
+					<span>{condition}</span>
+				{/each}
+			</a>
 		{/each}
-	</ul>
+	</div>
 </div>
 
 <style type="text/css">
-	.nav-item {
-		flex: inherit;
-	}
-	.nav-item a {
-		color: #68a557;
-		font-size: large;
-	}
 </style>

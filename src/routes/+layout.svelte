@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { session } from '$lib/session';
-	import { fade, slide } from 'svelte/transition';
+	import { fade } from 'svelte/transition';
 	import Nav from '$lib/components/Nav.svelte';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import type { LayoutData } from './$types';
@@ -90,6 +90,7 @@
 		if (loggedIn) {
 			dataLoading.set(true);
 			getUser(user);
+			console.log($doctors);
 		}
 	});
 </script>

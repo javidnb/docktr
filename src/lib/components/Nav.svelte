@@ -66,20 +66,25 @@
 			<ul class="navbar-nav ml-auto" style="margin-left: auto;">
 				{#if !$session.loggedIn}
 					<li class="nav-item">
-						<button class="nav-link" on:click|preventDefault={() => loginModal.set(true)}
-							>Giriş yap</button
-						>
+						<button class="nav-link" on:click|preventDefault={() => loginModal.set(true)}>
+							<span class="material-symbols-outlined"> login </span>
+							Giriş
+						</button>
 					</li>
 				{:else}
 					{#if $session.user?.admin}
 						<li class="nav-item">
 							<a class="nav-link" href="../admin" class:icon-fill={curPage == '/admin'}>
+								<span class="material-symbols-outlined icon-fill"> admin_panel_settings </span>
 								<span>Admin</span></a
 							>
 						</li>
 					{/if}
 					<li class="nav-item">
-						<a class="nav-link" href="../profile">Hesabım</a>
+						<a class="nav-link" href="../profile">
+							<span class="material-symbols-outlined icon-fill"> account_circle </span>
+							Hesabım
+						</a>
 					</li>
 				{/if}
 			</ul>

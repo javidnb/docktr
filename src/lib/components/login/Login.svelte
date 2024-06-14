@@ -5,12 +5,12 @@
 		signInWithEmailAndPassword,
 		type UserCredential,
 		signInWithRedirect,
-		RecaptchaVerifier,
-		signInWithPhoneNumber
+		signInWithCustomToken
 	} from 'firebase/auth';
 	import { getToken } from 'firebase/messaging';
 	import { onMount } from 'svelte';
 	import { dataLoading, loginModal, putData, appointments } from '$lib/store/dataStore';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	let email: string = '';
 	let password: string = '';
@@ -18,7 +18,6 @@
 	let displayName: string;
 	let disabled = false;
 	let showError: boolean = false;
-	let recaptchaVerify: RecaptchaVerifier;
 
 	let type: string = 'login';
 	let method: string = 'mobile';
@@ -39,26 +38,6 @@
 		if ($session.loggedIn) {
 			// goto('./profile');
 		}
-		recaptchaVerify = new RecaptchaVerifier(auth, 'btnLogin', {
-			size: 'invisible',
-			callback: (response: any) => {
-				// reCAPTCHA solved, allow signInWithPhoneNumber.
-				console.log(response);
-				signInWithPhoneNumber(auth, phoneNumber, recaptchaVerify)
-					.then((confirmationResult) => {
-						// SMS sent. Prompt user to type the code from the message, then sign the
-						// user in with confirmationResult.confirm(code).
-						let result = confirmationResult;
-						console.log(result);
-						// ...
-					})
-					.catch((error) => {
-						// Error; SMS not sent
-						// ...
-						console.log(error);
-					});
-			}
-		});
 	});
 
 	async function postData(userData: any) {
@@ -130,35 +109,54 @@
 	}
 
 	async function login() {
+		dataLoading.set(true);
+		disabled = true;
 		showError = false;
 		if (method == 'mobile') {
 			dataLoading.set(true);
-			console.log(phoneNumber);
-			signInWithPhoneNumber(auth, phoneNumber, recaptchaVerify)
-				.then((confirmationResult) => {
-					// SMS sent. Prompt user to type the code from the message, then sign the
-					// user in with confirmationResult.confirm(code).
-					let result = confirmationResult;
-					console.log(result);
-					dataLoading.set(false);
-					// ...
-				})
-				.catch((error) => {
-					// Error; SMS not sent
-					// ...
-					console.log(error);
-					showError = true;
-					dataLoading.set(false);
+			const response = await fetch('https://tekoplast.az/docktr/api/?authToken', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ phoneNumber })
+			});
+			const data = await response.json();
+			try {
+				const userCredential = await signInWithCustomToken(auth, data.customToken);
+				await getUser(userCredential);
+				toast.push(`Xoş gəldiniz ${userCredential.user.displayName ?? ''}!`, {
+					duration: 2000,
+					theme: {
+						'--toastColor': 'mintcream',
+						'--toastBackground': 'rgb(91 144 77)',
+						'--toastBarBackground': '#1d5b3c'
+					}
 				});
-			return;
+				dataLoading.set(false);
+				disabled = false;
+				closeModal();
+				return;
+			} catch (error) {
+				console.error('Error logging in:', error);
+				dataLoading.set(false);
+				disabled = false;
+				return;
+			}
 		}
-		dataLoading.set(true);
-		disabled = true;
 		await signInWithEmailAndPassword(auth, email, password)
 			.then(async (result) => {
 				const { user }: UserCredential = result;
 				localStorage.setItem('user', JSON.stringify(user));
 				await getUser(result);
+				toast.push(`Xoş gəldiniz ${result.user.displayName ?? ''}!`, {
+					duration: 2000,
+					theme: {
+						'--toastColor': 'mintcream',
+						'--toastBackground': 'rgb(91 144 77)',
+						'--toastBarBackground': '#1d5b3c'
+					}
+				});
 				closeModal();
 			})
 			.catch((error) => {

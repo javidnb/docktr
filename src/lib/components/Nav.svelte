@@ -105,14 +105,14 @@
 				<a class="nav-link" href="/doctors" class:active={curPage?.includes('/doctors')}
 					><span class="material-symbols-outlined" class:icon-fill={curPage?.includes('/doctors')}>
 						physical_therapy
-					</span><span class="navLinkText">Doktorlar</span></a
+					</span><span class="navLinkText">Həkimlər</span></a
 				>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="/branches" class:active={curPage?.includes('/branches')}
 					><span class="material-symbols-outlined" class:icon-fill={curPage?.includes('/branches')}>
 						category
-					</span><span class="navLinkText">Branşlar</span></a
+					</span><span class="navLinkText">Şöbələr</span></a
 				>
 			</li>
 			<li class="nav-item pcOnly">
@@ -120,7 +120,7 @@
 					><span class="material-symbols-outlined" class:icon-fill={curPage == '/diseases'}>
 						microbiology
 					</span>
-					<span class="navLinkText">Hastalıklar</span></a
+					<span class="navLinkText">Xəstəliklər</span></a
 				>
 			</li>
 			<li class="nav-item">
@@ -128,7 +128,7 @@
 					><span class="material-symbols-outlined" class:icon-fill={curPage == '/appointment'}>
 						local_library
 					</span>
-					<span class="navLinkText">Randevu</span>
+					<span class="navLinkText">Görüşlər</span>
 					{#if upcomingAppointments.length && curPage !== '/appointment'}
 						<span
 							class="redDot"
@@ -150,7 +150,7 @@
 			<li class="nav-item pcOnly">
 				<a class="nav-link" href="/"
 					><span class="material-symbols-outlined"> dialpad </span>
-					<span class="navLinkText">İletişim</span></a
+					<span class="navLinkText">Əlaqə</span></a
 				>
 			</li>
 

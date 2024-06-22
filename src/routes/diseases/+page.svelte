@@ -17,10 +17,14 @@
 <div class="container-fluid my-3">
 	<div class="container d-flex flex-wrap" style="gap: 1rem">
 		{#each diseases as item}
-			<a class="card p-3" href="/branches/{item.slug}" style="min-width: max-content; text-decoration: none">
+			<a
+				class="card p-3"
+				href="/branches/{item.slug}"
+				style="min-width: max-content; text-decoration: none"
+			>
 				<h4>{item.name}</h4>
-				{#each item.conditions as condition}
-					<span>{condition}</span>
+				{#each Object.entries(item.conditions) as [key, value]}
+					<span>{key}</span>
 				{/each}
 			</a>
 		{/each}

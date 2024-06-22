@@ -31,12 +31,14 @@
 						</div>
 					</div>
 				{/each}
-			{:else}
+			{:else if filteredDocs.length}
 				{#each filteredDocs as doctor, i}
 					<div class="col col-md-6 col-lg-4">
 						<DoctorCard props={doctor} />
 					</div>
 				{/each}
+			{:else}
+				<div class="col col-md-6 col-lg-4">Nəticə tapılmadı</div>
 			{/if}
 		</div>
 	</div>

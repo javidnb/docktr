@@ -99,13 +99,7 @@
 						>
 					</li>
 					<li>
-						<button
-							class="dropdown-item"
-							on:click={() => {
-								changeLocale('ru');
-								console.log($locale);
-							}}
-						>
+						<button class="dropdown-item" on:click={() => changeLocale('ru')}>
 							<img
 								style="width:20px;height:20px;margin-right:.5rem"
 								src="https://ik.imagekit.io/d2nwsj0ktvh/img/ru.png"
@@ -114,13 +108,7 @@
 						>
 					</li>
 					<li>
-						<button
-							class="dropdown-item"
-							on:click={() => {
-								changeLocale('en');
-								console.log($locale);
-							}}
-						>
+						<button class="dropdown-item" on:click={() => changeLocale('en')}>
 							<img
 								style="width:20px;height:20px;margin-right:.5rem"
 								src="https://ik.imagekit.io/d2nwsj0ktvh/img/en.png"

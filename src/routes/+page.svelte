@@ -1,6 +1,7 @@
 <script lang="ts">
 	import BranchSlider from '$lib/components/BranchSlider.svelte';
 	import Search from '$lib/helpers/Search.svelte';
+	import { _ } from 'svelte-i18n';
 </script>
 
 <section>
@@ -15,8 +16,8 @@
 		<div class="container">
 			<div class="row justify-content-center">
 				<div class="col col-md-8 d-flex align-items-center flex-column text-center">
-					<h1 class="display-4">Sağlığınız üçün burdayıq</h1>
-					<p class="lead">Həkiminizlə onlayn əlaqə saxlayın, sağlamlığınızı indi idarə edin</p>
+					<h1 class="display-4">{$_('home.hero')}</h1>
+					<p class="lead">{$_('home.lead')}</p>
 					<div class="col-12 col-md-10">
 						<Search />
 					</div>
@@ -30,7 +31,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col">
-				<h5>Branşlar</h5>
+				<h5>{$_('nav.branches')}</h5>
 				<BranchSlider />
 			</div>
 		</div>
@@ -41,7 +42,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col">
-				<h5>Sıkça sorulan sorular</h5>
+				<h5>{$_('home.faq')}</h5>
 			</div>
 		</div>
 	</div>

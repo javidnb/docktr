@@ -18,8 +18,9 @@
 <div class="branches">
 	{#each branches as item}
 		{#if item.id}
-			<div
-				class="card"
+			<button
+				on:click={() => goto(`./branches/${item.slug}`)}
+				class="card align-items-center"
 				style="flex: 1;
 					min-width: 10rem;
 					min-height: 10rem;
@@ -27,7 +28,8 @@
 					box-shadow: 0px 0px 5px #00000012;
 					border-radius: 20px;
 					cursor: auto;
-					text-decoration:none"
+					text-decoration:none;
+					cursor: pointer"
 			>
 				<div class="card-body d-flex flex-column align-items-center">
 					<span
@@ -50,12 +52,11 @@
 						style="	background-color: white;
 						border: 1px solid var(--primaryColor);
 						color: var(--primaryColor);"
-						on:click={() => goto(`./branches/${item.slug}`)}
 					>
 						{item.doctorCount} həkim
 					</button>
 				</div>
-			</div>
+			</button>
 		{/if}
 	{/each}
 </div>

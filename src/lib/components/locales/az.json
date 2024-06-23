@@ -1,0 +1,26 @@
+{
+	"home": {
+		"hero": "Sağlığınız üçün burdayıq",
+		"lead": "Həkiminizlə onlayn əlaqə saxlayın, sağlamlığınızı indi idarə edin",
+		"search": "Axtar",
+		"symptoms": "Simptomlar",
+		"faq": "Tez tez soruşulan suallar"
+	},
+	"nav": {
+		"home": "Ana Səhifə",
+		"docs": "Həkimlər",
+		"branches": "Şöbələr",
+		"diseases": "Xəstəliklər",
+		"appointments": "Görüşlər",
+		"blog": "Blog",
+		"contact": "Əlaqə",
+		"account": "Hesabım"
+	},
+	"appointment": {
+		"loginToSee": "Randevuları görmək üçün hesaba",
+		"login": "giriş et"
+	},
+	"other": {
+		"notFound": "Nəticə Tapılmadı"
+	}
+}

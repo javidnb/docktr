@@ -14,6 +14,7 @@
 	import { toast } from '@zerodevx/svelte-toast';
 	import { jsDateToSQL } from '$lib/helpers/dateFormatter';
 	import VideoCall from '$lib/components/VideoCall.svelte';
+	import { _ } from 'svelte-i18n';
 
 	let confirmationData: any = {};
 	let showDatePicker: boolean = false;
@@ -162,7 +163,7 @@
 
 <section>
 	<div class="jumbotron" style="padding-top: 2rem; background-color: #e2e9ef">
-		<h1 class="display-4">Randevu</h1>
+		<h1 class="display-4">{$_('nav.appointments')}</h1>
 		<!-- <p class="lead">We connect you to doctors around the world!</p> -->
 		<hr />
 		<!-- <p>
@@ -435,13 +436,13 @@
 						align-items: baseline;
 						gap: .5rem;"
 				>
-					Randevuları görmək üçün hesaba
+					{$_('appointment.loginToSee')}
 					<button
 						on:click={() => loginModal.set(true)}
 						class="btn btn-outline-primary"
 						style="height: 40px"
 					>
-						giriş et
+						{$_('appointment.login')}
 					</button>
 				</div>
 			{/if}

@@ -2,6 +2,7 @@
 	import { diseases } from '$lib/store/diseases';
 	import { writable } from 'svelte/store';
 	import { doctors } from '$lib/store/dataStore';
+	import { _ } from 'svelte-i18n';
 
 	const searchQuery = writable('');
 	const charMap: any = {
@@ -46,7 +47,6 @@
 				return acc;
 			}, {});
 			symptoms.set(Array.from(new Set($symptoms)));
-			console.log($symptoms);
 			return latinize(item.name).includes(query) || Object.keys(item.filteredConditions).length > 0;
 		}
 		return false;
@@ -84,7 +84,9 @@
 			class="form-control"
 			aria-label="Sizing example input"
 			aria-describedby="inputGroup-sizing-sm"
-			placeholder="Axtar (Həkimlər, Şöbələr, Xəstəliklər, Simptomlar)"
+			placeholder="{$_('home.search')} ({$_('nav.docs')}, {$_('nav.branches')}, {$_(
+				'nav.diseases'
+			)}, {$_('home.symptoms')})"
 			bind:value={$searchQuery}
 			on:keydown={handleKeydown}
 		/>
@@ -119,7 +121,7 @@
 							background: #ececec78;
 							border-bottom: 1px solid #dddddd;"
 						>
-							<span>Simptomlar: </span>
+							<span>{$_('home.symptoms')}: </span>
 							{#each $symptoms as val}
 								<span class="symptom flex-1" style="text-wrap: nowrap">{val}</span>
 							{/each}

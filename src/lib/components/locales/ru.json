@@ -1,0 +1,26 @@
+{
+	"home": {
+		"hero": "Цифровой подход к здравоохранению",
+		"lead": "Doktorunuzla İnternet Üzerinden Bağlantı Kurun, Sağlığınızı Şimdi Yönetin",
+		"search": "Поиск",
+		"symptoms": "Cимптомы",
+		"faq": "Часто задаваемые вопросы"
+	},
+	"nav": {
+		"home": "Дом",
+		"docs": "Врачи",
+		"branches": "Ветви",
+		"diseases": "Болезни",
+		"appointments": "Назначения",
+		"blog": "Блог",
+		"contact": "Контакт",
+		"account": "Мой аккаунт"
+	},
+	"appointment": {
+		"loginToSee": "Randevularınızı görmek için ",
+		"login": "hesabınıza girin"
+	},
+	"other": {
+		"notFound": "Sonuç bulunamadı"
+	}
+}

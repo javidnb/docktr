@@ -3,6 +3,7 @@
 	import DoctorCard from '$lib/components/DoctorCard.svelte';
 	import Search from '$lib/helpers/Search.svelte';
 	import { diseases } from '$lib/store/diseases';
+	import { _ } from 'svelte-i18n';
 
 	let selectedOption: any;
 
@@ -27,7 +28,7 @@
 
 <section>
 	<div class="jumbotron" style="padding-top: 2rem; background-color: #e2e9ef">
-		<h1 class="display-4">Doktorlar</h1>
+		<h1 class="display-4">{$_('nav.docs')}</h1>
 		<hr />
 	</div>
 </section>
@@ -35,7 +36,7 @@
 <section class="pt-3 pb-5" style="background-color: aliceblue;">
 	<div class="container pb-5">
 		<div class="row mb-3">
-			<div class="col-4">
+			<div class="col-sm-12 col-md-4">
 				<div class="input-group input-group-lg mb-3 mt-2">
 					<div class="input-group-text" style="background-color: var(--primaryColor); color: white">
 						<span class="material-symbols-outlined">category </span>
@@ -48,7 +49,7 @@
 						on:keydown={handleKeydown}
 						placeholder="Şöbələr"
 					>
-						<option disabled selected value="0">Şöbələr</option>
+						<option disabled selected value="0">{$_('nav.branches')}</option>
 						{#each diseases as option}
 							<option value={option.id}>{option.name}</option>
 						{/each}
@@ -60,7 +61,7 @@
 					{/if}
 				</div>
 			</div>
-			<div class="col-8"><Search /></div>
+			<div class="col-sm-12 col-md-8"><Search /></div>
 		</div>
 		<div class="row row-gap-3">
 			{#if !$doctors.length}
@@ -81,7 +82,7 @@
 					</div>
 				{/each}
 			{:else}
-				<div class="col col-md-6 col-lg-4"><h4>Nəticə tapılmadı</h4></div>
+				<div class="col col-md-6 col-lg-4"><h4>{$_('other.notFound')}</h4></div>
 			{/if}
 		</div>
 	</div>

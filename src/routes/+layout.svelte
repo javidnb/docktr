@@ -8,6 +8,7 @@
 	import { browser } from '$app/environment';
 	import { doctors, appointments, dataLoading } from '$lib/store/dataStore';
 	import { cubicIn } from 'svelte/easing';
+	import '../lib/i18n';
 	export let data: LayoutData;
 
 	if (data?.doctors?.length) {

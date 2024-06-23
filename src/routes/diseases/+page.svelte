@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { diseases } from '$lib/store/diseases';
+	import { _ } from 'svelte-i18n';
 </script>
 
 <section>
 	<div class="jumbotron" style="padding-top: 2rem; background-color: #e2e9ef">
-		<h1 class="display-4">Hastalıklar</h1>
+		<h1 class="display-4">{$_('nav.diseases')}</h1>
 		<!-- <p class="lead">We connect you to doctors around the world!</p> -->
 		<hr />
 		<!-- <p>

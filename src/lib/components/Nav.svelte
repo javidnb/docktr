@@ -7,6 +7,7 @@
 	import Modal from '$lib/helpers/Modal.svelte';
 	import Login from './login/Login.svelte';
 	import { goto } from '$app/navigation';
+	import { locale, _ } from 'svelte-i18n';
 
 	let currentDate = new Date();
 	let showModal: boolean = false;
@@ -16,7 +17,12 @@
 		setInterval(() => {
 			currentDate = new Date();
 		}, 60000);
+		console.log('lokel: ', $locale);
 	});
+
+	const changeLocale = (newLocale: string) => {
+		locale.set(newLocale);
+	};
 	let websiteName = $page.url.host;
 	let curPage: string | null = '/';
 	$: curPage = $page.route.id;
@@ -63,6 +69,67 @@
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<div class="dropdown">
+				<button
+					class="btn btn-outline-primary dropdown-toggle d-flex align-items-center gap-1 langSelector"
+					type="button"
+					data-bs-toggle="dropdown"
+					aria-expanded="false"
+					style="#d5e4d1"
+				>
+					<span class="material-symbols-outlined"> globe </span>{$locale?.toUpperCase()}
+				</button>
+				<ul class="dropdown-menu">
+					<li>
+						<button class="dropdown-item" on:click={() => changeLocale('az')}
+							><img
+								style="width:20px;height:20px;margin-right:.5rem"
+								src="https://ik.imagekit.io/d2nwsj0ktvh/img/az.png"
+								alt="Azerbaijan Flag"
+							/>Azərbaycan dili</button
+						>
+					</li>
+					<li>
+						<button class="dropdown-item" on:click={() => changeLocale('tr')}>
+							<img
+								style="width:20px;height:20px;margin-right:.5rem"
+								src="https://ik.imagekit.io/d2nwsj0ktvh/turkey_dBbuCptvk.png?updatedAt=1719140350211"
+								alt="Turkish Flag"
+							/>Türkçe</button
+						>
+					</li>
+					<li>
+						<button
+							class="dropdown-item"
+							on:click={() => {
+								changeLocale('ru');
+								console.log($locale);
+							}}
+						>
+							<img
+								style="width:20px;height:20px;margin-right:.5rem"
+								src="https://ik.imagekit.io/d2nwsj0ktvh/img/ru.png"
+								alt="Russian Flag"
+							/>Русский</button
+						>
+					</li>
+					<li>
+						<button
+							class="dropdown-item"
+							on:click={() => {
+								changeLocale('en');
+								console.log($locale);
+							}}
+						>
+							<img
+								style="width:20px;height:20px;margin-right:.5rem"
+								src="https://ik.imagekit.io/d2nwsj0ktvh/img/en.png"
+								alt="English Flag"
+							/>English</button
+						>
+					</li>
+				</ul>
+			</div>
 			<ul class="navbar-nav ml-auto" style="margin-left: auto;">
 				{#if !$session.loggedIn}
 					<li class="nav-item">
@@ -83,7 +150,7 @@
 					<li class="nav-item">
 						<a class="nav-link" href="../profile">
 							<span class="material-symbols-outlined icon-fill"> account_circle </span>
-							Hesabım
+							{$_('nav.account')}
 						</a>
 					</li>
 				{/if}
@@ -98,21 +165,21 @@
 			<li class="nav-item">
 				<a style="height: 100%;" class="nav-link" href="../" class:active={curPage == '/'}
 					><span class="material-symbols-outlined" class:icon-fill={curPage == '/'}> home </span>
-					<span class="mobileOnly navLinkText">Ana Səhifə</span>
+					<span class="mobileOnly navLinkText">{$_('nav.home')}</span>
 				</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="/doctors" class:active={curPage?.includes('/doctors')}
 					><span class="material-symbols-outlined" class:icon-fill={curPage?.includes('/doctors')}>
 						physical_therapy
-					</span><span class="navLinkText">Həkimlər</span></a
+					</span><span class="navLinkText">{$_('nav.docs')}</span></a
 				>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="/branches" class:active={curPage?.includes('/branches')}
 					><span class="material-symbols-outlined" class:icon-fill={curPage?.includes('/branches')}>
 						category
-					</span><span class="navLinkText">Şöbələr</span></a
+					</span><span class="navLinkText">{$_('nav.branches')}</span></a
 				>
 			</li>
 			<li class="nav-item pcOnly">
@@ -120,15 +187,19 @@
 					><span class="material-symbols-outlined" class:icon-fill={curPage == '/diseases'}>
 						microbiology
 					</span>
-					<span class="navLinkText">Xəstəliklər</span></a
+					<span class="navLinkText">{$_('nav.diseases')}</span></a
 				>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="/appointment" class:active={curPage == '/appointment'}
+				<a
+					class="nav-link"
+					href="/appointment"
+					class:active={curPage == '/appointment'}
+					style="position: relative;"
 					><span class="material-symbols-outlined" class:icon-fill={curPage == '/appointment'}>
 						local_library
 					</span>
-					<span class="navLinkText">Görüşlər</span>
+					<span class="navLinkText">{$_('nav.appointments')}</span>
 					{#if upcomingAppointments.length && curPage !== '/appointment'}
 						<span
 							class="redDot"
@@ -144,13 +215,13 @@
 			<li class="nav-item pcOnly">
 				<a class="nav-link" href="/"
 					><span class="material-symbols-outlined"> rss_feed </span>
-					<span class="navLinkText">Blog</span></a
+					<span class="navLinkText">{$_('nav.blog')}</span></a
 				>
 			</li>
 			<li class="nav-item pcOnly">
 				<a class="nav-link" href="/"
 					><span class="material-symbols-outlined"> dialpad </span>
-					<span class="navLinkText">Əlaqə</span></a
+					<span class="navLinkText">{$_('nav.contact')}</span></a
 				>
 			</li>
 
@@ -164,7 +235,7 @@
 					>
 						account_circle
 					</span>
-					<span class="navLinkText">Hesabım</span></button
+					<span class="navLinkText">{$_('nav.account')}</span></button
 				>
 			</li>
 
@@ -205,7 +276,7 @@
 	}
 	.homeNav {
 		border-radius: 40px;
-		background: white;
+		background: #fffffff0;
 		flex-wrap: nowrap;
 		overflow: hidden;
 		box-shadow: 0px 0px 5px #00000012;
@@ -243,7 +314,7 @@
 			padding-top: 0px !important;
 		}
 		.homeNavContainer ul {
-			width: 100%;
+			width: 100dvw;
 			border-radius: 0px;
 		}
 		.homeNavContainer .active {
@@ -284,6 +355,11 @@
 			border-radius: 10px;
 			padding: 0px 7px;
 		}
+		.redDot {
+			position: absolute;
+			right: 10px;
+			top: 10px;
+		}
 	}
 	@media screen and (min-width: 992px) {
 		.nav-link:hover {
@@ -321,5 +397,16 @@
 		100% {
 			transform: translateX(300%);
 		}
+	}
+
+	.langSelector {
+		background-color: unset !important;
+		color: rgb(213 228 209);
+	}
+
+	.langSelector:active,
+	.langSelector:hover {
+		background-color: #415d3a1c !important;
+		border-radius: 40px !important;
 	}
 </style>

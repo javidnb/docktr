@@ -35,6 +35,7 @@
 	"dependencies": {
 		"@daily-co/daily-js": "^0.65.0",
 		"@vercel/speed-insights": "^1.0.10",
-		"firebase": "^10.10.0"
+		"firebase": "^10.10.0",
+		"svelte-i18n": "^4.0.0"
 	}
 }

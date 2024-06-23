@@ -1,10 +1,11 @@
 <script lang="ts">
 	import BranchSlider from '$lib/components/BranchSlider.svelte';
+	import { _ } from 'svelte-i18n';
 </script>
 
 <section>
 	<div class="jumbotron" style="padding-top: 2rem; background-color: #e2e9ef">
-		<h1 class="display-4">Branşlar</h1>
+		<h1 class="display-4">{$_('nav.branches')}</h1>
 		<hr />
 	</div>
 </section>

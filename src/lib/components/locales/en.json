@@ -1,0 +1,26 @@
+{
+	"home": {
+		"hero": "Digital Approach to Healthcare",
+		"lead": "Contact with a doctor online",
+		"search": "Search",
+		"symptoms": "Symptoms",
+		"faq": "Frequently asked questions"
+	},
+	"nav": {
+		"home": "Home Page",
+		"docs": "Doctors",
+		"branches": "Branches",
+		"diseases": "Diseases",
+		"appointments": "Appointments",
+		"blog": "Blog",
+		"contact": "Contact",
+		"account": "My Account"
+	},
+	"appointment": {
+		"loginToSee": "Randevuları görmək üçün hesaba",
+		"login": "giriş et"
+	},
+	"other": {
+		"notFound": "Nəticə Tapılmadı"
+	}
+}

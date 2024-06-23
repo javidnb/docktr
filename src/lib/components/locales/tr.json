@@ -1,0 +1,26 @@
+{
+	"home": {
+		"hero": "Sağlık Hizmetlerine Dijital Yaklaşım",
+		"lead": "Doktorunuzla İnternet Üzerinden Bağlantı Kurun, Sağlığınızı Şimdi Yönetin",
+		"search": "Arama",
+		"symptoms": "Semptomlar",
+		"faq": "Sıkça sorulan sorular"
+	},
+	"nav": {
+		"home": "Ana Sayfa",
+		"docs": "Doktorlar",
+		"branches": "Branşlar",
+		"diseases": "Hastalıklar",
+		"appointments": "Randevular",
+		"blog": "Blog",
+		"contact": "İletişim",
+		"account": "Hesabım"
+	},
+	"appointment": {
+		"loginToSee": "Randevularınızı görmek için ",
+		"login": "hesabınıza girin"
+	},
+	"other": {
+		"notFound": "Sonuç bulunamadı"
+	}
+}

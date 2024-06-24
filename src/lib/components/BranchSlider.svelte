@@ -1,25 +1,31 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { diseases } from '$lib/store/diseases';
-	import { doctors } from '$lib/store/dataStore';
+	import { doctors, selectedBranch } from '$lib/store/dataStore';
+	import { _ } from 'svelte-i18n';
 
-	function routeTo(id: any) {
-		console.log('yo');
-	}
+	// function routeTo(id: any) {
+	// 	console.log('yo');
+	// }
 
-	let branches = diseases.map((branch) => {
-		const doctorCount = $doctors.filter((doctor) => doctor.branches.includes(branch.id)).length;
-		return { ...branch, doctorCount };
-	});
+	let branches = diseases
+		.map((branch) => {
+			const doctorCount = $doctors.filter((doctor) => doctor.branches.includes(branch.id)).length;
+			return { ...branch, doctorCount };
+		})
+		.filter((b) => b.doctorCount > 0);
 
 	branches.sort((a, b) => b.doctorCount - a.doctorCount);
 </script>
 
-<div class="branches">
+<div class="branches" style="display: flex;">
 	{#each branches as item}
 		{#if item.id}
 			<button
-				on:click={() => goto(`./branches/${item.slug}`)}
+				on:click={() => {
+					selectedBranch.set(item.id);
+					goto(`./doctors`);
+				}}
 				class="card align-items-center"
 				style="flex: 1;
 					min-width: 10rem;
@@ -29,7 +35,7 @@
 					border-radius: 20px;
 					cursor: auto;
 					text-decoration:none;
-					cursor: pointer"
+					cursor: pointer; align-items-center"
 			>
 				<div class="card-body d-flex flex-column align-items-center">
 					<span
@@ -41,20 +47,21 @@
 					>
 						biotech
 					</span>
-					<a
+					<span
 						class="card-link"
-						href="/branches/{item.slug}"
 						style="text-decoration: none; text-align: center;
-                margin-block: auto; color: black; font-weight: 600">{item.name}</a
+                margin-block: auto; color: black; font-weight: 600">{item.name}</span
 					>
-					<button
+					<span
 						class="btn btn-primary btnBranch"
 						style="	background-color: white;
-						border: 1px solid var(--primaryColor);
+						border: 0px;
+						box-shadow: 0px 0px 6px #a1c3986e;
 						color: var(--primaryColor);"
 					>
-						{item.doctorCount} həkim
-					</button>
+						{item.doctorCount}
+						{$_('home.doctor')}
+					</span>
 				</div>
 			</button>
 		{/if}

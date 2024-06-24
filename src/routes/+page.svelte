@@ -54,7 +54,7 @@
 								aria-expanded="true"
 								aria-controls="collapseOne"
 							>
-								Accordion Item #1
+								{$_('faq.q1')}
 							</button>
 						</h2>
 						<div
@@ -63,12 +63,7 @@
 							data-bs-parent="#accordionExample"
 						>
 							<div class="accordion-body">
-								<strong>This is the first item's accordion body.</strong> It is shown by default,
-								until the collapse plugin adds the appropriate classes that we use to style each
-								element. These classes control the overall appearance, as well as the showing and
-								hiding via CSS transitions. You can modify any of this with custom CSS or overriding
-								our default variables. It's also worth noting that just about any HTML can go within
-								the <code>.accordion-body</code>, though the transition does limit overflow.
+								{$_('faq.a1')}
 							</div>
 						</div>
 					</div>
@@ -82,7 +77,7 @@
 								aria-expanded="false"
 								aria-controls="collapseTwo"
 							>
-								Accordion Item #2
+								{$_('faq.q2')}
 							</button>
 						</h2>
 						<div
@@ -91,12 +86,7 @@
 							data-bs-parent="#accordionExample"
 						>
 							<div class="accordion-body">
-								<strong>This is the second item's accordion body.</strong> It is hidden by default,
-								until the collapse plugin adds the appropriate classes that we use to style each
-								element. These classes control the overall appearance, as well as the showing and
-								hiding via CSS transitions. You can modify any of this with custom CSS or overriding
-								our default variables. It's also worth noting that just about any HTML can go within
-								the <code>.accordion-body</code>, though the transition does limit overflow.
+								{$_('faq.a2')}
 							</div>
 						</div>
 					</div>
@@ -110,7 +100,7 @@
 								aria-expanded="false"
 								aria-controls="collapseThree"
 							>
-								Accordion Item #3
+								{$_('faq.q3')}
 							</button>
 						</h2>
 						<div
@@ -119,12 +109,7 @@
 							data-bs-parent="#accordionExample"
 						>
 							<div class="accordion-body">
-								<strong>This is the third item's accordion body.</strong> It is hidden by default,
-								until the collapse plugin adds the appropriate classes that we use to style each
-								element. These classes control the overall appearance, as well as the showing and
-								hiding via CSS transitions. You can modify any of this with custom CSS or overriding
-								our default variables. It's also worth noting that just about any HTML can go within
-								the <code>.accordion-body</code>, though the transition does limit overflow.
+								{$_('faq.a3')}
 							</div>
 						</div>
 					</div>
@@ -144,5 +129,17 @@
 		background-image: url('https://tekoplast.az/img/docktrbg.png');
 		background-size: cover;
 		background-blend-mode: overlay;
+	}
+	.accordion-button {
+		font-weight: 500;
+		background-color: #a1c39854;
+		color: #3a4138;
+	}
+	.accordion-button:not(.collapsed) {
+		background-color: var(--primaryColor);
+		color: white;
+	}
+	.accordion-button:focus {
+		box-shadow: none;
 	}
 </style>

@@ -1,15 +1,14 @@
 <script async script lang="ts">
-	import { doctors } from '$lib/store/dataStore';
+	import { onDestroy } from 'svelte';
+	import { doctors, selectedBranch } from '$lib/store/dataStore';
 	import DoctorCard from '$lib/components/DoctorCard.svelte';
 	import Search from '$lib/helpers/Search.svelte';
 	import { diseases } from '$lib/store/diseases';
 	import { _ } from 'svelte-i18n';
 
-	let selectedOption: any;
-
 	$: filteredDocs =
-		selectedOption != 0
-			? $doctors.filter((doc: any) => doc.branches.includes(selectedOption))
+		$selectedBranch != 0
+			? $doctors.filter((doc: any) => doc.branches.includes($selectedBranch))
 			: $doctors;
 
 	function handleChange(event: any) {
@@ -21,9 +20,13 @@
 	// clear input on escape
 	function handleKeydown(event: any) {
 		if (event.key === 'Escape') {
-			selectedOption = 0;
+			selectedBranch.set('0');
 		}
 	}
+
+	onDestroy(() => {
+		selectedBranch.set('0');
+	});
 </script>
 
 <section>
@@ -43,19 +46,18 @@
 					</div>
 					<select
 						class="form-control"
-						id="cars"
-						bind:value={selectedOption}
+						bind:value={$selectedBranch}
 						on:change={handleChange}
 						on:keydown={handleKeydown}
-						placeholder="Şöbələr"
+						placeholder={$_('nav.branches')}
 					>
 						<option disabled selected value="0">{$_('nav.branches')}</option>
 						{#each diseases as option}
 							<option value={option.id}>{option.name}</option>
 						{/each}
 					</select>
-					{#if selectedOption != 0}
-						<button class="input-group-text" on:click={() => (selectedOption = 0)}>
+					{#if $selectedBranch != 0}
+						<button class="input-group-text" on:click={() => selectedBranch.set('0')}>
 							<span class="material-symbols-outlined">close </span>
 						</button>
 					{/if}

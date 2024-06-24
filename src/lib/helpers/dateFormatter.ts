@@ -1,3 +1,5 @@
+import { _ } from 'svelte-i18n';
+
 export const monthNames = [
 	'Yanvar',
 	'Fevral',

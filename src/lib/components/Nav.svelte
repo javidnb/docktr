@@ -17,7 +17,6 @@
 		setInterval(() => {
 			currentDate = new Date();
 		}, 60000);
-		console.log('lokel: ', $locale);
 	});
 
 	const changeLocale = (newLocale: string) => {
@@ -69,7 +68,7 @@
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
-			<div class="dropdown">
+			<div class="dropdown dropstart">
 				<button
 					class="btn btn-outline-primary dropdown-toggle d-flex align-items-center gap-1 langSelector"
 					type="button"
@@ -77,7 +76,7 @@
 					aria-expanded="false"
 					style="#d5e4d1"
 				>
-					<span class="material-symbols-outlined"> globe </span>{$locale?.toUpperCase()}
+					<span class="material-symbols-outlined"> globe </span>{$locale?.toUpperCase().slice(0, 2)}
 				</button>
 				<ul class="dropdown-menu">
 					<li>
@@ -122,8 +121,8 @@
 				{#if !$session.loggedIn}
 					<li class="nav-item">
 						<button class="nav-link" on:click|preventDefault={() => loginModal.set(true)}>
-							<span class="material-symbols-outlined"> login </span>
-							Giriş
+							<span class="material-symbols-outlined"> input </span>
+							{$_('nav.login')}
 						</button>
 					</li>
 				{:else}
@@ -396,5 +395,12 @@
 	.langSelector:hover {
 		background-color: #415d3a1c !important;
 		border-radius: 40px !important;
+	}
+	.langSelector::before {
+		display: none;
+	}
+	.dropdown-menu {
+		top: 35px;
+		right: 0;
 	}
 </style>

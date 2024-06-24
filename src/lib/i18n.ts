@@ -1,4 +1,7 @@
 import { init, register, getLocaleFromNavigator } from 'svelte-i18n';
+import { browser } from '$app/environment';
+
+const defaultLocale = 'az';
 
 // Register your locales here
 register('az', () => import('$lib/components/locales/az.json'));
@@ -8,7 +11,6 @@ register('ru', () => import('$lib/components/locales/ru.json'));
 
 // Initialize with the default locale
 init({
-	initialLocale: getLocaleFromNavigator()?.slice(0, 2),
-	fallbackLocale: 'az'
-	// initialLocale: 'az'
+	initialLocale: browser ? getLocaleFromNavigator()?.slice(0, 2) : defaultLocale,
+	fallbackLocale: defaultLocale
 });

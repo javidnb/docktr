@@ -302,51 +302,109 @@ export const diseases = [
 		name: 'Pediatriya',
 		slug: 'pediatriya',
 		conditions: {
-			'Yüksək Hərarət': ['Yüksək hərarət', 'Qızdırma'],
-			İştahsızlıq: ['İştahsızlıq', 'Yeməkdən imtina', 'Çəki itkisi'],
-			'Qusma və İshal': ['Qusma', 'İshal', 'Qarın ağrısı', 'Şişkinlik'],
-			'Dəri Problemləri': [
-				'Dəri səpgi və ya qızartı',
-				'Qaşınma',
-				'Dəri tökülməsi',
-				'Dərinin rəng dəyişiklikləri'
-			],
-			'Tənəffüs Yolu Problemləri': [
+			'Soğuk Algınlığı': [
+				'Burun axması',
 				'Öskürək',
-				'Nəfəs alma çətinliyi',
-				'Burun tıkanıklığı',
-				'Asqırma',
-				'Sətəlcəm'
+				'Boğaz ağrısı',
+				'Yüksək hərarət',
+				'Baş ağrısı'
 			],
-			'Boğaz və Qulaq Ağrısı': ['Boğaz ağrısı', 'Qulaq ağrısı', 'Səs itkisi'],
-			'Baş Ağrısı': ['Baş ağrısı', 'Başgicəllənmə', 'Migren'],
-			'Yuxu Problemləri': ['Yuxusuzluq', 'Çox yatma', 'Yuxu sırasında narahatlıq'],
-			'Halsızlıq və Yorğunluq': ['Halsızlıq', 'Enerji itkisi', 'Fiziki zəiflik'],
-			'İnkişaf və Böyümə Problemləri': [
-				'İnkişaf geriliyi',
-				'Çəki artımı və ya azalması',
-				'Boy artımında ləngimə'
+			'Grip (İnfluenza)': [
+				'Yüksək hərarət',
+				'Titreme',
+				'Öskürək',
+				'Boğaz ağrısı',
+				'Baş ağrısı',
+				'Əzələ ağrıları',
+				'Yorğunluq'
 			],
-			'Qida Alerjiləri və İntoleransı': [
-				'Qida alerjiləri',
-				'Qida intoleransı',
-				'Bulantı',
-				'Dəri səpgi'
+			Bronşit: [
+				'Davamlı öskürək',
+				'Nəfəs darlığı',
+				'Hırıltılı tənəffüs',
+				'Balgam ifrazı',
+				'Yüksək hərarət'
 			],
-			'İdrar və Bağırsaq Problemləri': ['İdrar problemləri', 'Qəbizlik', 'Diareya', 'Qarın ağrısı'],
-			'Hərəkət Problemləri': ['Əzələ ağrıları', 'Hərəkət zamanı ağrı', 'Yürümə çətinlikləri'],
-			'Davranış və Psikoloji Problemlər': [
-				'Ağlama və narahatlıq',
-				'Hərəkətlilik',
-				'Diqqət əskikliyi',
-				'Əhval dəyişikliyi',
-				'İrritabilik',
-				'Sosial geri çəkilmə'
+			Astma: ['Nəfəs darlığı', 'Hırıltılı tənəffüs', 'Gecə öskürəyi', 'Sinə sıxılması'],
+			Pnevmoniya: [
+				'Yüksək hərarət',
+				'Titreme',
+				'Öskürək ilə balgam',
+				'Sinə ağrısı',
+				'Nəfəs darlığı'
 			],
-			'Bağışıklık Sistemi Problemləri': [
-				'Tez-tez infeksiyalar',
-				'Aşağı immunitet',
-				'Yaraların yavaş sağalması'
+			'Otit (Qulaq İltihabı)': [
+				'Qulaq ağrısı',
+				'Qulaqdan axıntı',
+				'Yüksək hərarət',
+				'Görmədə problem',
+				'Qulaqda dolğunluq hissi'
+			],
+			Gastroenterit: ['İshal', 'Qusma', 'Qarın ağrısı', 'Yüksək hərarət', 'Susuzluq'],
+			'Boğaz İltihabı': [
+				'Boğaz ağrısı',
+				'Boğazda qızartı',
+				'Yüksək hərarət',
+				'Udma çətinliyi',
+				'Baş ağrısı'
+			],
+			'Dəri Döküntüləri': [
+				'Dəri səpgi',
+				'Qaşınma',
+				'Qızartı',
+				'Dəri qabarıqları',
+				'Dəri tökülməsi'
+			],
+			Kızamık: ['Dəri səpgi', 'Yüksək hərarət', 'Öskürək', 'Burun axması', 'Göz qızartısı'],
+			Kabakulak: [
+				'Yanaqlarda şişlik',
+				'Yüksək hərarət',
+				'Baş ağrısı',
+				'Yorğunluq',
+				'Əzələ ağrıları'
+			],
+			'Su Çiçeği': ['Dəri səpgi', 'Qaşınma', 'Yüksək hərarət', 'Baş ağrısı', 'Yorğunluq'],
+			Anemiya: ['Halsızlıq', 'Yorğunluq', 'Solğun dəri', 'Yüksək nəbz', 'Baş ağrısı'],
+			Diabet: [
+				'Tez-tez sidiyə çıxma',
+				'Tez-tez susuzluq',
+				'Qəfil kilo itkisi',
+				'Yorğunluq',
+				'Bulantı və qusma'
+			],
+			'İnkişaf Geriliyi': [
+				'Fiziki inkişafda ləngimə',
+				'Motor bacarıqlarında problemlər',
+				'Dil inkişafında gecikmə',
+				'Sosial və emosional problemlər'
+			],
+			Alerji: ['Qaşınma', 'Dəri səpgi', 'Nəfəs darlığı', 'Göz qızartısı', 'Asqırma'],
+			'Uşaqlıq Dövrü Qəbizlik': [
+				'Nadir və ya sərt nəcisləmə',
+				'Qarın ağrısı',
+				'Nəcisləmə zamanı ağrı',
+				'Nəcisdə qan'
+			],
+			'İdrar Yolu İnfeksiyaları': [
+				'Ağrılı idrar',
+				'Tez-tez sidiyə çıxma',
+				'Qarın ağrısı',
+				'Yüksək hərarət',
+				'Qanlı idrar'
+			],
+			'Kawasaki Xəstəliyi': [
+				'Yüksək hərarət',
+				'Boğazda və dildə qızartı',
+				'Dəri səpgi',
+				'Şişmiş limfa düyünləri',
+				'Əllərdə və ayaqlarda şişlik'
+			],
+			'Revmatoid Artrit': [
+				'Oynaq ağrısı',
+				'Oynaq şişkinliyi',
+				'Səhər sərtliyi',
+				'Yüksək hərarət',
+				'Yorğunluq'
 			]
 		}
 	},

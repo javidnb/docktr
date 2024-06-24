@@ -4,7 +4,8 @@
 		"lead": "Həkiminizlə onlayn əlaqə saxlayın, sağlamlığınızı indi idarə edin",
 		"search": "Axtar",
 		"symptoms": "Simptomlar",
-		"faq": "Tez tez soruşulan suallar"
+		"faq": "Tez tez soruşulan suallar",
+		"doctor": "həkim"
 	},
 	"nav": {
 		"home": "Ana Səhifə",
@@ -14,7 +15,8 @@
 		"appointments": "Görüşlər",
 		"blog": "Blog",
 		"contact": "Əlaqə",
-		"account": "Hesabım"
+		"account": "Hesabım",
+		"login": "Giriş"
 	},
 	"appointment": {
 		"loginToSee": "Randevuları görmək üçün hesaba",
@@ -22,5 +24,27 @@
 	},
 	"other": {
 		"notFound": "Nəticə Tapılmadı"
+	},
+	"faq": {
+		"q1": "Həkim qəbulunu necə sifariş edə bilərəm?",
+		"a1": "Görüş sifariş etmək sadədir. Bu addımları yerinə yetirin: Hesabınıza daxil olun. 'Gündəlik sifariş et' bölməsinə keçin. Mövcud həkimlər siyahısından həkim seçin. Görüşünüz üçün əlverişli tarix və vaxt seçin. Görüş təfərrüatlarınızı təsdiqləyin və rezervasiyanı tamamlayın.",
+		"q2": "Görüşümü ləğv etməli və ya başqa vaxta təyin etməliyəmsə nə etməliyəm?",
+		"a2": "Görüşünüzü ləğv etmək və ya yenidən planlaşdırmaq lazımdırsa, bu addımları yerinə yetirin: Hesabınıza daxil olun. 'Mənim görüşlərim' bölməsinə keçin. Dəyişdirmək istədiyiniz görüşü tapın. 'Ləğv et' və ya  üzərinə klikləyin. Yenidən planlaşdırma' düyməsi. Yenidən planlaşdırırsınızsa, yeni tarix və vaxt seçin və dəyişiklikləri təsdiqləyin.",
+		"q3": "Həkimlə video zəngə necə qoşula bilərəm?",
+		"a3": "Həkiminizlə videozəngə qoşulmaq üçün bu addımları yerinə yetirin: Hesabınıza daxil olun. 'Mənim görüşlərim' bölməsinə keçin. Qarşıdan gələn görüşü tapın və üzərinə klikləyin. Planlaşdırılmış vaxtda ' Video Zəngə Qoşulun' düyməsi. Zəng üçün kameranızın və mikrofonunuzun aktiv olduğundan əmin olun."
+	},
+	"months": {
+		"1": "Yanvar",
+		"2": "Fevral",
+		"3": "Mart",
+		"4": "Aprel",
+		"5": "May",
+		"6": "Iyun",
+		"7": "Iyul",
+		"8": "Avqust",
+		"9": "Sentyabr",
+		"10": "Oktyabr",
+		"11": "Noyabr",
+		"12": "Dekabr"
 	}
 }

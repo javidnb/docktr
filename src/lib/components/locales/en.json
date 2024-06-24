@@ -4,7 +4,8 @@
 		"lead": "Contact with a doctor online",
 		"search": "Search",
 		"symptoms": "Symptoms",
-		"faq": "Frequently asked questions"
+		"faq": "Frequently asked questions",
+		"doctor": "doctors"
 	},
 	"nav": {
 		"home": "Home Page",
@@ -14,7 +15,8 @@
 		"appointments": "Appointments",
 		"blog": "Blog",
 		"contact": "Contact",
-		"account": "My Account"
+		"account": "My Account",
+		"login": "Login"
 	},
 	"appointment": {
 		"loginToSee": "Randevuları görmək üçün hesaba",
@@ -22,5 +24,27 @@
 	},
 	"other": {
 		"notFound": "Nəticə Tapılmadı"
+	},
+	"faq": {
+		"q1": "How do I book an appointment with a doctor?",
+		"a1": "Booking an appointment is simple. Follow these steps:Sign in to your account.Navigate to the 'Book Appointment' section.Choose a doctor from the list of available doctors.Select a convenient date and time for your appointment.Confirm your appointment details and complete the booking.",
+		"q2": "What should I do if I need to cancel or reschedule my appointment?",
+		"a2": "If you need to cancel or reschedule your appointment, follow these steps:Sign in to your account.Go to the 'My Appointments' section.Find the appointment you want to change.Click on the 'Cancel' or 'Reschedule' button.If rescheduling, choose a new date and time and confirm the changes.",
+		"q3": "How do I join a video call with my doctor?",
+		"a3": "To join a video call with your doctor, follow these steps:Sign in to your account.Go to the 'My Appointments' section.Find the upcoming appointment and click on it.At the scheduled time, click the 'Join Video Call' button.Ensure your camera and microphone are enabled for the call."
+	},
+	"months": {
+		"1": "January",
+		"2": "February",
+		"3": "March",
+		"4": "April",
+		"5": "May",
+		"6": "June",
+		"7": "July",
+		"8": "August",
+		"9": "September",
+		"10": "October",
+		"11": "November",
+		"12": "December"
 	}
 }

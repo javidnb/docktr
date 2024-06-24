@@ -4,7 +4,8 @@
 		"lead": "Doktorunuzla İnternet Üzerinden Bağlantı Kurun, Sağlığınızı Şimdi Yönetin",
 		"search": "Arama",
 		"symptoms": "Semptomlar",
-		"faq": "Sıkça sorulan sorular"
+		"faq": "Sıkça sorulan sorular",
+		"doctor": "doktor"
 	},
 	"nav": {
 		"home": "Ana Sayfa",
@@ -14,7 +15,8 @@
 		"appointments": "Randevular",
 		"blog": "Blog",
 		"contact": "İletişim",
-		"account": "Hesabım"
+		"account": "Hesabım",
+		"login": "Giriş"
 	},
 	"appointment": {
 		"loginToSee": "Randevularınızı görmek için ",
@@ -22,5 +24,13 @@
 	},
 	"other": {
 		"notFound": "Sonuç bulunamadı"
+	},
+	"faq": {
+		"q1": "Doktordan nasıl randevu alabilirim?",
+		"a1": "Randevu almak çok basit. Şu adımları izleyin: Hesabınızda oturum açın. 'Randevu Al' bölümüne gidin. Mevcut doktorlar listesinden bir doktor seçin. Randevunuz için uygun bir tarih ve saat seçin. Randevu bilgilerinizi doğrulayın ve rezervasyonu tamamlayın.",
+		"q2": "Randevumu iptal etmem veya yeniden planlamam gerekirse ne yapmalıyım?",
+		"a2": "Randevunuzu iptal etmeniz veya yeniden planlamanız gerekiyorsa şu adımları izleyin: Hesabınızda oturum açın. 'Randevularım' bölümüne gidin. Değiştirmek istediğiniz randevuyu bulun. 'İptal' veya ' Yeniden Planla' düğmesi.Yeniden planlama yapıyorsanız yeni bir tarih ve saat seçin ve değişiklikleri onaylayın.",
+		"q3": "Doktorumla görüntülü görüşmeye nasıl katılabilirim?",
+		"a3": "Doktorunuzla görüntülü görüşmeye katılmak için şu adımları izleyin: Hesabınızda oturum açın. 'Randevularım' bölümüne gidin. Yaklaşan randevuyu bulun ve tıklayın. Planlanan saatte ' Görüntülü Aramaya Katıl' düğmesi. Kameranızın ve mikrofonunuzun arama için etkinleştirildiğinden emin olun."
 	}
 }

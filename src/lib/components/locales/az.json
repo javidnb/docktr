@@ -18,9 +18,18 @@
 		"account": "Hesabım",
 		"login": "Giriş"
 	},
+	"doctor": {
+		"about": "Həkim Haqqında",
+		"comments": "Şərhlər",
+		"your_comment": "Şərhiniz",
+		"await_confimation": "Şərhiniz təsdiq gözləyir ..",
+		"no_comments": "Həkim haqqında şərh yoxdur"
+	},
 	"appointment": {
 		"loginToSee": "Randevuları görmək üçün hesaba",
-		"login": "giriş et"
+		"login": "giriş et",
+		"get": "Görüş Al",
+		"no_appointment": "Planlaşdırılmış görüş yoxdur .."
 	},
 	"other": {
 		"notFound": "Nəticə Tapılmadı"
@@ -32,6 +41,33 @@
 		"a2": "Görüşünüzü ləğv etmək və ya yenidən planlaşdırmaq lazımdırsa, bu addımları yerinə yetirin: Hesabınıza daxil olun. 'Mənim görüşlərim' bölməsinə keçin. Dəyişdirmək istədiyiniz görüşü tapın. 'Ləğv et' və ya  üzərinə klikləyin. Yenidən planlaşdırma' düyməsi. Yenidən planlaşdırırsınızsa, yeni tarix və vaxt seçin və dəyişiklikləri təsdiqləyin.",
 		"q3": "Həkimlə video zəngə necə qoşula bilərəm?",
 		"a3": "Həkiminizlə videozəngə qoşulmaq üçün bu addımları yerinə yetirin: Hesabınıza daxil olun. 'Mənim görüşlərim' bölməsinə keçin. Qarşıdan gələn görüşü tapın və üzərinə klikləyin. Planlaşdırılmış vaxtda ' Video Zəngə Qoşulun' düyməsi. Zəng üçün kameranızın və mikrofonunuzun aktiv olduğundan əmin olun."
+	},
+	"legal": {
+		"1": "Nəzərinizə çatdırırıq ki, görüşünüzün vaxtı həkim tərəfindən dəyişdirilə bilər.",
+		"2": "Bu təqdirdə yeni təyin olunan vaxt sizə bildiriş olaraq göndərilir və dəyişikliklər profilinizdə qeyd olunur.",
+		"3": "Pasient və həkimlər arasında qurulan dialoq və paylaşılan məlumatların konfidensiallığı qorunmaqdadır.",
+		"4": "Həkimlərin təyin etmiş olduğu müalicə üsulları və dərman vasitələri onların öz məsuliyyətindədir.",
+		"5": "Platformamız bu müalicə üsulları və dərmanların təsirinə və ya təsirsizliyinə görə hər hansı bir məsuliyyət daşımamaqdadır."
+	},
+	"actions": {
+		"change": "Dəyişdir",
+		"confirm": "Təsdiqlə",
+		"send": "Göndər",
+		"clear": "Təmizlə"
+	},
+	"login": {
+		"login_header": "Hesaba giriş",
+		"mobile": "Mobil",
+		"pass": "Şifrə",
+		"login": "Giriş",
+		"no_account": "Hesabın yoxdur?",
+		"yes_account": "Hesabınız var?",
+		"register": "Qeydiyyat",
+		"login_account": "Hesaba giriş",
+		"name_surname": "Ad Soyad",
+		"email": "Email",
+		"error": "Xəta! İstifadəçi adı vəya şifrə yanlışdır.",
+		"try_again": "Zəhmət olmasa yenidən cəhd edin"
 	},
 	"months": {
 		"1": "Yanvar",

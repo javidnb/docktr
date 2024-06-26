@@ -18,9 +18,40 @@
 		"account": "Hesabım",
 		"login": "Giriş"
 	},
+	"doctor": {
+		"about": "Doktor hakkında",
+		"comments": "Yorumlar",
+		"your_comment": "Yorumunuz"
+	},
 	"appointment": {
 		"loginToSee": "Randevularınızı görmek için ",
-		"login": "hesabınıza girin"
+		"login": "hesabınıza girin",
+		"get": "Randevu Al",
+		"no_appointment": "Bekleyen randevu yok .."
+	},
+	"legal": {
+		"1": "Randevu saatinizin doktorunuz tarafından değiştirilebileceğini bildiririz.",
+		"2": "Bu durumda yeni ayarlanan saat tarafınıza bildirim olarak gönderilir ve değişiklikler profilinize kaydedilir.",
+		"3": "Hasta ve doktor arasında kurulan diyalogun ve paylaşılan bilgilerin gizliliği korunur.",
+		"4": "Doktorların önerdiği tedavi yöntemleri ve ilaçlar kendi sorumluluğundadır.",
+		"5": "Platformumuz bu tedavilerin ve ilaçların etkililiği veya etkisizliği konusunda herhangi bir sorumluluk kabul etmez."
+	},
+	"actions": {
+		"change": "Değiştir",
+		"confirm": "Onayla",
+		"send": "Gönder"
+	},
+	"login": {
+		"login_header": "Hesaba giriş yapın",
+		"mobile": "Mobil",
+		"pass": "Şifre",
+		"login": "Giriş",
+		"no_account": "Hesabınız yok mu?",
+		"yes_account": "Hesabınız var mı?",
+		"register": "Kayıt ol",
+		"login_account": "Hesaba giriş yapın",
+		"name_surname": "Ad Soyadı",
+		"email": "E-posta"
 	},
 	"other": {
 		"notFound": "Sonuç bulunamadı"

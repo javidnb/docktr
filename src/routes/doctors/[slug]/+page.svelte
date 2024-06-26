@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { doctors, loginModal } from '$lib/store/dataStore';
+	import { goto } from '$app/navigation';
+	import { doctors, loginModal, selectedBranch } from '$lib/store/dataStore';
 	import { diseases } from '$lib/store/diseases';
 	import { onMount } from 'svelte';
+	import { _ } from 'svelte-i18n';
 	import { session } from '$lib/session';
 	import {
 		dataLoading,
@@ -29,7 +31,7 @@
 	$: console.log('next appointment: ', existingAppointment);
 
 	// $: console.log('brenc: ', doctor?.branches);
-	let btnCommentText: string = 'Göndər';
+	$: btnCommentText = $_('actions.send');
 	let btnCommentDisabled: boolean = false;
 	let truncate: boolean = true;
 	let selectedStarPoint: number = 0;
@@ -180,7 +182,7 @@
 									class="btn btn-outline-primary d-flex justify-content-center align-items-center btnRandevu"
 									on:click={openModal}
 									><span class="material-symbols-outlined">local_library</span><span
-										style="margin-inline: auto;">Görüş Al</span
+										style="margin-inline: auto;">{$_('appointment.get')}</span
 									></button
 								>
 							{:else}
@@ -193,14 +195,19 @@
 					{#if doctor?.branches}
 						<div class="branch d-flex flex-wrap gap-2">
 							{#each doctor.branches as br}
-								<a href="../branches/{getBranchSlug(br)}">{getBranchName(br)}</a>
+								<button
+									on:click={() => {
+										selectedBranch.set(br);
+										goto(`../doctors`);
+									}}>{getBranchName(br)}</button
+								>
 							{/each}
 						</div>
 					{/if}
 				</div>
 				<div class="row mt-3">
 					<div class="card p-3">
-						<div class="card-title">Həkim haqqında</div>
+						<div class="card-title">{$_('doctor.about')}</div>
 						<div class="card-body d-flex flex-column">
 							{#if doctor?.details}
 								{truncate ? truncateString(doctor?.details, 400) : doctor?.details}
@@ -224,7 +231,7 @@
 				<!-- COMMENTS CONTAINER -->
 				<div class="row mt-3">
 					<div class="card p-3">
-						<div class="card-title">Şərhlər</div>
+						<div class="card-title">{$_('doctor.comments')}</div>
 
 						{#if commentsLoading}
 							<div class="d-flex mt-3 ps-5" style="color: var(--primaryColor)!important;">
@@ -260,7 +267,7 @@
 												</button>
 											{/each}
 										</div>
-										<label for="comment">Şərhiniz</label>
+										<label for="comment">{$_('doctor.your_comment')}</label>
 										<textarea class="form-control" name="comment" id="comment" />
 										<button
 											class="btn btn-outline-primary mt-3"
@@ -329,7 +336,7 @@
 												</p>
 											{/if}
 											<span style="font-style: italic; font-size: small"
-												>Şərhiniz təsdiq gözləyir ..</span
+												>{$_('doctor.await_confirmation')}</span
 											>
 										</div>
 									{/if}
@@ -391,7 +398,7 @@
 									{/if}
 								{/each}
 								{#if !$comments.length}
-									<span>Həkim haqqında şərh yoxdur</span>
+									<span>{$_('doctor.no_comments')}</span>
 								{/if}
 							</div>{/if}
 					</div>
@@ -427,7 +434,7 @@
 	.btnRandevu:hover {
 		background-color: var(--primaryColor);
 	}
-	.branch a {
+	.branch button {
 		color: var(--primaryColor);
 		background: white;
 		text-decoration: none;

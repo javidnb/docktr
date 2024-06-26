@@ -427,7 +427,7 @@
 					</div>
 				{/each}
 			{:else if $session.loggedIn}
-				<div class="card mt-3 p-3">Planlaşdırılmış görüş yoxdur ..</div>
+				<div class="card mt-3 p-3">{$_('appointment.no_appointment')}</div>
 			{:else}
 				<div
 					class="card mt-3 p-3"

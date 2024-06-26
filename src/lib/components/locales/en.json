@@ -18,9 +18,16 @@
 		"account": "My Account",
 		"login": "Login"
 	},
+	"doctor": {
+		"about": "About doctor",
+		"comments": "Comments",
+		"your_comment": "Your comment"
+	},
 	"appointment": {
 		"loginToSee": "Randevuları görmək üçün hesaba",
-		"login": "giriş et"
+		"login": "giriş et",
+		"get": "Get Appointment",
+		"no_appointment": "No appointment .."
 	},
 	"other": {
 		"notFound": "Nəticə Tapılmadı"
@@ -32,6 +39,30 @@
 		"a2": "If you need to cancel or reschedule your appointment, follow these steps:Sign in to your account.Go to the 'My Appointments' section.Find the appointment you want to change.Click on the 'Cancel' or 'Reschedule' button.If rescheduling, choose a new date and time and confirm the changes.",
 		"q3": "How do I join a video call with my doctor?",
 		"a3": "To join a video call with your doctor, follow these steps:Sign in to your account.Go to the 'My Appointments' section.Find the upcoming appointment and click on it.At the scheduled time, click the 'Join Video Call' button.Ensure your camera and microphone are enabled for the call."
+	},
+	"legal": {
+		"1": "We inform you that the time of your appointment can be changed by the doctor.",
+		"2": "In this case, the newly set time is sent to you as a notification and the changes are recorded in your profile.",
+		"3": "Confidentiality of the dialogue established between patients and doctors and shared information is protected.",
+		"4": "The treatment methods and medicines prescribed by doctors are their own responsibility.",
+		"5": "Our platform does not assume any responsibility for the effectiveness or ineffectiveness of these treatments and drugs."
+	},
+	"actions": {
+		"change": "Change",
+		"confirm": "Confirm",
+		"send": "Send"
+	},
+	"login": {
+		"login_header": "Login to account",
+		"mobile": "Mobile",
+		"pass": "Password",
+		"login": "Login",
+		"no_account": "Don't have an account?",
+		"yes_account": "Have an account?",
+		"register": "Registration",
+		"login_account": "Login to account",
+		"name_surname": "Name Surname",
+		"email": "Email"
 	},
 	"months": {
 		"1": "January",

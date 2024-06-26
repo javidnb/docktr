@@ -12,6 +12,7 @@
 	import { jsDateToSQL } from '$lib/helpers/dateFormatter';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { monthNames } from '$lib/helpers/dateFormatter';
+	import { _ } from 'svelte-i18n';
 
 	export let doc: any;
 
@@ -137,20 +138,10 @@
 					</div>
 
 					<div class="d-flex flex-column mt-3" style="font-size: small; width: fit-content">
-						<span style="color: #bc0000;"
-							>* Nəzərinizə çatdırırıq ki, görüş tarixi həkim tərəfindən dəyişdirilə bilər</span
-						>
-						<span
-							>* Pasientlər və həkimlərin arasında olan bütün dialoq və məlumatların ötürülməsi
-							konfidensialdır.
-						</span>
-						<span
-							>* Həkimlərin yazdığı dərman vasitələri və müalicə üsulları onların öz
-							məsuliyyətindədir.</span
-						><span style="padding-left: 10px;"
-							>Platformamız bu müalicə üsulları və dərmanların təsirinə və ya təsirsizliyinə görə
-							hər hansı məsuliyyət daşımamaqdadır.</span
-						>
+						<span style="color: #bc0000;">* {$_('legal.1')}</span>
+						<span style="color: #bc0000;padding-left: 10px;">{$_('legal.2')}</span>
+						<span>* {$_('legal.3')} </span>
+						<span>* {$_('legal.4')}</span><span style="padding-left: 10px;">{$_('legal.5')}</span>
 					</div>
 
 					<div class="d-flex gap-3 mt-3">
@@ -160,11 +151,11 @@
 							on:click={() =>
 								selectedAppointmentDate.set({ day: null, time: null, start: null, end: null })}
 							><span class="material-symbols-outlined"> replay </span>
-							<span class="mx-auto">Dəyişdir</span></button
+							<span class="mx-auto">{$_('actions.change')}</span></button
 						>
 						<button {disabled} class="btn btn-primary w-100 d-flex" on:click={postAppointment}
 							><span class="material-symbols-outlined"> check </span>
-							<span class="mx-auto">Təsdiqlə</span>
+							<span class="mx-auto">{$_('actions.confirm')}</span>
 						</button>
 					</div>
 				</div>

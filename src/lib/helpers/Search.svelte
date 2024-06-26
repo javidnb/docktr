@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { diseases } from '$lib/store/diseases';
+	import { goto } from '$app/navigation';
 	import { writable } from 'svelte/store';
-	import { doctors } from '$lib/store/dataStore';
+	import { doctors, selectedSymptoms, selectedBranch } from '$lib/store/dataStore';
 	import { _ } from 'svelte-i18n';
 
 	const searchQuery = writable('');
@@ -61,7 +62,7 @@
 
 	function latinize(str: string) {
 		return str
-			.replace(/[çğıöşüÇĞİÖŞÜ]/g, (match) => charMap[match])
+			.replace(/[çğıöşüÇĞİÖŞÜƏə]/g, (match) => charMap[match])
 			.normalize('NFD')
 			.replace(/[\u0300-\u036f]/g, '')
 			.replace(/\s+/g, '')
@@ -123,7 +124,15 @@
 						>
 							<span>{$_('home.symptoms')}: </span>
 							{#each $symptoms as val}
-								<span class="symptom flex-1" style="text-wrap: nowrap">{val}</span>
+								<button
+									on:click={() => {
+										selectedSymptoms.set([...$selectedSymptoms, val]);
+										searchQuery.set('');
+										goto(`./diseases`);
+									}}
+									class="symptom flex-1"
+									style="text-wrap: nowrap; border: none">{val}</button
+								>
 							{/each}
 						</div>
 					{/if}
@@ -149,7 +158,8 @@
 							</a>
 						{:else if item.type === 'disease'}
 							<a
-								href="/branches/{item.slug}"
+								on:click={() => selectedBranch.set(item.id)}
+								href="/doctors"
 								class="hover"
 								style="display: inline-block; width:100%"
 							>

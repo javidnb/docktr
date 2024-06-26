@@ -101,93 +101,94 @@
 	});
 </script>
 
-<Nav />
+<div style="min-height: 100dvh; display: flex; flex-direction: column">
+	<Nav />
 
-<section style="position: absolute; width: 100%; z-index: -1">
-	<div class="jumbotron" style="padding-top: 2rem; background-color: #e2e9ef">
-		<h1 class="display-4">&#8203;</h1>
-		<!-- <p class="lead">We connect you to doctors around the world!</p> -->
-		<hr />
-		<!-- <p>
-			It uses utility classes for typography and spacing to space content out within the larger
-			container.
-		</p> -->
-		<!-- <a class="btn btn-primary btn-lg" href="#" role="button">Doktorlar</a> -->
-	</div>
-</section>
+	<section style="position: absolute; width: 100%; z-index: -1">
+		<div class="jumbotron" style="padding-top: 2rem; background-color: #e2e9ef">
+			<h1 class="display-4">&#8203;</h1>
+			<!-- <p class="lead">We connect you to doctors around the world!</p> -->
+			<hr />
+			<!-- <p>
+				It uses utility classes for typography and spacing to space content out within the larger
+				container.
+			</p> -->
+			<!-- <a class="btn btn-primary btn-lg" href="#" role="button">Doktorlar</a> -->
+		</div>
+	</section>
 
-<SvelteToast />
+	{#key data.url}
+		<div in:fade={{ duration: 100, easing: cubicIn }}>
+			<slot />
+		</div>
+	{/key}
 
-{#key data.url}
-	<div in:fade={{ duration: 100, easing: cubicIn }}>
-		<slot />
-	</div>
-{/key}
-
-<section
-	class="py-3"
-	style="border-top: 1px solid rgb(236, 236, 236);
-    background: var(--primaryColor);
-    color: white;"
->
-	<div class="container">
-		<div class="row">
-			<div class="col">
-				<span>© Səhiyyə.online 2023-2024</span>
-			</div>
-			<div class="col mobileOnly">
-				<div class="dropdown">
-					<button
-						class="btn btn-outline-primary dropdown-toggle d-flex align-items-center gap-1 langSelector"
-						type="button"
-						data-bs-toggle="dropdown"
-						aria-expanded="false"
-						style="#d5e4d1"
-					>
-						<span class="material-symbols-outlined"> globe </span>{$locale?.toUpperCase()}
-					</button>
-					<ul class="dropdown-menu">
-						<li>
-							<button class="dropdown-item" on:click={() => changeLocale('az')}
-								><img
-									style="width:20px;height:20px;margin-right:.5rem"
-									src="https://ik.imagekit.io/d2nwsj0ktvh/img/az.png"
-									alt="Azerbaijan Flag"
-								/>Azərbaycan dili</button
-							>
-						</li>
-						<li>
-							<button class="dropdown-item" on:click={() => changeLocale('tr')}>
-								<img
-									style="width:20px;height:20px;margin-right:.5rem"
-									src="https://ik.imagekit.io/d2nwsj0ktvh/turkey_dBbuCptvk.png?updatedAt=1719140350211"
-									alt="Turkish Flag"
-								/>Türkçe</button
-							>
-						</li>
-						<li>
-							<button class="dropdown-item" on:click={() => changeLocale('ru')}>
-								<img
-									style="width:20px;height:20px;margin-right:.5rem"
-									src="https://ik.imagekit.io/d2nwsj0ktvh/img/ru.png"
-									alt="Russian Flag"
-								/>Русский</button
-							>
-						</li>
-						<li>
-							<button class="dropdown-item" on:click={() => changeLocale('en')}>
-								<img
-									style="width:20px;height:20px;margin-right:.5rem"
-									src="https://ik.imagekit.io/d2nwsj0ktvh/img/en.png"
-									alt="English Flag"
-								/>English</button
-							>
-						</li>
-					</ul>
+	<section
+		class="py-3"
+		style="border-top: 1px solid rgb(236, 236, 236);
+		background: var(--primaryColor);
+		color: white; margin-top: auto"
+	>
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<span>© Səhiyyə.online 2023-2024</span>
+				</div>
+				<div class="col mobileOnly">
+					<div class="dropdown">
+						<button
+							class="btn btn-outline-primary dropdown-toggle d-flex align-items-center gap-1 langSelector"
+							type="button"
+							data-bs-toggle="dropdown"
+							aria-expanded="false"
+							style="#d5e4d1"
+						>
+							<span class="material-symbols-outlined"> globe </span>{$locale?.toUpperCase()}
+						</button>
+						<ul class="dropdown-menu">
+							<li>
+								<button class="dropdown-item" on:click={() => changeLocale('az')}
+									><img
+										style="width:20px;height:20px;margin-right:.5rem"
+										src="https://ik.imagekit.io/d2nwsj0ktvh/img/az.png"
+										alt="Azerbaijan Flag"
+									/>Azərbaycan dili</button
+								>
+							</li>
+							<li>
+								<button class="dropdown-item" on:click={() => changeLocale('tr')}>
+									<img
+										style="width:20px;height:20px;margin-right:.5rem"
+										src="https://ik.imagekit.io/d2nwsj0ktvh/turkey_dBbuCptvk.png?updatedAt=1719140350211"
+										alt="Turkish Flag"
+									/>Türkçe</button
+								>
+							</li>
+							<li>
+								<button class="dropdown-item" on:click={() => changeLocale('ru')}>
+									<img
+										style="width:20px;height:20px;margin-right:.5rem"
+										src="https://ik.imagekit.io/d2nwsj0ktvh/img/ru.png"
+										alt="Russian Flag"
+									/>Русский</button
+								>
+							</li>
+							<li>
+								<button class="dropdown-item" on:click={() => changeLocale('en')}>
+									<img
+										style="width:20px;height:20px;margin-right:.5rem"
+										src="https://ik.imagekit.io/d2nwsj0ktvh/img/en.png"
+										alt="English Flag"
+									/>English</button
+								>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</section>
+	</section>
+	<SvelteToast />
+</div>
 
 <style src="$lib/style/style.css"></style>

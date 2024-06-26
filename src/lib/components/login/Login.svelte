@@ -11,6 +11,7 @@
 	import { onMount } from 'svelte';
 	import { dataLoading, loginModal, putData, appointments } from '$lib/store/dataStore';
 	import { toast } from '@zerodevx/svelte-toast';
+	import { _ } from 'svelte-i18n';
 
 	let email: string = '';
 	let password: string = '';
@@ -291,14 +292,16 @@
 			>
 		</div>
 		<form on:submit={login}>
-			<h5 class="text-center mb-0">{type == 'login' ? 'Hesaba giriş' : 'Qeydiyyat'}</h5>
+			<h5 class="text-center mb-0">
+				{type == 'login' ? $_('login.login_header') : $_('login.register')}
+			</h5>
 			{#if type == 'register'}
 				<input
 					class="form-control"
 					style="padding: .5rem; min-width: 300px"
 					bind:value={displayName}
 					type="text"
-					placeholder="Ad Soyad"
+					placeholder={$_('login.name_surname')}
 					required
 				/>
 			{/if}
@@ -308,7 +311,7 @@
 					style="padding: .5rem; min-width: 300px"
 					bind:value={email}
 					type="text"
-					placeholder="Email"
+					placeholder={$_('login.email')}
 					required
 				/>
 			{:else if method == 'mobile'}
@@ -317,7 +320,7 @@
 					style="padding: .5rem; min-width: 300px"
 					bind:value={phoneNumber}
 					type="number"
-					placeholder="Mobil"
+					placeholder={$_('login.mobile')}
 					required
 				/>
 			{/if}
@@ -326,13 +329,11 @@
 				style="padding: .5rem;"
 				bind:value={password}
 				type="password"
-				placeholder="Şifrə"
+				placeholder={$_('login.pass')}
 				required
 			/>
 			{#if showError}
-				<span style="color:#c40f0f"
-					>Xəta! İstifadəçi adı vəya şifrə yanlışdır. <br />Zəhmət olmasa yenidən cəhd edin</span
-				>
+				<span style="color:#c40f0f">{$_('login.error')} <br />{$_('login.try_again')}</span>
 			{/if}
 			<button
 				class="btn"
@@ -346,7 +347,7 @@
 			border: 0px;
 			font-size: 1.05rem;
 			cursor: pointer;"
-				>{type == 'login' ? 'Giriş' : 'Qeydiyyat'}
+				>{type == 'login' ? $_('login.login') : $_('login.register')}
 				{#if $dataLoading}
 					<div class="loader"></div>
 				{/if}
@@ -355,12 +356,12 @@
 
 		<hr style="margin-top: 1rem" />
 		<div style="display: flex; flex-direction: column; gap: 1rem; align-items: center; padding:0">
-			<span>{type == 'login' ? 'Hesabın yoxdur? ' : 'Hesabınız var? '}</span>
+			<span>{type == 'login' ? $_('login.no_account') : $_('login.yes_account')}</span>
 			<button
 				on:click={() => (type = type == 'login' ? 'register' : 'login')}
 				class="btn btn-outline-primary w-100"
 			>
-				{type == 'login' ? 'Qeydiyyat' : 'Hesaba giriş'}
+				{type == 'login' ? $_('login.register') : $_('login.login_account')}
 			</button>
 		</div>
 	</div>

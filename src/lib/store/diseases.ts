@@ -17,7 +17,8 @@ export const diseases = [
 				'Dəridə ləkələr',
 				'Dərinin yağlanması',
 				'İrinli sızanaqlar',
-				'Dəri gözenəklərinin genişlənməsi'
+				'Dəri gözenəklərinin genişlənməsi',
+				'Ağrı və qaşıntı'
 			],
 			'Dəri Infeksiyaları': [
 				'Açıq yaralar',
@@ -169,7 +170,8 @@ export const diseases = [
 				'Vitamin əskikliyi',
 				'Dəmir əskikliyi',
 				'Kalsium əskikliyi',
-				'Enerji səviyyəsinin aşağı olması'
+				'Enerji səviyyəsinin aşağı olması',
+				'Ağrı və qaşıntı'
 			],
 			'Qida Alerjiləri və İntoleransı': [
 				'Qida alerjiləri',

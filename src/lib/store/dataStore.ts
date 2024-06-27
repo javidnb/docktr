@@ -12,6 +12,7 @@ export const confirmationModal = writable(false);
 export const selectedAppointmentDate = writable({ day: null, time: null, start: null, end: null });
 export const selectedBranch: any = writable('0');
 export const selectedSymptoms: any = writable([]);
+export const showBtnEndCall = writable(false);
 
 export async function putData(
 	table: string,

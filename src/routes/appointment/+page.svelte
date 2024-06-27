@@ -5,7 +5,8 @@
 		dataLoading,
 		doctors,
 		loginModal,
-		putData
+		putData,
+		showBtnEndCall
 	} from '$lib/store/dataStore';
 	import { onMount } from 'svelte';
 	import { monthNames } from '$lib/helpers/dateFormatter';
@@ -453,8 +454,9 @@
 		<VideoCall {appointmentId} />
 
 		<!-- END VIDEO CALL -->
-		<button
-			style="position: absolute;
+		{#if $showBtnEndCall}
+			<button
+				style="position: absolute;
 				bottom: 1rem;
 				right: 50%;
 				transform: translateX(50%);
@@ -467,12 +469,16 @@
 				display: flex;
 				align-items: center;
 				justify-content: center;"
-			class="btn btn-outline-primary"
-			on:click={() => (joinCall = false)}
-			><span style="font-size: 2rem" class="material-symbols-outlined icon-fill">
-				call_end
-			</span></button
-		>
+				class="btn btn-outline-primary"
+				on:click={() => {
+					showBtnEndCall.set(false);
+					joinCall = false;
+				}}
+				><span style="font-size: 2rem" class="material-symbols-outlined icon-fill">
+					call_end
+				</span></button
+			>
+		{/if}
 		<!-- </div>
 			<div class="col col-md-4 col-lg-3">
 				<div class="card h-100 my-2 p-2">Chat</div>

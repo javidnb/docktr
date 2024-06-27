@@ -2,7 +2,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import DailyIframe from '@daily-co/daily-js';
 	import type { DailyCall } from '@daily-co/daily-js';
-	import { dataLoading, putData } from '$lib/store/dataStore';
+	import { dataLoading, putData, showBtnEndCall } from '$lib/store/dataStore';
 
 	export let appointmentId: number;
 	let callFrame: DailyCall | null = null;
@@ -118,6 +118,7 @@
 		});
 
 		callFrame.join({ url: roomUrl, videoSource: true, audioSource: true }).then(() => {
+			showBtnEndCall.set(true);
 			dataLoading.set(false);
 			if (!callFrame) return;
 
@@ -154,15 +155,6 @@
 		};
 	}
 </script>
-
-<!-- <div>
-	<video bind:this={localVideo} autoplay muted>
-		<track kind="captions" srclang="en" label="English captions" />
-	</video>
-	<video bind:this={remoteVideo} autoplay>
-		<track kind="captions" srclang="en" label="English captions" />
-	</video>
-</div> -->
 
 <div class="video-container" bind:this={videoContainer}></div>
 

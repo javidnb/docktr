@@ -40,15 +40,14 @@
 	}
 
 	function handleSelect(event: any) {
+		console.log($selectedSymptoms);
 		if (event.type == 'clear') {
 			if (event.detail.length) {
 				selectedSymptoms.set([]);
 			} else {
-				console.log($selectedSymptoms);
 				let arr = $selectedSymptoms;
 				arr.splice(arr.indexOf(event.detail.value), 1);
 				selectedSymptoms.set([...arr]);
-				console.log($selectedSymptoms);
 			}
 		} else {
 			selectedSymptoms.set([...$selectedSymptoms, event.detail.value]);
@@ -110,7 +109,6 @@
 		{#if $selectedSymptoms.length}
 			<div class="row mt-3">
 				<div class="col">
-
 					<div class="d-flex flex-wrap gap-3 mt-3">
 						{#each $selectedDiseases as item}
 							<button
@@ -138,8 +136,9 @@
 					on:select={handleSelect}
 					on:clear={handleSelect}
 					itemFilter={customFilter}
+					value={$selectedSymptoms}
 					placeholder={$_('other.search_symptoms')}
-					placeholderAlwaysShow 
+					placeholderAlwaysShow
 					--border-radius="8px"
 					--border-focused="1px solid var(--primaryColor)"
 				>

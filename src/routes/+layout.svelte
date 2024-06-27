@@ -28,76 +28,15 @@
 
 	let userr: any = null;
 
-	async function getUser(user: any) {
-		try {
-			let time = new Date().getTime();
-			const response = await fetch(
-				`https://tekoplast.az/docktr/api/?user&id=${user.uid}&t=${time}`
-			);
-			const result = await response.json();
-			console.log('user: ', result);
-			if (result) {
-				getAppointments(result);
-
-				session.set({
-					user: { ...result, token: user.accessToken },
-					loggedIn: true,
-					loading: false
-				});
-				return null;
-			}
-			dataLoading.set(false);
-			return response;
-		} catch (error) {
-			console.error(error);
-			dataLoading.set(false);
-			return null;
-		}
-	}
-
-	async function getAppointments(user: any) {
-		try {
-			let time = new Date().getTime();
-			let response;
-			console.log('user doktor id: ', user.doctor);
-			if (user.doctor) {
-				response = await fetch(
-					`https://tekoplast.az/docktr/api/?appointments&id=${user.doctor}&type=doctor&t=${time}`
-				);
-			} else {
-				response = await fetch(
-					`https://tekoplast.az/docktr/api/?appointments&id=${user.uid}&t=${time}`
-				);
-			}
-
-			const result = await response.json();
-			if (result) {
-				console.log('appointments: ', result);
-				appointments.set(result);
-				dataLoading.set(false);
-				return null;
-			}
-			return response;
-		} catch (error) {
-			console.error(error);
-			dataLoading.set(false);
-			return null;
-		}
-	}
-
 	onMount(async () => {
 		if (browser) {
 			userr = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') ?? '') : null;
 		}
 
-		const user: any = await data.getAuthUser();
-		const loggedIn = user ? true : false;
+		console.log("session user: ",$session);
 
-		if (loggedIn) {
-			dataLoading.set(true);
-			getUser(user);
-			console.log($doctors);
-		}
+
+		const user: any = await data.getAuthUser();
 	});
 </script>
 

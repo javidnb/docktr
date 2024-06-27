@@ -145,89 +145,96 @@
 			</div>
 		</div>
 	</nav>
-{/if}
 
-<section class="homeNavContainer" style="background-color: #e2e9ef;">
-	<div class="container pt-3">
-		<ul class="nav nav-pills nav-fill homeNav">
-			<li class="nav-item">
-				<a style="height: 100%;" class="nav-link" href="../" class:active={curPage == '/'}
-					><span class="material-symbols-outlined" class:icon-fill={curPage == '/'}> home </span>
-					<span class="mobileOnly navLinkText">{$_('nav.home')}</span>
-				</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="/doctors" class:active={curPage?.includes('/doctors')}
-					><span class="material-symbols-outlined" class:icon-fill={curPage?.includes('/doctors')}>
-						physical_therapy
-					</span><span class="navLinkText">{$_('nav.docs')}</span></a
-				>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="/branches" class:active={curPage?.includes('/branches')}
-					><span class="material-symbols-outlined" class:icon-fill={curPage?.includes('/branches')}>
-						category
-					</span><span class="navLinkText">{$_('nav.branches')}</span></a
-				>
-			</li>
-			<li class="nav-item pcOnly">
-				<a class="nav-link" href="/diseases" class:active={curPage == '/diseases'}
-					><span class="material-symbols-outlined" class:icon-fill={curPage == '/diseases'}>
-						microbiology
-					</span>
-					<span class="navLinkText">{$_('nav.diseases')}</span></a
-				>
-			</li>
-			<li class="nav-item">
-				<a
-					class="nav-link"
-					href="/appointment"
-					class:active={curPage == '/appointment'}
-					style="position: relative;"
-					><span class="material-symbols-outlined" class:icon-fill={curPage == '/appointment'}>
-						local_library
-					</span>
-					<span class="navLinkText">{$_('nav.appointments')}</span>
-					{#if upcomingAppointments.length && curPage !== '/appointment'}
-						<span
-							class="redDot"
-							style="background: rgb(196, 15, 15);
+	<section class="homeNavContainer" style="background-color: #e2e9ef;">
+		<div class="container pt-3">
+			<ul class="nav nav-pills nav-fill homeNav">
+				<li class="nav-item">
+					<a style="height: 100%;" class="nav-link" href="../" class:active={curPage == '/'}
+						><span class="material-symbols-outlined" class:icon-fill={curPage == '/'}> home </span>
+						<span class="mobileOnly navLinkText">{$_('nav.home')}</span>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/doctors" class:active={curPage?.includes('/doctors')}
+						><span
+							class="material-symbols-outlined"
+							class:icon-fill={curPage?.includes('/doctors')}
+						>
+							physical_therapy
+						</span><span class="navLinkText">{$_('nav.docs')}</span></a
+					>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/branches" class:active={curPage?.includes('/branches')}
+						><span
+							class="material-symbols-outlined"
+							class:icon-fill={curPage?.includes('/branches')}
+						>
+							category
+						</span><span class="navLinkText">{$_('nav.branches')}</span></a
+					>
+				</li>
+				<li class="nav-item pcOnly">
+					<a class="nav-link" href="/diseases" class:active={curPage == '/diseases'}
+						><span class="material-symbols-outlined" class:icon-fill={curPage == '/diseases'}>
+							microbiology
+						</span>
+						<span class="navLinkText">{$_('nav.diseases')}</span></a
+					>
+				</li>
+				<li class="nav-item">
+					<a
+						class="nav-link"
+						href="/appointment"
+						class:active={curPage == '/appointment'}
+						style="position: relative;"
+						><span class="material-symbols-outlined" class:icon-fill={curPage == '/appointment'}>
+							local_library
+						</span>
+						<span class="navLinkText">{$_('nav.appointments')}</span>
+						{#if upcomingAppointments.length && curPage !== '/appointment'}
+							<span
+								class="redDot"
+								style="background: rgb(196, 15, 15);
 									width: 7px;
 									height: 7px;
 									border-radius: 50%;
 									align-self: baseline;"
-						></span>
-					{/if}
-				</a>
-			</li>
-			<li class="nav-item pcOnly">
-				<a class="nav-link" href="/"
-					><span class="material-symbols-outlined"> rss_feed </span>
-					<span class="navLinkText">{$_('nav.blog')}</span></a
-				>
-			</li>
-			<li class="nav-item pcOnly">
-				<a class="nav-link" href="/"
-					><span class="material-symbols-outlined"> dialpad </span>
-					<span class="navLinkText">{$_('nav.contact')}</span></a
-				>
-			</li>
-
-			<li class="nav-item mobileOnly">
-				<button
-					class="nav-link"
-					on:click={() => ($session.loggedIn ? goto('/profile') : loginModal.set(true))}
-					><span
-						class="material-symbols-outlined"
-						class:icon-fill={curPage == '/profile' || curPage == '/login' || curPage == '/register'}
+							></span>
+						{/if}
+					</a>
+				</li>
+				<li class="nav-item pcOnly">
+					<a class="nav-link" href="/"
+						><span class="material-symbols-outlined"> rss_feed </span>
+						<span class="navLinkText">{$_('nav.blog')}</span></a
 					>
-						account_circle
-					</span>
-					<span class="navLinkText">{$_('nav.account')}</span></button
-				>
-			</li>
+				</li>
+				<li class="nav-item pcOnly">
+					<a class="nav-link" href="/"
+						><span class="material-symbols-outlined"> dialpad </span>
+						<span class="navLinkText">{$_('nav.contact')}</span></a
+					>
+				</li>
 
-			<!-- {#if $session.loggedIn}
+				<li class="nav-item mobileOnly">
+					<button
+						class="nav-link"
+						on:click={() => ($session.loggedIn ? goto('/profile') : loginModal.set(true))}
+						><span
+							class="material-symbols-outlined"
+							class:icon-fill={curPage == '/profile' ||
+								curPage == '/login' ||
+								curPage == '/register'}
+						>
+							account_circle
+						</span>
+						<span class="navLinkText">{$_('nav.account')}</span></button
+					>
+				</li>
+
+				<!-- {#if $session.loggedIn}
 				<li class="nav-item pcOnly" class:active={curPage == '/admin'}>
 					<a class="nav-link" href="/admin"
 						><span class="material-symbols-outlined"  class:icon-fill={curPage == '/admin'}> admin_panel_settings </span>
@@ -235,9 +242,10 @@
 					>
 				</li>
 			{/if} -->
-		</ul>
-	</div>
-</section>
+			</ul>
+		</div>
+	</section>
+{/if}
 
 <Modal bind:showModal>
 	<Login />

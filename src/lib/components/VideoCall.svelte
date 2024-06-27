@@ -3,6 +3,7 @@
 	import DailyIframe from '@daily-co/daily-js';
 	import type { DailyCall } from '@daily-co/daily-js';
 	import { dataLoading, putData, showBtnEndCall } from '$lib/store/dataStore';
+	import { session } from '$lib/session';
 
 	export let appointmentId: number;
 	let callFrame: DailyCall | null = null;
@@ -113,11 +114,16 @@
 				height: 'calc(100dvh + 30px)',
 				border: 'none',
 				top: '-31px',
-				left: '0px'
+				left: '0px',
+				zIndex: '99'
 			}
 		});
 
 		callFrame.join({ url: roomUrl, videoSource: true, audioSource: true }).then(() => {
+			if (callFrame && $session.user?.displayName) {
+				callFrame?.setUserName($session.user?.displayName);
+			}
+
 			showBtnEndCall.set(true);
 			dataLoading.set(false);
 			if (!callFrame) return;

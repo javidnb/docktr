@@ -3,6 +3,8 @@
 import { initializeFirebase, auth } from '$lib/firebase.client';
 import { browser } from '$app/environment';
 import { onAuthStateChanged } from 'firebase/auth';
+import { session } from '$lib/session.js';
+import { appointments } from '$lib/store/dataStore.js';
 
 let doctorsData: any = null;
 
@@ -17,8 +19,60 @@ export async function load({ url }) {
 
 	function getAuthUser() {
 		return new Promise((resolve) => {
-			onAuthStateChanged(auth, (user) => resolve(user ? user : false));
+			onAuthStateChanged(auth, (user) => {
+				if (user) {
+					getUser(user);
+				}
+				resolve(user ? user : false);
+			});
 		});
+	}
+
+	async function getUser(user: any) {
+		try {
+			let time = new Date().getTime();
+			const response = await fetch(
+				`https://tekoplast.az/docktr/api/?user&id=${user.uid}&t=${time}`
+			);
+			const result = await response.json();
+			if (result) {
+				session.set({
+					user: { ...result, token: user.accessToken },
+					loggedIn: true,
+					loading: false
+				});
+				getAppointments(result);
+				return null;
+			}
+			return result;
+		} catch (error) {
+			return null;
+		}
+	}
+
+	async function getAppointments(user: any) {
+		try {
+			let time = new Date().getTime();
+			let response;
+			if (user.doctor) {
+				response = await fetch(
+					`https://tekoplast.az/docktr/api/?appointments&id=${user.doctor}&type=doctor&t=${time}`
+				);
+			} else {
+				response = await fetch(
+					`https://tekoplast.az/docktr/api/?appointments&id=${user.uid}&t=${time}`
+				);
+			}
+
+			const result = await response.json();
+			if (result) {
+				appointments.set(result);
+				return null;
+			}
+			return response;
+		} catch (error) {
+			return null;
+		}
 	}
 
 	if (!doctorsData) {

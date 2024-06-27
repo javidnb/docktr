@@ -124,13 +124,13 @@
 	{/key}
 
 	<section
-		class="py-3"
+		class="py-3 footer"
 		style="border-top: 1px solid rgb(236, 236, 236);
 		background: var(--primaryColor);
 		color: white; margin-top: auto"
 	>
 		<div class="container">
-			<div class="row">
+			<div class="row align-items-center">
 				<div class="col">
 					<span>© Səhiyyə.online 2023-2024</span>
 				</div>
@@ -141,7 +141,7 @@
 							type="button"
 							data-bs-toggle="dropdown"
 							aria-expanded="false"
-							style="#d5e4d1"
+							style="color: #d5e4d1"
 						>
 							<span class="material-symbols-outlined"> globe </span>{$locale?.toUpperCase()}
 						</button>

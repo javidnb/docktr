@@ -32,7 +32,8 @@
 		"no_appointment": "Planlaşdırılmış görüş yoxdur .."
 	},
 	"other": {
-		"notFound": "Nəticə Tapılmadı"
+		"notFound": "Nəticə Tapılmadı",
+		"search_symptoms": "Simptomlarınızı yazın"
 	},
 	"faq": {
 		"q1": "Həkim qəbulunu necə sifariş edə bilərəm?",

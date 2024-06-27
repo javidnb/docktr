@@ -3,7 +3,6 @@
 	import { diseases } from '$lib/store/diseases';
 	import { _ } from 'svelte-i18n';
 	import { selectedSymptoms, selectedBranch } from '$lib/store/dataStore';
-	import Search from '$lib/helpers/Search.svelte';
 	import { goto } from '$app/navigation';
 	import { writable } from 'svelte/store';
 	import Select from 'svelte-select';
@@ -13,13 +12,13 @@
 	});
 
 	let selectedDiseases: any = writable([]);
-	let items = [];
+	let items: any = [];
 
 	onMount(() => {
 		if (diseases.length) {
 			for (const category of diseases) {
 				for (const [conditionName, symptoms] of Object.entries(category.conditions)) {
-					symptoms.forEach((sm) => items.push(sm));
+					symptoms.forEach((sm: any) => items.push(sm));
 				}
 			}
 			items = Array.from(new Set(items));
@@ -40,12 +39,19 @@
 		}
 	}
 
-	function handleSelect(event) {
-		if (event.detail?.length) {
-			let selected = event.detail.map((a) => a.value);
-			selectedSymptoms.set(selected);
+	function handleSelect(event: any) {
+		if (event.type == 'clear') {
+			if (event.detail.length) {
+				selectedSymptoms.set([]);
+			} else {
+				console.log($selectedSymptoms);
+				let arr = $selectedSymptoms;
+				arr.splice(arr.indexOf(event.detail.value), 1);
+				selectedSymptoms.set([...arr]);
+				console.log($selectedSymptoms);
+			}
 		} else {
-			selectedSymptoms.set([]);
+			selectedSymptoms.set([...$selectedSymptoms, event.detail.value]);
 		}
 	}
 
@@ -79,7 +85,7 @@
 			.toLowerCase();
 	}
 
-	function customFilter(options, searchTerm) {
+	function customFilter(options: any, searchTerm: any) {
 		if (!searchTerm) {
 			return options;
 		}
@@ -102,46 +108,8 @@
 <div class="container-fluid mb-3">
 	<div class="container">
 		{#if $selectedSymptoms.length}
-			<!-- <div class="row mt-3">
-				<div class="col">
-					<div
-						class="d-flex align-items-center"
-						style="background: #0000000f;
-							border-radius: 8px;
-							padding-left: 1rem;"
-					>
-						<h5 style="margin-bottom: 0;">{$_('home.symptoms')}</h5>
-						<button
-							class="symptom d-flex align-items-center gap-2 ms-4"
-							style="border: 0px;"
-							on:click={() => {
-								selectedSymptoms.set([]);
-								selectedDiseases.set([]);
-							}}
-							><span class="material-symbols-outlined"> contract_delete </span>{$_(
-								'actions.clear'
-							)}</button
-						>
-					</div>
-					<div class="d-flex">
-						{#each $selectedSymptoms as sym}
-							<span class="symptom">
-								{sym}
-							</span>
-						{/each}
-					</div>
-				</div>
-			</div> -->
 			<div class="row mt-3">
 				<div class="col">
-					<!-- <div
-						class="d-flex align-items-center"
-						style="background: #0000000f;
-							border-radius: 8px;
-							padding-left: 1rem; height: 50px"
-					>
-						<h5 style="margin-bottom: 0">{$_('nav.diseases')}</h5>
-					</div> -->
 
 					<div class="d-flex flex-wrap gap-3 mt-3">
 						{#each $selectedDiseases as item}
@@ -154,9 +122,6 @@
 							>
 								<h5 style="margin:0">{item.condition}</h5>
 								<h6 style="margin:0; color: var(--primaryColor)">{item.name}</h6>
-								<!-- {#each Object.entries(item.conditions) as [key, value]}
-									<span>{key}</span>
-								{/each} -->
 							</button>
 						{/each}
 					</div>
@@ -168,13 +133,21 @@
 				<Select
 					class="form-control"
 					{items}
-					isMulti={true}
-					on:select={handleSelect}
 					closeListOnChange={false}
+					multiple
+					on:select={handleSelect}
+					on:clear={handleSelect}
 					itemFilter={customFilter}
-					placeholder={$_('home.search')}
-					noOptionsMessage={$_('other.notFound')}
-				/>
+					placeholder={$_('other.search_symptoms')}
+					placeholderAlwaysShow 
+					--border-radius="8px"
+					--border-focused="1px solid var(--primaryColor)"
+				>
+					<div slot="prepend" class="d-flex align-items-center" style="padding-right: 10px">
+						<span class="material-symbols-outlined"> search </span>
+					</div>
+				</Select>
+				<!-- noOptionsMessage={$_('other.notFound')} -->
 			</div>
 		</div>
 	</div>
@@ -189,8 +162,10 @@
 		box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.34);
 		border-radius: 6px;
 		background-color: white;
+		flex: 1;
+		max-width: 500px;
 	}
-	.symptom {
+	/* .symptom {
 		padding: 5px 15px;
 		border-radius: 20px;
 		margin: 5px;
@@ -198,7 +173,7 @@
 		box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.34);
 		background-color: white;
 		width: max-content;
-	}
+	} */
 	:global(.clearSelect) {
 		display: flex;
 	}

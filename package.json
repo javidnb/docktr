@@ -37,6 +37,6 @@
 		"@vercel/speed-insights": "^1.0.10",
 		"firebase": "^10.10.0",
 		"svelte-i18n": "^4.0.0",
-		"svelte-select": "^4.4.7"
+		"svelte-select": "^5.8.3"
 	}
 }

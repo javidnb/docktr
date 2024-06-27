@@ -39,7 +39,7 @@
 
 <nav
 	class="navbar navbar-expand-lg navbar-dark"
-	style="background-color: var(--primaryColor); z-index: 99"
+	style="background-color: var(--primaryColor);"
 >
 	<div
 		class="container-fluid"

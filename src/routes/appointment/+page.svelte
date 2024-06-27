@@ -451,6 +451,28 @@
 		<!-- <div class="row">
 			<div class="col col-md-8 col-lg-9"> -->
 		<VideoCall {appointmentId} />
+
+		<!-- END VIDEO CALL -->
+		<button
+			style="position: absolute;
+				bottom: 1rem;
+				right: 50%;
+				transform: translateX(50%);
+				background: rgb(212, 19, 19);
+				color: white;
+				font-size: 2rem;
+				border-radius: 100%;
+				width: 60px;
+				height: 60px;
+				display: flex;
+				align-items: center;
+				justify-content: center;"
+			class="btn btn-outline-primary"
+			on:click={() => (joinCall = false)}
+			><span style="font-size: 2rem" class="material-symbols-outlined icon-fill">
+				call_end
+			</span></button
+		>
 		<!-- </div>
 			<div class="col col-md-4 col-lg-3">
 				<div class="card h-100 my-2 p-2">Chat</div>

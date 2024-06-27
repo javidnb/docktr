@@ -110,9 +110,9 @@
 			iframeStyle: {
 				position: 'absolute',
 				width: '100vw',
-				height: 'calc(100dvh - 28px)',
+				height: 'calc(100dvh + 30px)',
 				border: 'none',
-				top: '28px',
+				top: '-31px',
 				left: '0px'
 			}
 		});

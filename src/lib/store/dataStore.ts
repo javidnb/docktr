@@ -18,9 +18,10 @@ export async function putData(
 	table: string,
 	primaryColName: string,
 	id: string | number,
-	data: any
+	data: any,
+	disableLoading?: boolean
 ) {
-	dataLoading.set(true);
+	if (!disableLoading) dataLoading.set(true);
 
 	let requestData = {
 		table,
@@ -47,7 +48,7 @@ export async function putData(
 		// 		'--toastBarBackground': '#1d5b3c'
 		// 	}
 		// });
-		dataLoading.set(false);
+		if (!disableLoading) dataLoading.set(false);
 		return 'ok';
 	} else {
 		toast.push('Xəta!', {

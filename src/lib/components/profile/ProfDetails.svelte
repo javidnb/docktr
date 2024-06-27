@@ -28,7 +28,7 @@
 	async function formSubmit(e: SubmitEvent) {
 		let result;
 		dataLoading.set(true);
-		const formData = new FormData(e.target as HTMLFormElement);
+		const formData: any = new FormData(e.target as HTMLFormElement);
 		const data: any = {};
 		for (let field of formData) {
 			const [key, value] = field;

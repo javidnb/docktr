@@ -3,7 +3,13 @@
 	import { page } from '$app/stores';
 	import { formatDate } from '$lib/helpers/dateFormatter';
 	import { session } from '$lib/session';
-	import { dataLoading, loginModal, appointments, showBtnEndCall } from '$lib/store/dataStore';
+	import {
+		dataLoading,
+		loginModal,
+		appointments,
+		showBtnEndCall,
+		putData
+	} from '$lib/store/dataStore';
 	import Modal from '$lib/helpers/Modal.svelte';
 	import Login from './login/Login.svelte';
 	import { goto } from '$app/navigation';
@@ -19,8 +25,12 @@
 		}, 60000);
 	});
 
-	const changeLocale = (newLocale: string) => {
+	const changeLocale = async (newLocale: string) => {
+		let local = $locale;
 		locale.set(newLocale);
+		if ($session.user?.uid && local != newLocale) {
+			await putData('users', 'uid', $session.user?.uid, { lang: newLocale }, true);
+		}
 	};
 	let websiteName = $page.url.host;
 	let curPage: string | null = '/';

@@ -1,15 +1,14 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { session } from '$lib/session';
 	import { fade } from 'svelte/transition';
 	import Nav from '$lib/components/Nav.svelte';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import type { LayoutData } from './$types';
-	import { browser } from '$app/environment';
-	import { doctors, appointments, dataLoading } from '$lib/store/dataStore';
+	import { doctors, putData } from '$lib/store/dataStore';
 	import { cubicIn } from 'svelte/easing';
 	import '../lib/i18n';
 	import { locale, _ } from 'svelte-i18n';
+	import { session } from '$lib/session';
 	export let data: LayoutData;
 
 	if (data?.doctors?.length) {
@@ -22,22 +21,19 @@
 		doctors.set(dooc);
 	}
 
-	const changeLocale = (newLocale: string) => {
+	const changeLocale = async (newLocale: string) => {
+		let local = $locale;
 		locale.set(newLocale);
+		if ($session.user?.uid && local != newLocale) {
+			await putData('users', 'uid', $session.user?.uid, { lang: newLocale }, true);
+		}
 	};
 
-	let userr: any = null;
-
 	onMount(async () => {
-		if (browser) {
-			userr = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') ?? '') : null;
-		}
-
-		console.log("session user: ",$session);
-
-
-		const user: any = await data.getAuthUser();
+		await data.getAuthUser();
 	});
+
+	$: if ($session.user?.lang) changeLocale($session.user?.lang);
 </script>
 
 <div style="min-height: 100dvh; display: flex; flex-direction: column">

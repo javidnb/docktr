@@ -11,6 +11,7 @@ export type User = {
 	admin?: boolean;
 	fcmToken?: string;
 	accessToken?: string;
+	lang?: string;
 };
 
 export type SessionState = {

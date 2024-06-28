@@ -302,7 +302,7 @@
 										color: white;"
 									>
 										<span class="material-symbols-outlined"> schedule </span>
-										<span class="mx-auto">Video görüşə qoşul</span>
+										<span class="mx-auto">{!joinCall ? 'Video görüşə qoşul' : 'Gözləyin'}</span>
 									</button>
 								{:else}
 									<button
@@ -312,7 +312,7 @@
 										color: white;"
 									>
 										<span class="material-symbols-outlined"> schedule </span>
-										<span class="mx-auto">Video görüşə qoşul</span>
+										<span class="mx-auto">{!joinCall ? 'Video görüşə qoşul' : 'Gözləyin'}</span>
 									</button>
 								{/if}
 							</div>
@@ -420,7 +420,7 @@
 										color: white;"
 									>
 										<span class="material-symbols-outlined"> schedule </span>
-										<span class="mx-auto">Video görüşə qoşul</span>
+										<span class="mx-auto">{!joinCall ? 'Video görüşə qoşul' : 'Gözləyin'}</span>
 									</button>
 								{/if}
 							</div>
@@ -451,7 +451,6 @@
 	{:else}
 		<!-- <div class="row">
 			<div class="col col-md-8 col-lg-9"> -->
-		<VideoCall {appointmentId} />
 
 		<!-- END VIDEO CALL -->
 		{#if $showBtnEndCall}
@@ -479,7 +478,18 @@
 					call_end
 				</span></button
 			>
+		{:else}
+			<div
+				style="width: 100dvw; height: 100dvh; position:absolute; top:0; 
+			left:0; 
+			display: flex; align-items:center; justify-content:center; z-index: 1"
+			>
+				Loading
+			</div>
 		{/if}
+
+		<VideoCall {appointmentId} />
+
 		<!-- </div>
 			<div class="col col-md-4 col-lg-3">
 				<div class="card h-100 my-2 p-2">Chat</div>

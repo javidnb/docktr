@@ -106,7 +106,7 @@
 
 	function launchVideoChatUI() {
 		callFrame = DailyIframe.createFrame(videoContainer, {
-			showLeaveButton: false,
+			showLeaveButton: true,
 			showFullscreenButton: true,
 			iframeStyle: {
 				position: 'absolute',

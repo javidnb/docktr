@@ -106,6 +106,30 @@
 </section>
 <div class="container-fluid mb-3">
 	<div class="container">
+		<div class="row mt-3">
+			<div class="col">
+				<!-- closeListOnChange={false} -->
+				<Select
+					class="form-control"
+					{items}
+					
+					multiple
+					on:select={handleSelect}
+					on:clear={handleSelect}
+					itemFilter={customFilter}
+					value={$selectedSymptoms}
+					placeholder={$_('other.search_symptoms')}
+					placeholderAlwaysShow
+					--border-radius="8px"
+					--border-focused="1px solid var(--primaryColor)"
+				>
+					<div slot="prepend" class="d-flex align-items-center" style="padding-right: 10px">
+						<span class="material-symbols-outlined"> search </span>
+					</div>
+				</Select>
+				<!-- noOptionsMessage={$_('other.notFound')} -->
+			</div>
+		</div>
 		{#if $selectedSymptoms.length}
 			<div class="row mt-3">
 				<div class="col">
@@ -125,30 +149,7 @@
 					</div>
 				</div>
 			</div>
-		{/if}
-		<div class="row mt-3">
-			<div class="col">
-				<Select
-					class="form-control"
-					{items}
-					closeListOnChange={false}
-					multiple
-					on:select={handleSelect}
-					on:clear={handleSelect}
-					itemFilter={customFilter}
-					value={$selectedSymptoms}
-					placeholder={$_('other.search_symptoms')}
-					placeholderAlwaysShow
-					--border-radius="8px"
-					--border-focused="1px solid var(--primaryColor)"
-				>
-					<div slot="prepend" class="d-flex align-items-center" style="padding-right: 10px">
-						<span class="material-symbols-outlined"> search </span>
-					</div>
-				</Select>
-				<!-- noOptionsMessage={$_('other.notFound')} -->
-			</div>
-		</div>
+		{/if}		
 	</div>
 </div>
 

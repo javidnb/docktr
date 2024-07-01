@@ -35,7 +35,9 @@
 	"dependencies": {
 		"@daily-co/daily-js": "^0.65.0",
 		"@vercel/speed-insights": "^1.0.10",
+		"filepond": "^4.31.1",
 		"firebase": "^10.10.0",
+		"svelte-filepond": "^0.2.2",
 		"svelte-i18n": "^4.0.0",
 		"svelte-select": "^5.8.3"
 	}

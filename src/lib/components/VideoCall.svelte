@@ -7,11 +7,11 @@
 
 	export let appointmentId: number;
 	let callFrame: DailyCall | null = null;
-	let roomUrl: string = 'https://sehiyye.daily.co/'; // Replace with your room URL
+	let roomUrl: string = 'https://sehiyye.daily.co/';
 	let localVideo: HTMLVideoElement;
 	let remoteVideo: HTMLVideoElement;
 	let videoContainer: HTMLDivElement;
-	let API_KEY = '9013923050beca02edf29057536ca66fb51a7e6a9fc33479bb9a7f0db2809dac';
+	let API_KEY = import.meta.env.VITE_DAILY_API_KEY;
 	let DAILY_API_URL = 'https://api.daily.co/v1/';
 	let roomId: any = null;
 

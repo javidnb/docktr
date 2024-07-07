@@ -6,22 +6,26 @@
 	import { createEventDispatcher } from 'svelte';
 	import { selectedUser } from '$lib/store/dataStore';
 	import { timestamp } from '$lib/helpers/dateFormatter';
+	import { page } from '$app/stores';
 
 	const messagesCollection = collection(db, 'messages');
-	let currentUser = 'HW50qLPCsBhdqW9LwQXXReN76JB2';
 	let messagesGroupedByUser: any = [];
 	const dispatch = createEventDispatcher();
+	$: curPage = $page.route.id;
 
 	onMount(async () => {
 		if ($session.user) {
-			const q = query(messagesCollection, where('participants', 'array-contains', currentUser));
+			const q = query(
+				messagesCollection,
+				where('participants', 'array-contains', $session.user?.uid)
+			);
 			const querySnapshot = await getDocs(q);
 
 			const groupedMessages: any = {};
 
 			querySnapshot.forEach((doc) => {
 				const data = doc.data();
-				const fromUser = data.fromUser;
+				const fromUser = data.fromUser == $session.user?.uid ? data.toUser : data.fromUser;
 
 				if (!groupedMessages[fromUser]) {
 					groupedMessages[fromUser] = [];
@@ -34,34 +38,47 @@
 			});
 
 			// Convert groupedMessages object to an array for easier rendering
-			messagesGroupedByUser = Object.keys(groupedMessages).map((fromUser) => ({
-				fromUser,
-				toUser: groupedMessages[fromUser][0].toUser,
-				messages: groupedMessages[fromUser],
-				lastMsgTime: groupedMessages[fromUser][groupedMessages[fromUser].length - 1].timestamp
+			messagesGroupedByUser = Object.keys(groupedMessages).map((user) => ({
+				user,
+				messages: groupedMessages[user],
+				lastMsgTime: groupedMessages[user][groupedMessages[user].length - 1].timestamp
 			}));
-			console.log(messagesGroupedByUser);
+
+			if (curPage == '/messages') {
+				selectedUser.set(messagesGroupedByUser[0].user);
+			}
 		}
 	});
 </script>
 
-<div class="d-flex gap-3 mb-3">
-	<h3>Mesajlar</h3>
-	<span>{$session.user?.uid}</span>
-</div>
+{#if curPage != '/messages'}
+	<div class="d-flex gap-3 mb-3">
+		<h3>Mesajlar</h3>
+		<span>{$session.user?.uid}</span>
+	</div>
+{/if}
 
-<div class="d-flex gap-3 flex-column">
-	{#each messagesGroupedByUser as { fromUser, toUser, lastMsgTime }}
+<div class="d-flex gap-2 flex-column">
+	{#each messagesGroupedByUser as { user, lastMsgTime }}
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<!-- svelte-ignore a11y-no-static-element-interactions -->
 		<button
-			class="d-flex flex-column justify-content-center ps-3"
+			class={$selectedUser == user ? 'active' : ''}
 			style="min-height: 60px; border-radius: 6px; border: 1px solid #ececec"
 			on:click={() => {
-				selectedUser.set(fromUser == $session.user?.uid ? toUser : fromUser);
-				dispatch('changeValue', fromUser == $session.user?.uid ? toUser : fromUser);
+				selectedUser.set(user);
+				dispatch('changeValue', user);
 			}}
 		>
-			{fromUser == $session.user?.uid ? toUser : fromUser}
-			<span style="font-size: smaller; color: gray">{timestamp(lastMsgTime)}</span>
+			<div class="d-flex align-items-center" style="overflow-x: hidden;">
+				<span style="font-size: 30px;" class="material-symbols-outlined icon-fill s-KnlqTvvrWAx4"
+					>account_circle</span
+				>
+				<div class="d-flex flex-column align-items-start">
+					{user}
+					<span style="font-size: smaller; color: gray">{timestamp(lastMsgTime)}</span>
+				</div>
+			</div>
 		</button>
 		<!-- <ul style="list-style-type: none;">
 				{#each messages as message}
@@ -72,3 +89,10 @@
 			</ul> -->
 	{/each}
 </div>
+
+<style>
+	.active {
+		background-color: var(--primaryColor);
+		color: white;
+	}
+</style>

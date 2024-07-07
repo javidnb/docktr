@@ -145,6 +145,12 @@
 							</li>
 						{/if}
 						<li class="nav-item">
+							<a class="nav-link" href="../messages">
+								<span class="material-symbols-outlined icon-fill"> mail </span>
+								{$_('nav.messages')}
+							</a>
+						</li>
+						<li class="nav-item">
 							<a class="nav-link" href="../profile">
 								<span class="material-symbols-outlined icon-fill"> account_circle </span>
 								{$_('nav.account')}

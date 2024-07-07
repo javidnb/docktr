@@ -13,7 +13,7 @@
 
 	onMount(async () => {
 		if ($session.user) {
-			const q = query(messagesCollection, where('toUser', '==', currentUser));
+			const q = query(messagesCollection, where('participants', 'array-contains', currentUser));
 			const querySnapshot = await getDocs(q);
 
 			const groupedMessages: any = {};
@@ -35,6 +35,7 @@
 			// Convert groupedMessages object to an array for easier rendering
 			messagesGroupedByUser = Object.keys(groupedMessages).map((fromUser) => ({
 				fromUser,
+				toUser: groupedMessages[fromUser][0].toUser,
 				messages: groupedMessages[fromUser]
 			}));
 		}
@@ -47,16 +48,16 @@
 </div>
 
 <div class="d-flex gap-3 flex-column">
-	{#each messagesGroupedByUser as { fromUser, messages }}
+	{#each messagesGroupedByUser as { fromUser, toUser }}
 		<button
 			class="d-flex align-items-center ps-3"
 			style="min-height: 60px; border-radius: 6px; border: 1px solid #ececec"
 			on:click={() => {
-				selectedUser.set(fromUser);
-				dispatch('changeValue', fromUser);
+				selectedUser.set(fromUser == $session.user?.uid ? toUser : fromUser);
+				dispatch('changeValue', fromUser == $session.user?.uid ? toUser : fromUser);
 			}}
 		>
-			{fromUser}
+			{fromUser == $session.user?.uid ? toUser : fromUser}
 		</button>
 		<!-- <ul style="list-style-type: none;">
 				{#each messages as message}

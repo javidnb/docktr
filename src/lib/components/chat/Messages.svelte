@@ -41,7 +41,10 @@
 	});
 </script>
 
-<h3>Mesajlar</h3>
+<div class="d-flex gap-3 mb-3">
+	<h3>Mesajlar</h3>
+	<span>{$session.user?.uid}</span>
+</div>
 
 <div class="d-flex gap-3 flex-column">
 	{#each messagesGroupedByUser as { fromUser, messages }}

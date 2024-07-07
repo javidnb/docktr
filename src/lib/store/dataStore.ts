@@ -13,6 +13,8 @@ export const selectedAppointmentDate = writable({ day: null, time: null, start: 
 export const selectedBranch: any = writable('0');
 export const selectedSymptoms: any = writable([]);
 export const showBtnEndCall = writable(false);
+export const joinVideoCall = writable(false);
+export const selectedUser = writable(null);
 
 export async function putData(
 	table: string,

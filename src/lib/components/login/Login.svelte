@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { session } from '$lib/session';
-	import { auth, messaging, provider } from '$lib/firebase.client';
+	import { auth, messaging } from '$lib/firebase.client';
 	import {
 		signInWithEmailAndPassword,
 		type UserCredential,
-		signInWithRedirect,
 		signInWithCustomToken
 	} from 'firebase/auth';
 	import { getToken } from 'firebase/messaging';
@@ -18,7 +17,7 @@
 	let phoneNumber: string = '';
 	let displayName: string;
 	let disabled = false;
-	let showError: boolean = false;
+	let showError: boolean = false; // display login error
 
 	let type: string = 'login';
 	let method: string = 'mobile';
@@ -60,15 +59,8 @@
 				loading: false
 			});
 			registerCM();
-			console.log('Data posted successfully: ', $session);
 		} else {
-			// Handle error response
 			console.error('Failed to post data');
-			// session.set({
-			// 	user: userData,
-			// 	loggedIn: true,
-			// 	loading: false
-			// });
 		}
 	}
 
@@ -113,6 +105,7 @@
 		dataLoading.set(true);
 		disabled = true;
 		showError = false;
+		// MOBILE NUMBER LOGIN
 		if (method == 'mobile') {
 			dataLoading.set(true);
 			const response = await fetch('https://tekoplast.az/docktr/api/?authToken', {
@@ -123,8 +116,10 @@
 				body: JSON.stringify({ phoneNumber })
 			});
 			const data = await response.json();
+			console.log('auth data:', data);
 			try {
 				const userCredential = await signInWithCustomToken(auth, data.customToken);
+				console.log('user cred: ', userCredential);
 				await getUser(userCredential);
 				toast.push(`Xoş gəldiniz ${userCredential.user.displayName ?? ''}!`, {
 					duration: 2000,
@@ -145,6 +140,7 @@
 				return;
 			}
 		}
+		// EMAIL LOGIN
 		await signInWithEmailAndPassword(auth, email, password)
 			.then(async (result) => {
 				const { user }: UserCredential = result;
@@ -166,14 +162,6 @@
 				dataLoading.set(false);
 				return error;
 			});
-	}
-
-	async function loginWithGoogle() {
-		try {
-			await signInWithRedirect(auth, provider);
-		} catch (error) {
-			console.error('Error logging in with Google', error);
-		}
 	}
 
 	// REGISTER FOR PUSH NOTIFICATIONS
@@ -266,7 +254,7 @@
 				class:active={method == 'email'}
 				><span class="material-symbols-outlined icon-fill"> mail </span></button
 			>
-			<button class="btn btn-outline-primary bg-white" on:click={loginWithGoogle}
+			<!-- <button class="btn btn-outline-primary bg-white" on:click={loginWithGoogle}
 				><svg
 					xmlns="http://www.w3.org/2000/svg"
 					x="0px"
@@ -289,7 +277,7 @@
 						d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
 					></path>
 				</svg></button
-			>
+			> -->
 		</div>
 		<form on:submit={login}>
 			<h5 class="text-center mb-0">
@@ -341,12 +329,12 @@
 				{disabled}
 				type="submit"
 				style="padding: 0.5rem;
-			border-radius: 10px;
-			background: var(--primaryColor);
-			color: white;
-			border: 0px;
-			font-size: 1.05rem;
-			cursor: pointer;"
+					border-radius: 10px;
+					background: var(--primaryColor);
+					color: white;
+					border: 0px;
+					font-size: 1.05rem;
+					cursor: pointer;"
 				>{type == 'login' ? $_('login.login') : $_('login.register')}
 				{#if $dataLoading}
 					<div class="loader"></div>
@@ -393,29 +381,5 @@
 	.active,
 	.socials button:hover {
 		background-color: var(--primaryColor) !important;
-	}
-
-	/* LOADER */
-	.loader {
-		width: 25px;
-		padding: 8px !important;
-		aspect-ratio: 1;
-		border-radius: 50%;
-		background: #25b09b;
-		--_m: conic-gradient(#0000 10%, #000), linear-gradient(#000 0 0) content-box;
-		-webkit-mask: var(--_m);
-		mask: var(--_m);
-		-webkit-mask-composite: source-out;
-		mask-composite: subtract;
-		animation: l3 1s infinite linear;
-		display: inline-block;
-		margin-left: 1rem;
-		position: absolute;
-		right: 3rem;
-	}
-	@keyframes l3 {
-		to {
-			transform: rotate(1turn);
-		}
 	}
 </style>

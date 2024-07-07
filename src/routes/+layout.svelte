@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { fade } from 'svelte/transition';
+	// import { fade } from 'svelte/transition';
 	import Nav from '$lib/components/Nav.svelte';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import type { LayoutData } from './$types';
 	import { doctors, putData } from '$lib/store/dataStore';
-	import { cubicIn } from 'svelte/easing';
 	import '../lib/i18n';
 	import { locale, _ } from 'svelte-i18n';
 	import { session } from '$lib/session';
@@ -53,7 +52,8 @@
 	</section>
 
 	{#key data.url}
-		<div in:fade={{ duration: 100, easing: cubicIn }}>
+		<!-- in:fade={{ duration: 100, easing: cubicIn }} -->
+		<div>
 			<slot />
 		</div>
 	{/key}

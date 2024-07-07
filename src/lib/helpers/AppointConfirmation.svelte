@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Modal from '$lib/helpers/Modal.svelte';
-	import { appointments, confirmationModal } from '$lib/store/dataStore';
+	import { confirmationModal } from '$lib/store/dataStore';
 	import DatePicker from './DatePicker.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { monthNames } from '$lib/helpers/dateFormatter';
@@ -53,10 +53,33 @@
 				<div class="row text-center pb-2">
 					<span>{@html confirmationData.text ?? ''}</span>
 					<div class="d-flex gap-3 mt-3">
-						<button class="btn btn-secondary w-100 d-flex" on:click={() => (showDatePicker = true)}
-							><span class="material-symbols-outlined"> replay </span>
-							<span class="mx-auto">{confirmationData.button1 ?? 'Dəyişdir'}</span></button
-						>
+						{#if confirmationData.button1}
+							<button
+								class="btn btn-secondary w-100 d-flex"
+								on:click={() => {
+									confirmationModal.set(false);
+								}}
+								><span class="material-symbols-outlined">
+									{confirmationData.button1_icon ?? 'replay'}
+								</span>
+								<span class="mx-auto">{confirmationData.button1 ?? 'Dəyişdir'}</span></button
+							>
+						{:else}
+							<button
+								class="btn btn-secondary w-100 d-flex"
+								on:click={() => {
+									if (confirmationData.button1_fn) {
+										confirmationData.button1_fn;
+										return;
+									}
+									showDatePicker = true;
+								}}
+								><span class="material-symbols-outlined">
+									{confirmationData.button1_icon ?? 'replay'}
+								</span>
+								<span class="mx-auto">{confirmationData.button1 ?? 'Dəyişdir'}</span></button
+							>
+						{/if}
 						<button
 							class="btn btn-primary w-100 d-flex"
 							on:click={() =>

@@ -2,22 +2,25 @@
 	import { logout } from '$lib/firebase.client.js';
 	import { onMount } from 'svelte';
 	import { session } from '$lib/session';
-	import { goto } from '$app/navigation';
+	import { _ } from 'svelte-i18n';
 
 	import ProfDetails from '$lib/components/profile/ProfDetails.svelte';
 	import History from '$lib/components/profile/History.svelte';
-	import { dataLoading } from '$lib/store/dataStore.js';
+	import { dataLoading, loginModal } from '$lib/store/dataStore';
+	import Chat from '$lib/components/chat/Chat.svelte';
+	import Messages from '$lib/components/chat/Messages.svelte';
 
 	export let data;
 	let userEmail: any = '';
 
-	$: dataLoading.set($session.loggedIn ? false : true);
+	$: dataLoading.set($session.user ? false : true);
 
 	onMount(async () => {
-		if (!$session.loggedIn) {
-			goto('./login');
-		}
 		const user: any = await data.getAuthUser();
+		if (!user) {
+			loginModal.set(true);
+			dataLoading.set(false);
+		}
 		userEmail = user.email;
 	});
 
@@ -30,6 +33,11 @@
 		} else {
 			component = comp;
 		}
+	}
+
+	function handleChangeValue(event: Event) {
+		console.log(event);
+		changeComponent(Chat);
 	}
 </script>
 
@@ -52,7 +60,7 @@
 					changeComponent(null, true);
 				}}><span class="material-symbols-outlined"> arrow_back_ios </span></button
 			>
-			<h1 class="display-4">Hesabım</h1>
+			<h1 class="display-4">{$_('nav.account')}</h1>
 			<hr />
 		</div>
 	</section>
@@ -80,9 +88,21 @@
 							>
 								<span class="material-symbols-outlined"> history </span>Hastalık Geçmişi
 							</button>
-							<li class="list-group-item">
+							<button
+								class="list-group-item w-100"
+								class:active={component == Chat}
+							>
 								<span class="material-symbols-outlined"> draft </span>Dökümanlarım
-							</li>
+							</button>
+							<button
+								class="list-group-item w-100"
+								on:click={() => {
+									changeComponent(Messages);
+								}}
+								class:active={component == Messages}
+							>
+								<span class="material-symbols-outlined"> draft </span>Mesajlar
+							</button>
 							<li class="list-group-item">
 								<span class="material-symbols-outlined"> description </span>Kayıtlarım
 							</li>
@@ -125,6 +145,15 @@
 							<li class="list-group-item">
 								<span class="material-symbols-outlined"> draft </span>Dökümanlarım
 							</li>
+							<button
+								class="list-group-item w-100"
+								on:click={() => {
+									changeComponent(Messages);
+								}}
+								class:active={component == Messages}
+							>
+								<span class="material-symbols-outlined"> draft </span>Mesajlar
+							</button>
 							<li class="list-group-item">
 								<span class="material-symbols-outlined"> description </span>Kayıtlarım
 							</li>
@@ -153,7 +182,7 @@
 							<div class="row">
 								<div class="col-12 mobileOnly" style="background-color: unset">
 									<div class="container">
-										<svelte:component this={mobileComponent} />
+										<svelte:component this={mobileComponent} on:changeValue={handleChangeValue} />
 									</div>
 								</div>
 							</div>
@@ -164,7 +193,7 @@
 						<div class="container">
 							<div class="row">
 								<div class="col pcOnly">
-									<svelte:component this={component} />
+									<svelte:component this={component} on:changeValue={handleChangeValue} />
 								</div>
 							</div>
 						</div>

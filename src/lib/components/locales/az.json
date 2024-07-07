@@ -22,7 +22,7 @@
 		"about": "Həkim Haqqında",
 		"comments": "Şərhlər",
 		"your_comment": "Şərhiniz",
-		"await_confimation": "Şərhiniz təsdiq gözləyir ..",
+		"await_confirmation": "Şərhiniz təsdiq gözləyir ..",
 		"no_comments": "Həkim haqqında şərh yoxdur"
 	},
 	"appointment": {
@@ -54,7 +54,14 @@
 		"change": "Dəyişdir",
 		"confirm": "Təsdiqlə",
 		"send": "Göndər",
-		"clear": "Təmizlə"
+		"clear": "Təmizlə",
+		"leave": "Çıxış",
+		"leave_call": "Video zəngdən çıxış",
+		"update": "Yenilə",
+		"success": "Uğurlu",
+		"add_pp": "Yeni şəkil əlavə et",
+		"remove_pp": "Profil şəklini sil",
+		"close": "Bağla"
 	},
 	"login": {
 		"login_header": "Hesaba giriş",

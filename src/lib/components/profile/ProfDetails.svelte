@@ -4,17 +4,17 @@
 	import { dataLoading, postData } from '$lib/store/dataStore';
 	import { putData } from '$lib/store/dataStore';
 	import { toast } from '@zerodevx/svelte-toast';
+	import { _ } from 'svelte-i18n';
+	import Confirm from '$lib/helpers/Confirm.svelte';
 
 	let file: any;
+	let uploadAfterSelect: boolean = false;
 	let uploadProgress = 0;
 	let uploading = false;
 	let disabled = false;
+	let showModal: boolean = false;
 
 	$: userData = $session;
-	let dialog: any; // Reference to the dialog tag
-	onMount(() => {
-		dialog = document.getElementById('confirmation-dialog');
-	});
 
 	let fileInput, avatar: any;
 
@@ -30,6 +30,7 @@
 				formData.append('file', image);
 			}
 		};
+		if (uploadAfterSelect) uploadFile(e);
 	};
 
 	async function formSubmit(e: SubmitEvent) {
@@ -50,7 +51,7 @@
 		}
 		if (userData.user?.uid) result = await putData('users', 'uid', userData.user?.uid, { ...data });
 		if (result) {
-			toast.push('Uğurlu!', {
+			toast.push($_('actions.success'), {
 				duration: 2000,
 				theme: {
 					'--toastColor': 'mintcream',
@@ -127,6 +128,10 @@
 						);
 						userData.user.photoURL = photoURL;
 						session.set({ ...userData });
+						if (uploadAfterSelect) {
+							disabled = false;
+							uploadAfterSelect = false;
+						}
 					}
 				} else {
 					console.log('File upload failed: ' + response.message);
@@ -136,6 +141,26 @@
 
 		xhr.open('POST', 'https://tekoplast.az/docktr/api/?upload');
 		xhr.send(formData);
+	}
+
+	// remove profile picture
+	async function modalConfirmed() {
+		showModal = false;
+		dataLoading.set(true);
+		if (userData.user?.uid) {
+			await putData(
+				'users',
+				'uid',
+				userData.user?.uid,
+				{
+					photoURL: null
+				},
+				true
+			);
+			userData.user.photoURL = null;
+			session.set({ ...userData });
+			dataLoading.set(false);
+		}
 	}
 </script>
 
@@ -151,7 +176,9 @@
 				<img
 					src={avatar ? avatar : userData?.user?.photoURL}
 					alt="Profile Pic"
-					style="max-width: 100px; border-radius: 100%; aspect-ratio: 1/1; object-fit: cover;"
+					style="max-width: 100px; border-radius: 100%; 
+						aspect-ratio: 1/1; object-fit: cover; cursor: pointer"
+					data-bs-toggle="dropdown"
 				/>
 				<div class="dropdown">
 					<button
@@ -160,16 +187,37 @@
 						data-bs-toggle="dropdown"
 						aria-expanded="false"
 						style="position: absolute; right: -5px; bottom: -5px;
-						background: white; border: 1px solid #ececec;
-						border-radius: 8px; padding: 5px; color: black;
-						display: flex; justify-content: center"
+							background: white; border: 1px solid #ececec;
+							border-radius: 8px; padding: 5px; color: black;
+							display: flex; justify-content: center;"
 					>
 						<span class="material-symbols-outlined icon-fill"> add </span>
 					</button>
 					<ul class="dropdown-menu">
-						<li><a class="dropdown-item" href="#">Action</a></li>
-						<li><a class="dropdown-item" href="#">Another action</a></li>
-						<li><a class="dropdown-item" href="#">Something else here</a></li>
+						<li>
+							<!-- svelte-ignore a11y-click-events-have-key-events -->
+							<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+							<label
+								for="fileInput"
+								on:click={() => {
+									uploadAfterSelect = true;
+								}}
+								class="dropdown-item d-flex align-items-center gap-1"
+								style="cursor: pointer;"
+								><span class="material-symbols-outlined"> add </span>{$_('actions.add_pp')}</label
+							>
+						</li>
+						<li>
+							<button
+								class="dropdown-item d-flex align-items-center gap-1"
+								on:click|preventDefault={() => {
+									showModal = true;
+								}}
+								><span class="material-symbols-outlined"> delete </span>{$_(
+									'actions.remove_pp'
+								)}</button
+							>
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -228,7 +276,7 @@
 	{/if} -->
 
 	<!-- END PHOTO-->
-	<label for="displayName">Adınız</label>
+	<label for="displayName">{$_('login.name_surname')}</label>
 	<input
 		name="displayName"
 		id="displayName"
@@ -236,9 +284,9 @@
 		class="form-control"
 		value={userData?.user?.displayName ?? ''}
 	/>
-	<label for="email">Email</label>
-	<input id="email" type="email" readonly class="form-control" value={userData?.user?.email} />
-	<label for="phone">Tel</label>
+	<label for="email">{$_('login.email')}</label>
+	<input id="email" type="email" class="form-control" value={userData?.user?.email} />
+	<label for="phone">{$_('login.mobile')}</label>
 	<input
 		name="phoneNumber"
 		id="phone"
@@ -246,7 +294,12 @@
 		class="form-control"
 		value={userData?.user?.phoneNumber ?? ''}
 	/>
-	<button class="btn btn-primary mt-3" {disabled}>Yenilə</button>
+	<button class="btn btn-primary mt-3 btnLoader" {disabled}>
+		<span>{$_('actions.update')}</span>
+		{#if $dataLoading}
+			<div class="loader"></div>
+		{/if}
+	</button>
 	{#if uploading}
 		<div
 			class="progress mt-3"
@@ -261,18 +314,15 @@
 	{/if}
 </form>
 
-<dialog
-	style="top: 1rem;
-    width: max-content;
-    left: 1rem;
-    margin-left: auto;
-    margin-right: 1rem;
-    border: 0px;
-    box-shadow: rgb(0 0 0 / 20%) 0px 0px 5px;
-    border-radius: 14px;"
->
-	This is an open dialog window
-</dialog>
+{#if showModal}
+	<Confirm
+		message={$_('actions.remove_pp')}
+		onConfirm={modalConfirmed}
+		onCancel={() => {
+			showModal = false;
+		}}
+	/>
+{/if}
 
 <style>
 	/* section {

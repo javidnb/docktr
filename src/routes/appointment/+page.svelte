@@ -6,12 +6,13 @@
 		doctors,
 		loginModal,
 		putData,
-		showBtnEndCall
+		showBtnEndCall,
+		joinVideoCall
 	} from '$lib/store/dataStore';
 	import { onMount } from 'svelte';
 	import { monthNames } from '$lib/helpers/dateFormatter';
 	import { session } from '$lib/session';
-	import ConfirmationModal from '$lib/helpers/ConfirmationModal.svelte';
+	import ConfirmationModal from '$lib/helpers/AppointConfirmation.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { jsDateToSQL } from '$lib/helpers/dateFormatter';
 	import VideoCall from '$lib/components/VideoCall.svelte';
@@ -20,7 +21,6 @@
 	let confirmationData: any = {};
 	let showDatePicker: boolean = false;
 	let upcomingAppointments;
-	let joinCall: boolean = false;
 	let appointmentId: any = null;
 
 	$: upcomingAppointments = $appointments.filter((ap) => new Date(ap.startTime) > new Date());
@@ -136,10 +136,10 @@
 		});
 	}
 
-	function joinVideoCall(appointment: any) {
+	function joinCall(appointment: any) {
 		dataLoading.set(true);
 		appointmentId = appointment.id;
-		joinCall = true;
+		joinVideoCall.set(true);
 	}
 
 	function checkTime(appointment: any) {
@@ -176,7 +176,7 @@
 </section>
 
 <div class="container">
-	{#if !joinCall}
+	{#if !$joinVideoCall}
 		<div class="row">
 			{#if upcomingAppointments.length}
 				{#each upcomingAppointments as appointment}
@@ -296,23 +296,27 @@
 
 									<!-- ALTDAKINI SIL, USTDEKINI KOMMENTDEN CIXART -->
 									<button
-										on:click={() => joinVideoCall(appointment)}
+										on:click={() => joinCall(appointment)}
 										class="btn btn-outline-primary mt-3 d-flex align-items-center"
 										style="background: var(--primaryColor);
 										color: white;"
 									>
 										<span class="material-symbols-outlined"> schedule </span>
-										<span class="mx-auto">{!joinCall ? 'Video görüşə qoşul' : 'Gözləyin'}</span>
+										<span class="mx-auto"
+											>{!$joinVideoCall ? 'Video görüşə qoşul' : 'Gözləyin'}</span
+										>
 									</button>
 								{:else}
 									<button
-										on:click={() => joinVideoCall(appointment)}
+										on:click={() => joinCall(appointment)}
 										class="btn btn-outline-primary mt-3 d-flex align-items-center"
 										style="background: var(--primaryColor);
 										color: white;"
 									>
 										<span class="material-symbols-outlined"> schedule </span>
-										<span class="mx-auto">{!joinCall ? 'Video görüşə qoşul' : 'Gözləyin'}</span>
+										<span class="mx-auto"
+											>{!$joinVideoCall ? 'Video görüşə qoşul' : 'Gözləyin'}</span
+										>
 									</button>
 								{/if}
 							</div>
@@ -414,13 +418,15 @@
 									</button> -->
 								{:else}
 									<button
-										on:click={() => joinVideoCall(appointment)}
+										on:click={() => joinCall(appointment)}
 										class="btn btn-outline-primary mt-3 d-flex align-items-center"
 										style="background: var(--primaryColor);
 										color: white;"
 									>
 										<span class="material-symbols-outlined"> schedule </span>
-										<span class="mx-auto">{!joinCall ? 'Video görüşə qoşul' : 'Gözləyin'}</span>
+										<span class="mx-auto"
+											>{!$joinVideoCall ? 'Video görüşə qoşul' : 'Gözləyin'}</span
+										>
 									</button>
 								{/if}
 							</div>
@@ -472,7 +478,7 @@
 				class="btn btn-outline-primary"
 				on:click={() => {
 					showBtnEndCall.set(false);
-					joinCall = false;
+					joinVideoCall.set(false);
 				}}
 				><span style="font-size: 2rem" class="material-symbols-outlined icon-fill">
 					call_end

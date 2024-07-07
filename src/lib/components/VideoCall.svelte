@@ -2,8 +2,9 @@
 	import { onMount, onDestroy } from 'svelte';
 	import DailyIframe from '@daily-co/daily-js';
 	import type { DailyCall } from '@daily-co/daily-js';
-	import { dataLoading, putData, showBtnEndCall } from '$lib/store/dataStore';
+	import { dataLoading, putData, joinVideoCall } from '$lib/store/dataStore';
 	import { session } from '$lib/session';
+	import { _ } from 'svelte-i18n';
 
 	export let appointmentId: number;
 	let callFrame: DailyCall | null = null;
@@ -16,9 +17,7 @@
 	let roomId: any = null;
 
 	onMount(() => {
-		console.log(appointmentId);
 		getRoom();
-		// createRoom();
 	});
 
 	onDestroy(() => {
@@ -55,8 +54,6 @@
 				} else {
 					createRoom();
 				}
-
-				// launchVideoChatUI();
 			} else {
 				createRoom();
 			}
@@ -106,7 +103,7 @@
 
 	function launchVideoChatUI() {
 		callFrame = DailyIframe.createFrame(videoContainer, {
-			showLeaveButton: false,
+			showLeaveButton: true,
 			showFullscreenButton: true,
 			iframeStyle: {
 				position: 'absolute',
@@ -120,36 +117,37 @@
 		});
 
 		callFrame.join({ url: roomUrl, videoSource: true, audioSource: true }).then(() => {
+			// SET USERNAME
 			if (callFrame && $session.user?.displayName) {
 				callFrame?.setUserName($session.user?.displayName);
 			}
 
-			showBtnEndCall.set(true);
+			// callFrame?.updateCustomTrayButtons({
+			// 	btnLeave: {
+			// 		iconPath: 'https://example.com/path/to/your/icon.svg',
+			// 		iconPathDarkMode: 'https://example.com/path/to/your/darkmode/icon.svg',
+			// 		label: $_('actions.leave'),
+			// 		tooltip: $_('actions.leave_call')
+			// 	}
+			// });
+
+			// callFrame?.on('custom-button-click', (ev) => {
+			// 	const buttonID = ev.button_id;
+			// 	if (buttonID !== 'btnLeave') return;
+			// 	console.log('clicked leave button');
+			// 	callFrame?.leave();
+			// 	joinVideoCall.set(false);
+			// });
+
+			// showBtnEndCall.set(true);
+			joinVideoCall.set(true);
 			dataLoading.set(false);
 			if (!callFrame) return;
 
-			callFrame.on('joined-meeting', () => {
-				const localParticipant = callFrame?.participants().local;
-				if (localParticipant?.tracks.video.persistentTrack) {
-					const localStream = new MediaStream([localParticipant.tracks.video.persistentTrack]);
-					localVideo.srcObject = localStream;
-				}
-			});
-
-			callFrame.on('participant-joined', (event) => {
-				const videoTrack = event.participant.tracks.video.persistentTrack;
-				if (videoTrack) {
-					const remoteStream = new MediaStream([videoTrack]);
-					remoteVideo.srcObject = remoteStream;
-				}
-			});
-
-			callFrame.on('participant-updated', (event) => {
-				const videoTrack = event.participant.tracks.video.persistentTrack;
-				if (videoTrack) {
-					const remoteStream = new MediaStream([videoTrack]);
-					remoteVideo.srcObject = remoteStream;
-				}
+			callFrame.on('left-meeting', async (event) => {
+				console.log('left event: ', event);
+				joinVideoCall.set(false);
+				console.log("session id: ",callFrame?.meetingSessionSummary());
 			});
 		});
 

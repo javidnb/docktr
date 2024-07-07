@@ -46,3 +46,17 @@ export function jsDateToSQL(date: any) {
 
 	return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
+
+export function timestamp(tm: any) {
+	// Create a Date object from the seconds and nanoseconds
+	const milliseconds = tm.seconds * 1000 + Math.floor(tm.nanoseconds / 1000000);
+	const date = new Date(milliseconds);
+
+	const day = String(date.getDate()).padStart(2, '0');
+	const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+	const year = date.getFullYear();
+	const hours = String(date.getHours()).padStart(2, '0');
+	const minutes = String(date.getMinutes()).padStart(2, '0');
+
+	return `${day}-${month}-${year} ${hours}:${minutes}`;
+}

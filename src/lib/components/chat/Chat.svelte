@@ -1,18 +1,26 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { collection, addDoc, query, where, onSnapshot, orderBy } from 'firebase/firestore';
+	import {
+		collection,
+		addDoc,
+		query,
+		where,
+		onSnapshot,
+		orderBy,
+		Timestamp
+	} from 'firebase/firestore';
 	import { db } from '$lib/firebase.client';
 	import { session } from '$lib/session';
 	import { selectedUser } from '$lib/store/dataStore';
+	import { timestamp } from '$lib/helpers/dateFormatter';
 
 	let messages: any = [];
 	let newMessage = '';
 	let currentUser = $session.user?.uid;
-	export let user = $selectedUser;
+	export let user = $selectedUser ?? '1TgHpEOspfZmDhanm8m1XLgm29u1';
 
 	const messagesCollection = collection(db, 'messages');
 
-	// Fetch and subscribe to messages in real-time
 	onMount(() => {
 		console.log(currentUser);
 		const q = query(
@@ -26,6 +34,7 @@
 			messages = snapshot.docs
 				.filter((doc) => doc.data().participants.includes(user))
 				.map((doc) => doc.data());
+			console.log(messages);
 		});
 
 		return () => {
@@ -49,17 +58,31 @@
 	};
 </script>
 
-<main>
-	<h1>Chat with User {user}</h1>
-	<div class="chat">
+<main class="d-flex flex-column h-100">
+	<h1>{user}</h1>
+	<div class="chat mb-3">
 		{#each messages as message}
-			<div class="message {message.fromUser === currentUser ? 'sent' : 'received'}">
+			<div
+				class="message d-flex flex-column {message.fromUser === currentUser ? 'sent' : 'received'}"
+			>
 				{message.message}
+				<span style="font-size: smaller; color: gray">{timestamp(message.timestamp)}</span>
 			</div>
 		{/each}
 	</div>
-	<input type="text" bind:value={newMessage} placeholder="Type a message..." />
-	<button on:click={sendMessage}>Send</button>
+	<div class="input-group d-flex mt-auto">
+		<input
+			class="form-control"
+			type="text"
+			bind:value={newMessage}
+			placeholder="Type a message..."
+		/>
+		<button
+			style="min-width: 60px;"
+			class="btn btn-primary d-flex align-items-center justify-content-center"
+			on:click={sendMessage}><span class="material-symbols-outlined"> send </span></button
+		>
+	</div>
 </main>
 
 <style>

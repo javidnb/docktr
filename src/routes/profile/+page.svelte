@@ -89,8 +89,7 @@
 								<span class="material-symbols-outlined"> history </span>Hastalık Geçmişi
 							</button>
 							<button
-								class="list-group-item w-100"
-								class:active={component == Chat}
+								class="list-group-item w-100"								
 							>
 								<span class="material-symbols-outlined"> draft </span>Dökümanlarım
 							</button>
@@ -99,7 +98,7 @@
 								on:click={() => {
 									changeComponent(Messages);
 								}}
-								class:active={component == Messages}
+								class:active={component == Messages || component == Chat }
 							>
 								<span class="material-symbols-outlined"> draft </span>Mesajlar
 							</button>
@@ -189,8 +188,8 @@
 					</div>
 				{:else}
 					<div class="col-md-8 col-lg-9 col-xxl-10 kont pcOnly">
-						<div class="container">
-							<div class="row">
+						<div class="container h-100">
+							<div class="row h-100">
 								<div class="col pcOnly">
 									<svelte:component this={component} on:changeValue={handleChangeValue} />
 								</div>

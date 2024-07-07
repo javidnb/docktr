@@ -148,9 +148,8 @@
 							<button
 								class="list-group-item w-100"
 								on:click={() => {
-									changeComponent(Messages);
+									changeComponent(Messages, true);
 								}}
-								class:active={component == Messages}
 							>
 								<span class="material-symbols-outlined"> draft </span>Mesajlar
 							</button>

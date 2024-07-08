@@ -8,12 +8,16 @@
 		loginModal,
 		appointments,
 		showBtnEndCall,
-		putData
+		putData,
+
+		selectedUser
+
 	} from '$lib/store/dataStore';
 	import Modal from '$lib/helpers/Modal.svelte';
 	import Login from './login/Login.svelte';
 	import { goto } from '$app/navigation';
 	import { locale, _ } from 'svelte-i18n';
+	import Chat from './chat/Chat.svelte';
 
 	let currentDate = new Date();
 	let showModal: boolean = false;
@@ -37,6 +41,8 @@
 	$: curPage = $page.route.id;
 
 	$: showModal = !!$loginModal;
+
+	let contactModal = false;
 
 	$: if (showModal == false) loginModal.set(false);
 </script>
@@ -236,9 +242,14 @@
 					>
 				</li>
 				<li class="nav-item pcOnly">
-					<a class="nav-link" href="/"
+					<button
+						class="nav-link"
+						on:click={() => {
+							selectedUser.set('1TgHpEOspfZmDhanm8m1XLgm29u1');
+							contactModal = true;
+						}}
 						><span class="material-symbols-outlined"> dialpad </span>
-						<span class="navLinkText">{$_('nav.contact')}</span></a
+						<span class="navLinkText">{$_('nav.contact')}</span></button
 					>
 				</li>
 

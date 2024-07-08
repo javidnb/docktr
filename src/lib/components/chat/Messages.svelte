@@ -5,7 +5,6 @@
 	import { session } from '$lib/session';
 	import { createEventDispatcher } from 'svelte';
 	import { selectedUser } from '$lib/store/dataStore';
-	import { timestamp } from '$lib/helpers/dateFormatter';
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
 
@@ -88,11 +87,15 @@
 			}}
 		>
 			<div class="d-flex align-items-center" style="overflow-x: hidden;">
-				<span style="font-size: 30px; padding-left: .5rem" class="material-symbols-outlined icon-fill s-KnlqTvvrWAx4"
-					>account_circle</span
+				<span
+					style="font-size: 30px; padding-left: .5rem"
+					class="material-symbols-outlined icon-fill s-KnlqTvvrWAx4">account_circle</span
 				>
-				<div class="d-flex flex-column align-items-start justify-content-center ps-2" style="height: 40px;">
-					{user}
+				<div
+					class="d-flex flex-column align-items-start justify-content-center ps-2"
+					style="height: 40px;"
+				>
+					{user == '1TgHpEOspfZmDhanm8m1XLgm29u1' ? 'Contact us' : user}
 					<!-- <span style="font-size: smaller; color: gray">{timestamp(lastMsgTime)}</span> -->
 				</div>
 			</div>

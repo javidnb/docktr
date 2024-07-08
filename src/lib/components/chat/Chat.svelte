@@ -12,7 +12,7 @@
 
 	let messages: any = [];
 	let newMessage = '';
-	let currentUser = $session.user?.uid;
+	let currentUser = $session.user?.uid || null;
 	let user: any;
 	$: curPage = $page.route.id;
 
@@ -33,23 +33,25 @@
 	});
 
 	function getMessages() {
-		const q = query(
-			messagesCollection,
-			where('participants', 'array-contains', currentUser),
-			orderBy('timestamp')
-		);
+		if (currentUser) {
+			const q = query(
+				messagesCollection,
+				where('participants', 'array-contains', currentUser),
+				orderBy('timestamp')
+			);
 
-		const unsubscribe = onSnapshot(q, (snapshot) => {
-			messages = snapshot.docs
-				.filter((doc) => doc.data().participants.includes(user))
-				.map((doc) => doc.data());
-			scrollToBottom();
-		});
+			const unsubscribe = onSnapshot(q, (snapshot) => {
+				messages = snapshot.docs
+					.filter((doc) => doc.data().participants.includes(user))
+					.map((doc) => doc.data());
+				scrollToBottom();
+			});
 
-		return () => {
-			unsubscribe();
-			selectedUser.set(null);
-		};
+			return () => {
+				unsubscribe();
+				selectedUser.set(null);
+			};
+		}
 	}
 
 	// Send a new message
@@ -108,7 +110,7 @@
 
 <main class="d-flex flex-column h-100">
 	{#if curPage != '/messages'}
-		<h1>{user}</h1>
+		<h4>{user == '1TgHpEOspfZmDhanm8m1XLgm29u1' ? 'Contact us' : user}</h4>
 	{/if}
 	<div
 		class="chat mb-3 d-flex flex-column gap-1"
@@ -168,7 +170,7 @@
 				padding-inline: .5rem;
 				position: relative"
 			>
-				{file.name.slice(0,15)}
+				{file.name.slice(0, 15)}
 				<button
 					on:click={() => {
 						file = null;

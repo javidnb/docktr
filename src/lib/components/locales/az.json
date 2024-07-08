@@ -62,7 +62,8 @@
 		"success": "Uğurlu",
 		"add_pp": "Yeni şəkil əlavə et",
 		"remove_pp": "Profil şəklini sil",
-		"close": "Bağla"
+		"close": "Bağla",
+		"add_file":"Fayl əlavə et"
 	},
 	"login": {
 		"login_header": "Hesaba giriş",

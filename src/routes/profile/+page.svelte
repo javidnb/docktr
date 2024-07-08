@@ -88,17 +88,15 @@
 							>
 								<span class="material-symbols-outlined"> history </span>Hastalık Geçmişi
 							</button>
-							<button
-								class="list-group-item w-100"								
-							>
+							<button class="list-group-item w-100">
 								<span class="material-symbols-outlined"> draft </span>Dökümanlarım
 							</button>
 							<button
 								class="list-group-item w-100"
 								on:click={() => {
-									changeComponent(Messages);
+									changeComponent(Messages, true);
 								}}
-								class:active={component == Messages || component == Chat }
+								class:active={component == Messages || component == Chat}
 							>
 								<span class="material-symbols-outlined"> draft </span>Mesajlar
 							</button>

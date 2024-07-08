@@ -1,20 +1,35 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { collection, query, where, getDocs } from 'firebase/firestore';
-	import { db } from '$lib/firebase.client';
+	import { collection, query, where, getDocs, CollectionReference } from 'firebase/firestore';
+	import { initializeFirebase, db } from '$lib/firebase.client';
 	import { session } from '$lib/session';
 	import { createEventDispatcher } from 'svelte';
 	import { selectedUser } from '$lib/store/dataStore';
 	import { timestamp } from '$lib/helpers/dateFormatter';
 	import { page } from '$app/stores';
+	import { browser } from '$app/environment';
 
-	const messagesCollection = collection(db, 'messages');
+	let messagesCollection: CollectionReference;
 	let messagesGroupedByUser: any = [];
+	if (browser) {
+		messagesGroupedByUser = localStorage.getItem('msgs')
+			? JSON.parse(localStorage.getItem('msgs') || '')
+			: [];
+	}
 	const dispatch = createEventDispatcher();
 	$: curPage = $page.route.id;
+	$: if ($session.user) getMsgs();
 
 	onMount(async () => {
-		if ($session.user) {
+		await initializeFirebase();
+		if (db) {
+			messagesCollection = collection(db, 'messages');
+			if ($session.user) getMsgs();
+		}
+	});
+
+	async function getMsgs() {
+		if (messagesCollection) {
 			const q = query(
 				messagesCollection,
 				where('participants', 'array-contains', $session.user?.uid)
@@ -44,11 +59,13 @@
 				lastMsgTime: groupedMessages[user][groupedMessages[user].length - 1].timestamp
 			}));
 
+			localStorage.setItem('msgs', JSON.stringify(messagesGroupedByUser));
+
 			if (curPage == '/messages') {
 				selectedUser.set(messagesGroupedByUser[0].user);
 			}
 		}
-	});
+	}
 </script>
 
 {#if curPage != '/messages'}

@@ -1,11 +1,14 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, afterUpdate } from 'svelte';
 	import { collection, addDoc, query, where, onSnapshot, orderBy } from 'firebase/firestore';
-	import { db } from '$lib/firebase.client';
+	import { db, initializeFirebase } from '$lib/firebase.client';
 	import { session } from '$lib/session';
 	import { selectedUser } from '$lib/store/dataStore';
 	import { timestamp } from '$lib/helpers/dateFormatter';
 	import { page } from '$app/stores';
+	import { tooltip } from 'svooltip';
+	import 'svooltip/styles.css';
+	import { _ } from 'svelte-i18n';
 
 	let messages: any = [];
 	let newMessage = '';
@@ -14,14 +17,19 @@
 	$: curPage = $page.route.id;
 
 	$: if ($selectedUser) {
-		user = $selectedUser ?? '1TgHpEOspfZmDhanm8m1XLgm29u1';
+		user = $selectedUser;
 		getMessages();
 	}
 
 	const messagesCollection = collection(db, 'messages');
 
-	onMount(() => {
+	onMount(async () => {
+		await initializeFirebase();
 		getMessages();
+	});
+
+	afterUpdate(() => {
+		scrollToBottom();
 	});
 
 	function getMessages() {
@@ -35,6 +43,7 @@
 			messages = snapshot.docs
 				.filter((doc) => doc.data().participants.includes(user))
 				.map((doc) => doc.data());
+			scrollToBottom();
 		});
 
 		return () => {
@@ -56,24 +65,36 @@
 			newMessage = '';
 		}
 	};
+
+	// SCROLLS MESSAGES CONTAINER TO BOTTOM TO SHOW NEWER MSGS
+	const scrollToBottom = () => {
+		const container = document.getElementById('messages-container');
+		if (container) {
+			container.scrollTop = container.scrollHeight;
+		}
+	};
 </script>
 
 <main class="d-flex flex-column h-100">
 	{#if curPage != '/messages'}
 		<h1>{user}</h1>
 	{/if}
-	<div class="chat mb-3 d-flex flex-column gap-1">
+	<div
+		class="chat mb-3 d-flex flex-column gap-1"
+		id="messages-container"
+		style="padding-right: .5rem;"
+	>
 		{#each messages as message}
 			<div
-				class="d-flex align-items-center {message.fromUser !== currentUser
+				class="d-flex align-items-center w-75 {message.fromUser !== currentUser
 					? 'flex-row'
-					: 'flex-row-reverse'}"
+					: 'flex-row-reverse align-self-end'}"
 			>
-				<span style="font-size: 30px;" class="material-symbols-outlined s-KnlqTvvrWAx4"
+				<span style="font-size: 30px; color: #628a57" class="material-symbols-outlined icon-fill"
 					>account_circle</span
 				>
 				<div
-					class="message d-flex flex-column flex-1 {message.fromUser === currentUser
+					class="message d-flex flex-column flex-1 px-3 {message.fromUser === currentUser
 						? 'sent'
 						: 'received'}"
 				>
@@ -83,7 +104,19 @@
 			</div>
 		{/each}
 	</div>
-	<div class="input-group d-flex mt-auto">
+	<div class="input-group d-flex mt-auto bg-white" id="msgContainer">
+		<button
+			style="min-width: 60px; border:1px solid rgb(222 226 230); border-right: none"
+			class="btn btn-outline-secondary d-flex align-items-center justify-content-center"
+			id="btnAttach"
+			on:click={sendMessage}
+			use:tooltip={{
+				content: $_('actions.add_file'),
+				placement: 'top-start'
+			}}
+		>
+			<span class="material-symbols-outlined"> attach_file </span>
+		</button>
 		<input
 			class="form-control"
 			type="text"
@@ -107,6 +140,17 @@
 		padding: 8px;
 		margin: 4px;
 		border-radius: 4px;
+	}
+	.message::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 0;
+		height: 0;
+		border-top: 10px solid #e1ffc7;
+		border-right: 10px solid transparent;
+		border-bottom-left-radius: 10px;
 	}
 	.sent {
 		background-color: #daf8cb;

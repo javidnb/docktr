@@ -22,17 +22,23 @@ const firebaseConfig = {
 	measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
-export const initializeFirebase = () => {
-	if (!browser) {
-		throw new Error("Can't use the Firebase client on the server.");
-	}
-	if (!app) {
-		app = initializeApp(firebaseConfig);
-		auth = getAuth(app);
-		messaging = getMessaging(app);
-		db = getFirestore(app);
-		// provider = new GoogleAuthProvider();
-	}
+export const initializeFirebase = (): Promise<void> => {
+	return new Promise((resolve, reject) => {
+		try {
+			if (!browser) {
+				throw new Error("Can't use the Firebase client on the server.");
+			}
+			if (!app) {
+				app = initializeApp(firebaseConfig);
+				auth = getAuth(app);
+				messaging = getMessaging(app);
+				db = getFirestore(app);
+			}
+			resolve();
+		} catch (error) {
+			reject(error);
+		}
+	});
 };
 
 export function logout() {

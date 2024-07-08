@@ -31,14 +31,14 @@
 	<div class="container">
 		<div class="row">
 			<div class="col">
-				<h5>{$_('nav.branches')}</h5>
+				<!-- <h5>{$_('nav.branches')}</h5> -->
 				<BranchSlider />
 			</div>
 		</div>
 	</div>
 </section>
 
-<section class="faq py-5" style="background-color: #f9f9f9;">
+<section class="faq pb-5 pt-4" style="background-color: #f9f9f9;">
 	<div class="container">
 		<div class="row">
 			<div class="col">

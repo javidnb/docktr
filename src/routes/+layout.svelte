@@ -24,7 +24,8 @@
 		let local = $locale;
 		locale.set(newLocale);
 		if ($session.user?.uid && local != newLocale) {
-			await putData('users', 'uid', $session.user?.uid, { lang: newLocale }, true);
+			// TODO this puts data to db every time?
+			// await putData('users', 'uid', $session.user?.uid, { lang: newLocale }, true);
 		}
 	};
 

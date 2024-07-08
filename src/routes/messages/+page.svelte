@@ -10,15 +10,14 @@
 </script>
 
 <section>
-	<div class="jumbotron" style="padding-top: 2rem; background-color: #e2e9ef">
-		<h1 class="display-4">{$_('nav.messages')}</h1>
-		<hr />
+	<div class="jumbotron" style="padding-block: 1rem; background-color: #e2e9ef">
+		<h1 class="display-4 mb-0">{$_('nav.messages')}</h1>
 	</div>
 </section>
 
-<section class="pt-3 pb-5">
+<section class="pt-3 pb-5" style="background-color: white;">
 	<div class="container">
-		<div class="row">
+		<div class="row" style="height: calc(100dvh - 280px)">
 			<div class="col-md-4 col-lg-3">
 				<div style="height: 100%; border-right: 1px solid #ececec; padding-right: .5rem">
 					<Messages />

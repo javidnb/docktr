@@ -73,6 +73,23 @@
 			container.scrollTop = container.scrollHeight;
 		}
 	};
+
+	// ADDING FILES
+	let fileInput: any, file: any, avatar: any;
+	const onFileSelected = (e: any) => {
+		let image = e.target.files[0];
+		console.log(image);
+		file = image;
+		let reader = new FileReader();
+		reader.readAsDataURL(image);
+		reader.onload = async (e) => {
+			if (e.target) {
+				avatar = e.target.result;
+				const formData = new FormData();
+				formData.append('file', image);
+			}
+		};
+	};
 </script>
 
 <button
@@ -113,13 +130,16 @@
 						: 'received'}"
 				>
 					{message.message}
-					<span style="font-size: smaller; color: gray">{timestamp(message.timestamp)}</span>
+					<span style="font-size: smaller; color: gray">{@html timestamp(message.timestamp)}</span>
 				</div>
 			</div>
 		{/each}
 	</div>
 	<div class="input-group d-flex mt-auto bg-white" id="msgContainer">
-		<button
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+		<label
+			for="fileInput"
 			style="min-width: 60px; border:1px solid rgb(222 226 230); border-right: none"
 			class="btn btn-outline-secondary d-flex align-items-center justify-content-center"
 			id="btnAttach"
@@ -130,7 +150,47 @@
 			}}
 		>
 			<span class="material-symbols-outlined"> attach_file </span>
-		</button>
+		</label>
+		<input
+			class="form-control d-none"
+			id="fileInput"
+			type="file"
+			accept=".jpg, .jpeg, .png"
+			on:change={(e) => onFileSelected(e)}
+			bind:this={fileInput}
+		/>
+		<!-- ADDING FILES-->
+		{#if file}
+			<span
+				style="display: flex;
+				align-items: center;
+				border: 1px solid #dee2e6;
+				padding-inline: .5rem;
+				position: relative"
+			>
+				{file.name.slice(0,15)}
+				<button
+					on:click={() => {
+						file = null;
+					}}
+					class="btn"
+					style="position: absolute;
+						top: 5px;
+						right: 5px;
+						background-color: #bd2626;
+						color: white;
+						border-radius: 100%;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						width: 23px;
+						height: 23px;"
+				>
+					<span style="font-size: 15px" class="material-symbols-outlined"> close </span>
+				</button>
+			</span>
+		{/if}
+		<!-- END FILES-->
 		<input
 			class="form-control"
 			type="text"
@@ -156,7 +216,7 @@
 		border-radius: 4px;
 	}
 	.sent {
-		background-color: #daf8cb;
+		background-color: var(--primaryColor);
 		text-align: right;
 	}
 	.received {

@@ -17,7 +17,7 @@
 
 <section class="py-3" style="background-color: white;">
 	<div class="container">
-		<div class="row" style="height: calc(100dvh - 250px)">
+		<div class="row msgRow">
 			<div class="col-md-4 col-lg-3 {$selectedUser ? 'pcOnly' : ''}">
 				<div style="height: 100%; border-right: 1px solid #ececec; padding-right: .5rem">
 					<Messages />
@@ -27,11 +27,23 @@
 				{#if $selectedUser}
 					<Chat />
 				{:else}
-					<div class="d-flex h-100 align-items-center justify-content-center">
-						<h6 style="color: gray">Select user</h6>
+					<div class="d-flex h-100 align-items-center justify-content-center pcOnly">
+						<h6 style="color: gray">Sehiyye.online</h6>
 					</div>
 				{/if}
 			</div>
 		</div>
 	</div>
 </section>
+
+<style>
+	.msgRow {
+		height: calc(100dvh - 250px);
+	}
+
+	@media screen and (max-width: 992px) {
+		.msgRow {
+			height: calc(-223px + 100dvh);
+		}
+	}
+</style>

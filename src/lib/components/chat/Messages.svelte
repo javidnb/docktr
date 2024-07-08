@@ -88,12 +88,12 @@
 			}}
 		>
 			<div class="d-flex align-items-center" style="overflow-x: hidden;">
-				<span style="font-size: 30px;" class="material-symbols-outlined icon-fill s-KnlqTvvrWAx4"
+				<span style="font-size: 30px; padding-left: .5rem" class="material-symbols-outlined icon-fill s-KnlqTvvrWAx4"
 					>account_circle</span
 				>
-				<div class="d-flex flex-column align-items-start">
+				<div class="d-flex flex-column align-items-start justify-content-center ps-2" style="height: 40px;">
 					{user}
-					<span style="font-size: smaller; color: gray">{timestamp(lastMsgTime)}</span>
+					<!-- <span style="font-size: smaller; color: gray">{timestamp(lastMsgTime)}</span> -->
 				</div>
 			</div>
 		</button>
@@ -109,7 +109,7 @@
 
 <style>
 	.active {
-		background-color: var(--primaryColor);
+		background-color: #596655;
 		color: white;
 	}
 </style>

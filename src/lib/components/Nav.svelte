@@ -127,7 +127,11 @@
 						</li>
 					</ul>
 				</div>
-				<ul class="navbar-nav ml-auto" style="margin-left: auto;">
+				<ul
+					class="navbar-nav ml-auto"
+					style="margin-left: auto;display: flex;
+    					flex-direction: row;"
+				>
 					{#if !$session.loggedIn}
 						<li class="nav-item">
 							<button class="nav-link" on:click|preventDefault={() => loginModal.set(true)}>
@@ -138,20 +142,24 @@
 					{:else}
 						{#if $session.user?.admin}
 							<li class="nav-item">
-								<a class="nav-link" href="../admin" class:icon-fill={curPage == '/admin'}>
+								<a
+									class="nav-link topnavlink"
+									href="../admin"
+									class:icon-fill={curPage == '/admin'}
+								>
 									<span class="material-symbols-outlined icon-fill"> admin_panel_settings </span>
 									<span>Admin</span></a
 								>
 							</li>
 						{/if}
 						<li class="nav-item">
-							<a class="nav-link" href="../messages">
+							<a class="nav-link topnavlink" href="../messages">
 								<span class="material-symbols-outlined icon-fill"> mail </span>
 								{$_('nav.messages')}
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="../profile">
+							<a class="nav-link topnavlink" href="../profile">
 								<span class="material-symbols-outlined icon-fill"> account_circle </span>
 								{$_('nav.account')}
 							</a>
@@ -352,7 +360,10 @@
 		.nav-link {
 			border-radius: 0px !important;
 			display: flex;
-			flex-direction: column;
+			/* flex-direction: column; */
+		}
+		.topnavlink .icon-fill {
+			background: unset;
 		}
 		.navLinkText {
 			font-size: x-small;

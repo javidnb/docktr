@@ -62,7 +62,7 @@
 				></a
 			>
 			<button
-				class="navbar-toggler d-none"
+				class="navbar-toggler"
 				type="button"
 				data-bs-toggle="collapse"
 				data-bs-target="#navbarSupportedContent"

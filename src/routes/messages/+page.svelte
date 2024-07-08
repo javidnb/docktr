@@ -15,10 +15,10 @@
 	</div>
 </section>
 
-<section class="pt-3 pb-5" style="background-color: white;">
+<section class="py-3" style="background-color: white;">
 	<div class="container">
-		<div class="row" style="height: calc(100dvh - 280px)">
-			<div class="col-md-4 col-lg-3">
+		<div class="row" style="height: calc(100dvh - 250px)">
+			<div class="col-md-4 col-lg-3 {$selectedUser ? 'pcOnly' : ''}">
 				<div style="height: 100%; border-right: 1px solid #ececec; padding-right: .5rem">
 					<Messages />
 				</div>

@@ -94,7 +94,7 @@
 							<button
 								class="list-group-item w-100"
 								on:click={() => {
-									changeComponent(Messages, true);
+									changeComponent(Messages);
 								}}
 								class:active={component == Messages || component == Chat}
 							>

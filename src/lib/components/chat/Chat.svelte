@@ -75,6 +75,20 @@
 	};
 </script>
 
+<button
+	class="btn btn-outline-primary mobileOnly"
+	style="position: absolute;
+		top: 77px;
+		left: 1rem;
+		background: rgb(153 155 152);
+		padding: 6px 0px 0px 8px;
+		color: white;
+		width: 3.5rem;"
+	on:click={() => selectedUser.set(null)}
+>
+	<span class="material-symbols-outlined">arrow_back_ios</span>
+</button>
+
 <main class="d-flex flex-column h-100">
 	{#if curPage != '/messages'}
 		<h1>{user}</h1>
@@ -133,24 +147,13 @@
 
 <style>
 	.chat {
-		max-height: 400px;
+		max-height: 430px;
 		overflow-y: auto;
 	}
 	.message {
 		padding: 8px;
 		margin: 4px;
 		border-radius: 4px;
-	}
-	.message::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		right: 0;
-		width: 0;
-		height: 0;
-		border-top: 10px solid #e1ffc7;
-		border-right: 10px solid transparent;
-		border-bottom-left-radius: 10px;
 	}
 	.sent {
 		background-color: #daf8cb;

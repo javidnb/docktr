@@ -61,9 +61,9 @@
 
 			localStorage.setItem('msgs', JSON.stringify(messagesGroupedByUser));
 
-			if (curPage == '/messages') {
-				selectedUser.set(messagesGroupedByUser[0].user);
-			}
+			// if (curPage == '/messages') {
+			// 	selectedUser.set(messagesGroupedByUser[0].user);
+			// }
 		}
 	}
 </script>

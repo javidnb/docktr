@@ -80,96 +80,98 @@
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<div class="dropdown dropstart">
-					<button
-						class="btn btn-outline-primary dropdown-toggle d-flex align-items-center gap-1 langSelector"
-						type="button"
-						data-bs-toggle="dropdown"
-						aria-expanded="false"
-						style="#d5e4d1"
-					>
-						<span class="material-symbols-outlined"> globe </span>{$locale
-							?.toUpperCase()
-							.slice(0, 2)}
-					</button>
-					<ul class="dropdown-menu">
-						<li>
-							<button class="dropdown-item" on:click={() => changeLocale('az')}
-								><img
-									style="width:20px;height:20px;margin-right:.5rem"
-									src="https://ik.imagekit.io/d2nwsj0ktvh/img/az.png"
-									alt="Azerbaijan Flag"
-								/>Azərbaycan dili</button
-							>
-						</li>
-						<li>
-							<button class="dropdown-item" on:click={() => changeLocale('tr')}>
-								<img
-									style="width:20px;height:20px;margin-right:.5rem"
-									src="https://ik.imagekit.io/d2nwsj0ktvh/turkey_dBbuCptvk.png?updatedAt=1719140350211"
-									alt="Turkish Flag"
-								/>Türkçe</button
-							>
-						</li>
-						<li>
-							<button class="dropdown-item" on:click={() => changeLocale('ru')}>
-								<img
-									style="width:20px;height:20px;margin-right:.5rem"
-									src="https://ik.imagekit.io/d2nwsj0ktvh/img/ru.png"
-									alt="Russian Flag"
-								/>Русский</button
-							>
-						</li>
-						<li>
-							<button class="dropdown-item" on:click={() => changeLocale('en')}>
-								<img
-									style="width:20px;height:20px;margin-right:.5rem"
-									src="https://ik.imagekit.io/d2nwsj0ktvh/img/en.png"
-									alt="English Flag"
-								/>English</button
-							>
-						</li>
-					</ul>
-				</div>
-				<ul
-					class="navbar-nav ml-auto topNav"
-					style="margin-left: auto;display: flex;
-    					flex-direction: row;"
-				>
-					{#if !$session.loggedIn}
-						<li class="nav-item">
-							<button class="nav-link" on:click|preventDefault={() => loginModal.set(true)}>
-								<span class="material-symbols-outlined"> input </span>
-								{$_('nav.login')}
-							</button>
-						</li>
-					{:else}
-						{#if $session.user?.admin}
-							<li class="nav-item">
-								<a
-									class="nav-link topnavlink"
-									href="../admin"
-									class:icon-fill={curPage == '/admin'}
-								>
-									<span class="material-symbols-outlined icon-fill"> admin_panel_settings </span>
-									<span>Admin</span></a
+				<div class="collapseContainer d-flex align-items-center justify-content-center">
+					<div class="dropdown dropstart">
+						<button
+							class="btn btn-outline-primary dropdown-toggle d-flex align-items-center gap-1 langSelector"
+							type="button"
+							data-bs-toggle="dropdown"
+							aria-expanded="false"
+							style="#d5e4d1"
+						>
+							<span class="material-symbols-outlined"> globe </span>{$locale
+								?.toUpperCase()
+								.slice(0, 2)}
+						</button>
+						<ul class="dropdown-menu">
+							<li>
+								<button class="dropdown-item" on:click={() => changeLocale('az')}
+									><img
+										style="width:20px;height:20px;margin-right:.5rem"
+										src="https://ik.imagekit.io/d2nwsj0ktvh/img/az.png"
+										alt="Azerbaijan Flag"
+									/>Azərbaycan dili</button
 								>
 							</li>
+							<li>
+								<button class="dropdown-item" on:click={() => changeLocale('tr')}>
+									<img
+										style="width:20px;height:20px;margin-right:.5rem"
+										src="https://ik.imagekit.io/d2nwsj0ktvh/turkey_dBbuCptvk.png?updatedAt=1719140350211"
+										alt="Turkish Flag"
+									/>Türkçe</button
+								>
+							</li>
+							<li>
+								<button class="dropdown-item" on:click={() => changeLocale('ru')}>
+									<img
+										style="width:20px;height:20px;margin-right:.5rem"
+										src="https://ik.imagekit.io/d2nwsj0ktvh/img/ru.png"
+										alt="Russian Flag"
+									/>Русский</button
+								>
+							</li>
+							<li>
+								<button class="dropdown-item" on:click={() => changeLocale('en')}>
+									<img
+										style="width:20px;height:20px;margin-right:.5rem"
+										src="https://ik.imagekit.io/d2nwsj0ktvh/img/en.png"
+										alt="English Flag"
+									/>English</button
+								>
+							</li>
+						</ul>
+					</div>
+					<ul
+						class="navbar-nav ml-auto topNav"
+						style="margin-left: auto;display: flex;
+							flex-direction: row;"
+					>
+						{#if !$session.loggedIn}
+							<li class="nav-item">
+								<button class="nav-link" on:click|preventDefault={() => loginModal.set(true)}>
+									<span class="material-symbols-outlined"> input </span>
+									{$_('nav.login')}
+								</button>
+							</li>
+						{:else}
+							{#if $session.user?.admin}
+								<li class="nav-item">
+									<a
+										class="nav-link topnavlink"
+										href="../admin"
+										class:icon-fill={curPage == '/admin'}
+									>
+										<span class="material-symbols-outlined icon-fill"> admin_panel_settings </span>
+										<span>Admin</span></a
+									>
+								</li>
+							{/if}
+							<li class="nav-item">
+								<a class="nav-link topnavlink" href="../messages">
+									<span class="material-symbols-outlined icon-fill"> mail </span>
+									{$_('nav.messages')}
+								</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link topnavlink" href="../profile">
+									<span class="material-symbols-outlined icon-fill"> account_circle </span>
+									{$_('nav.account')}
+								</a>
+							</li>
 						{/if}
-						<li class="nav-item">
-							<a class="nav-link topnavlink" href="../messages">
-								<span class="material-symbols-outlined icon-fill"> mail </span>
-								{$_('nav.messages')}
-							</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link topnavlink" href="../profile">
-								<span class="material-symbols-outlined icon-fill"> account_circle </span>
-								{$_('nav.account')}
-							</a>
-						</li>
-					{/if}
-				</ul>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</nav>
@@ -302,6 +304,9 @@
 		.navbar-collapse {
 			flex: none !important;
 		}
+		.nav-link {
+			gap: 0.3rem;
+		}
 	}
 	.homeNav {
 		border-radius: 40px;
@@ -324,7 +329,6 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		gap: 0.3rem;
 		transition-duration: 0.3s;
 	}
 	@media screen and (max-width: 992px) {
@@ -360,6 +364,12 @@
 		.homeNavContainer .nav-link .material-symbols-outlined {
 			font-size: 30px;
 			color: var(--primaryColor);
+		}
+		.topNav {
+			margin-left: 0 !important;
+		}
+		.collapseContainer {
+			flex-direction: row-reverse;
 		}
 		.nav-item {
 			flex: 1 !important;

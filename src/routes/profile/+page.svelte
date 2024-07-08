@@ -43,7 +43,7 @@
 
 {#if $session.loggedIn}
 	<section>
-		<div class="jumbotron" style="padding-top: 2rem; background-color: #e2e9ef">
+		<div class="jumbotron" style="padding-block: 1rem; background-color: #e2e9ef">
 			<button
 				class="btn mobileOnly"
 				style="position: absolute;
@@ -61,7 +61,6 @@
 				}}><span class="material-symbols-outlined"> arrow_back_ios </span></button
 			>
 			<h1 class="display-4">{$_('nav.account')}</h1>
-			<hr />
 		</div>
 	</section>
 	<section>

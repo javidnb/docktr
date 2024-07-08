@@ -123,9 +123,21 @@
 					? 'flex-row'
 					: 'flex-row-reverse align-self-end'}"
 			>
-				<span style="font-size: 30px; color: #628a57" class="material-symbols-outlined icon-fill"
-					>account_circle</span
-				>
+				{#if message.fromUser === currentUser && $session.user?.photoURL}
+					<img
+						src={$session.user?.photoURL}
+						alt="PP"
+						style="width: 35px;
+							height: 35px;
+							border-radius: 100%;
+							margin-left: 10px;
+							margin-right: 5px;"
+					/>
+				{:else}
+					<span style="font-size: 38px; color: #628a57" class="material-symbols-outlined icon-fill"
+						>account_circle</span
+					>
+				{/if}
 				<div
 					class="message d-flex flex-column flex-1 px-3 {message.fromUser === currentUser
 						? 'sent'
@@ -218,7 +230,7 @@
 		border-radius: 4px;
 	}
 	.sent {
-		background-color: var(--primaryColor);
+		background-color: #65a3547d;
 		text-align: right;
 	}
 	.received {

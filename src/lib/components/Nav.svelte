@@ -9,9 +9,7 @@
 		appointments,
 		showBtnEndCall,
 		putData,
-
 		selectedUser
-
 	} from '$lib/store/dataStore';
 	import Modal from '$lib/helpers/Modal.svelte';
 	import Login from './login/Login.svelte';
@@ -134,7 +132,7 @@
 					</ul>
 				</div>
 				<ul
-					class="navbar-nav ml-auto"
+					class="navbar-nav ml-auto topNav"
 					style="margin-left: auto;display: flex;
     					flex-direction: row;"
 				>
@@ -371,7 +369,10 @@
 		.nav-link {
 			border-radius: 0px !important;
 			display: flex;
-			/* flex-direction: column; */
+			flex-direction: column;
+		}
+		.topnavlink {
+			flex-direction: unset;
 		}
 		.topnavlink .icon-fill {
 			background: unset;

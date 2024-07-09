@@ -40,6 +40,7 @@
 			const querySnapshot = await getDocs(q);
 
 			const groupedMessages: any = {};
+			let uids: string[] = [];
 
 			querySnapshot.forEach((doc) => {
 				const data = doc.data();
@@ -78,12 +79,20 @@
 			}
 
 			// Convert groupedMessages object to an array for easier rendering
-			messagesGroupedByUser = Object.keys(groupedMessages).map((user) => ({
-				uid: user,
-				messages: groupedMessages[user],
-				lastMsgTime: groupedMessages[user][groupedMessages[user].length - 1].timestamp
-			}));
+			messagesGroupedByUser = Object.keys(groupedMessages).map((user) => {
+				const messages = groupedMessages[user];
+				const lastMsgTime = Math.max(...messages.map((msg: any) => msg.timestamp.seconds));
+				return {
+					uid: user,
+					messages,
+					lastMsgTime
+				};
+			});
 
+			// Sort by lastMsgTime in descending order
+			messagesGroupedByUser.sort(
+				(a: any, b: any) => (b.lastMsgTime as number) - (a.lastMsgTime as number)
+			);
 
 			let result: {}[] = [];
 			messagesGroupedByUser.forEach((msg: any) => {
@@ -93,11 +102,6 @@
 			messagesGroupedByUser = result;
 			console.log(result);
 			localStorage.setItem('msgs', JSON.stringify(messagesGroupedByUser));
-
-
-			// if (curPage == '/messages') {
-			// 	selectedUser.set(messagesGroupedByUser[0].user);
-			// }
 		}
 	}
 </script>
@@ -123,12 +127,17 @@
 		>
 			<div class="d-flex align-items-center" style="overflow: hidden;">
 				{#if user?.photoURL}
-					<img src={user.photoURL} alt="PP" 
+					<img
+						src={user.photoURL}
+						alt="PP"
 						style="width: 35px;
 							height: 35px;
 							border-radius: 100%;
 							margin-left: 10px;
-							margin-right: 5px;" />
+							margin-right: 5px;
+							object-fit: cover;
+    						object-position: center;"
+					/>
 				{:else}
 					<span
 						style="font-size: 38px; padding-left: .5rem"

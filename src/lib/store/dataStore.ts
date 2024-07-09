@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store';
 import type { Doctor } from '../interfaces/doctor.interface';
 import { toast } from '@zerodevx/svelte-toast';
+import { browser } from '$app/environment';
 
 export const doctors = writable<Doctor[]>([]);
 export const appointments = writable<any[]>([]);
@@ -15,6 +16,11 @@ export const selectedSymptoms: any = writable([]);
 export const showBtnEndCall = writable(false);
 export const joinVideoCall = writable(false);
 export const selectedUser = writable();
+
+export const mobile = writable();
+
+if (browser)
+	mobile.set(/android|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent));
 
 export async function putData(
 	table: string,

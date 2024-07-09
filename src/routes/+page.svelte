@@ -1,7 +1,13 @@
 <script lang="ts">
 	import BranchSlider from '$lib/components/BranchSlider.svelte';
 	import Search from '$lib/helpers/Search.svelte';
+	import { mobile } from '$lib/store/dataStore';
+	import { browser } from '$app/environment';
 	import { _ } from 'svelte-i18n';
+	import Modal from '$lib/helpers/Modal.svelte';
+
+	if (browser) console.log('mobile: ', $mobile);
+	let showModal: boolean = false;
 </script>
 
 <section>
@@ -19,7 +25,31 @@
 					<h1 class="display-4">{$_('home.hero')}</h1>
 					<p class="lead">{$_('home.lead')}</p>
 					<div class="col-12 col-md-10">
-						<Search />
+						<div class="pcOnly w-100">
+							<Search />
+						</div>
+						<div class="mobileOnly">
+							<!-- svelte-ignore a11y-click-events-have-key-events -->
+							<!-- svelte-ignore a11y-no-static-element-interactions -->
+							<div class="w-100" on:click={() => (showModal = true)}>
+								<div class="input-group input-group-lg mb-3 mt-2">
+									<input
+										type="text"
+										class="form-control searchBox"
+										aria-label="Sizing example input"
+										aria-describedby="inputGroup-sizing-sm"
+										placeholder="{$_('home.search')} ({$_('nav.docs')}, {$_('nav.branches')}, {$_(
+											'nav.diseases'
+										)}, {$_('home.symptoms')})"
+									/>
+									<span
+										class="input-group-text"
+										style="background: var(--primaryColor);
+								color: white;"><span class="material-symbols-outlined"> search </span></span
+									>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -118,6 +148,10 @@
 		</div>
 	</div>
 </section>
+
+<Modal bind:showModal fullScreen={true}>
+	<Search />
+</Modal>
 
 <style>
 	.categories {

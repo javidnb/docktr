@@ -1,6 +1,7 @@
 <script lang="ts">
 	export let showModal: boolean; // boolean
 	let dialog: HTMLDialogElement; // HTMLDialogElement
+	export let fullScreen: boolean = false;
 
 	$: if (showModal) {
 		if (dialog) dialog.showModal();
@@ -21,6 +22,7 @@
 		showModal = false;
 		dialog.close();
 	}}
+	style={fullScreen ? 'margin:0;' : ''}
 >
 	<!-- <button
 		class="btn btn-outline-primary d-flex justify-content-center"
@@ -34,7 +36,7 @@
 		on:click={() => dialog.close()}><span class="material-symbols-outlined"> close </span></button
 	> -->
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
-	<div on:click|stopPropagation>
+	<div on:click|stopPropagation style={fullScreen ? 'height:100dvh; width: 100dvh' : ''}>
 		<slot name="header" />
 		<slot />
 		<!-- svelte-ignore a11y-autofocus -->

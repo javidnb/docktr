@@ -95,7 +95,11 @@
 						</button>
 						<ul class="dropdown-menu">
 							<li>
-								<button class="dropdown-item" on:click={() => changeLocale('az')}
+								<button
+									class="dropdown-item"
+									on:click={() => changeLocale('az')}
+									data-bs-toggle="collapse"
+									data-bs-target="#navbarSupportedContent"
 									><img
 										style="width:20px;height:20px;margin-right:.5rem"
 										src="https://ik.imagekit.io/d2nwsj0ktvh/img/az.png"
@@ -104,7 +108,12 @@
 								>
 							</li>
 							<li>
-								<button class="dropdown-item" on:click={() => changeLocale('tr')}>
+								<button
+									class="dropdown-item"
+									on:click={() => changeLocale('tr')}
+									data-bs-toggle="collapse"
+									data-bs-target="#navbarSupportedContent"
+								>
 									<img
 										style="width:20px;height:20px;margin-right:.5rem"
 										src="https://ik.imagekit.io/d2nwsj0ktvh/turkey_dBbuCptvk.png?updatedAt=1719140350211"
@@ -113,7 +122,12 @@
 								>
 							</li>
 							<li>
-								<button class="dropdown-item" on:click={() => changeLocale('ru')}>
+								<button
+									class="dropdown-item"
+									on:click={() => changeLocale('ru')}
+									data-bs-toggle="collapse"
+									data-bs-target="#navbarSupportedContent"
+								>
 									<img
 										style="width:20px;height:20px;margin-right:.5rem"
 										src="https://ik.imagekit.io/d2nwsj0ktvh/img/ru.png"
@@ -122,7 +136,12 @@
 								>
 							</li>
 							<li>
-								<button class="dropdown-item" on:click={() => changeLocale('en')}>
+								<button
+									class="dropdown-item"
+									on:click={() => changeLocale('en')}
+									data-bs-toggle="collapse"
+									data-bs-target="#navbarSupportedContent"
+								>
 									<img
 										style="width:20px;height:20px;margin-right:.5rem"
 										src="https://ik.imagekit.io/d2nwsj0ktvh/img/en.png"
@@ -139,7 +158,12 @@
 					>
 						{#if !$session.loggedIn}
 							<li class="nav-item">
-								<button class="nav-link" on:click|preventDefault={() => loginModal.set(true)}>
+								<button
+									data-bs-toggle="collapse"
+									data-bs-target="#navbarSupportedContent"
+									class="nav-link d-flex flex-row gap-1"
+									on:click|preventDefault={() => loginModal.set(true)}
+								>
 									<span class="material-symbols-outlined"> input </span>
 									{$_('nav.login')}
 								</button>
@@ -151,6 +175,8 @@
 										class="nav-link topnavlink"
 										href="../admin"
 										class:icon-fill={curPage == '/admin'}
+										data-bs-toggle="collapse"
+										data-bs-target="#navbarSupportedContent"
 									>
 										<span class="material-symbols-outlined icon-fill"> admin_panel_settings </span>
 										<span>Admin</span></a
@@ -158,16 +184,26 @@
 								</li>
 							{/if}
 							<li class="nav-item">
-								<a class="nav-link topnavlink" href="../messages">
+								<button
+									class="nav-link topnavlink"
+									on:click={() => goto('../messages')}
+									data-bs-toggle="collapse"
+									data-bs-target="#navbarSupportedContent"
+								>
 									<span class="material-symbols-outlined icon-fill"> mail </span>
 									{$_('nav.messages')}
-								</a>
+								</button>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link topnavlink" href="../profile">
+								<button
+									class="nav-link topnavlink"
+									on:click={() => goto('../profile')}
+									data-bs-toggle="collapse"
+									data-bs-target="#navbarSupportedContent"
+								>
 									<span class="material-symbols-outlined icon-fill"> account_circle </span>
-									{$_('nav.account')}
-								</a>
+									<span>{$_('nav.account')}</span>
+								</button>
 							</li>
 						{/if}
 					</ul>
@@ -294,6 +330,10 @@
 		font-size: 2rem;
 		line-height: 1;
 	}
+	.navbar-toggler:focus-within {
+		box-shadow: none;
+		background: #0000002e;
+	}
 	@media screen and (max-width: 769px) {
 		.time,
 		.pcOnly {
@@ -367,6 +407,7 @@
 		}
 		.topNav {
 			margin-left: 0 !important;
+			text-wrap: nowrap;
 		}
 		.collapseContainer {
 			flex-direction: row-reverse;

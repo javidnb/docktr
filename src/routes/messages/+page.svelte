@@ -17,7 +17,7 @@
 
 <section class="py-3" style="background-color: white;">
 	<div class="container">
-		<div class="row msgRow">
+		<div class="row msgRow justify-content-center">
 			<div class="col-md-4 col-lg-3 {$selectedUser ? 'pcOnly' : ''}">
 				<div style="height: 100%; border-right: 1px solid #ececec; padding-right: .5rem">
 					<Messages />

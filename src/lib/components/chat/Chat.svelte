@@ -235,7 +235,7 @@
 	>
 		{#each messages as message}
 			<div
-				class="d-flex align-items-center w-75 {message.fromUser !== currentUser
+				class="d-flex msgBox align-items-center {message.fromUser !== currentUser
 					? 'flex-row'
 					: 'flex-row-reverse align-self-end'}"
 			>
@@ -260,7 +260,6 @@
 						: 'received'}"
 				>
 					{message.message}
-					<span style="font-size: smaller; color: gray">{@html timestamp(message.timestamp)}</span>
 					{#if message.file}
 						<a
 							class="fileCard"
@@ -276,18 +275,19 @@
 							</span>
 							<span
 								style="padding-inline: 5px;
-									font-size: smaller;
-									overflow-wrap: break-word;
-									max-height: 25px;
-									overflow-y: hidden;
-									line-height: normal;
-									text-decoration: none; 
-									color: unset"
+								font-size: smaller;
+								overflow-wrap: break-word;
+								max-height: 25px;
+								overflow-y: hidden;
+								line-height: normal;
+								text-decoration: none; 
+								color: unset"
 							>
 								{message.file.name}
 							</span>
 						</a>
 					{/if}
+					<span style="font-size: smaller; color: gray">{@html timestamp(message.timestamp)}</span>
 				</div>
 			</div>
 		{/each}
@@ -409,19 +409,35 @@
 		display: flex;
 		flex-wrap: wrap;
 		text-wrap: balance;
+		text-align: center;
 		justify-content: center;
 		align-items: center;
 		font-size: small;
 		overflow-x: clip;
 		height: 80px;
 		border-radius: 6px;
-		box-shadow: -2px 0px 4px rgba(0, 0, 0, 0.226);	
-		align-self: end;
-		margin-top: 1rem;
+		box-shadow: -2px 0px 4px rgba(0, 0, 0, 0.226);
+		margin-block: 0.5rem;
 		cursor: pointer;
-		transition-duration: .2s;
+		transition-duration: 0.2s;
+	}
+	.sent .fileCard {
+		align-self: end;
 	}
 	.fileCard:hover {
 		background: #ffffffe3;
+	}
+	@media screen and (min-width: 992px) {
+		.msgBox {
+			width: 60% !important;
+		}
+	}
+	@media screen and (max-width: 992px) {
+		.chat {
+			max-height: calc(100dvh - 275px) !important;
+		}
+		.msgBox {
+			width: 100% !important;
+		}
 	}
 </style>

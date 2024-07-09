@@ -82,7 +82,7 @@
 	<div class="input-group input-group-lg mb-3 mt-2">
 		<input
 			type="text"
-			class="form-control"
+			class="form-control searchBox"
 			aria-label="Sizing example input"
 			aria-describedby="inputGroup-sizing-sm"
 			placeholder="{$_('home.search')} ({$_('nav.docs')}, {$_('nav.branches')}, {$_(

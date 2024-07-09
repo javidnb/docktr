@@ -9,6 +9,7 @@
 	import { tooltip } from 'svooltip';
 	import 'svooltip/styles.css';
 	import { _ } from 'svelte-i18n';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	let messages: any = [];
 	let newMessage = '';
@@ -56,13 +57,19 @@
 
 	// Send a new message
 	const sendMessage = async () => {
-		if (newMessage.trim() !== '') {
+		let file = null;
+		if (selectedFile) {
+			file = await uploadFile(selectedFile);
+			console.log(file);
+		}
+		if (newMessage.trim() !== '' || file) {
 			await addDoc(messagesCollection, {
 				fromUser: currentUser,
 				toUser: user,
 				message: newMessage,
 				participants: [currentUser, user],
-				timestamp: new Date()
+				timestamp: new Date(),
+				file
 			});
 			newMessage = '';
 		}
@@ -77,21 +84,130 @@
 	};
 
 	// ADDING FILES
-	let fileInput: any, file: any, avatar: any;
+	let uploadProgress = 0;
+	let uploading = false;
+	let fileInput: any, avatar: any;
+	let selectedFile: File | null = null;
+
+	const allowedExtensions = [
+		'jpg',
+		'jpeg',
+		'png',
+		'gif',
+		'bmp',
+		'webp',
+		'pdf',
+		'doc',
+		'docx',
+		'xls',
+		'xlsx',
+		'ppt',
+		'pptx',
+		'txt',
+		'zip',
+		'tar',
+		'gz'
+	];
+
+	const allowedMimeTypes = [
+		'image/jpeg',
+		'image/png',
+		'image/gif',
+		'image/bmp',
+		'image/webp',
+		'application/pdf',
+		'application/msword',
+		'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+		'application/vnd.ms-excel',
+		'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+		'application/vnd.ms-powerpoint',
+		'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+		'text/plain',
+		'application/zip',
+		'application/x-tar',
+		'application/gzip'
+	];
+
+	function getFileExtension(filename: string): string {
+		return filename.split('.').pop()?.toLowerCase() ?? '';
+	}
+
 	const onFileSelected = (e: any) => {
-		let image = e.target.files[0];
-		console.log(image);
-		file = image;
-		let reader = new FileReader();
-		reader.readAsDataURL(image);
-		reader.onload = async (e) => {
-			if (e.target) {
-				avatar = e.target.result;
-				const formData = new FormData();
-				formData.append('file', image);
+		let file = e.target.files[0];
+		if (file) {
+			const fileExtension = getFileExtension(file.name);
+			const fileType = file.type;
+
+			if (!allowedMimeTypes.includes(fileType) || !allowedExtensions.includes(fileExtension)) {
+				selectedFile = null;
+				toast.push('Xəta! Fayl dəstəklənmir', {
+					duration: 2000,
+					theme: {
+						'--toastColor': 'mintcream',
+						'--toastBackground': 'rgb(176 24 24)',
+						'--toastBarBackground': '#5b1010'
+					}
+				});
+			} else {
+				selectedFile = file;
 			}
-		};
+		}
+
+		if (selectedFile) {
+			let reader = new FileReader();
+			reader.readAsDataURL(file);
+			reader.onload = async (e) => {
+				if (e.target) {
+					avatar = e.target.result;
+					const formData = new FormData();
+					formData.append('file', file);
+				}
+			};
+		}
 	};
+
+	function uploadFile(file: File): Promise<{}> {
+		return new Promise((resolve, reject) => {
+			const formData = new FormData();
+			formData.append('file', file);
+
+			const xhr = new XMLHttpRequest();
+
+			xhr.upload.addEventListener('progress', (event) => {
+				if (event.lengthComputable) {
+					uploadProgress = (event.loaded / event.total) * 100;
+				}
+			});
+
+			xhr.upload.addEventListener('loadstart', () => {
+				uploading = true;
+				uploadProgress = 0;
+			});
+
+			xhr.upload.addEventListener('loadend', () => {
+				uploading = false;
+				selectedFile = null;
+			});
+
+			xhr.onreadystatechange = () => {
+				if (xhr.readyState === XMLHttpRequest.DONE) {
+					const response = JSON.parse(xhr.responseText);
+
+					if (xhr.status === 200 && response.status === 'success') {
+						console.log('File uploaded successfully: ' + response.filename);
+						let fileURL = `https://tekoplast.az/docktr/uploads/${response.filename}`;
+						resolve({ url: fileURL, name: file.name });
+					} else {
+						console.log('File upload failed: ' + response.message);
+						reject(new Error('File upload failed: ' + response.message));
+					}
+				}
+			};
+
+			xhr.open('POST', 'https://tekoplast.az/docktr/api/?upload');
+			xhr.send(formData);
+		});
+	}
 </script>
 
 <button
@@ -145,6 +261,33 @@
 				>
 					{message.message}
 					<span style="font-size: smaller; color: gray">{@html timestamp(message.timestamp)}</span>
+					{#if message.file}
+						<a
+							class="fileCard"
+							href={message.file.url}
+							target="_blank"
+							style="text-decoration: none; color: unset"
+						>
+							<span
+								style="font-size: 30px; color: #30552e"
+								class="material-symbols-outlined mt-auto"
+							>
+								description
+							</span>
+							<span
+								style="padding-inline: 5px;
+									font-size: smaller;
+									overflow-wrap: break-word;
+									max-height: 25px;
+									overflow-y: hidden;
+									line-height: normal;
+									text-decoration: none; 
+									color: unset"
+							>
+								{message.file.name}
+							</span>
+						</a>
+					{/if}
 				</div>
 			</div>
 		{/each}
@@ -157,7 +300,6 @@
 			style="min-width: 60px; border:1px solid rgb(222 226 230); border-right: none"
 			class="btn btn-outline-secondary d-flex align-items-center justify-content-center"
 			id="btnAttach"
-			on:click={sendMessage}
 			use:tooltip={{
 				content: $_('actions.add_file'),
 				placement: 'top-start'
@@ -169,40 +311,62 @@
 			class="form-control d-none"
 			id="fileInput"
 			type="file"
-			accept=".jpg, .jpeg, .png"
+			accept=".jpg,.jpeg,.png,.gif,.bmp,.webp,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,.tar,.gz"
 			on:change={(e) => onFileSelected(e)}
 			bind:this={fileInput}
 		/>
 		<!-- ADDING FILES-->
-		{#if file}
-			<span
-				style="display: flex;
-				align-items: center;
-				border: 1px solid #dee2e6;
-				padding-inline: .5rem;
-				position: relative"
+		{#if selectedFile}
+			<div
+				class="progress h-100"
+				style="position: relative; width: 10em"
+				role="progressbar"
+				aria-label="Upload percentage"
+				aria-valuenow={uploadProgress}
+				aria-valuemin="0"
+				aria-valuemax="100"
 			>
-				{file.name.slice(0, 15)}
-				<button
-					on:click={() => {
-						file = null;
-					}}
-					class="btn"
-					style="position: absolute;
-						top: 5px;
-						right: 5px;
-						background-color: #bd2626;
-						color: white;
-						border-radius: 100%;
-						display: flex;
+				{#if uploading}
+					<span
+						class="progress-bar"
+						style="display: flex;
 						align-items: center;
-						justify-content: center;
-						width: 23px;
-						height: 23px;"
+						border: 1px solid #dee2e6;
+						padding-inline: .5rem;
+						position: relative;
+						width: {uploadProgress}%"
+					/>
+				{/if}
+				<div
+					style="position: absolute;
+						left: 0px;
+						top: 50%;
+						width: 100%;
+						padding-left: 5px;
+						transform: translateY(-50%);"
 				>
-					<span style="font-size: 15px" class="material-symbols-outlined"> close </span>
-				</button>
-			</span>
+					{selectedFile.name.slice(0, 15)}
+					<button
+						on:click={() => {
+							selectedFile = null;
+						}}
+						class="btn"
+						style="position: absolute;
+							top: -2px;
+							right: 5px;
+							background-color: #bd2626;
+							color: white;
+							border-radius: 100%;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							width: 23px;
+							height: 23px;"
+					>
+						<span style="font-size: 15px" class="material-symbols-outlined"> close </span>
+					</button>
+				</div>
+			</div>
 		{/if}
 		<!-- END FILES-->
 		<input
@@ -235,5 +399,29 @@
 	}
 	.received {
 		background-color: #f1f0f0;
+	}
+	.progress-bar {
+		background-color: var(--primaryColor);
+	}
+	.fileCard {
+		background: #ffffffb8;
+		width: 80px;
+		display: flex;
+		flex-wrap: wrap;
+		text-wrap: balance;
+		justify-content: center;
+		align-items: center;
+		font-size: small;
+		overflow-x: clip;
+		height: 80px;
+		border-radius: 6px;
+		box-shadow: -2px 0px 4px rgba(0, 0, 0, 0.226);	
+		align-self: end;
+		margin-top: 1rem;
+		cursor: pointer;
+		transition-duration: .2s;
+	}
+	.fileCard:hover {
+		background: #ffffffe3;
 	}
 </style>

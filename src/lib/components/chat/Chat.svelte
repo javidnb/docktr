@@ -57,21 +57,22 @@
 
 	// Send a new message
 	const sendMessage = async () => {
+		let msg = newMessage;
+		newMessage = '';
 		let file = null;
 		if (selectedFile) {
 			file = await uploadFile(selectedFile);
 			console.log(file);
 		}
-		if (newMessage.trim() !== '' || file) {
+		if (msg.trim() !== '' || file) {
 			await addDoc(messagesCollection, {
 				fromUser: currentUser,
 				toUser: user,
-				message: newMessage,
+				message: msg,
 				participants: [currentUser, user],
 				timestamp: new Date(),
 				file
 			});
-			newMessage = '';
 		}
 	};
 
@@ -195,7 +196,7 @@
 
 					if (xhr.status === 200 && response.status === 'success') {
 						console.log('File uploaded successfully: ' + response.filename);
-						let fileURL = `https://tekoplast.az/docktr/uploads/${response.filename}`;
+						let fileURL = `https://sehiyye.online/uploads/${response.filename}`;
 						resolve({ url: fileURL, name: file.name });
 					} else {
 						console.log('File upload failed: ' + response.message);
@@ -207,6 +208,12 @@
 			xhr.open('POST', 'https://tekoplast.az/docktr/api/?upload');
 			xhr.send(formData);
 		});
+	}
+
+	function handleKeyDown(event: KeyboardEvent) {
+		if (event.key === 'Enter') {
+			sendMessage();
+		}
 	}
 </script>
 
@@ -261,27 +268,23 @@
 				>
 					{message.message}
 					{#if message.file}
-						<a
-							class="fileCard"
-							href={message.file.url}
-							target="_blank"
-							style="text-decoration: none; color: unset"
-						>
+						<a class="fileCard" href={message.file.url} target="_blank">
 							<span
 								style="font-size: 30px; color: #30552e"
-								class="material-symbols-outlined mt-auto"
+								class="material-symbols-outlined my-auto"
 							>
 								description
 							</span>
 							<span
 								style="padding-inline: 5px;
-								font-size: smaller;
-								overflow-wrap: break-word;
-								max-height: 25px;
-								overflow-y: hidden;
-								line-height: normal;
-								text-decoration: none; 
-								color: unset"
+									font-size: smaller;
+									overflow-wrap: break-word;
+									max-height: 25px;
+									overflow-y: hidden;
+									line-height: normal;
+									text-decoration: none;
+									color: unset;
+									margin-bottom: 10px;"
 							>
 								{message.file.name}
 							</span>
@@ -374,6 +377,7 @@
 			type="text"
 			bind:value={newMessage}
 			placeholder="Type a message..."
+			on:keydown={handleKeyDown}
 		/>
 		<button
 			style="min-width: 60px;"
@@ -420,6 +424,10 @@
 		margin-block: 0.5rem;
 		cursor: pointer;
 		transition-duration: 0.2s;
+		text-decoration: none;
+		color: unset;
+		width: 100%;
+		flex-direction: column;
 	}
 	.sent .fileCard {
 		align-self: end;

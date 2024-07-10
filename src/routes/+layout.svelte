@@ -9,7 +9,10 @@
 	import { locale, _ } from 'svelte-i18n';
 	import { session } from '$lib/session';
 	import { page } from '$app/stores';
+	import Modal from '$lib/helpers/Modal.svelte';
+	import Gpt from '$lib/components/Gpt.svelte';
 	export let data: LayoutData;
+	let showGPT: boolean = false;
 
 	if (data?.doctors?.length) {
 		const dooc = data.doctors
@@ -70,5 +73,22 @@
 	{/if}
 	<SvelteToast />
 </div>
+
+<button
+	class="btn btn-outline-primary"
+	style="position: fixed; right: 1rem; bottom: 1rem;
+	border-radius: 100%; background: var(--primaryColor);
+	color: white; display: flex; align-items: center; justify-content: center;
+	height: 4rem; width: 4rem; box-shadow: 0px 0px 4px #0000006b"
+	on:click={() => {
+		showGPT = true;
+	}}
+>
+	<span style="font-size: 30px" class="material-symbols-outlined icon-fill"> sms </span>
+</button>
+
+<Modal bind:showModal={showGPT}>
+	<Gpt />
+</Modal>
 
 <style src="$lib/style/style.css"></style>

@@ -4,13 +4,16 @@
 	import {
 		signInWithEmailAndPassword,
 		type UserCredential,
-		signInWithCustomToken
+		signInWithCustomToken,
+		RecaptchaVerifier,
+		signInWithPhoneNumber
 	} from 'firebase/auth';
 	import { getToken } from 'firebase/messaging';
 	import { onMount } from 'svelte';
 	import { dataLoading, loginModal, putData, appointments } from '$lib/store/dataStore';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { _ } from 'svelte-i18n';
+	import { browser } from '$app/environment';
 
 	let email: string = '';
 	let password: string = '';
@@ -33,7 +36,19 @@
 		showError = false;
 	}
 
+	let verificationCode = '';
+	let verificationId = '';
+
 	onMount(async () => {
+		if (browser) {
+			(window as any).recaptchaVerifier = new RecaptchaVerifier(auth, 'recap', {
+				size: 'normal',
+				callback: (response: any) => {
+					console.log('recap: ', response);
+				}
+			});
+		}
+
 		showError = false;
 		if ($session.loggedIn) {
 			// goto('./profile');
@@ -107,6 +122,14 @@
 		showError = false;
 		// MOBILE NUMBER LOGIN
 		if (method == 'mobile') {
+			try {
+				const appVerifier = (window as any).recaptchaVerifier;
+				const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
+				verificationId = confirmationResult.verificationId;
+			} catch (error) {
+				console.error('Error during sign in:', error);
+			}
+			return;
 			dataLoading.set(true);
 			const response = await fetch('https://tekoplast.az/docktr/api/?authToken', {
 				method: 'POST',
@@ -310,7 +333,7 @@
 					type="number"
 					placeholder={$_('login.mobile')}
 					required
-				/>
+				/>				
 			{/if}
 			<input
 				class="form-control"
@@ -354,6 +377,8 @@
 		</div>
 	</div>
 </div>
+
+<div id="recap"></div>
 
 <style type="text/css">
 	.login-form {

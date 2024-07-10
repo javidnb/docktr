@@ -1,12 +1,9 @@
 <script lang="ts">
 	import BranchSlider from '$lib/components/BranchSlider.svelte';
 	import Search from '$lib/helpers/Search.svelte';
-	import { mobile } from '$lib/store/dataStore';
-	import { browser } from '$app/environment';
 	import { _ } from 'svelte-i18n';
 	import Modal from '$lib/helpers/Modal.svelte';
 
-	if (browser) console.log('mobile: ', $mobile);
 	let showModal: boolean = false;
 </script>
 

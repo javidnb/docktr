@@ -9,7 +9,8 @@
 		appointments,
 		showBtnEndCall,
 		putData,
-		selectedUser
+		selectedUser,
+		mobile
 	} from '$lib/store/dataStore';
 	import Modal from '$lib/helpers/Modal.svelte';
 	import Login from './login/Login.svelte';
@@ -74,8 +75,8 @@
 				aria-expanded="false"
 				aria-label="Toggle navigation"
 				style="position: absolute;
-			right: 1rem;
-			top: 9px;"
+					right: 1rem;
+					top: 9px;"
 			>
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -159,8 +160,8 @@
 						{#if !$session.loggedIn}
 							<li class="nav-item">
 								<button
-									data-bs-toggle="collapse"
-									data-bs-target="#navbarSupportedContent"
+									data-bs-toggle={$mobile ? 'collapse' : ''}
+									data-bs-target={$mobile ? '#navbarSupportedContent' : ''}
 									class="nav-link d-flex flex-row gap-1"
 									on:click|preventDefault={() => loginModal.set(true)}
 								>
@@ -187,8 +188,8 @@
 								<button
 									class="nav-link topnavlink"
 									on:click={() => goto('../messages')}
-									data-bs-toggle="collapse"
-									data-bs-target="#navbarSupportedContent"
+									data-bs-toggle={$mobile ? 'collapse' : ''}
+									data-bs-target={$mobile ? '#navbarSupportedContent' : ''}
 								>
 									<span class="material-symbols-outlined icon-fill"> mail </span>
 									{$_('nav.messages')}
@@ -198,8 +199,8 @@
 								<button
 									class="nav-link topnavlink"
 									on:click={() => goto('../profile')}
-									data-bs-toggle="collapse"
-									data-bs-target="#navbarSupportedContent"
+									data-bs-toggle={$mobile ? 'collapse' : ''}
+									data-bs-target={$mobile ? '#navbarSupportedContent' : ''}
 								>
 									<span class="material-symbols-outlined icon-fill"> account_circle </span>
 									<span>{$_('nav.account')}</span>

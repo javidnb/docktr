@@ -287,7 +287,7 @@
 							</span>
 						</a>
 					{/if}
-					<span style="font-size: smaller; color: gray">{@html timestamp(message.timestamp)}</span>
+					<span style="font-size: small; color: gray">{@html timestamp(message.timestamp)}</span>
 				</div>
 			</div>
 		{/each}

@@ -125,7 +125,8 @@
 			try {
 				const appVerifier = (window as any).recaptchaVerifier;
 				const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
-				verificationId = confirmationResult.verificationId;
+			
+				console.log(verificationId);
 			} catch (error) {
 				console.error('Error during sign in:', error);
 			}

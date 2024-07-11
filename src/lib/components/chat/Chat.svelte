@@ -284,7 +284,8 @@
 									line-height: normal;
 									text-decoration: none;
 									color: unset;
-									margin-bottom: 10px;"
+									margin-bottom: 10px;
+									max-width: 80%"
 							>
 								{message.file.name}
 							</span>
@@ -396,6 +397,7 @@
 		padding: 8px;
 		margin: 4px;
 		border-radius: 4px;
+		max-width: calc(100dvw - 75px);
 	}
 	.sent {
 		background-color: #65a3547d;

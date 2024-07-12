@@ -4,15 +4,12 @@
 	import { initializeFirebase, db } from '$lib/firebase.client';
 	import { session } from '$lib/session';
 	import { createEventDispatcher } from 'svelte';
-	import { selectedUser } from '$lib/store/dataStore';
+	import { selectedUser, users } from '$lib/store/dataStore';
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
-	import { writable } from 'svelte/store';
 
 	let messagesCollection: CollectionReference;
 	let messagesGroupedByUser: any = [];
-	let uids: {}[] = [];
-	let users = writable([]);
 	if (browser) {
 		messagesGroupedByUser = localStorage.getItem('msgs')
 			? JSON.parse(localStorage.getItem('msgs') || '')

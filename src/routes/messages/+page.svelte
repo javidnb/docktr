@@ -2,15 +2,22 @@
 	import Messages from '$lib/components/chat/Messages.svelte';
 	import Chat from '$lib/components/chat/Chat.svelte';
 	import { _ } from 'svelte-i18n';
-	import { selectedUser } from '$lib/store/dataStore';
+	import { selectedUser, hideNav } from '$lib/store/dataStore';
 	import { onMount } from 'svelte';
 	onMount(() => {
-		return selectedUser.set(null);
+		hideNav.set(true);
+		return () => {
+			selectedUser.set(null);
+			hideNav.set(false);
+		};
 	});
 </script>
 
 <section>
-	<div class="jumbotron" style="padding-block: 1rem; background-color: #e2e9ef">
+	<div
+		class="jumbotron {$hideNav ? 'd-none' : ''}"
+		style="padding-block: 1rem; background-color: #e2e9ef"
+	>
 		<h1 class="display-4 mb-0">{$_('nav.messages')}</h1>
 	</div>
 </section>

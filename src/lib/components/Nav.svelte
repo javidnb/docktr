@@ -10,7 +10,8 @@
 		showBtnEndCall,
 		putData,
 		selectedUser,
-		mobile
+		mobile,
+		hideNav
 	} from '$lib/store/dataStore';
 	import Modal from '$lib/helpers/Modal.svelte';
 	import Login from './login/Login.svelte';
@@ -166,7 +167,7 @@
 									on:click|preventDefault={() => loginModal.set(true)}
 								>
 									<span class="material-symbols-outlined"> input </span>
-									{$_('nav.login')}
+									{$_('nav.login') ?? 'Login'}
 								</button>
 							</li>
 						{:else}
@@ -203,7 +204,7 @@
 									data-bs-target={$mobile ? '#navbarSupportedContent' : ''}
 								>
 									<span class="material-symbols-outlined icon-fill"> account_circle </span>
-									<span>{$_('nav.account')}</span>
+									<span>{$_('nav.account') ?? 'Login'}</span>
 								</button>
 							</li>
 						{/if}
@@ -213,7 +214,7 @@
 		</div>
 	</nav>
 
-	<section class="homeNavContainer" style="background-color: #e2e9ef;">
+	<section class="homeNavContainer {$hideNav ? 'd-none' : ''}" style="background-color: #e2e9ef;">
 		<div class="container pt-3">
 			<ul class="nav nav-pills nav-fill homeNav">
 				<li class="nav-item">

@@ -15,7 +15,9 @@ export const selectedBranch: any = writable('0');
 export const selectedSymptoms: any = writable([]);
 export const showBtnEndCall = writable(false);
 export const joinVideoCall = writable(false);
+export const users = writable([]);
 export const selectedUser = writable();
+export const hideNav = writable(false);
 
 export const mobile = writable();
 

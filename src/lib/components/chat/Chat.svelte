@@ -3,30 +3,34 @@
 	import { collection, addDoc, query, where, onSnapshot, orderBy } from 'firebase/firestore';
 	import { db, initializeFirebase } from '$lib/firebase.client';
 	import { session } from '$lib/session';
-	import { selectedUser } from '$lib/store/dataStore';
+	import { selectedUser, users } from '$lib/store/dataStore';
 	import { timestamp } from '$lib/helpers/dateFormatter';
-	import { page } from '$app/stores';
 	import { tooltip } from 'svooltip';
 	import 'svooltip/styles.css';
 	import { _ } from 'svelte-i18n';
 	import { toast } from '@zerodevx/svelte-toast';
+	import { writable } from 'svelte/store';
 
 	let messages: any = [];
 	let newMessage = '';
 	let currentUser = $session.user?.uid || null;
-	let user: any;
-	$: curPage = $page.route.id;
+	let userId: any;
+	let user: any = writable({});
 
 	$: if ($selectedUser) {
-		user = $selectedUser;
+		userId = $selectedUser;
+		user.set($users.find((u: any) => u.uid == userId));
+		console.log($user);
 		getMessages();
 	}
 
 	const messagesCollection = collection(db, 'messages');
 
-	onMount(async () => {
-		await initializeFirebase();
-		getMessages();
+	onMount(() => {
+		(async () => {
+			await initializeFirebase();
+			getMessages();
+		})();
 	});
 
 	afterUpdate(() => {
@@ -43,7 +47,7 @@
 
 			const unsubscribe = onSnapshot(q, (snapshot) => {
 				messages = snapshot.docs
-					.filter((doc) => doc.data().participants.includes(user))
+					.filter((doc) => doc.data().participants.includes(userId))
 					.map((doc) => doc.data());
 				scrollToBottom();
 			});
@@ -67,9 +71,9 @@
 		if (msg.trim() !== '' || file) {
 			await addDoc(messagesCollection, {
 				fromUser: currentUser,
-				toUser: user,
+				toUser: userId,
 				message: msg,
-				participants: [currentUser, user],
+				participants: [currentUser, userId],
 				timestamp: new Date(),
 				file
 			});
@@ -220,7 +224,7 @@
 <button
 	class="btn btn-outline-primary mobileOnly"
 	style="position: absolute;
-		top: 77px;
+		top: 10px;
 		left: 1rem;
 		background: rgb(153 155 152);
 		padding: 6px 0px 0px 8px;
@@ -232,14 +236,54 @@
 </button>
 
 <main class="d-flex flex-column h-100">
-	{#if curPage != '/messages'}
-		<h4>{user == '1TgHpEOspfZmDhanm8m1XLgm29u1' ? 'Contact us' : user}</h4>
-	{/if}
 	<div
 		class="chat mb-3 d-flex flex-column gap-1"
 		id="messages-container"
-		style="padding-right: .5rem;"
+		style="padding-right: .5rem; position: relative"
 	>
+		<div
+			style="position: sticky;
+			top: 0px;
+			background: white;
+			border-bottom: 1px solid #ececec;"
+		>
+			<div class="d-flex align-items-center w-100 pt-1 py-2">
+				{#if $user.photoURL}
+					<img
+						src={$user.photoURL}
+						alt="PP"
+						style="width: 35px;
+				height: 35px;
+				border-radius: 100%;
+				margin-left: 10px;
+				margin-right: 5px;
+				object-fit: cover;
+				object-position: center;"
+					/>
+				{/if}
+				<h5 class="flex-1 mb-0">{$user.displayName || $user.email || $user.phoneNumber || ''}</h5>
+				<div class="input-group ml-auto" style="width: fit-content;">
+					<!-- <button
+						class="btn btn-outline-primary d-flex align-items-center gap-1"
+						style="padding: 5px 15px"
+						on:click={() => {
+							hideNav.set(!$hideNav);
+						}}
+					>
+						<span class="material-symbols-outlined">
+							{$hideNav ? 'arrow_circle_down' : 'arrow_circle_up'}
+						</span>
+					</button> -->
+					<button
+						class="btn btn-outline-primary d-flex align-items-center gap-1"
+						style="padding: 5px 15px"
+					>
+						<span class="material-symbols-outlined ml-auto"> video_call </span>
+						<span>Call</span>
+					</button>
+				</div>
+			</div>
+		</div>
 		{#each messages as message}
 			<div
 				class="d-flex msgBox align-items-center {message.fromUser !== currentUser
@@ -254,7 +298,21 @@
 							height: 35px;
 							border-radius: 100%;
 							margin-left: 10px;
-							margin-right: 5px;"
+							margin-right: 5px;
+							object-fit: cover;
+    						object-position: center;"
+					/>
+				{:else if $user.photoURL}
+					<img
+						src={$user.photoURL}
+						alt="PP"
+						style="width: 35px;
+						height: 35px;
+						border-radius: 100%;
+						margin-left: 10px;
+						margin-right: 5px;
+						object-fit: cover;
+    					object-position: center;"
 					/>
 				{:else}
 					<span style="font-size: 38px; color: #628a57" class="material-symbols-outlined icon-fill"
@@ -390,7 +448,7 @@
 
 <style>
 	.chat {
-		max-height: 430px;
+		max-height: calc(100dvh - 150px);
 		overflow-y: auto;
 	}
 	.message {
@@ -444,7 +502,7 @@
 	}
 	@media screen and (max-width: 992px) {
 		.chat {
-			max-height: calc(100dvh - 275px) !important;
+			max-height: calc(100dvh - 140px) !important;
 		}
 		.msgBox {
 			width: 100% !important;

@@ -75,6 +75,9 @@
 		overflow-x: scroll;
 		padding-block: 1rem;
 		padding-left: 3px;
+		flex-wrap: wrap;
+		flex-direction: column;
+		max-height: 500px;
 	}
 	.btnBranch {
 		background-color: white;

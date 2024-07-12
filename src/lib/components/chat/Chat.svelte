@@ -455,7 +455,8 @@
 		padding: 8px;
 		margin: 4px;
 		border-radius: 4px;
-		max-width: calc(100dvw - 75px);
+		max-width: calc(100dvw - 100px);
+		/* max-width: 0%; */
 	}
 	.sent {
 		background-color: #65a3547d;

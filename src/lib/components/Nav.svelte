@@ -100,8 +100,8 @@
 								<button
 									class="dropdown-item"
 									on:click={() => changeLocale('az')}
-									data-bs-toggle="collapse"
-									data-bs-target="#navbarSupportedContent"
+									data-bs-toggle={$mobile ? 'collapse' : ''}
+									data-bs-target={$mobile ? '#navbarSupportedContent' : ''}
 									><img
 										style="width:20px;height:20px;margin-right:.5rem"
 										src="https://ik.imagekit.io/d2nwsj0ktvh/img/az.png"
@@ -113,8 +113,8 @@
 								<button
 									class="dropdown-item"
 									on:click={() => changeLocale('tr')}
-									data-bs-toggle="collapse"
-									data-bs-target="#navbarSupportedContent"
+									data-bs-toggle={$mobile ? 'collapse' : ''}
+									data-bs-target={$mobile ? '#navbarSupportedContent' : ''}
 								>
 									<img
 										style="width:20px;height:20px;margin-right:.5rem"
@@ -127,8 +127,8 @@
 								<button
 									class="dropdown-item"
 									on:click={() => changeLocale('ru')}
-									data-bs-toggle="collapse"
-									data-bs-target="#navbarSupportedContent"
+									data-bs-toggle={$mobile ? 'collapse' : ''}
+									data-bs-target={$mobile ? '#navbarSupportedContent' : ''}
 								>
 									<img
 										style="width:20px;height:20px;margin-right:.5rem"
@@ -141,8 +141,8 @@
 								<button
 									class="dropdown-item"
 									on:click={() => changeLocale('en')}
-									data-bs-toggle="collapse"
-									data-bs-target="#navbarSupportedContent"
+									data-bs-toggle={$mobile ? 'collapse' : ''}
+									data-bs-target={$mobile ? '#navbarSupportedContent' : ''}
 								>
 									<img
 										style="width:20px;height:20px;margin-right:.5rem"

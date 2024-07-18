@@ -8,7 +8,6 @@
 	import History from '$lib/components/profile/History.svelte';
 	import { dataLoading, loginModal } from '$lib/store/dataStore';
 	import Chat from '$lib/components/chat/Chat.svelte';
-	import Messages from '$lib/components/chat/Messages.svelte';
 	import Documents from '$lib/components/profile/Documents.svelte';
 
 	export let data;
@@ -42,28 +41,28 @@
 	}
 </script>
 
+<section>
+	<div class="jumbotron" style="padding-block: 1rem; background-color: #e2e9ef">
+		<button
+			class="btn mobileOnly"
+			style="position: absolute;
+				top: 10px;
+				left: 1rem;
+				color: rgb(213, 228, 209);
+				border: 1px solid #ffffff36 !important;
+				text-align: center;
+				width: 56px;
+				padding-left: 20px;
+				display: flex"
+			class:d-none={!mobileComponent}
+			on:click={() => {
+				changeComponent(null, true);
+			}}><span class="material-symbols-outlined"> arrow_back_ios </span></button
+		>
+		<h1 class="display-4">{$_('nav.account')}</h1>
+	</div>
+</section>
 {#if $session.loggedIn}
-	<section>
-		<div class="jumbotron" style="padding-block: 1rem; background-color: #e2e9ef">
-			<button
-				class="btn mobileOnly"
-				style="position: absolute;
-    top: 10px;
-    left: 1rem;
-    color: rgb(213, 228, 209);
-    border: 1px solid #ffffff36 !important;
-    text-align: center;
-    width: 56px;
-    padding-left: 20px;
-	display: flex"
-				class:d-none={!mobileComponent}
-				on:click={() => {
-					changeComponent(null, true);
-				}}><span class="material-symbols-outlined"> arrow_back_ios </span></button
-			>
-			<h1 class="display-4">{$_('nav.account')}</h1>
-		</div>
-	</section>
 	<section>
 		<div class="container mobileCont">
 			<div class="row mt-3 pb-5">
@@ -96,15 +95,6 @@
 								class:active={component == Documents}
 							>
 								<span class="material-symbols-outlined"> draft </span>Dökümanlarım
-							</button>
-							<button
-								class="list-group-item w-100"
-								on:click={() => {
-									changeComponent(Messages);
-								}}
-								class:active={component == Messages || component == Chat}
-							>
-								<span class="material-symbols-outlined"> draft </span>Mesajlar
 							</button>
 							<li class="list-group-item">
 								<span class="material-symbols-outlined"> description </span>Kayıtlarım
@@ -156,14 +146,6 @@
 							>
 								<span class="material-symbols-outlined"> draft </span>Dökümanlarım
 							</button>
-							<button
-								class="list-group-item w-100"
-								on:click={() => {
-									changeComponent(Messages, true);
-								}}
-							>
-								<span class="material-symbols-outlined"> draft </span>Mesajlar
-							</button>
 							<li class="list-group-item">
 								<span class="material-symbols-outlined"> description </span>Kayıtlarım
 							</li>
@@ -212,6 +194,13 @@
 			</div>
 		</div>
 	</section>
+{:else}
+	<div
+		class="d-flex w-100 h-100 align-items-center justify-content-center"
+		style="min-height: calc(100dvh - 300px);"
+	>
+		<h6 style="color: gray;">Sehiyye.online</h6>
+	</div>
 {/if}
 
 <style>

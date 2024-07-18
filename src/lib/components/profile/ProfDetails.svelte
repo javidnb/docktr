@@ -208,6 +208,16 @@
 							>
 						</li>
 						<li>
+							<a
+								class="dropdown-item d-flex align-items-center gap-1"
+								href={avatar ? avatar : userData?.user?.photoURL}
+								target="_blank"
+								><span class="material-symbols-outlined"> fullscreen </span>{$_(
+									'actions.view_pp'
+								)}</a
+							>
+						</li>
+						<li>
 							<button
 								class="dropdown-item d-flex align-items-center gap-1"
 								on:click|preventDefault={() => {

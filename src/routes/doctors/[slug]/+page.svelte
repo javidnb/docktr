@@ -140,9 +140,8 @@
 </script>
 
 <section>
-	<div class="jumbotron" style="padding-top: 2rem; background-color: #e2e9ef">
+	<div class="jumbotron" style="padding-block: 1rem; background-color: #e2e9ef">
 		<h1 class="display-4">{doctor?.name || ''}</h1>
-		<hr />
 		<!-- <p>
 			It uses utility classes for typography and spacing to space content out within the larger
 			container.
@@ -159,7 +158,7 @@
 	</ol>
 </Modal>
 
-<section class="my-3">
+<section class="py-3" style="background-color: rgb(249 249 249);">
 	<div class="container">
 		<div class="row">
 			<div class="col-12">
@@ -172,7 +171,8 @@
 							aspect-ratio: 1/1;
 							object-fit: cover;
 							object-position: top;
-							border-radius: 100%;"
+							border-radius: 100%;
+							box-shadow: 0px 0px 6px #0000000a"
 						/>
 					</div>
 					{#if !$session?.user?.doctor}
@@ -427,12 +427,13 @@
 		border-radius: 20px;
 		font-size: large;
 		margin-block: auto;
-		background: white;
+		background: var(--primaryColor);
 		padding-inline: 2rem;
 		padding-block: 1rem;
+		color: white;
 	}
 	.btnRandevu:hover {
-		background-color: var(--primaryColor);
+		background-color: #95ba8c;
 	}
 	.branch button {
 		color: var(--primaryColor);

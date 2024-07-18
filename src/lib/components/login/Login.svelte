@@ -6,7 +6,8 @@
 		type UserCredential,
 		signInWithCustomToken,
 		RecaptchaVerifier,
-		signInWithPhoneNumber
+		signInWithPhoneNumber,
+		type ConfirmationResult
 	} from 'firebase/auth';
 	import { getToken } from 'firebase/messaging';
 	import { onMount } from 'svelte';
@@ -19,8 +20,11 @@
 	let password: string = '';
 	let phoneNumber: string = '';
 	let displayName: string;
+	let confirmationNumber: string = '';
 	let disabled = false;
 	let showError: boolean = false; // display login error
+	let showConfimationInput: boolean = false;
+	let confResult: ConfirmationResult;
 
 	let type: string = 'login';
 	let method: string = 'mobile';
@@ -38,21 +42,26 @@
 
 	let verificationCode = '';
 	let verificationId = '';
+	let recapVer: RecaptchaVerifier;
 
 	onMount(async () => {
 		if (browser) {
-			(window as any).recaptchaVerifier = new RecaptchaVerifier(auth, 'recap', {
-				size: 'normal',
+			auth.languageCode = 'az';
+			recapVer = new RecaptchaVerifier(auth, 'btnLogin', {
+				size: 'invisible',
 				callback: (response: any) => {
 					console.log('recap: ', response);
+					loginModal.set(true);
 				}
 			});
 		}
 
 		showError = false;
-		if ($session.loggedIn) {
-			// goto('./profile');
-		}
+		showConfimationInput = false;
+
+		// if ($session.loggedIn) {
+		// 	goto('./profile');
+		// }
 	});
 
 	async function postData(userData: any) {
@@ -122,14 +131,17 @@
 		showError = false;
 		// MOBILE NUMBER LOGIN
 		if (method == 'mobile') {
-			try {
-				const appVerifier = (window as any).recaptchaVerifier;
-				const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
-			
-				console.log(verificationId);
-			} catch (error) {
-				console.error('Error during sign in:', error);
-			}
+			signInWithPhoneNumber(auth, `+` + phoneNumber, recapVer)
+				.then((confirmationResult) => {
+					confResult = confirmationResult;
+					showConfimationInput = true;
+				})
+				.catch((error) => {
+					console.log('phone: ', phoneNumber);
+					console.log(error);
+					// Error; SMS not sent
+					// ...
+				});
 			return;
 			dataLoading.set(true);
 			const response = await fetch('https://tekoplast.az/docktr/api/?authToken', {
@@ -261,6 +273,30 @@
 			return null;
 		}
 	}
+
+	function confirm() {
+		confResult
+			.confirm(confirmationNumber)
+			.then(async (result) => {
+				console.log(result);
+				// User signed in successfully.
+				const user = result.user;
+				await getUser(result);
+				toast.push(`Xoş gəldiniz ${result.user.displayName ?? ''}!`, {
+					duration: 2000,
+					theme: {
+						'--toastColor': 'mintcream',
+						'--toastBackground': 'rgb(91 144 77)',
+						'--toastBarBackground': '#1d5b3c'
+					}
+				});
+				closeModal();
+			})
+			.catch((error) => {
+				console.log(error);
+				showError = true;
+			});
+	}
 </script>
 
 <div class="login-form" style="max-width: 100%; overflow-x:hidden">
@@ -326,44 +362,66 @@
 					placeholder={$_('login.email')}
 					required
 				/>
-			{:else if method == 'mobile'}
 				<input
 					class="form-control"
-					style="padding: .5rem; min-width: 300px"
-					bind:value={phoneNumber}
-					type="number"
-					placeholder={$_('login.mobile')}
+					style="padding: .5rem;"
+					bind:value={password}
+					type="password"
+					placeholder={$_('login.pass')}
 					required
-				/>				
+				/>
+			{:else if method == 'mobile'}
+				{#if !showConfimationInput}
+					<input
+						class="form-control"
+						style="padding: .5rem; min-width: 300px"
+						bind:value={phoneNumber}
+						type="number"
+						placeholder={$_('login.mobile')}
+						required
+					/>
+				{:else}
+					<input
+						class="form-control"
+						style="padding: .5rem; min-width: 300px"
+						bind:value={confirmationNumber}
+						type="number"
+						placeholder="12345"
+						required
+					/>
+					<button class="btn btn-outline-primary" on:click|preventDefault={confirm}>
+						Confirm
+					</button>
+				{/if}
+				<!-- <div
+					id="recap"
+					style="background: white;
+					border-radius: 6px;
+					padding: 0"
+				></div> -->
 			{/if}
-			<input
-				class="form-control"
-				style="padding: .5rem;"
-				bind:value={password}
-				type="password"
-				placeholder={$_('login.pass')}
-				required
-			/>
 			{#if showError}
 				<span style="color:#c40f0f">{$_('login.error')} <br />{$_('login.try_again')}</span>
 			{/if}
-			<button
-				class="btn"
-				id="btnLogin"
-				{disabled}
-				type="submit"
-				style="padding: 0.5rem;
+			{#if !showConfimationInput}
+				<button
+					class="btn"
+					id="btnLogin"
+					{disabled}
+					type="submit"
+					style="padding: 0.5rem;
 					border-radius: 10px;
 					background: var(--primaryColor);
 					color: white;
 					border: 0px;
 					font-size: 1.05rem;
 					cursor: pointer;"
-				>{type == 'login' ? $_('login.login') : $_('login.register')}
-				{#if $dataLoading}
-					<div class="loader"></div>
-				{/if}
-			</button>
+					>{type == 'login' ? $_('login.login') : $_('login.register')}
+					{#if $dataLoading}
+						<div class="loader"></div>
+					{/if}
+				</button>
+			{/if}
 		</form>
 
 		<hr style="margin-top: 1rem" />
@@ -378,8 +436,6 @@
 		</div>
 	</div>
 </div>
-
-<div id="recap"></div>
 
 <style type="text/css">
 	.login-form {

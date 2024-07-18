@@ -17,7 +17,6 @@
 	import Login from './login/Login.svelte';
 	import { goto } from '$app/navigation';
 	import { locale, _ } from 'svelte-i18n';
-	import Chat from './chat/Chat.svelte';
 
 	let currentDate = new Date();
 	let showModal: boolean = false;
@@ -57,11 +56,29 @@
 	<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primaryColor);">
 		<div
 			class="container-fluid"
-			style="display: flex;flex-wrap: inherit;
-    align-items: center;
-    justify-content: space-between; width:100%"
+			style="display: flex;
+			flex-wrap: inherit;
+			align-items: center;
+			justify-content: space-between; 
+			width:100%"
 		>
-			<p class="d-flex align-items mb-0 time" style="color: white;">{formatDate(currentDate)}</p>
+			{#if curPage == '/messages' && !$mobile}
+				<button
+					on:click={() => {
+						history.back();
+					}}
+					class="d-flex nav-link topnavlink btnBack"
+					type="button"
+					style="color: rgb(213, 228, 209);
+						padding: 5px 10px;
+						gap: 0;"
+				>
+					<span class="material-symbols-outlined"> arrow_back_ios </span>
+					<span>Geri</span>
+				</button>
+			{:else}
+				<p class="d-flex align-items mb-0 time" style="color: white;">{formatDate(currentDate)}</p>
+			{/if}
 			<a class="navbar-brand mx-auto" style="margin-left: auto;" href="../">
 				Səhiyyə<span style="font-size: x-large; color: rgb(0 0 0 / 70%)"
 					>.{websiteName.endsWith('.net') ? 'net' : 'online'}</span
@@ -341,6 +358,10 @@
 		.pcOnly {
 			display: none !important;
 		}
+		.btnBack {
+			position: absolute;
+			top: 12px;
+		}
 	}
 	@media screen and (min-width: 992px) {
 		.navbar-collapse {
@@ -348,6 +369,11 @@
 		}
 		.nav-link {
 			gap: 0.3rem;
+		}
+		.navbar-brand {
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
 		}
 	}
 	.homeNav {

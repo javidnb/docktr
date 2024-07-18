@@ -10,12 +10,15 @@
 	import { _ } from 'svelte-i18n';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { writable } from 'svelte/store';
+	import Documents from '../profile/Documents.svelte';
+	import selectedUserId from '../profile/Documents.svelte';
 
 	let messages: any = [];
 	let newMessage = '';
 	let currentUser = $session.user?.uid || null;
 	let userId: any;
 	let user: any = writable({});
+	let showDocs: boolean = false;
 
 	$: if ($selectedUser) {
 		userId = $selectedUser;
@@ -224,46 +227,49 @@
 <button
 	class="btn btn-outline-primary mobileOnly"
 	style="position: absolute;
-		top: 10px;
-		left: 1rem;
-		background: rgb(153 155 152);
-		padding: 6px 0px 0px 8px;
-		color: white;
-		width: 3.5rem;"
+    top: 10px;
+    left: 1rem;
+    color: rgb(213, 228, 209);
+    border: 1px solid #ffffff36 !important;
+    text-align: center;
+    width: 56px;
+	height: 40px;
+    padding-left: 20px;"
 	on:click={() => selectedUser.set(null)}
 >
 	<span class="material-symbols-outlined">arrow_back_ios</span>
 </button>
 
-<main class="d-flex flex-column h-100">
-	<div
-		class="chat mb-3 d-flex flex-column gap-1"
-		id="messages-container"
-		style="padding-right: .5rem; position: relative"
-	>
+{#if !showDocs}
+	<main class="d-flex flex-column h-100">
 		<div
-			style="position: sticky;
+			class="chat mb-3 d-flex flex-column gap-1"
+			id="messages-container"
+			style="padding-right: .5rem; position: relative"
+		>
+			<div
+				style="position: sticky;
 			top: 0px;
 			background: white;
 			border-bottom: 1px solid #ececec;"
-		>
-			<div class="d-flex align-items-center w-100 pt-1 py-2">
-				{#if $user.photoURL}
-					<img
-						src={$user.photoURL}
-						alt="PP"
-						style="width: 35px;
-				height: 35px;
-				border-radius: 100%;
-				margin-left: 10px;
-				margin-right: 5px;
-				object-fit: cover;
-				object-position: center;"
-					/>
-				{/if}
-				<h5 class="flex-1 mb-0">{$user.displayName || $user.email || $user.phoneNumber || ''}</h5>
-				<div class="input-group ml-auto" style="width: fit-content;">
-					<!-- <button
+			>
+				<div class="d-flex align-items-center w-100 pt-1 py-2">
+					{#if $user?.photoURL}
+						<img
+							src={$user.photoURL}
+							alt="PP"
+							style="width: 35px;
+							height: 35px;
+							border-radius: 100%;
+							margin-left: 10px;
+							margin-right: 5px;
+							object-fit: cover;
+							object-position: center;"
+						/>
+					{/if}
+					<h5 class="flex-1 mb-0">{$user.displayName || $user.email || $user.phoneNumber || ''}</h5>
+					<div class="d-flex gap-2 ml-auto" style="width: fit-content;">
+						<!-- <button
 						class="btn btn-outline-primary d-flex align-items-center gap-1"
 						style="padding: 5px 15px"
 						on:click={() => {
@@ -274,146 +280,155 @@
 							{$hideNav ? 'arrow_circle_down' : 'arrow_circle_up'}
 						</span>
 					</button> -->
-					<button
-						class="btn btn-outline-primary d-flex align-items-center gap-1"
-						style="padding: 5px 15px"
-					>
-						<span class="material-symbols-outlined ml-auto"> video_call </span>
-						<span>Call</span>
-					</button>
+						<button
+							class="btn btn-outline-primary d-flex align-items-center gap-1 pcOnly"
+							style="padding: 5px 15px"
+							on:click={() => (showDocs = !showDocs)}
+						>
+							<span class="material-symbols-outlined"> draft </span>
+							<span>Dökümanlar</span>
+						</button>
+						<button
+							class="btn btn-outline-primary d-flex align-items-center gap-1"
+							style="padding: 5px 15px"
+						>
+							<span class="material-symbols-outlined ml-auto"> video_call </span>
+							<span>Call</span>
+						</button>
+					</div>
 				</div>
 			</div>
-		</div>
-		{#each messages as message}
-			<div
-				class="d-flex msgBox align-items-center {message.fromUser !== currentUser
-					? 'flex-row'
-					: 'flex-row-reverse align-self-end'}"
-			>
-				{#if message.fromUser === currentUser && $session.user?.photoURL}
-					<img
-						src={$session.user?.photoURL}
-						alt="PP"
-						style="width: 35px;
+			{#each messages as message}
+				<div
+					class="d-flex msgBox align-items-center {message.fromUser !== currentUser
+						? 'flex-row'
+						: 'flex-row-reverse align-self-end'}"
+				>
+					{#if message.fromUser === currentUser && $session.user?.photoURL}
+						<img
+							src={$session.user?.photoURL}
+							alt="PP"
+							style="width: 35px;
 							height: 35px;
 							border-radius: 100%;
 							margin-left: 10px;
 							margin-right: 5px;
 							object-fit: cover;
     						object-position: center;"
-					/>
-				{:else if $user.photoURL}
-					<img
-						src={$user.photoURL}
-						alt="PP"
-						style="width: 35px;
+						/>
+					{:else if $user.photoURL}
+						<img
+							src={$user.photoURL}
+							alt="PP"
+							style="width: 35px;
 						height: 35px;
 						border-radius: 100%;
 						margin-left: 10px;
 						margin-right: 5px;
 						object-fit: cover;
     					object-position: center;"
-					/>
-				{:else}
-					<span style="font-size: 38px; color: #628a57" class="material-symbols-outlined icon-fill"
-						>account_circle</span
+						/>
+					{:else}
+						<span
+							style="font-size: 38px; color: #628a57"
+							class="material-symbols-outlined icon-fill">account_circle</span
+						>
+					{/if}
+					<div
+						class="message d-flex flex-column flex-1 px-3 {message.fromUser === currentUser
+							? 'sent'
+							: 'received'}"
 					>
-				{/if}
-				<div
-					class="message d-flex flex-column flex-1 px-3 {message.fromUser === currentUser
-						? 'sent'
-						: 'received'}"
-				>
-					{message.message}
-					{#if message.file}
-						<a class="fileCard" href={message.file.url} target="_blank">
-							<span
-								style="font-size: 30px; color: #30552e"
-								class="material-symbols-outlined my-auto"
-							>
-								description
-							</span>
-							<span
-								style="padding-inline: 5px;
+						{message.message}
+						{#if message.file}
+							<a class="fileCard" href={message.file.url} target="_blank">
+								<span
+									style="font-size: 30px; color: #30552e"
+									class="material-symbols-outlined my-auto"
+								>
+									description
+								</span>
+								<span
+									style="padding-inline: 5px;
 									font-size: smaller;
 									overflow-wrap: break-word;
-									max-height: 25px;
+									max-height: 28px;
 									overflow-y: hidden;
 									line-height: normal;
 									text-decoration: none;
 									color: unset;
 									margin-bottom: 10px;
 									max-width: 80%"
-							>
-								{message.file.name}
-							</span>
-						</a>
-					{/if}
-					<span style="font-size: small; color: gray">{@html timestamp(message.timestamp)}</span>
+								>
+									{message.file.name}
+								</span>
+							</a>
+						{/if}
+						<span style="font-size: small; color: gray">{@html timestamp(message.timestamp)}</span>
+					</div>
 				</div>
-			</div>
-		{/each}
-	</div>
-	<div class="input-group d-flex mt-auto bg-white" id="msgContainer">
-		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-		<label
-			for="fileInput"
-			style="min-width: 60px; border:1px solid rgb(222 226 230); border-right: none"
-			class="btn btn-outline-secondary d-flex align-items-center justify-content-center"
-			id="btnAttach"
-			use:tooltip={{
-				content: $_('actions.add_file'),
-				placement: 'top-start'
-			}}
-		>
-			<span class="material-symbols-outlined"> attach_file </span>
-		</label>
-		<input
-			class="form-control d-none"
-			id="fileInput"
-			type="file"
-			accept=".jpg,.jpeg,.png,.gif,.bmp,.webp,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,.tar,.gz"
-			on:change={(e) => onFileSelected(e)}
-			bind:this={fileInput}
-		/>
-		<!-- ADDING FILES-->
-		{#if selectedFile}
-			<div
-				class="progress h-100"
-				style="position: relative; width: 10em"
-				role="progressbar"
-				aria-label="Upload percentage"
-				aria-valuenow={uploadProgress}
-				aria-valuemin="0"
-				aria-valuemax="100"
+			{/each}
+		</div>
+		<div class="input-group d-flex mt-auto bg-white" id="msgContainer">
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+			<label
+				for="fileInput"
+				style="min-width: 60px; border:1px solid rgb(222 226 230); border-right: none"
+				class="btn btn-outline-secondary d-flex align-items-center justify-content-center"
+				id="btnAttach"
+				use:tooltip={{
+					content: $_('actions.add_file'),
+					placement: 'top-start'
+				}}
 			>
-				{#if uploading}
-					<span
-						class="progress-bar"
-						style="display: flex;
+				<span class="material-symbols-outlined"> attach_file </span>
+			</label>
+			<input
+				class="form-control d-none"
+				id="fileInput"
+				type="file"
+				accept=".jpg,.jpeg,.png,.gif,.bmp,.webp,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,.tar,.gz"
+				on:change={(e) => onFileSelected(e)}
+				bind:this={fileInput}
+			/>
+			<!-- ADDING FILES-->
+			{#if selectedFile}
+				<div
+					class="progress h-100"
+					style="position: relative; width: 10em"
+					role="progressbar"
+					aria-label="Upload percentage"
+					aria-valuenow={uploadProgress}
+					aria-valuemin="0"
+					aria-valuemax="100"
+				>
+					{#if uploading}
+						<span
+							class="progress-bar"
+							style="display: flex;
 						align-items: center;
 						border: 1px solid #dee2e6;
 						padding-inline: .5rem;
 						position: relative;
 						width: {uploadProgress}%"
-					/>
-				{/if}
-				<div
-					style="position: absolute;
+						/>
+					{/if}
+					<div
+						style="position: absolute;
 						left: 0px;
 						top: 50%;
 						width: 100%;
 						padding-left: 5px;
 						transform: translateY(-50%);"
-				>
-					{selectedFile.name.slice(0, 15)}
-					<button
-						on:click={() => {
-							selectedFile = null;
-						}}
-						class="btn"
-						style="position: absolute;
+					>
+						{selectedFile.name.slice(0, 15)}
+						<button
+							on:click={() => {
+								selectedFile = null;
+							}}
+							class="btn"
+							style="position: absolute;
 							top: -2px;
 							right: 5px;
 							background-color: #bd2626;
@@ -424,27 +439,32 @@
 							justify-content: center;
 							width: 23px;
 							height: 23px;"
-					>
-						<span style="font-size: 15px" class="material-symbols-outlined"> close </span>
-					</button>
+						>
+							<span style="font-size: 15px" class="material-symbols-outlined"> close </span>
+						</button>
+					</div>
 				</div>
-			</div>
-		{/if}
-		<!-- END FILES-->
-		<input
-			class="form-control"
-			type="text"
-			bind:value={newMessage}
-			placeholder="Type a message..."
-			on:keydown={handleKeyDown}
-		/>
-		<button
-			style="min-width: 60px;"
-			class="btn btn-primary d-flex align-items-center justify-content-center"
-			on:click={sendMessage}><span class="material-symbols-outlined"> send </span></button
-		>
+			{/if}
+			<!-- END FILES-->
+			<input
+				class="form-control"
+				type="text"
+				bind:value={newMessage}
+				placeholder="Type a message..."
+				on:keydown={handleKeyDown}
+			/>
+			<button
+				style="min-width: 60px;"
+				class="btn btn-primary d-flex align-items-center justify-content-center"
+				on:click={sendMessage}><span class="material-symbols-outlined"> send </span></button
+			>
+		</div>
+	</main>
+{:else}
+	<div class="d-flex flex-column h-100">
+		<Documents />
 	</div>
-</main>
+{/if}
 
 <style>
 	.chat {

@@ -9,6 +9,7 @@
 	import { dataLoading, loginModal } from '$lib/store/dataStore';
 	import Chat from '$lib/components/chat/Chat.svelte';
 	import Messages from '$lib/components/chat/Messages.svelte';
+	import Documents from '$lib/components/profile/Documents.svelte';
 
 	export let data;
 	let userEmail: any = '';
@@ -47,14 +48,14 @@
 			<button
 				class="btn mobileOnly"
 				style="position: absolute;
-			left: 15px;
-			top: 9px;
-			background: #00000054;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			padding-inline: 14px 5px;
-			color: var(--primaryColor);"
+    top: 10px;
+    left: 1rem;
+    color: rgb(213, 228, 209);
+    border: 1px solid #ffffff36 !important;
+    text-align: center;
+    width: 56px;
+    padding-left: 20px;
+	display: flex"
 				class:d-none={!mobileComponent}
 				on:click={() => {
 					changeComponent(null, true);
@@ -87,7 +88,13 @@
 							>
 								<span class="material-symbols-outlined"> history </span>Hastalık Geçmişi
 							</button>
-							<button class="list-group-item w-100">
+							<button
+								class="list-group-item w-100"
+								on:click={() => {
+									changeComponent(Documents);
+								}}
+								class:active={component == Documents}
+							>
 								<span class="material-symbols-outlined"> draft </span>Dökümanlarım
 							</button>
 							<button
@@ -103,7 +110,10 @@
 								<span class="material-symbols-outlined"> description </span>Kayıtlarım
 							</li>
 							<li class="list-group-item">
-								<span class="material-symbols-outlined"> medication </span>İlaçlarım
+								<span class="material-symbols-outlined"> medication </span>Notlar
+							</li>
+							<li class="list-group-item">
+								<span class="material-symbols-outlined"> medication </span>Reçetelerim
 							</li>
 							<li class="list-group-item">
 								<span class="material-symbols-outlined"> event </span>İlaç hatırlatıcı
@@ -138,9 +148,14 @@
 							>
 								<span class="material-symbols-outlined"> history </span>Hastalık Geçmişi
 							</button>
-							<li class="list-group-item">
+							<button
+								class="list-group-item"
+								on:click={() => {
+									changeComponent(Documents, true);
+								}}
+							>
 								<span class="material-symbols-outlined"> draft </span>Dökümanlarım
-							</li>
+							</button>
 							<button
 								class="list-group-item w-100"
 								on:click={() => {

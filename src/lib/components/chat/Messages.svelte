@@ -4,7 +4,7 @@
 	import { initializeFirebase, db } from '$lib/firebase.client';
 	import { session } from '$lib/session';
 	import { createEventDispatcher } from 'svelte';
-	import { selectedUser, users } from '$lib/store/dataStore';
+	import { dataLoading, selectedUser, users } from '$lib/store/dataStore';
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
 
@@ -29,6 +29,7 @@
 	});
 
 	async function getMsgs() {
+		dataLoading.set(true);
 		if (messagesCollection) {
 			const q = query(
 				messagesCollection,
@@ -99,6 +100,7 @@
 			messagesGroupedByUser = result;
 			console.log(result);
 			localStorage.setItem('msgs', JSON.stringify(messagesGroupedByUser));
+			dataLoading.set(false);
 		}
 	}
 </script>

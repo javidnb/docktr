@@ -4,6 +4,7 @@
 	import { _ } from 'svelte-i18n';
 	import { selectedUser, hideNav } from '$lib/store/dataStore';
 	import { onMount } from 'svelte';
+
 	onMount(() => {
 		hideNav.set(true);
 		return () => {
@@ -11,6 +12,22 @@
 			hideNav.set(false);
 		};
 	});
+
+	let animate = true;
+	function scaleFade(node: HTMLElement, { duration = 70 }: { duration?: number } = {}) {
+		return {
+			duration,
+			css: (t: number) => {
+				const scale = 1.05 - 0.05 * t; // from 1.1 to 1
+				const opacity = t; // from 0 to 1
+				const x = -100 + 100 * t;
+				return `
+				 	transform: scale(${scale});					
+                    opacity: ${opacity};
+                `;
+			}
+		};
+	}
 </script>
 
 <section>
@@ -27,12 +44,21 @@
 		<div class="row msgRow justify-content-center">
 			<div class="col-md-4 col-lg-3 {$selectedUser ? 'pcOnly' : ''}">
 				<div style="height: 100%; border-right: 1px solid #ececec; padding-right: .5rem">
-					<Messages />
+					<Messages
+						on:changeValue={() => {
+							// animate = false;
+							// setTimeout(() => {
+							// 	animate = true;
+							// }, 5);
+						}}
+					/>
 				</div>
 			</div>
 			<div class="col-md-8 col-lg-9">
-				{#if $selectedUser}
-					<Chat />
+				{#if $selectedUser && animate}
+					<div in:scaleFade>
+						<Chat />
+					</div>
 				{:else}
 					<div class="d-flex h-100 align-items-center justify-content-center pcOnly">
 						<h6 style="color: gray">Sehiyye.online</h6>

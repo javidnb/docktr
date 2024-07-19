@@ -38,6 +38,7 @@
 		"@vercel/speed-insights": "^1.0.10",
 		"filepond": "^4.31.1",
 		"firebase": "^10.10.0",
+		"libphonenumber-js": "^1.11.4",
 		"peerjs": "^1.5.4",
 		"socket.io-client": "^4.7.5",
 		"svelte-filepond": "^0.2.2",

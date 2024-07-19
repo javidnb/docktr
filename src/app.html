@@ -115,7 +115,7 @@
 				color: white;
 			}
 			.btn:active {
-				background-color: #7d9576!important;
+				background-color: #7d9576 !important;
 			}
 			.mobileOnly {
 				display: none;
@@ -135,10 +135,10 @@
 			}
 			@media screen and (max-width: 992px) {
 				.mobileOnly {
-					display: inline-block!important;
+					display: inline-block !important;
 				}
 				.pcOnly {
-					display: none!important;
+					display: none !important;
 				}
 			}
 			@media (min-width: 1200px) {
@@ -178,10 +178,25 @@
 			::-webkit-scrollbar-thumb:hover {
 				background-color: #394636;
 			}
+			/* ANIMATIONS */
+			.anim-scale-down {
+				animation: anim-scale-down 0.1s linear;
+			}
+			@keyframes anim-scale-down {
+				0% {
+					opacity: 0;
+					transform: scale(1.1);
+				}
+				100% {
+					opacity: 1;
+					transform: scale(1);
+				}
+			}
+
 			/* BTN LOADING ICON */
 			.btnLoader {
 				position: relative;
-				padding: .5rem;
+				padding: 0.5rem;
 			}
 
 			.loader {

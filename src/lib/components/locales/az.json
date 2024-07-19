@@ -64,7 +64,8 @@
 		"remove_pp": "Profil şəklini sil",
 		"view_pp":"Şəklə bax",
 		"close": "Bağla",
-		"add_file":"Fayl əlavə et"
+		"add_file":"Fayl əlavə et",
+		"wait": "Gözləyin"
 	},
 	"login": {
 		"login_header": "Hesaba giriş",

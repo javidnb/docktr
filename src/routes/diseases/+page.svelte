@@ -40,7 +40,6 @@
 	}
 
 	function handleSelect(event: any) {
-		console.log($selectedSymptoms);
 		if (event.type == 'clear') {
 			if (event.detail.length) {
 				selectedSymptoms.set([]);

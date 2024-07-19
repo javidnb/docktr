@@ -4,9 +4,10 @@
 	import { initializeFirebase, db } from '$lib/firebase.client';
 	import { session } from '$lib/session';
 	import { createEventDispatcher } from 'svelte';
-	import { dataLoading, selectedUser, users } from '$lib/store/dataStore';
+	import { selectedUser, users } from '$lib/store/dataStore';
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
+	import { writable } from 'svelte/store';
 
 	let messagesCollection: CollectionReference;
 	let messagesGroupedByUser: any = [];
@@ -19,6 +20,7 @@
 	const dispatch = createEventDispatcher();
 	$: curPage = $page.route.id;
 	$: if ($session.user) getMsgs();
+	let dataLoading = writable(false);
 
 	onMount(async () => {
 		await initializeFirebase();
@@ -111,6 +113,21 @@
 		<span>{$session.user?.uid}</span>
 	</div>
 {/if}
+
+<div class="d-flex" style="position: relative">
+	<span
+		style="font-size: larger;
+		 border-bottom: 1px solid #ececec; 
+		 padding: 10px; 
+		 margin-bottom: 1rem;
+		 width: 100%;"
+	>
+		Mesajlar
+	</span>
+	{#if $dataLoading}
+		<div class="loader" style="background-color: var(--primaryColor); top: 10px; right: 10px"></div>
+	{/if}
+</div>
 
 <div class="d-flex gap-2 flex-column">
 	{#each messagesGroupedByUser as { user, uid }}

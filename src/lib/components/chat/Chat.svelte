@@ -247,11 +247,12 @@
 			id="messages-container"
 			style="padding-right: .5rem; position: relative"
 		>
+			<!-- HEADER-->
 			<div
 				style="position: sticky;
-			top: 0px;
-			background: white;
-			border-bottom: 1px solid #ececec;"
+				top: 0px;
+				background: white;
+				border-bottom: 1px solid #ececec;"
 			>
 				<div class="d-flex align-items-center w-100 pt-1 py-2">
 					{#if $user?.photoURL}
@@ -298,6 +299,7 @@
 					</div>
 				</div>
 			</div>
+			<!-- END HEADER-->
 			{#each messages as message}
 				<div
 					class="d-flex msgBox align-items-center {message.fromUser !== currentUser

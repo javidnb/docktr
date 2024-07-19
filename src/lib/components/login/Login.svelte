@@ -15,13 +15,15 @@
 	import { toast } from '@zerodevx/svelte-toast';
 	import { _ } from 'svelte-i18n';
 	import { browser } from '$app/environment';
+	import Select from 'svelte-select';
+	import { parsePhoneNumber, isValidNumber } from 'libphonenumber-js';
 
 	let email: string = '';
 	let password: string = '';
 	let phoneNumber: string = '';
 	let displayName: string;
 	let confirmationNumber: string = '';
-	let disabled = false;
+	let disabled = true;
 	let showError: boolean = false; // display login error
 	let showConfimationInput: boolean = false;
 	let confResult: ConfirmationResult;
@@ -29,35 +31,39 @@
 	let type: string = 'login';
 	let method: string = 'mobile';
 
-	function closeModal() {
-		loginModal.set(false);
-		disabled = false;
-		showError = false;
-	}
+	let selectItems = [
+		{ value: '+994', label: '+994' },
+		{ value: '+90', label: '+90' }
+	];
+
+	let selecedItem = selectItems[0];
 
 	$: if ($loginModal == false) {
 		disabled = false;
 		showError = false;
 	}
-
-	let verificationCode = '';
-	let verificationId = '';
 	let recapVer: RecaptchaVerifier;
 
-	onMount(async () => {
-		if (browser) {
-			auth.languageCode = 'az';
-			recapVer = new RecaptchaVerifier(auth, 'btnLogin', {
-				size: 'invisible',
-				callback: (response: any) => {
-					console.log('recap: ', response);
-					loginModal.set(true);
-				}
-			});
-		}
-
+	onMount(() => {
 		showError = false;
 		showConfimationInput = false;
+		if (browser) {
+			const asyncFunction = async () => {
+				try {
+					auth.languageCode = 'az';
+					recapVer = new RecaptchaVerifier(auth, 'btnLogin', {
+						size: 'invisible',
+						callback: (response: any) => {
+							console.log('recap: ', response);
+							loginModal.set(true);
+						}
+					});
+				} catch (error) {
+					console.error(error);
+				}
+			};
+			asyncFunction();
+		}
 
 		// if ($session.loggedIn) {
 		// 	goto('./profile');
@@ -131,13 +137,13 @@
 		showError = false;
 		// MOBILE NUMBER LOGIN
 		if (method == 'mobile') {
-			signInWithPhoneNumber(auth, `+` + phoneNumber, recapVer)
+			signInWithPhoneNumber(auth, `+` + selecedItem.value + phoneNumber, recapVer)
 				.then((confirmationResult) => {
 					confResult = confirmationResult;
 					showConfimationInput = true;
+					dataLoading.set(false);
 				})
 				.catch((error) => {
-					console.log('phone: ', phoneNumber);
 					console.log(error);
 					// Error; SMS not sent
 					// ...
@@ -274,11 +280,12 @@
 		}
 	}
 
-	function confirm() {
+	function confirm(event: any) {
+		event.target.disabled = true;
+		event.target.innerText = $_('actions.wait');
 		confResult
 			.confirm(confirmationNumber)
 			.then(async (result) => {
-				console.log(result);
 				// User signed in successfully.
 				const user = result.user;
 				await getUser(result);
@@ -290,12 +297,53 @@
 						'--toastBarBackground': '#1d5b3c'
 					}
 				});
+				showConfimationInput = false;
+				showError = false;
 				closeModal();
 			})
 			.catch((error) => {
 				console.log(error);
+				event.target.disabled = false;
+				event.target.innerText = $_('actions.confirm');
 				showError = true;
 			});
+	}
+
+	function closeModal() {
+		loginModal.set(false);
+		disabled = false;
+		showError = false;
+		showConfimationInput = false;
+	}
+
+	// PHONE NUMBER INPUT FORMATTING
+	function handleInput() {
+		if (phoneNumber.length > 3) {
+			const country = selecedItem.value == '+994' ? 'AZ' : 'TR';
+			let num = parsePhoneNumber(phoneNumber, country);
+			if (num.isValid()) {
+				phoneNumber = num.formatNational().slice(1);
+				disabled = false;
+			} else {
+				disabled = true;
+			}
+		}
+	}
+
+	// ANIMATION
+	function scaleFade(node: HTMLElement, { duration = 70 }: { duration?: number } = {}) {
+		return {
+			duration,
+			css: (t: number) => {
+				const scale = 1.05 - 0.05 * t; // from 1.1 to 1
+				const opacity = t; // from 0 to 1
+				const x = -100 + 100 * t;
+				return `
+				 	transform: scale(${scale});					
+                    opacity: ${opacity};
+                `;
+			}
+		};
 	}
 </script>
 
@@ -303,16 +351,32 @@
 	<div class="col pb-4" style="margin-top: 0; padding-top:0">
 		<div class="d-flex px-0 gap-2 socials w-100" style="padding: 1.5rem;">
 			<button
-				on:click={() => (method = 'mobile')}
-				class="btn btn-outline-primary"
+				on:click={() => {
+					method = 'mobile';
+					phoneNumber = '';
+					email = '';
+					password = '';
+					disabled = true;
+				}}
+				class="btn btn-outline-primary d-flex justify-content-start"
 				class:active={method == 'mobile'}
-				><span class="material-symbols-outlined icon-fill"> call </span></button
+				><span class="material-symbols-outlined icon-fill"> call </span><span class="mx-auto"
+					>Mobil</span
+				></button
 			>
 			<button
-				on:click={() => (method = 'email')}
-				class="btn btn-outline-primary bg-white"
+				on:click={() => {
+					method = 'email';
+					phoneNumber = '';
+					email = '';
+					password = '';
+					disabled = true;
+				}}
+				class="btn btn-outline-primary bg-white d-flex justify-content-start"
 				class:active={method == 'email'}
-				><span class="material-symbols-outlined icon-fill"> mail </span></button
+				><span class="material-symbols-outlined icon-fill"> mail </span><span class="mx-auto"
+					>E-mail</span
+				></button
 			>
 			<!-- <button class="btn btn-outline-primary bg-white" on:click={loginWithGoogle}
 				><svg
@@ -340,7 +404,14 @@
 			> -->
 		</div>
 		<form on:submit={login}>
-			<h5 class="text-center mb-0">
+			<h5
+				class="text-center mb-0"
+				style="padding-block: .5rem;
+				background: white;
+				box-shadow: 0px 0px 6px #0000000a;
+				border-radius: 6px;
+				color: #465543;"
+			>
 				{type == 'login' ? $_('login.login_header') : $_('login.register')}
 			</h5>
 			{#if type == 'register'}
@@ -358,6 +429,13 @@
 					class="form-control"
 					style="padding: .5rem; min-width: 300px"
 					bind:value={email}
+					on:input={() => {
+						if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && password.length > 6) {
+							disabled = false;
+						} else {
+							disabled = true;
+						}
+					}}
 					type="text"
 					placeholder={$_('login.email')}
 					required
@@ -366,32 +444,72 @@
 					class="form-control"
 					style="padding: .5rem;"
 					bind:value={password}
+					on:input={() => {
+						if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && password.length > 6) {
+							disabled = false;
+						} else {
+							disabled = true;
+						}
+					}}
 					type="password"
 					placeholder={$_('login.pass')}
 					required
 				/>
 			{:else if method == 'mobile'}
 				{#if !showConfimationInput}
-					<input
-						class="form-control"
-						style="padding: .5rem; min-width: 300px"
-						bind:value={phoneNumber}
-						type="number"
-						placeholder={$_('login.mobile')}
-						required
-					/>
+					<div class="p-0 input-group">
+						{#if type != 'register'}
+							{#if selecedItem.value == '+994'}
+								<div class="d-flex p-1 align-items-center">
+									<img
+										style="width:30px;height:30px"
+										src="https://ik.imagekit.io/d2nwsj0ktvh/img/az.png"
+										alt="Azerbaijan Flag"
+									/>
+								</div>
+							{:else}
+								<div class="d-flex p-1 align-items-center">
+									<img
+										style="width:30px;height:30px"
+										src="https://ik.imagekit.io/d2nwsj0ktvh/turkey_dBbuCptvk.png?updatedAt=1719140350211"
+										alt="Turkish Flag"
+									/>
+								</div>
+							{/if}
+						{/if}
+						<Select
+							class="form-control"
+							items={selectItems}
+							--width="80px"
+							--border-focused="1px solid var(--primaryColor)"
+							--border-radius="0px"
+							bind:value={selecedItem}
+							clearable={false}
+						></Select>
+						<input
+							class="form-control"
+							style="padding: .5rem;"
+							bind:value={phoneNumber}
+							on:input={handleInput}
+							type="text"
+							placeholder={$_('login.mobile')}
+							required
+						/>
+					</div>
 				{:else}
-					<input
-						class="form-control"
-						style="padding: .5rem; min-width: 300px"
-						bind:value={confirmationNumber}
-						type="number"
-						placeholder="12345"
-						required
-					/>
-					<button class="btn btn-outline-primary" on:click|preventDefault={confirm}>
-						Confirm
-					</button>
+					<div class="d-flex flex-column gap-3 p-0" in:scaleFade>
+						<input
+							class="form-control"
+							style="padding: .5rem; min-width: 300px"
+							bind:value={confirmationNumber}
+							type="number"
+							placeholder="123456"
+							required
+						/>
+						<button class="btn btn-outline-primary" on:click|preventDefault={confirm}>
+							{$_('actions.confirm')}
+						</button>
+					</div>
 				{/if}
 				<!-- <div
 					id="recap"
@@ -462,6 +580,6 @@
 	}
 	.active,
 	.socials button:hover {
-		background-color: var(--primaryColor) !important;
+		background-color: #a5a5a5 !important;
 	}
 </style>

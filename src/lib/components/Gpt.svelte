@@ -31,7 +31,7 @@
 </script>
 
 <div class="container" style="background-color: #efefef;">
-	<div class="row py-3 px-2" style="min-width: min(100dvw, 550px);">
+	<div class="row py-3 px-2" style="min-width: min(90dvw, 550px);">
 		<div class="col">
 			<h5 style="text-align: center;">How can we help?</h5>
 			<div

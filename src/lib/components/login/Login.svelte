@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { session } from '$lib/session';
+	import { session, type User } from '$lib/session';
 	import { auth, messaging } from '$lib/firebase.client';
 	import {
 		signInWithEmailAndPassword,
@@ -7,7 +7,9 @@
 		signInWithCustomToken,
 		RecaptchaVerifier,
 		signInWithPhoneNumber,
-		type ConfirmationResult
+		type ConfirmationResult,
+		createUserWithEmailAndPassword,
+		updateProfile
 	} from 'firebase/auth';
 	import { getToken } from 'firebase/messaging';
 	import { onMount } from 'svelte';
@@ -135,75 +137,59 @@
 		dataLoading.set(true);
 		disabled = true;
 		showError = false;
+
 		// MOBILE NUMBER LOGIN
 		if (method == 'mobile') {
-			signInWithPhoneNumber(auth, `+` + selecedItem.value + phoneNumber, recapVer)
-				.then((confirmationResult) => {
-					confResult = confirmationResult;
-					showConfimationInput = true;
-					dataLoading.set(false);
-				})
-				.catch((error) => {
-					console.log(error);
-					// Error; SMS not sent
-					// ...
-				});
-			return;
-			dataLoading.set(true);
-			const response = await fetch('https://tekoplast.az/docktr/api/?authToken', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ phoneNumber })
-			});
-			const data = await response.json();
-			console.log('auth data:', data);
-			try {
-				const userCredential = await signInWithCustomToken(auth, data.customToken);
-				console.log('user cred: ', userCredential);
-				await getUser(userCredential);
-				toast.push(`Xoş gəldiniz ${userCredential.user.displayName ?? ''}!`, {
-					duration: 2000,
-					theme: {
-						'--toastColor': 'mintcream',
-						'--toastBackground': 'rgb(91 144 77)',
-						'--toastBarBackground': '#1d5b3c'
-					}
-				});
-				dataLoading.set(false);
-				disabled = false;
-				closeModal();
-				return;
-			} catch (error) {
-				console.error('Error logging in:', error);
-				dataLoading.set(false);
-				disabled = false;
-				return;
-			}
+			const country = selecedItem.value == '+994' ? 'AZ' : 'TR';
+			email = parsePhoneNumber(phoneNumber, country).number.slice(1) + '@sehiyye.online';
 		}
 		// EMAIL LOGIN
-		await signInWithEmailAndPassword(auth, email, password)
-			.then(async (result) => {
-				const { user }: UserCredential = result;
-				localStorage.setItem('user', JSON.stringify(user));
-				await getUser(result);
-				toast.push(`Xoş gəldiniz ${result.user.displayName ?? ''}!`, {
-					duration: 2000,
-					theme: {
-						'--toastColor': 'mintcream',
-						'--toastBackground': 'rgb(91 144 77)',
-						'--toastBarBackground': '#1d5b3c'
-					}
+		if (type == 'register') {
+			createUserWithEmailAndPassword(auth, email, password)
+				.then(async (userCredential: UserCredential) => {
+					// Signed up
+					const user = userCredential;
+					updateProfile(user.user, { displayName });
+					await getUser(user);
+					toast.push(`Xoş gəldiniz ${user.user.displayName ?? ''}!`, {
+						duration: 2000,
+						theme: {
+							'--toastColor': 'mintcream',
+							'--toastBackground': 'rgb(91 144 77)',
+							'--toastBarBackground': '#1d5b3c'
+						}
+					});
+					closeModal();
+				})
+				.catch((error) => {
+					const errorCode = error.code;
+					const errorMessage = error.message;
+					// ..
 				});
-				closeModal();
-			})
-			.catch((error) => {
-				disabled = false;
-				showError = true;
-				dataLoading.set(false);
-				return error;
-			});
+		} else {
+			await signInWithEmailAndPassword(auth, email, password)
+				.then(async (result) => {
+					const { user }: UserCredential = result;
+					await getUser(result);
+					toast.push(`Xoş gəldiniz ${result.user.displayName ?? ''}!`, {
+						duration: 2000,
+						theme: {
+							'--toastColor': 'mintcream',
+							'--toastBackground': 'rgb(91 144 77)',
+							'--toastBarBackground': '#1d5b3c'
+						}
+					});
+					closeModal();
+				})
+				.catch((error) => {
+					disabled = false;
+					showError = true;
+					console.log(email);
+					console.log(password);
+					dataLoading.set(false);
+					return error;
+				});
+		}
 	}
 
 	// REGISTER FOR PUSH NOTIFICATIONS
@@ -430,7 +416,7 @@
 					style="padding: .5rem; min-width: 300px"
 					bind:value={email}
 					on:input={() => {
-						if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && password.length > 6) {
+						if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
 							disabled = false;
 						} else {
 							disabled = true;
@@ -438,21 +424,6 @@
 					}}
 					type="text"
 					placeholder={$_('login.email')}
-					required
-				/>
-				<input
-					class="form-control"
-					style="padding: .5rem;"
-					bind:value={password}
-					on:input={() => {
-						if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && password.length > 6) {
-							disabled = false;
-						} else {
-							disabled = true;
-						}
-					}}
-					type="password"
-					placeholder={$_('login.pass')}
 					required
 				/>
 			{:else if method == 'mobile'}
@@ -518,6 +489,14 @@
 					padding: 0"
 				></div> -->
 			{/if}
+			<input
+				class="form-control"
+				style="padding: .5rem;"
+				bind:value={password}
+				type="password"
+				placeholder={$_('login.pass')}
+				required
+			/>
 			{#if showError}
 				<span style="color:#c40f0f">{$_('login.error')} <br />{$_('login.try_again')}</span>
 			{/if}

@@ -2,19 +2,22 @@
 	import { onMount, onDestroy } from 'svelte';
 	import DailyIframe from '@daily-co/daily-js';
 	import type { DailyCall } from '@daily-co/daily-js';
-	import { dataLoading, putData, joinVideoCall } from '$lib/store/dataStore';
+	import {
+		dataLoading,
+		putData,
+		joinVideoCall,
+		ongoingAppointment,
+		sendNotification
+	} from '$lib/store/dataStore';
 	import { session } from '$lib/session';
 	import { _ } from 'svelte-i18n';
 
 	export let appointmentId: number;
 	let callFrame: DailyCall | null = null;
 	let roomUrl: string = 'https://sehiyye.daily.co/';
-	let localVideo: HTMLVideoElement;
-	let remoteVideo: HTMLVideoElement;
 	let videoContainer: HTMLDivElement;
 	let API_KEY = import.meta.env.VITE_DAILY_API_KEY;
 	let DAILY_API_URL = 'https://api.daily.co/v1/';
-	let roomId: any = null;
 
 	onMount(() => {
 		getRoom();
@@ -144,10 +147,48 @@
 			dataLoading.set(false);
 			if (!callFrame) return;
 
+			if (callFrame.participantCounts().present != 2) {
+				if ($session.user?.uid == $ongoingAppointment.userId) {
+					sendNotification(
+						$ongoingAppointment.doctorId,
+						true,
+						'Pls Join Video Call',
+						'Click to join',
+						'https://sehiyye.online/appointment'
+					);
+				} else {
+					sendNotification(
+						$ongoingAppointment.userId,
+						false,
+						'Pls Join Video Call',
+						'Click to join',
+						'https://sehiyye.online/appointment'
+					);
+				}
+			}
+
 			callFrame.on('left-meeting', async (event) => {
-				console.log('left event: ', event);
+				console.log('left', event);
 				joinVideoCall.set(false);
-				console.log("session id: ",callFrame?.meetingSessionSummary());
+				ongoingAppointment.set(false);
+				let session = callFrame?.meetingSessionSummary();
+
+				const headers = new Headers({
+					Authorization: `Bearer ${API_KEY}`,
+					'Content-Type': 'application/json'
+				});
+
+				fetch(`${DAILY_API_URL}/meetings/${session?.id}`, {
+					method: 'GET',
+					headers: headers
+				})
+					.then((response) => response.json())
+					.then((data) => {
+						console.log('Session Details:', data);
+					})
+					.catch((error) => {
+						console.error('Error fetching session details:', error);
+					});
 			});
 		});
 

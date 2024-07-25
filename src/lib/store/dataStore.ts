@@ -15,6 +15,7 @@ export const selectedBranch: any = writable('0');
 export const selectedSymptoms: any = writable([]);
 export const showBtnEndCall = writable(false);
 export const joinVideoCall = writable(false);
+export const ongoingAppointment = writable<any>();
 export const users = writable([]);
 export const selectedUser = writable();
 export const hideNav = writable(false);
@@ -92,5 +93,37 @@ export async function postData(table: string, data: any) {
 	} else {
 		dataLoading.set(false);
 		return 'error';
+	}
+}
+
+export async function sendNotification(
+	uid: string,
+	doctor: boolean,
+	title?: string,
+	body?: string,
+	url?: string
+) {
+	let time = new Date().getTime();
+	const fcmToken = doctor
+		? await fetch(`https://tekoplast.az/docktr/api/?getTokens&uid=${uid}&type=doctor&t=${time}`)
+		: await fetch(`https://tekoplast.az/docktr/api/?getTokens&uid=${uid}&t=${time}`);
+	const fcmTokens = await fcmToken.json();
+
+	let requestData = {
+		tokens: JSON.stringify(fcmTokens[0].fcmToken),
+		title,
+		body,
+		url
+	};
+	const response = await fetch(`https://tekoplast.az/docktr/api/?pushNotification`, {
+		method: 'POST',
+		cache: 'no-store',
+		body: JSON.stringify({ ...requestData })
+	});
+
+	if (response.ok) {
+		dataLoading.set(false);
+	} else {
+		dataLoading.set(false);
 	}
 }

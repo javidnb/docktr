@@ -7,7 +7,9 @@
 		loginModal,
 		putData,
 		showBtnEndCall,
-		joinVideoCall
+		joinVideoCall,
+		sendNotification,
+		ongoingAppointment
 	} from '$lib/store/dataStore';
 	import { onMount } from 'svelte';
 	import { monthNames } from '$lib/helpers/dateFormatter';
@@ -103,7 +105,7 @@
 				}
 			});
 
-			sendNotification(customisedApp);
+			sendNotif(customisedApp);
 			dataLoading.set(false);
 			confirmationModal.set(false);
 		} else {
@@ -111,14 +113,12 @@
 		}
 	}
 
-	async function sendNotification(appointment: any) {
+	async function sendNotif(appointment: any) {
 		let time = new Date().getTime();
 		console.log('appointment: ', appointment);
 		let uid = appointment.userId;
 		const fcmToken = await fetch(`https://tekoplast.az/docktr/api/?getTokens&uid=${uid}&t=${time}`);
 		const fcmTokens = await fcmToken.json();
-
-		console.log('fcmTokens: ', fcmTokens[0].fcmToken);
 
 		let requestData = {
 			tokens: JSON.stringify(fcmTokens[0].fcmToken),
@@ -137,6 +137,24 @@
 	}
 
 	function joinCall(appointment: any) {
+		ongoingAppointment.set(appointment);
+		// if ($session.user?.uid == appointment.userId) {
+		// 	sendNotification(
+		// 		appointment.doctorId,
+		// 		true,
+		// 		'Pls Join Video Call',
+		// 		'Click to join',
+		// 		'https://sehiyye.online/appointment'
+		// 	);
+		// } else {
+		// 	sendNotification(
+		// 		appointment.userId,
+		// 		false,
+		// 		'Pls Join Video Call',
+		// 		'Click to join',
+		// 		'https://sehiyye.online/appointment'
+		// 	);
+		// }
 		dataLoading.set(true);
 		appointmentId = appointment.id;
 		joinVideoCall.set(true);

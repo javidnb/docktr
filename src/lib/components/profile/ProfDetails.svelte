@@ -6,6 +6,8 @@
 	import { toast } from '@zerodevx/svelte-toast';
 	import { _ } from 'svelte-i18n';
 	import Confirm from '$lib/helpers/Confirm.svelte';
+	import { auth } from '$lib/firebase.client';
+	import { updateProfile } from 'firebase/auth';
 
 	let file: any;
 	let uploadAfterSelect: boolean = false;
@@ -15,6 +17,20 @@
 	let showModal: boolean = false;
 
 	$: userData = $session;
+
+	$: if ($session.user) {
+		if ($session.user?.email?.endsWith('@sehiyye.online')) {
+			let us = userData.user;
+			us = {
+				...us,
+				email: '',
+				phoneNumber: $session.user?.email.substring(0, $session.user?.email.length - 15)
+			};
+			userData = { ...userData, user: us };
+		}
+	}
+
+	onMount(() => {});
 
 	let fileInput, avatar: any;
 
@@ -49,6 +65,7 @@
 			const [key, value] = field;
 			data[key] = value;
 		}
+		console.log('data: ', data);
 		if (userData.user?.uid) result = await putData('users', 'uid', userData.user?.uid, { ...data });
 		if (result) {
 			toast.push($_('actions.success'), {
@@ -63,22 +80,19 @@
 		}
 		$session.user = { ...$session.user, ...data };
 
-		// const auth = getAuth();
-		// if (auth.currentUser) {
-		// 	updateProfile(auth.currentUser, {
-		// 		displayName: data.displayName,
-		// 		photoURL: data.photoURL
-		// 	}).then(
-		// 		() => {
-		// 			console.log('yo');
-		// 			dataLoading.set(false);
-		// 		},
-		// 		function (error) {
-		// 			console.log(error);
-		// 			dataLoading.set(false);
-		// 		}
-		// 	);
-		// }
+		if (auth.currentUser) {
+			updateProfile(auth.currentUser, {
+				displayName: data.displayName,
+				photoURL: data.photoURL
+			}).then(
+				() => {
+					dataLoading.set(false);
+				},
+				function (error) {
+					dataLoading.set(false);
+				}
+			);
+		}
 	}
 
 	function uploadFile(e: SubmitEvent) {
@@ -295,7 +309,7 @@
 		value={userData?.user?.displayName ?? ''}
 	/>
 	<label for="email">{$_('login.email')}</label>
-	<input id="email" type="email" class="form-control" value={userData?.user?.email} />
+	<input name="email" id="email" type="email" class="form-control" value={userData?.user?.email} />
 	<label for="phone">{$_('login.mobile')}</label>
 	<input
 		name="phoneNumber"

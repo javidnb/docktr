@@ -342,11 +342,9 @@
 					password = '';
 					disabled = true;
 				}}
-				class="btn btn-outline-primary d-flex justify-content-start"
+				class="btn btn-outline-primary d-flex justify-content-center"
 				class:active={method == 'mobile'}
-				><span class="material-symbols-outlined icon-fill"> call </span><span class="mx-auto"
-					>Mobil</span
-				></button
+				><span class="material-symbols-outlined icon-fill"> call </span></button
 			>
 			<button
 				on:click={() => {
@@ -356,11 +354,9 @@
 					password = '';
 					disabled = true;
 				}}
-				class="btn btn-outline-primary bg-white d-flex justify-content-start"
+				class="btn btn-outline-primary bg-white d-flex justify-content-center"
 				class:active={method == 'email'}
-				><span class="material-symbols-outlined icon-fill"> mail </span><span class="mx-auto"
-					>E-mail</span
-				></button
+				><span class="material-symbols-outlined icon-fill"> mail </span></button
 			>
 			<button class="btn btn-outline-primary bg-white" on:click={loginWithGoogle}
 				><svg

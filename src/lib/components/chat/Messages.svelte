@@ -61,21 +61,23 @@
 			// GET USERS DATA
 			uids = [...new Set(uids)];
 
-			const response = await fetch('https://tekoplast.az/docktr/api/?usersByArray', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ uids })
-			});
+			if (uids.length) {
+				const response = await fetch('https://tekoplast.az/docktr/api/?usersByArray', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ uids })
+				});
 
-			if (response.ok) {
-				const data = await response.json();
-				console.log('users data: ', data);
-				localStorage.setItem('users', JSON.stringify(data));
-				users.set(data);
-			} else {
-				console.error('Failed to fetch users data');
+				if (response.ok) {
+					const data = await response.json();
+					console.log('users data: ', data);
+					localStorage.setItem('users', JSON.stringify(data));
+					users.set(data);
+				} else {
+					console.error('Failed to fetch users data');
+				}
 			}
 
 			// Convert groupedMessages object to an array for easier rendering

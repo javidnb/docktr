@@ -9,7 +9,8 @@
 		showBtnEndCall,
 		joinVideoCall,
 		sendNotification,
-		ongoingAppointment
+		ongoingAppointment,
+		selectedUser
 	} from '$lib/store/dataStore';
 	import { onMount } from 'svelte';
 	import { monthNames } from '$lib/helpers/dateFormatter';
@@ -19,6 +20,8 @@
 	import { jsDateToSQL } from '$lib/helpers/dateFormatter';
 	import VideoCall from '$lib/components/VideoCall.svelte';
 	import { _ } from 'svelte-i18n';
+	import { app } from '$lib/firebase.client';
+	import { goto } from '$app/navigation';
 
 	let confirmationData: any = {};
 	let showDatePicker: boolean = false;
@@ -178,6 +181,18 @@
 			seconds
 		};
 	}
+
+	function sendMsg(appointment: any, doctor?: boolean) {
+		console.log(appointment);
+		if (doctor) {
+			let doc = $doctors.find((d) => d.id == appointment.doctorId);
+			console.log(doc);
+			if (doc) {
+				selectedUser.set(doc.uid);
+				goto('./messages');
+			}
+		}
+	}
 </script>
 
 <section>
@@ -195,7 +210,7 @@
 
 <div class="container">
 	{#if !$joinVideoCall}
-		<div class="row">
+		<div class="row mb-5 pb-5">
 			{#if upcomingAppointments.length}
 				{#each upcomingAppointments as appointment}
 					<div class="col col-md-6 col-lg-4">
@@ -340,7 +355,7 @@
 							</div>
 						{:else}
 							<!-- APPOINTMENTS OF A USER -->
-							<div class="card mt-3 p-3">
+							<div class="card mt-3 p-3 h-100">
 								<div class="d-flex gap-3 align-items-center">
 									<img
 										src={$doctors.find((d) => d.id == appointment.doctorId)?.img}
@@ -355,6 +370,22 @@
 										<span style="font-size: 1.2rem; text-align: center"
 											>{$doctors.find((d) => d.id == appointment.doctorId)?.name}</span
 										>
+										{#if appointment.purchased}
+											<button
+												on:click={() => {
+													sendMsg(appointment, true);
+												}}
+												class="btn btn-outline-primary d-flex align-items-center"
+												style="width: fit-content;
+													align-self: center;
+													margin: 0 !important;
+													margin-top: 10px !important;
+													gap: 10px;"
+											>
+												<span class="material-symbols-outlined"> send </span>
+												<span class="mx-auto">Send msg</span>
+											</button>
+										{/if}
 									</div>
 								</div>
 								<div class="d-flex align-items-center gap-2 mt-3 mb-1">
@@ -405,18 +436,18 @@
 									</span>
 								{/if}
 								<!-- PAYMENT -->
-								<div
-									class="d-flex align-items-center gap-1 mt-2"
-									style="color: {appointment.purchased ? 'green' : '#c00909'}"
-								>
-									<span class="material-symbols-outlined">
-										{appointment.purchased ? 'check' : 'error'}
-									</span>
-									<span>{appointment.purchased ? 'Ödəniş edilib' : 'Ödəniş edilməmişdir'}</span>
-								</div>
+								{#if !appointment.purchased}
+									<div
+										class="d-flex align-items-center gap-1 mt-2"
+										style="color: {appointment.purchased ? 'green' : '#c00909'}"
+									>
+										<span class="material-symbols-outlined"> error </span>
+										<span>Ödəniş edilməmişdir</span>
+									</div>
+								{/if}
 
 								{#if !appointment.purchased}
-									<button class="btn btn-outline-primary mt-3 d-flex align-items-center">
+									<button class="btn btn-outline-primary mt-auto mb-2 d-flex align-items-center">
 										<span class="material-symbols-outlined"> shopping_cart </span>
 										<span class="mx-auto">Ödəniş et</span>
 									</button>
@@ -437,9 +468,7 @@
 								{:else}
 									<button
 										on:click={() => joinCall(appointment)}
-										class="btn btn-outline-primary mt-3 d-flex align-items-center"
-										style="background: var(--primaryColor);
-										color: white;"
+										class="btn btn-outline-primary mt-auto mb-2 d-flex align-items-center"
 									>
 										<span class="material-symbols-outlined"> schedule </span>
 										<span class="mx-auto"

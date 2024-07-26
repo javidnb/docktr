@@ -241,7 +241,7 @@
 </button>
 
 {#if !showDocs}
-	<main class="d-flex flex-column h-100">
+	<main class="d-flex flex-column h-100" style="min-height: calc(100dvh - 85px)!important">
 		<div
 			class="chat mb-3 d-flex flex-column gap-1"
 			id="messages-container"
@@ -306,18 +306,25 @@
 						? 'flex-row'
 						: 'flex-row-reverse align-self-end'}"
 				>
-					{#if message.fromUser === currentUser && $session.user?.photoURL}
-						<img
-							src={$session.user?.photoURL}
-							alt="PP"
-							style="width: 35px;
+					{#if message.fromUser === currentUser}
+						{#if $session.user?.photoURL}
+							<img
+								src={$session.user?.photoURL}
+								alt="PP"
+								style="width: 35px;
 							height: 35px;
 							border-radius: 100%;
 							margin-left: 10px;
 							margin-right: 5px;
 							object-fit: cover;
     						object-position: center;"
-						/>
+							/>
+						{:else}
+							<span
+								style="font-size: 38px; color: #628a57"
+								class="material-symbols-outlined icon-fill">account_circle</span
+							>
+						{/if}
 					{:else if $user.photoURL}
 						<img
 							src={$user.photoURL}

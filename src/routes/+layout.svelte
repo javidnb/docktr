@@ -9,6 +9,8 @@
 	import { locale, _ } from 'svelte-i18n';
 	import { session } from '$lib/session';
 	import { page } from '$app/stores';
+	import { getRedirectResult } from 'firebase/auth';
+	import { auth } from '$lib/firebase.client';
 	import Modal from '$lib/helpers/Modal.svelte';
 	import Gpt from '$lib/components/Gpt.svelte';
 	export let data: LayoutData;
@@ -26,6 +28,15 @@
 
 	onMount(async () => {
 		await data.getAuthUser();
+
+		try {
+			const result = await getRedirectResult(auth);
+			if (result) {
+				console.log('auth', result);
+			}
+		} catch (error) {
+			console.error('Error completing Google sign-in', error);
+		}
 	});
 
 	$: if ($session.user?.lang) locale.set($session.user?.lang);

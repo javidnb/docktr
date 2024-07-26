@@ -8,7 +8,6 @@
 		putData,
 		showBtnEndCall,
 		joinVideoCall,
-		sendNotification,
 		ongoingAppointment,
 		selectedUser
 	} from '$lib/store/dataStore';
@@ -20,8 +19,8 @@
 	import { jsDateToSQL } from '$lib/helpers/dateFormatter';
 	import VideoCall from '$lib/components/VideoCall.svelte';
 	import { _ } from 'svelte-i18n';
-	import { app } from '$lib/firebase.client';
 	import { goto } from '$app/navigation';
+	import { tooltip } from 'svooltip';
 
 	let confirmationData: any = {};
 	let showDatePicker: boolean = false;
@@ -366,7 +365,7 @@
 											object-fit: cover"
 										alt="dok pic"
 									/>
-									<div class="d-flex flex-column w-100">
+									<div class="d-flex align-items-center w-100">
 										<span style="font-size: 1.2rem; text-align: center"
 											>{$doctors.find((d) => d.id == appointment.doctorId)?.name}</span
 										>
@@ -375,15 +374,16 @@
 												on:click={() => {
 													sendMsg(appointment, true);
 												}}
-												class="btn btn-outline-primary d-flex align-items-center"
+												class="btn btn-outline-primary d-flex align-items-center ms-auto"
 												style="width: fit-content;
 													align-self: center;
-													margin: 0 !important;
-													margin-top: 10px !important;
 													gap: 10px;"
+												use:tooltip={{
+													content: 'Send msg',
+													placement: 'right'
+												}}
 											>
 												<span class="material-symbols-outlined"> send </span>
-												<span class="mx-auto">Send msg</span>
 											</button>
 										{/if}
 									</div>

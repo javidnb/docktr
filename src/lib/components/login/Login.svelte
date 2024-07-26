@@ -1,15 +1,16 @@
 <script lang="ts">
-	import { session, type User } from '$lib/session';
+	import { session } from '$lib/session';
 	import { auth, messaging } from '$lib/firebase.client';
 	import {
 		signInWithEmailAndPassword,
 		type UserCredential,
-		signInWithCustomToken,
 		RecaptchaVerifier,
-		signInWithPhoneNumber,
+		signInWithRedirect,
+		getRedirectResult,
 		type ConfirmationResult,
 		createUserWithEmailAndPassword,
-		updateProfile
+		updateProfile,
+		GoogleAuthProvider
 	} from 'firebase/auth';
 	import { getToken } from 'firebase/messaging';
 	import { onMount } from 'svelte';
@@ -50,20 +51,7 @@
 		showError = false;
 		showConfimationInput = false;
 		if (browser) {
-			const asyncFunction = async () => {
-				try {
-					auth.languageCode = 'az';
-					recapVer = new RecaptchaVerifier(auth, 'btnLogin', {
-						size: 'invisible',
-						callback: (response: any) => {
-							console.log('recap: ', response);
-							loginModal.set(true);
-						}
-					});
-				} catch (error) {
-					console.error(error);
-				}
-			};
+			const asyncFunction = async () => {};
 			asyncFunction();
 		}
 
@@ -331,6 +319,16 @@
 			}
 		};
 	}
+
+	async function loginWithGoogle() {
+		let provider = new GoogleAuthProvider();
+		try {
+			const result = await signInWithRedirect(auth, provider);
+			console.log(result);
+		} catch (error) {
+			console.error('Error signing in with Google', error);
+		}
+	}
 </script>
 
 <div class="login-form" style="max-width: 100%; overflow-x:hidden">
@@ -364,7 +362,7 @@
 					>E-mail</span
 				></button
 			>
-			<!-- <button class="btn btn-outline-primary bg-white" on:click={loginWithGoogle}
+			<button class="btn btn-outline-primary bg-white" on:click={loginWithGoogle}
 				><svg
 					xmlns="http://www.w3.org/2000/svg"
 					x="0px"
@@ -387,7 +385,7 @@
 						d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
 					></path>
 				</svg></button
-			> -->
+			>
 		</div>
 		<form on:submit={login}>
 			<h5

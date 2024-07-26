@@ -57,14 +57,14 @@
 		"send": "Göndər",
 		"clear": "Təmizlə",
 		"leave": "Çıxış",
-		"leave_call": "Video zəngdən çıxış",
+		"leave_call": "Bağla",
 		"update": "Yenilə",
 		"success": "Uğurlu",
 		"add_pp": "Yeni şəkil əlavə et",
 		"remove_pp": "Profil şəklini sil",
-		"view_pp":"Şəklə bax",
+		"view_pp": "Şəklə bax",
 		"close": "Bağla",
-		"add_file":"Fayl əlavə et",
+		"add_file": "Fayl əlavə et",
 		"wait": "Gözləyin"
 	},
 	"login": {

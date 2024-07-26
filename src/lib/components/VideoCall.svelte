@@ -72,7 +72,8 @@
 		const roomConfig = {
 			properties: {
 				exp: Math.floor(Date.now() / 1000) + 3600,
-				max_participants: 2
+				max_participants: 2,
+				enable_screenshare: false
 			}
 		};
 
@@ -106,7 +107,8 @@
 
 	function launchVideoChatUI() {
 		callFrame = DailyIframe.createFrame(videoContainer, {
-			showLeaveButton: true,
+			showLeaveButton: false,
+			showUserNameChangeUI: false,
 			showFullscreenButton: true,
 			iframeStyle: {
 				position: 'absolute',
@@ -124,28 +126,19 @@
 			if (callFrame && $session.user?.displayName) {
 				callFrame?.setUserName($session.user?.displayName);
 			}
-
-			// callFrame?.updateCustomTrayButtons({
-			// 	btnLeave: {
-			// 		iconPath: 'https://example.com/path/to/your/icon.svg',
-			// 		iconPathDarkMode: 'https://example.com/path/to/your/darkmode/icon.svg',
-			// 		label: $_('actions.leave'),
-			// 		tooltip: $_('actions.leave_call')
-			// 	}
-			// });
-
-			// callFrame?.on('custom-button-click', (ev) => {
-			// 	const buttonID = ev.button_id;
-			// 	if (buttonID !== 'btnLeave') return;
-			// 	console.log('clicked leave button');
-			// 	callFrame?.leave();
-			// 	joinVideoCall.set(false);
-			// });
-
 			// showBtnEndCall.set(true);
 			joinVideoCall.set(true);
 			dataLoading.set(false);
 			if (!callFrame) return;
+
+			callFrame?.updateCustomTrayButtons({
+				btnLeave: {
+					iconPath: 'https://sehiyye.online/uploads/4b9971e19fc01e7804afeb41061f7ba0.png',
+					iconPathDarkMode: 'https://sehiyye.online/uploads/4b9971e19fc01e7804afeb41061f7ba0.png',
+					label: $_('actions.leave'),
+					tooltip: $_('actions.leave_call')
+				}
+			});
 
 			if (callFrame.participantCounts().present != 2) {
 				if ($session.user?.uid == $ongoingAppointment.userId) {
@@ -166,30 +159,36 @@
 					);
 				}
 			}
+		});
 
-			callFrame.on('left-meeting', async (event) => {
-				console.log('left', event);
-				joinVideoCall.set(false);
-				ongoingAppointment.set(false);
-				let session = callFrame?.meetingSessionSummary();
+		callFrame?.on('custom-button-click', (ev) => {
+			const buttonID = ev.button_id;
+			if (buttonID !== 'btnLeave') return;
+			callFrame?.leave();
+			callFrame?.destroy();
+		});
 
-				const headers = new Headers({
-					Authorization: `Bearer ${API_KEY}`,
-					'Content-Type': 'application/json'
-				});
+		callFrame.on('left-meeting', async (event) => {
+			joinVideoCall.set(false);
+			ongoingAppointment.set(false);
+			let session = callFrame?.meetingSessionSummary();
 
-				fetch(`${DAILY_API_URL}/meetings/${session?.id}`, {
-					method: 'GET',
-					headers: headers
-				})
-					.then((response) => response.json())
-					.then((data) => {
-						console.log('Session Details:', data);
-					})
-					.catch((error) => {
-						console.error('Error fetching session details:', error);
-					});
+			const headers = new Headers({
+				Authorization: `Bearer ${API_KEY}`,
+				'Content-Type': 'application/json'
 			});
+
+			fetch(`${DAILY_API_URL}/meetings/${session?.id}`, {
+				method: 'GET',
+				headers: headers
+			})
+				.then((response) => response.json())
+				.then((data) => {
+					console.log('Session Details:', data);
+				})
+				.catch((error) => {
+					console.error('Error fetching session details:', error);
+				});
 		});
 
 		return () => {

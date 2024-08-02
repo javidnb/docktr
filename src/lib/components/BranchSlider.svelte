@@ -28,7 +28,7 @@
 				}}
 				class="card align-items-center"
 				style="flex: 1;
-					min-width: 10rem;
+					min-width: 250px;
 					min-height: 10rem;
 					border: 0px;
 					box-shadow: 0px 0px 5px #00000012;

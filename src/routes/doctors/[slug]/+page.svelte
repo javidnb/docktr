@@ -63,7 +63,7 @@
 				`https://tekoplast.az/docktr/api/?comments&doctor=${doctor?.id}&t=${time}`
 			);
 			let result = await response.json();
-			result = result.filter((c: any) => c.status == 1);
+			result = result.filter((c: any) => c.status == 1 || c.userId == $session?.user?.uid);
 			comments.set(result);
 			commentsLoading = false;
 
@@ -227,27 +227,37 @@
 				</div>
 				<div class="row mt-3">
 					<div class="card p-3">
-						<div class="card-title">{$_('doctor.about')}</div>
 						<div class="card-body d-flex flex-column">
+							
 							{#if doctor?.details}
-								<div>
-									{@html truncate ? truncateString(doctor?.details, 400) : doctor?.details}
-									{#if doctor?.details.length > 400}
-										<button
-											class="btn btn-outline-primary mt-3 d-flex justify-content-center align-items-center"
-											style="max-width: 200px;"
-											on:click={() => {
-												truncate = !truncate;
-											}}
-											>{@html truncate
-												? `<span class="material-symbols-outlined">expand_all</span><span style='margin-inline:auto'>Daha çox</span>`
-												: `<span class="material-symbols-outlined">collapse_all</span><span style='margin-inline:auto'>Azalt</span>`}</button
-										>
-									{/if}
+								<div class="card p-3">
+									<div class="d-flex align-items-center gap-1" style="color: #54744c">
+										<span class="material-symbols-outlined"> info </span>
+										<h6 class="mb-0">{$_('doctor.about')}</h6>
+									</div>
+									<div class="mt-3 ps-3">
+										{@html truncate ? truncateString(doctor?.details, 400) : doctor?.details}
+										{#if doctor?.details.length > 400}
+											<button
+												class="btn btn-outline-primary mt-3 d-flex justify-content-center align-items-center"
+												style="max-width: 200px;"
+												on:click={() => {
+													truncate = !truncate;
+												}}
+												>{@html truncate
+													? `<span class="material-symbols-outlined">expand_all</span><span style='margin-inline:auto'>Daha çox</span>`
+													: `<span class="material-symbols-outlined">collapse_all</span><span style='margin-inline:auto'>Azalt</span>`}</button
+											>
+										{/if}
+									</div>
+									
 								</div>
 								{#if doctor?.hospital}
-									<div class="mt-2">
-										<h6>Çalıştığı hastaneler</h6>
+									<div class="card p-3 mt-3" style="color: #54744c">
+										<div class="d-flex align-items-center gap-1">
+											<span class="material-symbols-outlined"> home_health </span>
+											<h6 class="mb-0">{$_('doctor.hospitals')}</h6>
+										</div>
 
 										<ul class="list-group list-group-flush mt-1">
 											{#each JSON.parse(doctor?.hospital) as hospital}
@@ -257,8 +267,11 @@
 									</div>
 								{/if}
 								{#if doctor?.certificates}
-									<div class="mt-2">
-										<h6>Sertifikalar</h6>
+									<div class="card p-3 mt-3" style="color: #54744c">
+										<div class="d-flex align-items-center gap-1">
+											<span class="material-symbols-outlined"> workspace_premium </span>
+											<h6 class="mb-0">{$_('doctor.certificates')}</h6>
+										</div>
 
 										<ul class="list-group list-group-flush mt-1">
 											{#each JSON.parse(doctor?.certificates) as hospital}
@@ -268,19 +281,25 @@
 									</div>
 								{/if}
 								{#if doctor?.langs}
-									<div class="mt-2">
-										<h6>Konuştuğu diller</h6>
+									<div class="card p-3 mt-3" style="color: #54744c">
+										<div class="d-flex align-items-center gap-1">
+											<span class="material-symbols-outlined"> language </span>
+											<h6 class="mb-0">{$_('doctor.langs_spoken')}</h6>
+										</div>
 
 										<ul class="list-group list-group-flush mt-1">
 											{#each JSON.parse(doctor?.langs) as hospital}
-												<li class="list-group-item">{hospital}</li>
+												<li class="list-group-item">{$_(`langs.` + hospital)}</li>
 											{/each}
 										</ul>
 									</div>
 								{/if}
 								{#if doctor?.diseases}
-									<div class="mt-2">
-										<h6>Tedavi edilen Hastalıklar</h6>
+									<div class="card p-3 mt-3" style="color: #54744c">
+										<div class="d-flex align-items-center gap-1">
+											<span class="material-symbols-outlined"> microbiology </span>
+											<h6 class="mb-0">{$_('doctor.diseases')}</h6>
+										</div>
 
 										<ul class="list-group list-group-flush mt-1">
 											{#each JSON.parse(doctor?.diseases) as hospital}
@@ -290,8 +309,13 @@
 									</div>
 								{/if}
 								{#if doctor?.nationality}
-									<h6 class="mt-2">Milli mənsubiyyət</h6>
-									<span>{doctor?.nationality}</span>
+									<div class="card p-3 mt-3">
+										<div class="d-flex align-items-center gap-1" style="color: #54744c">
+											<span class="material-symbols-outlined"> flag </span>
+											<h6 class="mb-0">{$_('doctor.nationality')}</h6>
+										</div>
+										<span class="ps-3 mt-2">{$_(`nations.` + doctor?.nationality)}</span>
+									</div>
 								{/if}
 							{/if}
 						</div>
@@ -300,7 +324,7 @@
 
 				<!-- COMMENTS CONTAINER -->
 				<div class="row mt-3">
-					<div class="card p-3" style="position: relative;">
+					<div class="card p-3 px-4" style="position: relative;">
 						<div class="card-title">{$_('doctor.comments')}</div>
 
 						{#if commentsLoading}
@@ -508,8 +532,14 @@
 		text-decoration: none;
 		border-radius: 10px;
 		padding: 3px 13px;
-		border: 1px solid;
+		border: 0px;
 		font-size: small;
+		box-shadow: 0px 0px 4px #a1c39852;
+		transition-duration: 0.2s;
+	}
+	.branch button:hover {
+		background-color: var(--primaryColor);
+		color: white;
 	}
 	@media screen and (max-width: 992px) {
 		.btnRandevu {

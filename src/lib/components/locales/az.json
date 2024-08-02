@@ -24,7 +24,12 @@
 		"comments": "Şərhlər",
 		"your_comment": "Şərh yazın",
 		"await_confirmation": "Şərhiniz təsdiq gözləyir ..",
-		"no_comments": "Həkim haqqında şərh yoxdur"
+		"no_comments": "Həkim haqqında şərh yoxdur",
+		"hospitals": "İşlədiyi xəstəxanalar",
+		"certificates": "Sertifikatlar",
+		"langs_spoken": "Danışdığı dillər",
+		"diseases": "Müalicə etdiyi xəstəliklər",
+		"nationality": "Milli mənsubiyyət"
 	},
 	"appointment": {
 		"loginToSee": "Randevuları görmək üçün hesaba",

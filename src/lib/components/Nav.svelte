@@ -190,15 +190,15 @@
 						{:else}
 							{#if $session.user?.admin}
 								<li class="nav-item">
-									<a
+									<button
 										class="nav-link topnavlink"
-										href="../admin"
+										on:click={() => goto('../admin')}
 										class:icon-fill={curPage == '/admin'}
 										data-bs-toggle={$mobile ? 'collapse' : ''}
 										data-bs-target={$mobile ? '#navbarSupportedContent' : ''}
 									>
 										<span class="material-symbols-outlined icon-fill"> admin_panel_settings </span>
-										<span>Admin</span></a
+										<span>Admin</span></button
 									>
 								</li>
 							{/if}
@@ -235,8 +235,10 @@
 		<div class="container pt-3">
 			<ul class="nav nav-pills nav-fill homeNav">
 				<li class="nav-item">
-					<a style="height: 100%;" class="nav-link" href="../" class:active={curPage == '/'}
-						><span class="material-symbols-outlined" class:icon-fill={curPage == '/'}> home </span>
+					<a style="height: 100%;" class="nav-link" href="../" class:active={curPage == '/'}>
+						<span class="material-symbols-outlined" class:icon-fill={curPage == '/'}>
+							home
+						</span>
 						<span class="mobileOnly navLinkText">{$_('nav.home')}</span>
 					</a>
 				</li>

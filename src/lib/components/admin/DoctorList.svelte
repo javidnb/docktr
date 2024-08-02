@@ -129,8 +129,8 @@
 	onMount(() => {
 		if (diseases.length) {
 			for (const category of diseases) {
-				for (const [conditionName, symptoms] of Object.entries(category.conditions)) {
-					symptoms.forEach((sm: any) => hastalik.push(sm));
+				for (const [conditionName] of Object.entries(category.conditions)) {
+					hastalik.push(conditionName);
 				}
 			}
 			hastalik = Array.from(new Set(hastalik));
@@ -228,6 +228,11 @@
 		{/each}
 	{:else}
 		<div class="pb-3">
+			<div class="d-flex w-100 justify-content-center">
+				<!-- svelte-ignore a11y-img-redundant-alt -->
+				<img src={$doctor.img} style="height: 100px" alt="Doctor Photo" />
+			</div>
+
 			<form on:submit|preventDefault={handleSubmit}>
 				<div class="form-group">
 					<label for="name" class="form-label">Ad Soyad</label>

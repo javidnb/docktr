@@ -5,7 +5,7 @@ import { getFirestore, type Firestore } from 'firebase/firestore';
 
 import { browser } from '$app/environment';
 import { session } from '$lib/session';
-import { appointments } from './store/dataStore';
+import { appointments, dataLoading } from './store/dataStore';
 
 export let app: FirebaseApp;
 export let auth: Auth;
@@ -42,14 +42,18 @@ export const initializeFirebase = (): Promise<void> => {
 };
 
 export function logout() {
+	session.set({ user: null, loggedIn: false });
+	appointments.set([]);
+	localStorage.removeItem('user');
 	auth
 		.signOut()
 		.then(() => {
+			dataLoading.set(false);
+		})
+		.catch(() => {
+			dataLoading.set(false);
 			session.set({ user: null });
 			appointments.set([]);
 			localStorage.removeItem('user');
-		})
-		.catch((error) => {
-			console.error('Error logging out:', error);
 		});
 }

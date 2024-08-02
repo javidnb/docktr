@@ -194,8 +194,8 @@
 										class="nav-link topnavlink"
 										href="../admin"
 										class:icon-fill={curPage == '/admin'}
-										data-bs-toggle="collapse"
-										data-bs-target="#navbarSupportedContent"
+										data-bs-toggle={$mobile ? 'collapse' : ''}
+										data-bs-target={$mobile ? '#navbarSupportedContent' : ''}
 									>
 										<span class="material-symbols-outlined icon-fill"> admin_panel_settings </span>
 										<span>Admin</span></a

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { doctors, loginModal, selectedBranch } from '$lib/store/dataStore';
+	import { doctors, selectedBranch } from '$lib/store/dataStore';
 	import { diseases } from '$lib/store/diseases';
 	import { onMount } from 'svelte';
 	import { _ } from 'svelte-i18n';
@@ -20,7 +20,9 @@
 	export let data;
 	const { ...commentss } = data;
 
+	const keysToParse = ['certificates'];
 	$: doctor = $doctors.find((d) => d.slug == $page.params.slug);
+
 	const doc = writable<any>(doctor);
 
 	let existingAppointment: any;
@@ -30,7 +32,6 @@
 		);
 	$: console.log('next appointment: ', existingAppointment);
 
-	// $: console.log('brenc: ', doctor?.branches);
 	$: btnCommentText = $_('actions.send');
 	let btnCommentDisabled: boolean = false;
 	let truncate: boolean = true;
@@ -186,7 +187,25 @@
 									></button
 								>
 							{:else}
-								<span>Planlaşdırılan görüş: </span> <span>{existingAppointment.startTime}</span>
+								<div
+									class="card p-4 mt-auto"
+									style="max-height: 150px;
+										min-width: min(100%, 350px);
+										border-radius: 35px;
+										align-self: baseline"
+								>
+									<span style="font-size: small;">{$_('appointment.planned')}: </span>
+									<span class="my-auto">{formatDate(new Date(existingAppointment.startTime))}</span>
+									<button
+										class="btn btn-outline-primary mt-auto d-flex align-items-center"
+										on:click={() => {
+											goto('../appointment');
+										}}
+									>
+										<span class="material-symbols-outlined"> info </span>
+										<span class="mx-auto">{$_('actions.details')}</span>
+									</button>
+								</div>
 							{/if}
 						</div>
 					{/if}
@@ -210,18 +229,68 @@
 						<div class="card-title">{$_('doctor.about')}</div>
 						<div class="card-body d-flex flex-column">
 							{#if doctor?.details}
-								{truncate ? truncateString(doctor?.details, 400) : doctor?.details}
-								{#if doctor?.details.length > 400}
-									<button
-										class="btn btn-outline-primary mt-3 d-flex justify-content-center align-items-center"
-										style="max-width: 200px;"
-										on:click={() => {
-											truncate = !truncate;
-										}}
-										>{@html truncate
-											? `<span class="material-symbols-outlined">expand_all</span><span style='margin-inline:auto'>Daha çox</span>`
-											: `<span class="material-symbols-outlined">collapse_all</span><span style='margin-inline:auto'>Azalt</span>`}</button
-									>
+								<div>
+									{@html truncate ? truncateString(doctor?.details, 400) : doctor?.details}
+									{#if doctor?.details.length > 400}
+										<button
+											class="btn btn-outline-primary mt-3 d-flex justify-content-center align-items-center"
+											style="max-width: 200px;"
+											on:click={() => {
+												truncate = !truncate;
+											}}
+											>{@html truncate
+												? `<span class="material-symbols-outlined">expand_all</span><span style='margin-inline:auto'>Daha çox</span>`
+												: `<span class="material-symbols-outlined">collapse_all</span><span style='margin-inline:auto'>Azalt</span>`}</button
+										>
+									{/if}
+								</div>
+								{#if doctor?.hospital}
+									<div class="mt-2">
+										<h6>Çalıştığı hastaneler</h6>
+
+										<ul class="list-group list-group-flush mt-1">
+											{#each JSON.parse(doctor?.hospital) as hospital}
+												<li class="list-group-item">{hospital}</li>
+											{/each}
+										</ul>
+									</div>
+								{/if}
+								{#if doctor?.certificates}
+									<div class="mt-2">
+										<h6>Sertifikalar</h6>
+
+										<ul class="list-group list-group-flush mt-1">
+											{#each JSON.parse(doctor?.certificates) as hospital}
+												<li class="list-group-item">{hospital}</li>
+											{/each}
+										</ul>
+									</div>
+								{/if}
+								{#if doctor?.langs}
+									<div class="mt-2">
+										<h6>Konuştuğu diller</h6>
+
+										<ul class="list-group list-group-flush mt-1">
+											{#each JSON.parse(doctor?.langs) as hospital}
+												<li class="list-group-item">{hospital}</li>
+											{/each}
+										</ul>
+									</div>
+								{/if}
+								{#if doctor?.diseases}
+									<div class="mt-2">
+										<h6>Tedavi edilen Hastalıklar</h6>
+
+										<ul class="list-group list-group-flush mt-1">
+											{#each JSON.parse(doctor?.diseases) as hospital}
+												<li class="list-group-item">{hospital}</li>
+											{/each}
+										</ul>
+									</div>
+								{/if}
+								{#if doctor?.nationality}
+									<h6 class="mt-2">Milli mənsubiyyət</h6>
+									<span>{doctor?.nationality}</span>
 								{/if}
 							{/if}
 						</div>
@@ -230,21 +299,12 @@
 
 				<!-- COMMENTS CONTAINER -->
 				<div class="row mt-3">
-					<div class="card p-3">
+					<div class="card p-3" style="position: relative;">
 						<div class="card-title">{$_('doctor.comments')}</div>
 
 						{#if commentsLoading}
-							<div class="d-flex mt-3 ps-5" style="color: var(--primaryColor)!important;">
-								<div class="lds-roller">
-									<div></div>
-									<div></div>
-									<div></div>
-									<div></div>
-									<div></div>
-									<div></div>
-									<div></div>
-									<div></div>
-								</div>
+							<div class="progress-bar">
+								<div class="progress-animation"></div>
 							</div>
 						{:else}
 							<!-- POST COMMENT -->
@@ -450,93 +510,27 @@
 		}
 	}
 
-	.lds-roller,
-	.lds-roller div,
-	.lds-roller div:after {
-		box-sizing: border-box;
-	}
-	.lds-roller {
-		display: inline-block;
-		position: relative;
-		width: 80px;
-		height: 80px;
-	}
-	.lds-roller div {
-		animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-		transform-origin: 40px 40px;
-	}
-	.lds-roller div:after {
-		content: ' ';
-		display: block;
+	.progress-bar {
 		position: absolute;
-		width: 7.2px;
-		height: 7.2px;
-		border-radius: 50%;
-		background: currentColor;
-		margin: -3.6px 0 0 -3.6px;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 1011;
 	}
-	.lds-roller div:nth-child(1) {
-		animation-delay: -0.036s;
+
+	.progress-animation {
+		width: 30%; /* width of the line */
+		height: 3px; /* adjust height as needed */
+		background-color: #597153; /* adjust color as needed */
+		animation: progress 2.5s linear infinite;
 	}
-	.lds-roller div:nth-child(1):after {
-		top: 62.62742px;
-		left: 62.62742px;
-	}
-	.lds-roller div:nth-child(2) {
-		animation-delay: -0.072s;
-	}
-	.lds-roller div:nth-child(2):after {
-		top: 67.71281px;
-		left: 56px;
-	}
-	.lds-roller div:nth-child(3) {
-		animation-delay: -0.108s;
-	}
-	.lds-roller div:nth-child(3):after {
-		top: 70.90963px;
-		left: 48.28221px;
-	}
-	.lds-roller div:nth-child(4) {
-		animation-delay: -0.144s;
-	}
-	.lds-roller div:nth-child(4):after {
-		top: 72px;
-		left: 40px;
-	}
-	.lds-roller div:nth-child(5) {
-		animation-delay: -0.18s;
-	}
-	.lds-roller div:nth-child(5):after {
-		top: 70.90963px;
-		left: 31.71779px;
-	}
-	.lds-roller div:nth-child(6) {
-		animation-delay: -0.216s;
-	}
-	.lds-roller div:nth-child(6):after {
-		top: 67.71281px;
-		left: 24px;
-	}
-	.lds-roller div:nth-child(7) {
-		animation-delay: -0.252s;
-	}
-	.lds-roller div:nth-child(7):after {
-		top: 62.62742px;
-		left: 17.37258px;
-	}
-	.lds-roller div:nth-child(8) {
-		animation-delay: -0.288s;
-	}
-	.lds-roller div:nth-child(8):after {
-		top: 56px;
-		left: 12.28719px;
-	}
-	@keyframes lds-roller {
+
+	@keyframes progress {
 		0% {
-			transform: rotate(0deg);
+			transform: translateX(-100%);
 		}
 		100% {
-			transform: rotate(360deg);
+			transform: translateX(300%);
 		}
 	}
 </style>

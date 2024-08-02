@@ -49,7 +49,7 @@
 						text-align: center;
 						color: #575757;"
 				>
-					{truncateString(props.details, 120)}
+					{@html truncateString(props.details, 120)}
 				</p>
 			</div>
 		</div>

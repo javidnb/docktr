@@ -27,7 +27,9 @@
 	let upcomingAppointments;
 	let appointmentId: any = null;
 
-	$: upcomingAppointments = $appointments.filter((ap) => new Date(ap.startTime) > new Date());
+	$: upcomingAppointments = $appointments
+		.filter((ap) => new Date(ap.startTime) > new Date())
+		.sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
 
 	onMount(() => {
 		const updateRemainingTime = () => {
@@ -117,7 +119,6 @@
 
 	async function sendNotif(appointment: any) {
 		let time = new Date().getTime();
-		console.log('appointment: ', appointment);
 		let uid = appointment.userId;
 		const fcmToken = await fetch(`https://tekoplast.az/docktr/api/?getTokens&uid=${uid}&t=${time}`);
 		const fcmTokens = await fcmToken.json();
@@ -131,7 +132,7 @@
 			url: 'https://sehiyye.online/appointment'
 		};
 
-		const response = await fetch(`https://tekoplast.az/docktr/api/?pushNotification`, {
+		await fetch(`https://tekoplast.az/docktr/api/?pushNotification`, {
 			method: 'POST',
 			cache: 'no-store',
 			body: JSON.stringify({ ...requestData })
@@ -140,23 +141,6 @@
 
 	function joinCall(appointment: any) {
 		ongoingAppointment.set(appointment);
-		// if ($session.user?.uid == appointment.userId) {
-		// 	sendNotification(
-		// 		appointment.doctorId,
-		// 		true,
-		// 		'Pls Join Video Call',
-		// 		'Click to join',
-		// 		'https://sehiyye.online/appointment'
-		// 	);
-		// } else {
-		// 	sendNotification(
-		// 		appointment.userId,
-		// 		false,
-		// 		'Pls Join Video Call',
-		// 		'Click to join',
-		// 		'https://sehiyye.online/appointment'
-		// 	);
-		// }
 		dataLoading.set(true);
 		appointmentId = appointment.id;
 		joinVideoCall.set(true);
@@ -195,10 +179,9 @@
 </script>
 
 <section>
-	<div class="jumbotron" style="padding-top: 2rem; background-color: #e2e9ef">
+	<div class="jumbotron" style="padding-block: 1rem; background-color: #e2e9ef">
 		<h1 class="display-4">{$_('nav.appointments')}</h1>
 		<!-- <p class="lead">We connect you to doctors around the world!</p> -->
-		<hr />
 		<!-- <p>
 			It uses utility classes for typography and spacing to space content out within the larger
 			container.
@@ -312,7 +295,10 @@
 								{/if}
 
 								{#if appointment?.remainingTime?.total > 0}
-									<!-- <button class="btn btn-outline-primary mt-3 d-flex align-items-center">
+									<button
+										class="btn btn-outline-primary mt-auto mb-2 d-flex align-items-center"
+										on:click={() => joinCall(appointment)}
+									>
 										<span class="material-symbols-outlined"> schedule </span>
 										<span class="mx-auto"
 											>{appointment.remainingTime.days +
@@ -324,7 +310,7 @@
 												appointment.remainingTime.seconds +
 												' san qalıb'}</span
 										>
-									</button> -->
+									</button>
 
 									<!-- ALTDAKINI SIL, USTDEKINI KOMMENTDEN CIXART -->
 									<button
@@ -355,20 +341,32 @@
 						{:else}
 							<!-- APPOINTMENTS OF A USER -->
 							<div class="card mt-3 p-3 h-100">
-								<div class="d-flex gap-3 align-items-center">
+								<div
+									class="d-flex gap-3 align-items-center"
+									style="border-bottom: 1px solid #ececec; padding-bottom: 1rem"
+								>
 									<img
 										src={$doctors.find((d) => d.id == appointment.doctorId)?.img}
 										style="max-height: 80px; 
 											aspect-ratio: 1.5/1;
 											max-width: 120px; 
 											border-radius: 6px; 
-											object-fit: cover"
+											object-fit: cover;
+											object-position: top"
 										alt="dok pic"
 									/>
 									<div class="d-flex align-items-center w-100">
-										<span style="font-size: 1.2rem; text-align: center"
-											>{$doctors.find((d) => d.id == appointment.doctorId)?.name}</span
+										<a
+											href="/doctors/{$doctors.find((d) => d.id == appointment.doctorId)?.slug}"
+											style="font-size: 1.2rem;
+												text-align: center;
+												text-decoration: none;
+												color: #37592e;
+												font-weight: 500;
+												margin-inline: auto;"
 										>
+											{$doctors.find((d) => d.id == appointment.doctorId)?.name}
+										</a>
 										{#if appointment.purchased}
 											<button
 												on:click={() => {
@@ -379,7 +377,7 @@
 													align-self: center;
 													gap: 10px;"
 												use:tooltip={{
-													content: 'Send msg',
+													content: $_('actions.send_msg'),
 													placement: 'right'
 												}}
 											>
@@ -408,7 +406,10 @@
 										>
 									</div>
 								</div>
-								<div class="d-flex align-items-center gap-2 mb-3">
+								<div
+									class="d-flex align-items-center gap-2 mb-1"
+									style="border-bottom: 1px solid #ececec; padding-bottom: 1rem"
+								>
 									<span class="material-symbols-outlined"> calendar_month </span>
 									<span
 										><span
@@ -451,8 +452,11 @@
 										<span class="material-symbols-outlined"> shopping_cart </span>
 										<span class="mx-auto">Ödəniş et</span>
 									</button>
-									<!-- {:else if appointment?.remainingTime?.total > 0}
-									<button class="btn btn-outline-primary mt-3 d-flex align-items-center">
+								{:else if appointment?.remainingTime?.total > 0}
+									<button
+										class="btn btn-outline-primary mt-auto mb-2 d-flex align-items-center"
+										on:click={() => joinCall(appointment)}
+									>
 										<span class="material-symbols-outlined"> schedule </span>
 										<span class="mx-auto"
 											>{appointment.remainingTime.days +
@@ -462,9 +466,9 @@
 												appointment.remainingTime.minutes +
 												' deq ' +
 												appointment.remainingTime.seconds +
-												' san qalıb'}</span
+												' san'}</span
 										>
-									</button> -->
+									</button>
 								{:else}
 									<button
 										on:click={() => joinCall(appointment)}

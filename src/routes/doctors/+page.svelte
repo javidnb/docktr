@@ -30,9 +30,8 @@
 </script>
 
 <section>
-	<div class="jumbotron" style="padding-top: 2rem; background-color: #e2e9ef">
+	<div class="jumbotron" style="padding-block: 1rem; background-color: #e2e9ef">
 		<h1 class="display-4">{$_('nav.docs')}</h1>
-		<hr />
 	</div>
 </section>
 

@@ -13,6 +13,7 @@
 	import { toast } from '@zerodevx/svelte-toast';
 	import { monthNames } from '$lib/helpers/dateFormatter';
 	import { _ } from 'svelte-i18n';
+	import { goto } from '$app/navigation';
 
 	export let doc: any;
 
@@ -62,6 +63,7 @@
 						'--toastBarBackground': '#1d5b3c'
 					}
 				});
+				goto('../appointment')
 			}
 		}
 	}

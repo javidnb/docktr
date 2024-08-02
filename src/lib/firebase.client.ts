@@ -30,7 +30,7 @@ export const initializeFirebase = (): Promise<void> => {
 			}
 			if (!app) {
 				app = initializeApp(firebaseConfig);
-				auth = getAuth(app);
+				auth = getAuth();
 				messaging = getMessaging(app);
 				db = getFirestore(app);
 			}

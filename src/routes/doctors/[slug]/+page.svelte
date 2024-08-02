@@ -62,7 +62,8 @@
 			const response = await fetch(
 				`https://tekoplast.az/docktr/api/?comments&doctor=${doctor?.id}&t=${time}`
 			);
-			const result = await response.json();
+			let result = await response.json();
+			result = result.filter((c: any) => c.status == 1);
 			comments.set(result);
 			commentsLoading = false;
 
@@ -311,24 +312,30 @@
 							{#if $session.loggedIn && !$alreadyCommented}
 								<div class="col-12 col-md-8">
 									<form class="d-flex flex-column" on:submit|preventDefault={postComment}>
-										<span
+										<!-- <span
 											>{$session.user?.displayName ||
 												$session.user?.email ||
 												$session.user?.phoneNumber}</span
-										>
-										<div class="d-flex">
-											{#each [1, 2, 3, 4, 5] as star, index}
-												<button
-													on:click|preventDefault={() => (selectedStarPoint = index + 1)}
-													class="material-symbols-outlined star"
-													class:icon-fill={selectedStarPoint >= star}
-												>
-													star
-												</button>
-											{/each}
+										> -->
+
+										<div class="d-flex gap-3 align-items-center">
+											<label style="font-size: small" for="comment"
+												>{$_('doctor.your_comment')}</label
+											>
+
+											<div class="d-flex">
+												{#each [1, 2, 3, 4, 5] as star, index}
+													<button
+														on:click|preventDefault={() => (selectedStarPoint = index + 1)}
+														class="material-symbols-outlined star"
+														class:icon-fill={selectedStarPoint >= star}
+													>
+														star
+													</button>
+												{/each}
+											</div>
 										</div>
-										<label for="comment">{$_('doctor.your_comment')}</label>
-										<textarea class="form-control" name="comment" id="comment" />
+										<textarea class="form-control mt-2" name="comment" id="comment" />
 										<button
 											class="btn btn-outline-primary mt-3"
 											type="submit"

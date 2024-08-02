@@ -22,7 +22,7 @@
 	"doctor": {
 		"about": "Həkim Haqqında",
 		"comments": "Şərhlər",
-		"your_comment": "Şərhiniz",
+		"your_comment": "Şərh yazın",
 		"await_confirmation": "Şərhiniz təsdiq gözləyir ..",
 		"no_comments": "Həkim haqqında şərh yoxdur"
 	},

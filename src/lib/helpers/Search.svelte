@@ -91,6 +91,15 @@
 			bind:value={$searchQuery}
 			on:keydown={handleKeydown}
 		/>
+		{#if $mobile}
+			<span
+				style="position: absolute;
+				bottom: -25px;
+				left: 10px;
+				color: gray; background: transparent"
+				>{$_('nav.docs')}, {$_('nav.branches')}, {$_('nav.diseases')}, {$_('home.symptoms')}</span
+			>
+		{/if}
 		{#if $searchQuery}
 			<button class="input-group-text" on:click={() => searchQuery.set('')}
 				><span class="material-symbols-outlined"> close </span></button

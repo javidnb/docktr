@@ -79,6 +79,11 @@
 			{:else}
 				<p class="d-flex align-items mb-0 time" style="color: white;">{formatDate(currentDate)}</p>
 			{/if}
+			<!-- <img
+				src="https://ik.imagekit.io/d2nwsj0ktvh/logo_hyRmOQCNQ.png?updatedAt=1722624724577"
+				style="width: 30px; filter: grayscale(1) brightness(2)"
+				alt="Sehiyye Logo"
+			/> -->
 			<a class="navbar-brand mx-auto" style="margin-left: auto;" href="../">
 				Səhiyyə<span style="font-size: x-large; color: rgb(0 0 0 / 70%)"
 					>.{websiteName.endsWith('.net') ? 'net' : 'online'}</span
@@ -236,9 +241,7 @@
 			<ul class="nav nav-pills nav-fill homeNav">
 				<li class="nav-item">
 					<a style="height: 100%;" class="nav-link" href="../" class:active={curPage == '/'}>
-						<span class="material-symbols-outlined" class:icon-fill={curPage == '/'}>
-							home
-						</span>
+						<span class="material-symbols-outlined" class:icon-fill={curPage == '/'}> home </span>
 						<span class="mobileOnly navLinkText">{$_('nav.home')}</span>
 					</a>
 				</li>

@@ -19,9 +19,8 @@
 		<div class="container">
 			<div class="row justify-content-center">
 				<div class="col col-md-8 d-flex align-items-center flex-column text-center">
-					<img src='https://tekoplast.az/docktr/logo.png' style="width: 200px" alt="Sehiyye Logo" />
-					<!-- <h1 class="display-4">{$_('home.hero')}</h1>
-					<p class="lead">{$_('home.lead')}</p> -->
+					<h1 class="display-4">{$_('home.hero')}</h1>
+					<p class="lead">{$_('home.lead')}</p>
 					<div class="col-12 col-md-10">
 						<div class="w-100">
 							<Search />

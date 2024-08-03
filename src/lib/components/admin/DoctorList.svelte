@@ -105,7 +105,7 @@
 						dbDiseases.forEach(
 							(d: any) => (selectedDiseases = selectedDiseases.concat(dbDiseases))
 						);
-					}
+					} else selectedDiseases = null;
 					// selectedLangs = dbLangs
 					// 	.map((b: string) => langs.find((brr: { value: string }) => brr.value === b) ?? null)
 					// 	.filter((lang: any) => lang !== null);

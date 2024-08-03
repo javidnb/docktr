@@ -13,6 +13,7 @@
 	import { auth } from '$lib/firebase.client';
 	import Modal from '$lib/helpers/Modal.svelte';
 	import Gpt from '$lib/components/Gpt.svelte';
+	import { goto } from '$app/navigation';
 	export let data: LayoutData;
 	let showGPT: boolean = false;
 
@@ -27,8 +28,7 @@
 	}
 
 	onMount(async () => {
-		await data.getAuthUser();
-
+		let usr = await data.getAuthUser();
 		try {
 			const result = await getRedirectResult(auth);
 			if (result) {
@@ -40,6 +40,7 @@
 	});
 
 	$: if ($session.user?.lang) locale.set($session.user?.lang);
+	// $: if ($session.user?.doctor) goto('./doctor');
 	$: curPage = $page.route.id;
 </script>
 

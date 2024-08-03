@@ -66,7 +66,7 @@
 	<section>
 		<div class="container mobileCont">
 			<div class="row mt-3 pb-5">
-				<div class="col-12 col-md-4 col-lg-3 col-xxl-2">
+				<div class="col-12 col-md-4 col-lg-3">
 					{#if !mobileComponent}
 						<ul class="list-group pcOnly w-100 h-100 bg-white d-flex" style="min-height: 400px;">
 							<button
@@ -85,7 +85,7 @@
 								}}
 								class:active={component == History}
 							>
-								<span class="material-symbols-outlined"> history </span>Hastalık Geçmişi
+								<span class="material-symbols-outlined"> history </span>Görüşlərim
 							</button>
 							<button
 								class="list-group-item w-100"
@@ -94,22 +94,10 @@
 								}}
 								class:active={component == Documents}
 							>
-								<span class="material-symbols-outlined"> draft </span>Dökümanlarım
+								<span class="material-symbols-outlined"> draft </span>Analizlərim və Reseptlərim
 							</button>
 							<li class="list-group-item">
-								<span class="material-symbols-outlined"> description </span>Kayıtlarım
-							</li>
-							<li class="list-group-item">
-								<span class="material-symbols-outlined"> medication </span>Notlar
-							</li>
-							<li class="list-group-item">
-								<span class="material-symbols-outlined"> medication </span>Reçetelerim
-							</li>
-							<li class="list-group-item">
-								<span class="material-symbols-outlined"> event </span>İlaç hatırlatıcı
-							</li>
-							<li class="list-group-item">
-								<span class="material-symbols-outlined"> clinical_notes </span>Doktorlarım
+								<span class="material-symbols-outlined"> clinical_notes </span>Həkimlərim
 							</li>
 							<a
 								class="list-group-item mt-auto bg-secondary text-white"
@@ -118,7 +106,7 @@
 								style="margin: 1rem; border-radius: 10px"
 							>
 								<span class="material-symbols-outlined"> logout </span>
-								<span class="mx-auto" style="padding-right: 1rem;">Çıkış</span>
+								<span class="mx-auto" style="padding-right: 1rem;">Hesabdan Çıxış</span>
 							</a>
 						</ul>
 						<ul class="list-group mobileList mobileOnly w-100">
@@ -147,13 +135,7 @@
 								<span class="material-symbols-outlined"> draft </span>Dökümanlarım
 							</button>
 							<li class="list-group-item">
-								<span class="material-symbols-outlined"> description </span>Kayıtlarım
-							</li>
-							<li class="list-group-item">
 								<span class="material-symbols-outlined"> medication </span>İlaçlarım
-							</li>
-							<li class="list-group-item">
-								<span class="material-symbols-outlined"> event </span>İlaç hatırlatıcı
 							</li>
 							<li class="list-group-item">
 								<span class="material-symbols-outlined"> clinical_notes </span>Doktorlarım
@@ -181,7 +163,7 @@
 						</div>
 					</div>
 				{:else}
-					<div class="col-md-8 col-lg-9 col-xxl-10 kont pcOnly">
+					<div class="col-md-8 col-lg-9 kont pcOnly">
 						<div class="container h-100">
 							<div class="row h-100">
 								<div class="col pcOnly">

@@ -3,14 +3,21 @@
 	import { getMessaging, getToken } from 'firebase/messaging';
 	import { app } from '$lib/firebase.client';
 	import { session } from '$lib/session';
-	import { dataLoading, putData } from '$lib/store/dataStore';
+	import { appointments, dataLoading, putData, doctors } from '$lib/store/dataStore';
 	import { toast } from '@zerodevx/svelte-toast';
+	import { formatDate } from '$lib/helpers/dateFormatter';
 
 	const messaging = getMessaging(app);
 	let hideBtn: boolean = false;
 	let inputToken = '';
 
-	onMount(async () => {});
+	$: apps = $appointments.sort(
+		(a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime()
+	);
+
+	onMount(async () => {
+		console.log($appointments);
+	});
 
 	function registerCM() {
 		dataLoading.set(true);
@@ -118,7 +125,7 @@
 	}
 </script>
 
-<section>
+<!-- <section>
 	<h5>Hastalık Geçmişi</h5>
 	<button class="btn btn-primary w-50" class:d-none={hideBtn} on:click={registerCM}
 		>push token</button
@@ -134,4 +141,50 @@
 	{/if}
 
 	<button class="btn btn-primary w-50 mt-3" on:click={sendMsg}>send notification</button>
+</section> -->
+
+<section>
+	<div class="d-flex flex-column gap-3">
+		{#each apps as appointment}
+			<div class="card py-2 px-3 d-flex flex-row gap-3" style="background-color: #f0f0f0;">
+				<div>
+					<img
+						src={$doctors.find((d) => d.id == appointment.doctorId)?.img}
+						style="max-height: 80px; 
+						aspect-ratio: 1.5/1;
+						max-width: 100px; 
+						border-radius: 6px; 
+						object-fit: cover;
+						object-position: top"
+						alt="dok pic"
+					/>
+				</div>
+				<div class="d-flex flex-column justify-content-center">
+					<a
+						href="/doctors/{$doctors.find((d) => d.id == appointment.doctorId)?.slug}"
+						style="font-size: 1.2rem;
+								text-decoration: none;
+								color: #37592e;
+								font-weight: 500;"
+					>
+						{$doctors.find((d) => d.id == appointment.doctorId)?.name}
+					</a>
+					<span style="font-size: small">{formatDate(new Date(appointment.startTime))}</span>
+				</div>
+				<div
+					class="d-flex align-items-center ms-auto"
+					style="color: {(appointment.status == 1 || appointment.status == 2) &&
+					appointment.purchased == 1
+						? 'var(--primaryColor)'
+						: '#bd3939'}"
+				>
+					<span class="material-symbols-outlined icon-fill">
+						{(appointment.status == 1 || appointment.status == 2) && appointment.purchased == 1
+							? 'check_circle'
+							: 'error'}
+					</span>
+				</div>
+			</div>
+		{/each}
+	</div>
 </section>

@@ -153,7 +153,7 @@
                                         text-align: left;"
 								>
 									<h4 style="margin-bottom:0px">{item.name}</h4>
-									<p>{item.details}</p>
+									<p>{@html item.details}</p>
 								</div>
 							</a>
 						{:else if item.type === 'disease'}

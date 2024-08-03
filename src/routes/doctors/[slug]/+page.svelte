@@ -160,10 +160,10 @@
 	</ol>
 </Modal>
 
-<section class="py-3" style="background-color: rgb(249 249 249);">
+<section class="pt-3 pb-5 mb-3" style="background-color: rgb(249 249 249);">
 	<div class="container">
 		<div class="row">
-			<div class="col-12">
+			<div class="col col-md-8">
 				<div class="row">
 					<div class="col-3 col-md-2">
 						<img
@@ -178,57 +178,41 @@
 						/>
 					</div>
 					{#if !$session?.user?.doctor}
-						<div class="col-9 col-md-10 d-flex flex-column align-items-center">
-							{#if !existingAppointment}
-								<button
-									class="btn btn-outline-primary d-flex justify-content-center align-items-center btnRandevu"
-									on:click={openModal}
-									><span class="material-symbols-outlined">local_library</span><span
-										style="margin-inline: auto;">{$_('appointment.get')}</span
-									></button
+						<div class="col-9 col-md-10 d-flex flex-column">
+							<div class="d-flex align-items-center gap-1 mt-2">
+								<span
+									style="color: var(--primaryColor)"
+									class="material-symbols-outlined icon-fill"
 								>
-							{:else}
-								<div
-									class="card p-4 mt-auto"
-									style="max-height: 150px;
-										min-width: min(100%, 350px);
-										border-radius: 35px;
-										align-self: baseline"
-								>
-									<span style="font-size: small;">{$_('appointment.planned')}: </span>
-									<span class="my-auto">{formatDate(new Date(existingAppointment.startTime))}</span>
-									<button
-										class="btn btn-outline-primary mt-auto d-flex align-items-center"
-										on:click={() => {
-											goto('../appointment');
-										}}
+									science
+								</span><span>17 il iş təcrübəsi</span>
+							</div>
+							{#if doctor?.nationality}
+								<div class="d-flex align-items-center gap-1">
+									<span style="color: var(--primaryColor)" class="material-symbols-outlined icon-fill"> location_on </span><span
+										>{$_(`nations.` + doctor?.nationality)}</span
 									>
-										<span class="material-symbols-outlined"> info </span>
-										<span class="mx-auto">{$_('actions.details')}</span>
-									</button>
+								</div>
+							{/if}
+							{#if doctor?.branches}
+								<div class="branch d-flex flex-wrap gap-2 mt-auto">
+									{#each doctor.branches as br}
+										<button
+											on:click={() => {
+												selectedBranch.set(br);
+												goto(`../doctors`);
+											}}>{getBranchName(br)}</button
+										>
+									{/each}
 								</div>
 							{/if}
 						</div>
 					{/if}
 				</div>
+				<div class="row mt-3"></div>
 				<div class="row mt-3">
-					{#if doctor?.branches}
-						<div class="branch d-flex flex-wrap gap-2">
-							{#each doctor.branches as br}
-								<button
-									on:click={() => {
-										selectedBranch.set(br);
-										goto(`../doctors`);
-									}}>{getBranchName(br)}</button
-								>
-							{/each}
-						</div>
-					{/if}
-				</div>
-				<div class="row mt-3">
-					<div class="card p-3">
+					<div class="p-3">
 						<div class="card-body d-flex flex-column">
-							
 							{#if doctor?.details}
 								<div class="card p-3">
 									<div class="d-flex align-items-center gap-1" style="color: #54744c">
@@ -250,7 +234,6 @@
 											>
 										{/if}
 									</div>
-									
 								</div>
 								{#if doctor?.hospital}
 									<div class="card p-3 mt-3" style="color: #54744c">
@@ -308,24 +291,47 @@
 										</ul>
 									</div>
 								{/if}
-								{#if doctor?.nationality}
-									<div class="card p-3 mt-3">
-										<div class="d-flex align-items-center gap-1" style="color: #54744c">
-											<span class="material-symbols-outlined"> flag </span>
-											<h6 class="mb-0">{$_('doctor.nationality')}</h6>
-										</div>
-										<span class="ps-3 mt-2">{$_(`nations.` + doctor?.nationality)}</span>
-									</div>
-								{/if}
 							{/if}
 						</div>
 					</div>
 				</div>
-
+			</div>
+			<div class="col col-md-4">
+				<div class="container">
+					{#if !existingAppointment}
+						<button
+							class="btn btn-outline-primary d-flex justify-content-center align-items-center btnRandevu w-100"
+							on:click={openModal}
+							><span class="material-symbols-outlined">local_library</span><span
+								style="margin-inline: auto;">{$_('appointment.get')}</span
+							></button
+						>
+					{:else}
+						<div
+							class="card p-4 mt-auto"
+							style="max-height: 150px;
+							min-width: min(100%, 350px);
+							border-radius: 8px;
+							align-self: baseline"
+						>
+							<span style="font-size: small;">{$_('appointment.planned')}: </span>
+							<span class="my-auto">{formatDate(new Date(existingAppointment.startTime))}</span>
+							<button
+								class="btn btn-outline-primary mt-2 d-flex align-items-center"
+								on:click={() => {
+									goto('../appointment');
+								}}
+							>
+								<span class="material-symbols-outlined"> info </span>
+								<span class="mx-auto">{$_('actions.details')}</span>
+							</button>
+						</div>
+					{/if}
+				</div>
 				<!-- COMMENTS CONTAINER -->
-				<div class="row mt-3">
+				<div class="container mt-3">
 					<div class="card p-3 px-4" style="position: relative;">
-						<div class="card-title">{$_('doctor.comments')}</div>
+						<span>{$_('doctor.comments')}</span>
 
 						{#if commentsLoading}
 							<div class="progress-bar">
@@ -334,7 +340,7 @@
 						{:else}
 							<!-- POST COMMENT -->
 							{#if $session.loggedIn && !$alreadyCommented}
-								<div class="col-12 col-md-8">
+								<div class="col-12">
 									<form class="d-flex flex-column" on:submit|preventDefault={postComment}>
 										<!-- <span
 											>{$session.user?.displayName ||
@@ -370,7 +376,10 @@
 								</div>
 							{/if}
 							<!-- COMMENTS -->
-							<div class="d-flex flex-column gap-3 pt-3">
+							<div
+								class="d-flex flex-column gap-3 mt-2 pt-3"
+								style="border-top: 1px solid #ececec;"
+							>
 								{#each $comments as comment}
 									{#if comment.status == null && comment.userId == $session.user?.uid}
 										<div class="card commentCard p-3" style="background-color: rgb(243 243 243);">
@@ -515,7 +524,7 @@
 	}
 	.btnRandevu {
 		min-width: 250px;
-		border-radius: 20px;
+		border-radius: 8px;
 		font-size: large;
 		margin-block: auto;
 		background: var(--primaryColor);

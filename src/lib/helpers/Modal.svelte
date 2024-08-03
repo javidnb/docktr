@@ -22,7 +22,9 @@
 		showModal = false;
 		dialog.close();
 	}}
-	style={fullScreen ? 'margin:0;' : ''}
+	style={fullScreen
+		? 'margin:0; height: 100%; overflow-y: hidden; width: 100%; min-width: 100%; padding: 1rem'
+		: ''}
 >
 	<!-- <button
 		class="btn btn-outline-primary d-flex justify-content-center"
@@ -36,7 +38,7 @@
 		on:click={() => dialog.close()}><span class="material-symbols-outlined"> close </span></button
 	> -->
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
-	<div on:click|stopPropagation style={fullScreen ? 'height:100dvh; width: 100dvh' : ''}>
+	<div on:click|stopPropagation style={fullScreen ? 'height:100%; width: 100%' : ''}>
 		<slot name="header" />
 		<slot />
 		<!-- svelte-ignore a11y-autofocus -->

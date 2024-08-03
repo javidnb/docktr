@@ -19,33 +19,12 @@
 		<div class="container">
 			<div class="row justify-content-center">
 				<div class="col col-md-8 d-flex align-items-center flex-column text-center">
-					<h1 class="display-4">{$_('home.hero')}</h1>
-					<p class="lead">{$_('home.lead')}</p>
+					<img src='https://tekoplast.az/docktr/logo.png' style="width: 200px" alt="Sehiyye Logo" />
+					<!-- <h1 class="display-4">{$_('home.hero')}</h1>
+					<p class="lead">{$_('home.lead')}</p> -->
 					<div class="col-12 col-md-10">
-						<div class="pcOnly w-100">
+						<div class="w-100">
 							<Search />
-						</div>
-						<div class="mobileOnly">
-							<!-- svelte-ignore a11y-click-events-have-key-events -->
-							<!-- svelte-ignore a11y-no-static-element-interactions -->
-							<div class="w-100" on:click={() => (showModal = true)}>
-								<div class="input-group input-group-lg mb-3 mt-2">
-									<input
-										type="text"
-										class="form-control searchBox"
-										aria-label="Sizing example input"
-										aria-describedby="inputGroup-sizing-sm"
-										placeholder="{$_('home.search')} ({$_('nav.docs')}, {$_('nav.branches')}, {$_(
-											'nav.diseases'
-										)}, {$_('home.symptoms')})"
-									/>
-									<span
-										class="input-group-text"
-										style="background: var(--primaryColor);
-								color: white;"><span class="material-symbols-outlined"> search </span></span
-									>
-								</div>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -147,7 +126,12 @@
 </section>
 
 <Modal bind:showModal fullScreen={true}>
-	<Search />
+	<div class="d-flex flex-column h-100">
+		<Search />
+		<div class="d-flex my-auto justify-content-center">
+			{$_('nav.docs')}, {$_('nav.branches')}, {$_('nav.diseases')}, {$_('home.symptoms')}
+		</div>
+	</div>
 </Modal>
 
 <style>

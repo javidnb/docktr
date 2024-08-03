@@ -2,7 +2,7 @@
 	import { diseases } from '$lib/store/diseases';
 	import { goto } from '$app/navigation';
 	import { writable } from 'svelte/store';
-	import { doctors, selectedSymptoms, selectedBranch } from '$lib/store/dataStore';
+	import { doctors, selectedSymptoms, selectedBranch, mobile } from '$lib/store/dataStore';
 	import { _ } from 'svelte-i18n';
 
 	const searchQuery = writable('');
@@ -85,9 +85,9 @@
 			class="form-control searchBox"
 			aria-label="Sizing example input"
 			aria-describedby="inputGroup-sizing-sm"
-			placeholder="{$_('home.search')} ({$_('nav.docs')}, {$_('nav.branches')}, {$_(
-				'nav.diseases'
-			)}, {$_('home.symptoms')})"
+			placeholder="{$mobile ? $_('home.search') : $_('home.search')} ({$_('nav.docs')}, {$_(
+				'nav.branches'
+			)}, {$_('nav.diseases')}, {$_('home.symptoms')})"
 			bind:value={$searchQuery}
 			on:keydown={handleKeydown}
 		/>

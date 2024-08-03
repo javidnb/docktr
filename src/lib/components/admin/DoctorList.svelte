@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { dataLoading, doctors, putData } from '$lib/store/dataStore';
+	import { dataLoading, doctors, putData, langs, nationality } from '$lib/store/dataStore';
 	import { writable, get } from 'svelte/store';
 	import Select from 'svelte-select';
 	import { diseases } from '$lib/store/diseases';
@@ -48,21 +48,7 @@
 	let selectedBranches: any = [];
 	let selectedDiseases: any = [];
 
-	let nationality: any = [
-		{ value: 'aze', label: 'Azərbaycan' },
-		{ value: 'turk', label: 'Türk' },
-		{ value: 'iran', label: 'İran' }
-	];
-
 	let selectedNationality: any;
-
-	let langs: any = [
-		{ value: 'aze', label: 'Azərbaycanca' },
-		{ value: 'eng', label: 'İngiliscə' },
-		{ value: 'ru', label: 'Rusca' },
-		{ value: 'turk', label: 'Türkcə' },
-		{ value: 'iran', label: 'Farsca' }
-	];
 
 	let selectedLangs: any = [];
 
@@ -306,6 +292,8 @@
 						bind:value={selectedNationality}
 						--border-radius="8px"
 						--border-focused="1px solid var(--primaryColor)"
+						--item-is-active-bg="var(--primaryColor)"
+						--item-hover-bg="#d9e1d7"
 					>
 						<div slot="prepend" class="d-flex align-items-center" style="padding-right: 10px">
 							<span class="material-symbols-outlined"> flag </span>

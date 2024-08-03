@@ -1,28 +1,37 @@
 <script async script lang="ts">
 	import { onDestroy } from 'svelte';
-	import { doctors, selectedBranch } from '$lib/store/dataStore';
+	import { doctors, selectedBranch, langs } from '$lib/store/dataStore';
 	import DoctorCard from '$lib/components/DoctorCard.svelte';
-	import Search from '$lib/helpers/Search.svelte';
 	import { diseases } from '$lib/store/diseases';
 	import { _ } from 'svelte-i18n';
+	import Select from 'svelte-select';
+	import { writable } from 'svelte/store';
 
-	$: filteredDocs =
-		$selectedBranch != 0
-			? $doctors.filter((doc: any) => doc.branches.includes($selectedBranch))
-			: $doctors;
+	$: filteredDocs = $doctors;
 
-	function handleChange(event: any) {
-		// console.log(event.target.value);
-		// console.log($doctors);
-		// console.log(selectedOption);
+	let diss = diseases.map((d) => ({ value: d.id, label: d.name }));
+	let selectedLangs: any = writable(null);
+
+	$: if ($selectedLangs || $selectedBranch) filterDocs();
+
+	function filterDocs() {
+		console.log('filtering');
+		let docs = $doctors;
+		if ($selectedBranch != 0)
+			docs = docs.filter((doc: any) => doc.branches.includes($selectedBranch));
+		if ($selectedLangs)
+			docs = docs.filter((doc: any) => {
+				return doc.langs ? JSON.parse(doc.langs).includes($selectedLangs) : false;
+			});
+		filteredDocs = docs;
 	}
 
 	// clear input on escape
-	function handleKeydown(event: any) {
-		if (event.key === 'Escape') {
-			selectedBranch.set('0');
-		}
-	}
+	// function handleKeydown(event: any) {
+	// 	if (event.key === 'Escape') {
+	// 		selectedBranch.set('0');
+	// 	}
+	// }
 
 	onDestroy(() => {
 		selectedBranch.set('0');
@@ -40,10 +49,30 @@
 		<div class="row mb-3">
 			<div class="col-sm-12 col-md-4">
 				<div class="input-group input-group-lg mb-3 mt-2">
-					<div class="input-group-text" style="background-color: var(--primaryColor); color: white">
+					<!-- <div class="input-group-text" style="background-color: var(--primaryColor); color: white">
 						<span class="material-symbols-outlined">category </span>
-					</div>
-					<select
+					</div> -->
+					<Select
+						class="form-control"
+						items={diss}
+						placeholder={$_('nav.branches')}
+						id="branches"
+						--border-radius="8px"
+						--border-focused="1px solid var(--primaryColor)"
+						--item-is-active-bg="var(--primaryColor)"
+						--item-hover-bg="#d9e1d7"
+						on:change={(event) => {
+							selectedBranch.set(event.detail.value);
+						}}
+						on:clear={() => {
+							selectedBranch.set('0');
+						}}
+					>
+						<div slot="prepend" class="d-flex align-items-center" style="padding-right: 10px">
+							<span class="material-symbols-outlined"> category </span>
+						</div>
+					</Select>
+					<!-- <select
 						class="form-control"
 						bind:value={$selectedBranch}
 						on:change={handleChange}
@@ -54,15 +83,37 @@
 						{#each diseases as option}
 							<option value={option.id}>{option.name}</option>
 						{/each}
-					</select>
-					{#if $selectedBranch != 0}
+					</select> -->
+					<!-- {#if $selectedBranch != 0}
 						<button class="input-group-text" on:click={() => selectedBranch.set('0')}>
 							<span class="material-symbols-outlined">close </span>
 						</button>
-					{/if}
+					{/if} -->
 				</div>
 			</div>
-			<div class="col-sm-12 col-md-8"><Search /></div>
+			<div class="col-md-4 mb-3 mt-2">
+				<Select
+					class="form-control"
+					items={langs}
+					placeholder={$_('doctor.langs_spoken')}
+					id="langs"
+					--border-radius="8px"
+					--border-focused="1px solid var(--primaryColor)"
+					--item-is-active-bg="var(--primaryColor)"
+					--item-hover-bg="#d9e1d7"
+					on:change={(event) => {
+						selectedLangs.set(event.detail.value);
+					}}
+					on:clear={() => {
+						selectedLangs.set(null);
+					}}
+				>
+					<div slot="prepend" class="d-flex align-items-center" style="padding-right: 10px">
+						<span class="material-symbols-outlined"> language </span>
+					</div>
+				</Select>
+			</div>
+			<!-- <div class="col-sm-12 col-md-8"><Search /></div> -->
 		</div>
 		<div class="row row-gap-3">
 			{#if !$doctors.length}

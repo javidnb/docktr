@@ -11,7 +11,7 @@ export const loginModal = writable(false);
 export const appointmentModal = writable(false);
 export const confirmationModal = writable(false);
 export const selectedAppointmentDate = writable({ day: null, time: null, start: null, end: null });
-export const selectedBranch: any = writable('0');
+export const selectedBranch: any = writable();
 export const selectedSymptoms: any = writable([]);
 export const showBtnEndCall = writable(false);
 export const joinVideoCall = writable(false);
@@ -19,6 +19,20 @@ export const ongoingAppointment = writable<any>();
 export const users = writable([]);
 export const selectedUser = writable();
 export const hideNav = writable(false);
+
+export const langs: any = [
+	{ value: 'aze', label: 'Azərbaycanca' },
+	{ value: 'eng', label: 'İngiliscə' },
+	{ value: 'ru', label: 'Rusca' },
+	{ value: 'turk', label: 'Türkcə' },
+	{ value: 'iran', label: 'Farsca' }
+];
+
+export const nationality: any = [
+	{ value: 'aze', label: 'Azərbaycan' },
+	{ value: 'turk', label: 'Türk' },
+	{ value: 'iran', label: 'İran' }
+];
 
 export const mobile = writable();
 

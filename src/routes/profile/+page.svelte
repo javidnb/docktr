@@ -53,7 +53,7 @@
 				text-align: center;
 				width: 56px;
 				padding-left: 20px;
-				display: flex"
+				display: flex; height: 40px"
 			class:d-none={!mobileComponent}
 			on:click={() => {
 				changeComponent(null, true);

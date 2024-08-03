@@ -169,7 +169,6 @@
 		console.log(appointment);
 		if (doctor) {
 			let doc = $doctors.find((d) => d.id == appointment.doctorId);
-			console.log(doc);
 			if (doc) {
 				selectedUser.set(doc.uid);
 				goto('./messages');

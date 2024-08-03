@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { doctors, selectedBranch } from '$lib/store/dataStore';
+	import { doctors, selectedBranch, selectedUser } from '$lib/store/dataStore';
 	import { diseases } from '$lib/store/diseases';
 	import { onMount } from 'svelte';
 	import { _ } from 'svelte-i18n';
@@ -189,9 +189,12 @@
 							</div>
 							{#if doctor?.nationality}
 								<div class="d-flex align-items-center gap-1">
-									<span style="color: var(--primaryColor)" class="material-symbols-outlined icon-fill"> location_on </span><span
-										>{$_(`nations.` + doctor?.nationality)}</span
+									<span
+										style="color: var(--primaryColor)"
+										class="material-symbols-outlined icon-fill"
 									>
+										location_on
+									</span><span>{$_(`nations.` + doctor?.nationality)}</span>
 								</div>
 							{/if}
 							{#if doctor?.branches}
@@ -309,7 +312,7 @@
 					{:else}
 						<div
 							class="card p-4 mt-auto"
-							style="max-height: 150px;
+							style="max-height: 250px;
 							min-width: min(100%, 350px);
 							border-radius: 8px;
 							align-self: baseline"
@@ -325,6 +328,18 @@
 								<span class="material-symbols-outlined"> info </span>
 								<span class="mx-auto">{$_('actions.details')}</span>
 							</button>
+							{#if existingAppointment.purchased}
+								<button
+									class="btn btn-outline-primary mt-3 w-100 d-flex"
+									on:click={() => {
+										selectedUser.set($doc.uid);
+										goto('../messages');
+									}}
+								>
+									<span class="material-symbols-outlined"> send </span>
+									<span class="mx-auto">{$_('actions.send_msg')}</span>
+								</button>
+							{/if}
 						</div>
 					{/if}
 				</div>

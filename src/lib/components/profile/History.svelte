@@ -176,12 +176,16 @@
 					style="color: {(appointment.status == 1 || appointment.status == 2) &&
 					appointment.purchased == 1
 						? 'var(--primaryColor)'
-						: '#bd3939'}"
+						: new Date(appointment.startTime) > new Date()
+							? 'rgb(76 55 55)'
+							: '#bd3939'}"
 				>
 					<span class="material-symbols-outlined icon-fill">
 						{(appointment.status == 1 || appointment.status == 2) && appointment.purchased == 1
 							? 'check_circle'
-							: 'error'}
+							: new Date(appointment.startTime) > new Date()
+								? 'pending'
+								: 'error'}
 					</span>
 				</div>
 			</div>

@@ -2,16 +2,22 @@
 	import Messages from '$lib/components/chat/Messages.svelte';
 	import Chat from '$lib/components/chat/Chat.svelte';
 	import { _ } from 'svelte-i18n';
-	import { selectedUser, hideNav } from '$lib/store/dataStore';
+	import { selectedUser, hideNav, mobile } from '$lib/store/dataStore';
 	import { onMount } from 'svelte';
 
 	onMount(() => {
-		hideNav.set(true);
+		if ($mobile==false) hideNav.set(true);
 		return () => {
 			selectedUser.set(null);
 			hideNav.set(false);
 		};
 	});
+
+	$: if ($selectedUser) {
+		hideNav.set(true);
+	} else if($mobile) {
+		hideNav.set(false);
+	}
 
 	let animate = true;
 	function scaleFade(node: HTMLElement, { duration = 70 }: { duration?: number } = {}) {

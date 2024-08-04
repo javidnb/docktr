@@ -198,7 +198,6 @@
 									<button
 										class="nav-link topnavlink"
 										on:click={() => goto('../admin')}
-										class:icon-fill={curPage == '/admin'}
 										data-bs-toggle={$mobile ? 'collapse' : ''}
 										data-bs-target={$mobile ? '#navbarSupportedContent' : ''}
 									>
@@ -255,7 +254,7 @@
 						</span><span class="navLinkText">{$_('nav.docs')}</span></a
 					>
 				</li>
-				<li class="nav-item">
+				<li class="nav-item pcOnly">
 					<a class="nav-link" href="/branches" class:active={curPage?.includes('/branches')}
 						><span
 							class="material-symbols-outlined"
@@ -293,6 +292,18 @@
 									align-self: baseline;"
 							></span>
 						{/if}
+					</a>
+				</li>
+				<li class="nav-item mobileOnly">
+					<a
+						class="nav-link"
+						href="/messages"
+						class:active={curPage == '/messages'}
+						style="position: relative;"
+						><span class="material-symbols-outlined" class:icon-fill={curPage == '/messages'}>
+							mail
+						</span>
+						<span class="navLinkText">{$_('nav.messages')}</span>
 					</a>
 				</li>
 				<li class="nav-item pcOnly">

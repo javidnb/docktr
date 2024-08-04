@@ -8,6 +8,7 @@
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
 	import { writable } from 'svelte/store';
+	import { _ } from 'svelte-i18n';
 
 	let messagesCollection: CollectionReference;
 	let messagesGroupedByUser: any = [];
@@ -118,13 +119,14 @@
 
 <div class="d-flex" style="position: relative">
 	<span
+		class="pcOnly"
 		style="font-size: larger;
 		 border-bottom: 1px solid #ececec; 
 		 padding: 10px; 
 		 margin-bottom: 1rem;
 		 width: 100%;"
 	>
-		Mesajlar
+		{$_('nav.messages')}
 	</span>
 	{#if $dataLoading}
 		<div class="loader" style="background-color: var(--primaryColor); top: 10px; right: 10px"></div>

@@ -160,9 +160,9 @@
 	</ol>
 </Modal>
 
-<section class="pt-3 pb-5 mb-3" style="background-color: rgb(249 249 249);">
-	<div class="container">
-		<div class="row">
+<section class="pt-3 pb-5" style="background-color: rgb(249 249 249);">
+	<div class="container pb-3">
+		<div class="row px-3">
 			<div class="col col-md-8">
 				<div class="row">
 					<div class="col-3 col-md-2">
@@ -212,7 +212,6 @@
 						</div>
 					{/if}
 				</div>
-				<div class="row mt-3"></div>
 				<div class="row mt-3">
 					<div class="p-3">
 						<div class="card-body d-flex flex-column">
@@ -300,7 +299,7 @@
 				</div>
 			</div>
 			<div class="col col-md-4">
-				<div class="container">
+				<div class="row px-3">
 					{#if !existingAppointment}
 						<button
 							class="btn btn-outline-primary d-flex justify-content-center align-items-center btnRandevu w-100"
@@ -344,7 +343,7 @@
 					{/if}
 				</div>
 				<!-- COMMENTS CONTAINER -->
-				<div class="container mt-3">
+				<div class="row px-3 mt-3">
 					<div class="card p-3 px-4" style="position: relative;">
 						<span>{$_('doctor.comments')}</span>
 

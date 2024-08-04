@@ -1,6 +1,6 @@
 <script async script lang="ts">
 	import { onDestroy } from 'svelte';
-	import { doctors, selectedBranch, langs } from '$lib/store/dataStore';
+	import { doctors, selectedBranch, langs, mobile } from '$lib/store/dataStore';
 	import DoctorCard from '$lib/components/DoctorCard.svelte';
 	import { diseases } from '$lib/store/diseases';
 	import { _ } from 'svelte-i18n';
@@ -9,7 +9,9 @@
 
 	$: filteredDocs = $doctors;
 
-	let diss = diseases.map((d) => ({ value: d.id, label: d.name }));
+	let diss = diseases
+		.map((d) => ({ value: d.id, label: d.name }))
+		.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base' }));
 	let selectedLangs: any = writable(null);
 
 	let orderBy = [
@@ -40,7 +42,6 @@
 					a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
 				);
 			}
-			console.log(docs);
 			filteredDocs = docs;
 		}
 	}
@@ -72,7 +73,7 @@
 					<span class="mx-auto">Filter</span>
 				</button>
 				<div class="collapse filterCollapse" id="collapseExample">
-					<div class="row mt-md-3 row-gap-2">
+					<div class="row mt-mobile row-gap-2">
 						<div class="col-md-4">
 							<div class="input-group input-group-lg">
 								<Select
@@ -91,6 +92,7 @@
 										selectedBranch.set(null);
 										filterDocs();
 									}}
+									searchable={$mobile ? false : true}
 								>
 									<div slot="prepend" class="d-flex align-items-center" style="padding-right: 10px">
 										<span class="material-symbols-outlined"> category </span>
@@ -192,6 +194,10 @@
 		animation: skeleton-loading 1s linear infinite alternate;
 	}
 
+	.btnFilter:not(:hover) {
+		background-color: white;
+	}
+
 	@keyframes skeleton-loading {
 		0% {
 			background-color: hsl(200deg 21.42% 87.98%);
@@ -209,11 +215,6 @@
 		}
 		.btnFilter {
 			display: none !important;
-		}
-	}
-	@media screen and (max-width: 768px) {
-		.mt-md-3 {
-			margin-top: 1rem;
 		}
 	}
 </style>

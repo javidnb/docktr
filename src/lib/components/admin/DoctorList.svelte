@@ -146,7 +146,7 @@
 		data.branches = selectedBranches.length
 			? JSON.stringify(selectedBranches.map((sb: any) => sb.value))
 			: null;
-		data.diseases = selectedDiseases.length
+		data.diseases = selectedDiseases?.length
 			? JSON.stringify(JSON.parse(data.diseases).map((dd: any) => dd.label))
 			: null;
 		data.hospital = hospitals.filter((str: string) => str !== '').length

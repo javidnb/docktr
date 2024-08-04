@@ -85,21 +85,24 @@
 			class="form-control searchBox"
 			aria-label="Sizing example input"
 			aria-describedby="inputGroup-sizing-sm"
-			placeholder="{$mobile ? $_('home.search') : $_('home.search')} ({$_('nav.docs')}, {$_(
-				'nav.branches'
-			)}, {$_('nav.diseases')}, {$_('home.symptoms')})"
+			placeholder="{$_('home.search')} ({$_('nav.docs')}, {$_('nav.branches')}, {$_(
+				'nav.diseases'
+			)}, {$_('home.symptoms')})"
 			bind:value={$searchQuery}
 			on:keydown={handleKeydown}
 		/>
-		{#if $mobile}
-			<span
-				style="position: absolute;
-				bottom: -25px;
-				left: 10px;
-				color: gray; background: transparent"
-				>{$_('nav.docs')}, {$_('nav.branches')}, {$_('nav.diseases')}, {$_('home.symptoms')}</span
-			>
-		{/if}
+		<span
+			class="mobileOnly"
+			style="position: absolute;
+					bottom: -22px;
+					left: 2px;
+					color: gray;
+					background: transparent;
+					text-wrap: nowrap;
+					font-size: small;
+					width: 100%;"
+			>{$_('nav.docs')}, {$_('nav.branches')}, {$_('nav.diseases')}, {$_('home.symptoms')}</span
+		>
 		{#if $searchQuery}
 			<button class="input-group-text" on:click={() => searchQuery.set('')}
 				><span class="material-symbols-outlined"> close </span></button
@@ -219,5 +222,16 @@
 		margin-top: 10px;
 		box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.34);
 		background-color: white;
+	}
+	.searchBox::placeholder {
+		font-size: 16px;
+		color: gray;
+	}
+	@media screen and (max-width: 992px) {
+		.searchBox::placeholder {
+			width: 4ch;
+			overflow: hidden;
+			white-space: nowrap;
+		}
 	}
 </style>

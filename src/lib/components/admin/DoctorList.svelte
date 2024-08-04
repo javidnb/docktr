@@ -1,5 +1,13 @@
 <script lang="ts">
-	import { dataLoading, doctors, putData, langs, nationality } from '$lib/store/dataStore';
+	import {
+		dataLoading,
+		doctors,
+		putData,
+		langs,
+		nationality,
+		postData,
+		latinize
+	} from '$lib/store/dataStore';
 	import { writable, get } from 'svelte/store';
 	import Select from 'svelte-select';
 	import { diseases } from '$lib/store/diseases';
@@ -55,11 +63,8 @@
 	let details = '';
 	let docName: string = '';
 	let contact: string = '';
-
 	let hospitals: any = [''];
-
 	let certificates: any = [''];
-
 	let hastalik: any = [];
 
 	$: if ($selectedDoc) {
@@ -109,7 +114,14 @@
 		selectedDoctor = null;
 		selectedNationality = null;
 		selectedBranches = [];
+		selectedDiseases = [];
 		selectedLangs = [];
+		details = '';
+		docName = '';
+		contact = '';
+		hospitals = [''];
+		certificates = [''];
+		hastalik = [];
 	}
 
 	onMount(() => {
@@ -134,7 +146,7 @@
 		data.branches = selectedBranches.length
 			? JSON.stringify(selectedBranches.map((sb: any) => sb.value))
 			: null;
-		data.diseases = data.diseases
+		data.diseases = selectedDiseases.length
 			? JSON.stringify(JSON.parse(data.diseases).map((dd: any) => dd.label))
 			: null;
 		data.hospital = hospitals.filter((str: string) => str !== '').length
@@ -150,26 +162,44 @@
 
 		console.log(data);
 
-		const response = await putData('doctors', 'id', $doctor.id, data);
+		let response: any;
+
+		if ($doctor?.id) {
+			response = await putData('doctors', 'id', $doctor.id, data);
+		} else {
+			dataLoading.set(true);
+			data.slug = latinize(data.name);
+			response = await postData('doctors', data);
+		}
 
 		if (response == 'ok') {
 			selectedDoctor = { ...selectedDoctor, ...data };
-			doctors.update((items) => {
-				return items.map((item) =>
-					item.id === selectedDoctor.id
-						? {
-								...item,
-								...selectedDoctor,
-								branches: JSON.parse(selectedDoctor.branches),
-								diseases: selectedDoctor.diseases,
-								hospital: selectedDoctor.hospital,
-								certificates: selectedDoctor.certificates,
-								langs: selectedDoctor.langs
-							}
-						: item
-				);
-			});
+
+			if ($doctor?.id) {
+				doctors.update((items) => {
+					return items.map((item) =>
+						item.id === selectedDoctor.id
+							? {
+									...item,
+									...selectedDoctor,
+									branches: JSON.parse(selectedDoctor.branches),
+									diseases: selectedDoctor.diseases,
+									hospital: selectedDoctor.hospital,
+									certificates: selectedDoctor.certificates,
+									langs: selectedDoctor.langs
+								}
+							: item
+					);
+				});
+			} else {
+				doctors.set([
+					...$doctors,
+					{ ...selectedDoctor, branches: JSON.parse(selectedDoctor.branches) }
+				]);
+			}
+
 			selectedDoc.set(null);
+			dataLoading.set(false);
 		}
 	}
 </script>
@@ -214,14 +244,18 @@
 		{/each}
 	{:else}
 		<div class="pb-3">
-			<div class="d-flex w-100 justify-content-center">
-				<!-- svelte-ignore a11y-img-redundant-alt -->
-				<img src={$doctor.img} style="height: 100px" alt="Doctor Photo" />
-			</div>
+			{#if doctor.img}
+				<div class="d-flex w-100 justify-content-center">
+					<!-- svelte-ignore a11y-img-redundant-alt -->
+					<img src={$doctor.img} style="height: 100px" alt="Doctor Photo" />
+				</div>
+			{/if}
 
 			<form on:submit|preventDefault={handleSubmit}>
 				<div class="form-group">
-					<label for="name" class="form-label">Ad Soyad</label>
+					<label for="name" class="form-label"
+						>Ad Soyad <span style="font-weight: 600; color: red">*</span></label
+					>
 					<input
 						name="name"
 						type="text"
@@ -244,7 +278,9 @@
 				</div>
 				<!-- BRANSLAR -->
 				<div class="form-group mt-3">
-					<label for="branchSelector" class="form-label">Branşlar</label>
+					<label for="branchSelector" class="form-label"
+						>Branşlar <span style="font-weight: 600; color: red">*</span></label
+					>
 					<Select
 						class="form-control"
 						items={branches}
@@ -255,6 +291,7 @@
 						name="branches"
 						--border-radius="8px"
 						--border-focused="1px solid var(--primaryColor)"
+						required
 					>
 						<div slot="prepend" class="d-flex align-items-center" style="padding-right: 10px">
 							<span class="material-symbols-outlined"> category </span>

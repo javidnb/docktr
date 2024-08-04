@@ -54,7 +54,7 @@
 			</div>
 		</div>
 
-		<div class="row w-100 mt-1" style="margin-top: auto">
+		<div class="row w-100 mt-auto" style="margin-top: auto">
 			<div class="branch">
 				{#each props.branches as br, i}
 					<span style="min-width: max-content;">{getBranchName(br)}</span>

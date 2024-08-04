@@ -29,7 +29,9 @@
 		"certificates": "Sertifikatlar",
 		"langs_spoken": "Danışdığı dillər",
 		"diseases": "Müalicə etdiyi xəstəliklər",
-		"nationality": "Milli mənsubiyyət"
+		"nationality": "Milli mənsubiyyət",
+		"order_by": "Sırala",
+		"order_by_point": "Xala görə"
 	},
 	"appointment": {
 		"loginToSee": "Randevuları görmək üçün hesaba",

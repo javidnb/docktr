@@ -34,6 +34,31 @@ export const nationality: any = [
 	{ value: 'iran', label: 'İran' }
 ];
 
+const charMap: any = {
+	ç: 'c',
+	ğ: 'g',
+	ı: 'i',
+	ö: 'o',
+	ş: 's',
+	ü: 'u',
+	Ç: 'C',
+	Ğ: 'G',
+	İ: 'I',
+	Ö: 'O',
+	Ş: 'S',
+	Ü: 'U',
+	Ə: 'E',
+	ə: 'e'
+};
+
+export function latinize(str: string) {
+	return str
+		.replace(/[çğıöşüÇĞİÖŞÜƏə]/g, (match) => charMap[match])
+		.normalize('NFD')
+		.replace(/[\u0300-\u036f]/g, '')
+		.replace(/\s+/g, '-');
+}
+
 export const mobile = writable();
 
 if (browser)

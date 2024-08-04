@@ -6,12 +6,13 @@
 
 	import ProfDetails from '$lib/components/profile/ProfDetails.svelte';
 	import History from '$lib/components/profile/History.svelte';
-	import { dataLoading, loginModal } from '$lib/store/dataStore';
+	import { dataLoading, loginModal, mobile } from '$lib/store/dataStore';
 	import Chat from '$lib/components/chat/Chat.svelte';
 	import Documents from '$lib/components/profile/Documents.svelte';
 
 	export let data;
 	let userEmail: any = '';
+	let component: any = ProfDetails;
 
 	$: dataLoading.set($session.user ? false : true);
 
@@ -24,7 +25,6 @@
 		userEmail = user.email;
 	});
 
-	let component = ProfDetails;
 	let mobileComponent: any = null;
 
 	function changeComponent(comp: any, mobile?: boolean) {
@@ -43,9 +43,10 @@
 
 <section>
 	<div class="jumbotron" style="padding-block: 1rem; background-color: #e2e9ef">
-		<button
-			class="btn mobileOnly"
-			style="position: absolute;
+		{#if mobileComponent}
+			<button
+				class="btn mobileOnly"
+				style="position: absolute;
 				top: 10px;
 				left: 1rem;
 				color: rgb(213, 228, 209);
@@ -54,11 +55,12 @@
 				width: 56px;
 				padding-left: 20px;
 				display: flex; height: 40px"
-			class:d-none={!mobileComponent}
-			on:click={() => {
-				changeComponent(null, true);
-			}}><span class="material-symbols-outlined"> arrow_back_ios </span></button
-		>
+				class:d-none={!mobileComponent}
+				on:click={() => {
+					changeComponent(null, true);
+				}}><span class="material-symbols-outlined"> arrow_back_ios </span></button
+			>
+		{/if}
 		<h1 class="display-4">{$_('nav.account')}</h1>
 	</div>
 </section>
@@ -109,9 +111,9 @@
 								<span class="mx-auto" style="padding-right: 1rem;">Hesabdan Çıxış</span>
 							</a>
 						</ul>
-						<ul class="list-group mobileList mobileOnly w-100">
+						<div class="d-flex flex-column mobileList mobileOnly w-100">
 							<button
-								class="list-group-item w-100"
+								class="card btn btn-outline-primary d-flex flex-row w-100"
 								on:click={() => {
 									changeComponent(ProfDetails, true);
 								}}
@@ -119,34 +121,31 @@
 								<span class="material-symbols-outlined"> for_you </span>Hesap Bilgileri
 							</button>
 							<button
-								class="list-group-item w-100"
+								class="card btn btn-outline-primary d-flex flex-row w-100"
 								on:click={() => {
 									changeComponent(History, true);
 								}}
 							>
-								<span class="material-symbols-outlined"> history </span>Hastalık Geçmişi
+								<span class="material-symbols-outlined"> history </span>Görüşlərim
 							</button>
 							<button
-								class="list-group-item"
+								class="card btn btn-outline-primary d-flex flex-row w-100"
 								on:click={() => {
 									changeComponent(Documents, true);
 								}}
 							>
-								<span class="material-symbols-outlined"> draft </span>Dökümanlarım
+								<span class="material-symbols-outlined"> draft </span>Analizlərim və Reseptlərim
 							</button>
-							<li class="list-group-item">
-								<span class="material-symbols-outlined"> medication </span>İlaçlarım
+							<li class="card btn btn-outline-primary d-flex flex-row w-100">
+								<span class="material-symbols-outlined"> clinical_notes </span>Həkimlərim
 							</li>
-							<li class="list-group-item">
-								<span class="material-symbols-outlined"> clinical_notes </span>Doktorlarım
-							</li>
-							<a class="list-group-item" href="./admin">
+							<a class="card btn btn-outline-primary d-flex flex-row w-100" href="./admin">
 								<span class="material-symbols-outlined"> admin_panel_settings </span>Admin
 							</a>
-							<a class="list-group-item" on:click={logout} href="../">
-								<span class="material-symbols-outlined"> logout </span>Çıkış
+							<a class="card btn btn-outline-primary d-flex flex-row w-100rd" on:click={logout} href="../">
+								<span class="material-symbols-outlined"> logout </span>Çıxış
 							</a>
-						</ul>
+						</div>
 					{/if}
 				</div>
 
@@ -213,13 +212,6 @@
 		font-weight: 450;
 		width: 100%;
 	}
-	.mobileList,
-	.mobileList .list-group-item {
-		background-color: unset;
-	}
-	.mobileList .list-group-item {
-		padding-inline: 0;
-	}
 	@media screen and (max-width: 768px) {
 		.list-group {
 			border-radius: 0px;
@@ -242,6 +234,20 @@
 		}
 		.pcOnly {
 			display: none !important;
+		}
+		.mobileList {
+			display: inline-flex!important;
+			margin-top: 1rem;
+			gap: .5rem;
+		}
+		.mobileList > * {
+			padding-block: .8rem;
+			background-color: #f0f0f0;
+			color: black;
+			box-shadow: none!important;
+			display: flex;
+			gap: .3rem;
+			border: 1px solid #e4e4e4c2 !important;
 		}
 	}
 	@media screen and (min-width: 768px) {

@@ -295,16 +295,16 @@
 					</a>
 				</li>
 				<li class="nav-item mobileOnly">
-					<a
+					<button
 						class="nav-link"
-						href="/messages"
+						on:click={() => ($session.loggedIn ? goto('/messages') : loginModal.set(true))}
 						class:active={curPage == '/messages'}
 						style="position: relative;"
 						><span class="material-symbols-outlined" class:icon-fill={curPage == '/messages'}>
 							mail
 						</span>
 						<span class="navLinkText">{$_('nav.messages')}</span>
-					</a>
+					</button>
 				</li>
 				<li class="nav-item pcOnly">
 					<a class="nav-link" href="/"

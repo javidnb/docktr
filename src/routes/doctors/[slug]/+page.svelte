@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { doctors, selectedBranch, selectedUser } from '$lib/store/dataStore';
+	import { doctors, mobile, selectedBranch, selectedUser } from '$lib/store/dataStore';
 	import { diseases } from '$lib/store/diseases';
 	import { onMount } from 'svelte';
 	import { _ } from 'svelte-i18n';
@@ -140,6 +140,23 @@
 		selectedAppointmentDate.set({ day: null, time: null, start: null, end: null });
 	}
 </script>
+
+<button
+	on:click={() => {
+		history.back();
+	}}
+	class="nav-link topnavlink btnBack mobileOnly"
+	type="button"
+	style="color: rgb(213, 228, 209);
+		padding: 5px 10px;
+		gap: 0px;
+		position: absolute;
+		top: 12px;
+		left: 5px;"
+>
+	<span class="material-symbols-outlined"> arrow_back_ios </span>
+	<span>Geri</span>
+</button>
 
 <section>
 	<div class="jumbotron" style="padding-block: 1rem; background-color: #e2e9ef">
@@ -567,6 +584,9 @@
 	@media screen and (max-width: 992px) {
 		.btnRandevu {
 			padding-block: 0.5rem;
+		}
+		.btnBack {
+			display: flex !important;
 		}
 	}
 

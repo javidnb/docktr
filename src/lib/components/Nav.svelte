@@ -77,7 +77,7 @@
 					<span>Geri</span>
 				</button>
 			{:else}
-				<p class="d-flex align-items mb-0 time" style="color: white;">{formatDate(currentDate)}</p>
+				<p class="d-flex align-items mb-0 time" style="color: white;"></p>
 			{/if}
 			<!-- <img
 				src="https://ik.imagekit.io/d2nwsj0ktvh/logo_hyRmOQCNQ.png?updatedAt=1722624724577"

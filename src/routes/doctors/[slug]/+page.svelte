@@ -184,7 +184,9 @@
 				<div class="row">
 					<div class="col-3 col-md-2">
 						<img
-							src={doctor?.img}
+							src={doctor?.img
+								? doctor.img
+								: 'https://ik.imagekit.io/d2nwsj0ktvh/docktr/uploads/docplaceholder.jpg'}
 							alt={doctor?.name}
 							style="width: max(100%);
 							aspect-ratio: 1/1;

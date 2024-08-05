@@ -9,11 +9,8 @@
 	import { locale, _ } from 'svelte-i18n';
 	import { session } from '$lib/session';
 	import { page } from '$app/stores';
-	import { getRedirectResult } from 'firebase/auth';
-	import { auth } from '$lib/firebase.client';
 	import Modal from '$lib/helpers/Modal.svelte';
 	import Gpt from '$lib/components/Gpt.svelte';
-	import { goto } from '$app/navigation';
 	export let data: LayoutData;
 	let showGPT: boolean = false;
 
@@ -28,15 +25,7 @@
 	}
 
 	onMount(async () => {
-		let usr = await data.getAuthUser();
-		try {
-			const result = await getRedirectResult(auth);
-			if (result) {
-				console.log('auth', result);
-			}
-		} catch (error) {
-			console.error('Error completing Google sign-in', error);
-		}
+		await data.getAuthUser();
 	});
 
 	$: if ($session.user?.lang) locale.set($session.user?.lang);
@@ -45,20 +34,22 @@
 </script>
 
 <div style="min-height: 100dvh; display: flex; flex-direction: column">
-	<Nav />
+	{#if curPage !== '/doctor'}
+		<Nav />
 
-	<section style="position: absolute; width: 100%; z-index: -1">
-		<div class="jumbotron" style="padding-top: 2rem; background-color: #e2e9ef">
-			<h1 class="display-4">&#8203;</h1>
-			<!-- <p class="lead">We connect you to doctors around the world!</p> -->
-			<hr />
-			<!-- <p>
+		<section style="position: absolute; width: 100%; z-index: -1">
+			<div class="jumbotron" style="padding-top: 2rem; background-color: #e2e9ef">
+				<h1 class="display-4">&#8203;</h1>
+				<!-- <p class="lead">We connect you to doctors around the world!</p> -->
+				<hr />
+				<!-- <p>
 				It uses utility classes for typography and spacing to space content out within the larger
 				container.
 			</p> -->
-			<!-- <a class="btn btn-primary btn-lg" href="#" role="button">Doktorlar</a> -->
-		</div>
-	</section>
+				<!-- <a class="btn btn-primary btn-lg" href="#" role="button">Doktorlar</a> -->
+			</div>
+		</section>
+	{/if}
 
 	{#key data.url}
 		<!-- in:fade={{ duration: 100, easing: cubicIn }} -->
@@ -67,7 +58,7 @@
 		</div>
 	{/key}
 
-	{#if curPage !== '/messages'}
+	{#if curPage !== '/messages' && curPage !== '/doctor'}
 		<section
 			class="py-3 footer pcOnly"
 			style="border-top: 1px solid rgb(236, 236, 236);
@@ -86,21 +77,21 @@
 	<SvelteToast />
 </div>
 
-<button
+<!-- <button
 	class="btn btn-outline-primary btnContact {$hideNav ? 'd-none' : ''}"
 	on:click={() => {
 		showGPT = true;
 	}}
 >
 	<span style="font-size: 30px" class="material-symbols-outlined icon-fill"> sms </span>
-</button>
+</button> -->
 
 <Modal bind:showModal={showGPT}>
 	<Gpt />
 </Modal>
 
 <style src="$lib/style/style.css">
-	.btnContact {
+	/* .btnContact {
 		position: fixed;
 		right: 1rem;
 		bottom: 1rem;
@@ -118,5 +109,5 @@
 		.btnContact {
 			bottom: 4rem;
 		}
-	}
+	} */
 </style>

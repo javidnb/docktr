@@ -268,7 +268,9 @@
 							object-position: center;"
 						/>
 					{/if}
-					<h5 class="flex-1 mb-0">{$user.displayName || $user.email || $user.phoneNumber || ''}</h5>
+					<h5 class="flex-1 mb-0">
+						{$user?.displayName || $user?.email || $user?.phoneNumber || ''}
+					</h5>
 					<div class="d-flex gap-2 ml-auto" style="width: fit-content;">
 						<!-- <button
 						class="btn btn-outline-primary d-flex align-items-center gap-1"
@@ -405,7 +407,7 @@
 			{#if selectedFile}
 				<div
 					class="progress h-100"
-					style="position: relative; width: 10em"
+					style="position: relative; width: 10em; min-height: 37.5px"
 					role="progressbar"
 					aria-label="Upload percentage"
 					aria-valuenow={uploadProgress}
@@ -465,6 +467,7 @@
 			<button
 				style="min-width: 60px;"
 				class="btn btn-primary d-flex align-items-center justify-content-center"
+				disabled={uploading ? true : false}
 				on:click={sendMessage}><span class="material-symbols-outlined"> send </span></button
 			>
 		</div>

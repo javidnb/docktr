@@ -17,7 +17,13 @@
 	<div class="card-body d-flex flex-column align-items-center">
 		<div class="row">
 			<div class="col-5 d-flex flex-column">
-				<img src={props.img} alt="Some Doc" style="max-width: max(150px,100%)" />
+				<img
+					src={props.img
+						? props.img
+						: 'https://ik.imagekit.io/d2nwsj0ktvh/docktr/uploads/docplaceholder.jpg'}
+					alt="Some Doc"
+					style="max-width: max(150px,100%)"
+				/>
 				<div
 					style="color: #rgb(99 141 88)"
 					class="d-flex flex-column justify-content-center align-items-center mt-1"

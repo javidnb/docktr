@@ -3,6 +3,7 @@
 		appointments,
 		confirmationModal,
 		dataLoading,
+		appointmentsLoading,
 		doctors,
 		loginModal,
 		putData,
@@ -28,7 +29,7 @@
 	let appointmentId: any = null;
 
 	$: upcomingAppointments = $appointments
-		.filter((ap) => new Date(ap.startTime) > new Date())
+		.filter((ap) => new Date(ap.endTime) > new Date())
 		.sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
 
 	onMount(() => {
@@ -185,9 +186,14 @@
 					<div class="col col-md-6 col-lg-4">
 						{#if $session?.user?.doctor}
 							<!-- APPOINTMENTS OF A DOCTOR -->
-							<div class="card mt-3 p-3">
-								<div class="card-body" style="padding: .5rem;">
-									<div class="d-flex gap-3 align-items-center">
+							<div class="card mt-3 p-3 h-100">
+								<div class="card-body d-flex flex-column" style="padding: .5rem;">
+									<div
+										class="d-flex gap-3 align-items-center"
+										style="border-bottom: 1px solid rgb(236, 236, 236); 
+										padding-bottom: 1rem;
+										min-height: 100px"
+									>
 										{#if appointment.photoURL}
 											<img
 												src={appointment.photoURL}
@@ -217,7 +223,7 @@
 											<span>{appointment.email}</span>
 										</div>
 									</div>
-									<div class="d-flex align-items-center gap-2 mt-3 mb-1">
+									<div class="d-flex align-items-center gap-2 mt-3">
 										<span class="material-symbols-outlined"> schedule </span>
 										<div>
 											<span
@@ -237,7 +243,10 @@
 											>
 										</div>
 									</div>
-									<div class="d-flex align-items-center gap-2 mb-3">
+									<div
+										class="d-flex align-items-center gap-2 mb-3 mt-2"
+										style="border-bottom: 1px solid rgb(236, 236, 236); padding-bottom: 1rem;"
+									>
 										<span class="material-symbols-outlined"> calendar_month </span>
 										<span
 											><span
@@ -246,6 +255,7 @@
 											></span
 										>
 									</div>
+
 									{#if appointment.status == 1}
 										<span class="d-flex mt-3 gap-1" style="color: #93930a"
 											><span class="material-symbols-outlined"> pending </span>
@@ -264,6 +274,7 @@
 										</span>
 									{/if}
 								</div>
+								<!-- CONFIRM APPOINTMENT -->
 								{#if appointment.status == 1}
 									<button
 										class="btn btn-outline-primary mt-3 d-flex align-items-center"
@@ -281,26 +292,44 @@
 									</button>
 								{/if}
 
-								{#if appointment?.remainingTime?.total > 0}
+								{#if appointment?.remainingTime?.total > 0 && appointment.status == 2}
 									<button
 										class="btn btn-outline-primary mt-auto mb-2 d-flex align-items-center"
 										on:click={() => joinCall(appointment)}
 									>
 										<span class="material-symbols-outlined"> schedule </span>
 										<span class="mx-auto"
-											>{appointment.remainingTime.days +
-												' gün ' +
-												appointment.remainingTime.hours +
-												' saat ' +
-												appointment.remainingTime.minutes +
-												' deq ' +
-												appointment.remainingTime.seconds +
-												' san qalıb'}</span
+											>{appointment.remainingTime.days != 0
+												? appointment.remainingTime.days +
+													' gün ' +
+													appointment.remainingTime.hours +
+													':' +
+													appointment.remainingTime.minutes +
+													':' +
+													appointment.remainingTime.seconds
+												: appointment.remainingTime.hours +
+													':' +
+													appointment.remainingTime.minutes +
+													':' +
+													appointment.remainingTime.seconds +
+													''}</span
+										>
+									</button>
+								{:else if appointment.status == 2}
+									<button
+										on:click={() => joinCall(appointment)}
+										class="btn btn-outline-primary mt-3 mb-2 d-flex align-items-center"
+										style="background: var(--primaryColor);
+										color: white;"
+									>
+										<span class="material-symbols-outlined"> schedule </span>
+										<span class="mx-auto"
+											>{!$joinVideoCall ? 'Video görüşə qoşul' : 'Gözləyin'}</span
 										>
 									</button>
 
 									<!-- ALTDAKINI SIL, USTDEKINI KOMMENTDEN CIXART -->
-									<button
+									<!-- <button
 										on:click={() => joinCall(appointment)}
 										class="btn btn-outline-primary mt-3 d-flex align-items-center"
 										style="background: var(--primaryColor);
@@ -310,19 +339,7 @@
 										<span class="mx-auto"
 											>{!$joinVideoCall ? 'Video görüşə qoşul' : 'Gözləyin'}</span
 										>
-									</button>
-								{:else}
-									<button
-										on:click={() => joinCall(appointment)}
-										class="btn btn-outline-primary mt-3 d-flex align-items-center"
-										style="background: var(--primaryColor);
-										color: white;"
-									>
-										<span class="material-symbols-outlined"> schedule </span>
-										<span class="mx-auto"
-											>{!$joinVideoCall ? 'Video görüşə qoşul' : 'Gözləyin'}</span
-										>
-									</button>
+									</button> -->
 								{/if}
 							</div>
 						{:else}
@@ -471,6 +488,9 @@
 						{/if}
 					</div>
 				{/each}
+			{:else if $session.loggedIn && $appointmentsLoading}
+				<!-- APOINTMENTS LOADING -->
+				<div class="card mt-3 p-3">Loading</div>
 			{:else if $session.loggedIn}
 				<div class="card mt-3 p-3">{$_('appointment.no_appointment')}</div>
 			{:else}
@@ -528,6 +548,7 @@
 			left:0; 
 			display: flex; align-items:center; justify-content:center; z-index: 1"
 			>
+				<!-- VIDEO CALL LOADING-->
 				Loading
 			</div>
 		{/if}

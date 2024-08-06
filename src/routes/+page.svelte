@@ -43,7 +43,7 @@
 	</div>
 </section>
 
-<section class="faq pb-5 pt-4" style="background-color: #f9f9f9;">
+<section class="faq pb-5 pt-4" style="background-color: #0000000a;">
 	<div class="container">
 		<div class="row">
 			<div class="col">
@@ -134,9 +134,6 @@
 </Modal>
 
 <style>
-	.categories {
-		background-color: aliceblue;
-	}
 	.jumbotron {
 		padding-block: 3rem;
 		background-color: #e2e9ef;

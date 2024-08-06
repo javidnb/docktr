@@ -18,9 +18,3 @@
 		</div>
 	</div>
 </section>
-
-<style>
-	.categories {
-		background-color: aliceblue;
-	}
-</style>

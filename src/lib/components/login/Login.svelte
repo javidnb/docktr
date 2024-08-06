@@ -20,6 +20,7 @@
 	import { browser } from '$app/environment';
 	import Select from 'svelte-select';
 	import { parsePhoneNumber, isValidNumber } from 'libphonenumber-js';
+	import { goto } from '$app/navigation';
 
 	let email: string = '';
 	let password: string = '';
@@ -91,6 +92,7 @@
 				`https://tekoplast.az/docktr/api/?user&id=${user.user.uid}&t=${time}`
 			);
 			const result = await response.json();
+			if (result.doctor) goto('./doctor');
 			console.log('response: ', result);
 			if (!result) {
 				console.log('add user to db');
@@ -158,7 +160,7 @@
 			await signInWithEmailAndPassword(auth, email, password)
 				.then(async (result) => {
 					const { user }: UserCredential = result;
-					await getUser(result);
+					let usr: any = await getUser(result);
 					toast.push(`Xoş gəldiniz ${result.user.displayName ?? ''}!`, {
 						duration: 2000,
 						theme: {

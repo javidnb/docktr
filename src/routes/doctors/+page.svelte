@@ -57,7 +57,7 @@
 	</div>
 </section>
 
-<section class="pt-3 pb-5" style="background-color: aliceblue;">
+<section class="pt-3 pb-5">
 	<div class="container pb-5">
 		<div class="row mb-3">
 			<div class="col">

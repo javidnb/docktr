@@ -82,7 +82,8 @@
 	<div class="input-group input-group-lg mb-3 mt-2" style="position: relative;">
 		<span
 			class="input-group-text"
-			style="background: unset; position: absolute; border: 0; z-index: 9; top: 7px; color: gray; left: 0"
+			style="background: unset; position: absolute; border: 0; z-index: 9; top: 50%;
+    transform: translateY(-50%); color: gray; left: 0"
 		>
 			<span class="material-symbols-outlined" style="font-size: 20px;"> search </span>
 		</span>

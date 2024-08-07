@@ -9,7 +9,7 @@
 
 <section>
 	<div
-		class="jumbotron"
+		class="jumbotron homeJumbo"
 		style="padding-block: 3rem;
 		background-color: #e2e9ef;
 		background-image: url('https://tekoplast.az/img/docktrbg.png');
@@ -132,25 +132,3 @@
 		</div>
 	</div>
 </Modal>
-
-<style>
-	.jumbotron {
-		padding-block: 3rem;
-		background-color: #e2e9ef;
-		background-image: url('https://tekoplast.az/img/docktrbg.png');
-		background-size: cover;
-		background-blend-mode: overlay;
-	}
-	.accordion-button {
-		font-weight: 500;
-		background-color: #a1c39854;
-		color: #3a4138;
-	}
-	.accordion-button:not(.collapsed) {
-		background-color: var(--primaryColor);
-		color: white;
-	}
-	.accordion-button:focus {
-		box-shadow: none;
-	}
-</style>

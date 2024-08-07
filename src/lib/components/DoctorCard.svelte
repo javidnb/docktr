@@ -109,6 +109,10 @@
 		overflow: hidden;
 	}
 	.star {
-		color: var(--primaryColor);
+		color: var(--primaryColor)!important;
+		background-color: unset!important;
+	}
+	.icon-fill {
+		padding: 0;
 	}
 </style>

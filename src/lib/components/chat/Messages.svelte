@@ -138,8 +138,8 @@
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<!-- svelte-ignore a11y-no-static-element-interactions -->
 		<button
-			class={$selectedUser == uid ? 'active' : ''}
-			style="min-height: 60px; border-radius: 6px; border: 1px solid #ececec"
+			class={$selectedUser == uid ? 'active' : 'users'}
+			style="min-height: 60px; border-radius: 6px; border: 1px solid rgb(207 207 207);"
 			on:click={() => {
 				selectedUser.set(uid);
 				dispatch('changeValue', uid);
@@ -185,7 +185,11 @@
 
 <style>
 	.active {
-		background-color: #596655;
 		color: white;
+	}
+	.users {
+		background-color: #f0f0f0;
+		border-radius: 20px!important;
+		border: 1px solid #e4e4e4c2 !important
 	}
 </style>

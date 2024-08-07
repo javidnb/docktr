@@ -45,7 +45,7 @@
 	</div>
 </section>
 
-<section class="py-3" style="background-color: white;">
+<section class="py-3" style="background-color: #f8f8f8;">
 	<div class="container">
 		<div class="row msgRow justify-content-center">
 			<div class="col-md-4 col-lg-3 {$selectedUser ? 'pcOnly' : ''}">

@@ -251,7 +251,7 @@
 			<div
 				style="position: sticky;
 				top: 0px;
-				background: white;
+				background: #f8f8f8;
 				border-bottom: 1px solid #ececec;"
 			>
 				<div class="d-flex align-items-center w-100 pt-1 py-2">
@@ -486,8 +486,9 @@
 	.message {
 		padding: 8px;
 		margin: 4px;
-		border-radius: 4px;
+		border-radius: 10px;
 		max-width: calc(100dvw - 100px);
+		background: #dddada;
 		/* max-width: 0%; */
 	}
 	.sent {
@@ -495,7 +496,7 @@
 		text-align: right;
 	}
 	.received {
-		background-color: #f1f0f0;
+		background-color: #dddada;
 	}
 	.progress-bar {
 		background-color: var(--primaryColor);

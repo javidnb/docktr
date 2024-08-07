@@ -4,7 +4,7 @@
 	import Nav from '$lib/components/Nav.svelte';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import type { LayoutData } from './$types';
-	import { appointmentsLoading, doctors, hideNav } from '$lib/store/dataStore';
+	import { appointmentsLoading, doctors } from '$lib/store/dataStore';
 	import '../lib/i18n';
 	import { locale, _ } from 'svelte-i18n';
 	import { session } from '$lib/session';
@@ -90,25 +90,3 @@
 <Modal bind:showModal={showGPT}>
 	<Gpt />
 </Modal>
-
-<style src="$lib/style/style.css">
-	/* .btnContact {
-		position: fixed;
-		right: 1rem;
-		bottom: 1rem;
-		border-radius: 100%;
-		background: var(--primaryColor);
-		color: white;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		height: 4rem;
-		width: 4rem;
-		box-shadow: 0px 0px 4px #0000006b;
-	}
-	@media screen and (max-width: 992px) {
-		.btnContact {
-			bottom: 4rem;
-		}
-	} */
-</style>

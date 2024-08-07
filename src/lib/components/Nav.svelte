@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import { formatDate } from '$lib/helpers/dateFormatter';
 	import { session } from '$lib/session';
 	import {
 		dataLoading,
@@ -408,6 +407,7 @@
 		border-radius: 40px;
 		transition-duration: 0.3s;
 		font-weight: 450;
+		background: var(--primaryColor);
 	}
 	.nav-link {
 		display: flex;

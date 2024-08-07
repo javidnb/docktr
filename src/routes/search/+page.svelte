@@ -255,12 +255,12 @@
 		background: #00000017;
 		border: 0 !important;
 		color: white;
-		border-radius: 8px!important;
+		border-radius: 8px !important;
 		border: 0;
 		border-bottom: 1px solid #ececec;
 		height: 42px;
 		padding-left: 2.2rem;
-        font-size: 16px;
+		font-size: 16px;
 	}
 	.searchBox::placeholder {
 		font-size: 16px;

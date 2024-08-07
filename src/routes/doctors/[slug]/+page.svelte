@@ -145,7 +145,7 @@
 	on:click={() => {
 		history.back();
 	}}
-	class="nav-link topnavlink btnBack mobileOnly btn"
+	class="btnBack mobileOnly btn"
 	type="button"
 	style="position: absolute;
     top: 10px;
@@ -154,11 +154,11 @@
     border: 1px solid rgba(255, 255, 255, 0.21) !important;
     text-align: center;
     width: 56px;
-    display: flex !important;
     height: 40px;
     align-items: center;
     justify-content: center;
-    padding-left: 7px;"
+    padding-left: 19px;
+	border-radius: 6px!important"
 >
 	<span class="material-symbols-outlined"> arrow_back_ios </span>
 </button>
@@ -555,8 +555,9 @@
 													{/if}
 												</div>
 												<div>
-													<div class="d-flex gap-2">
-														<span>{comment.displayName || comment.email || 'Adsız İstifadəçi'}</span
+													<div class="d-flex gap-2 commentor">
+														<span class="name"
+															>{comment.displayName || comment.email || 'Adsız İstifadəçi'}</span
 														>
 														<div class="d-flex">
 															{#each Array.from({ length: comment.star }) as _}
@@ -592,79 +593,3 @@
 		</div>
 	</div>
 </section>
-
-<style>
-	.card {
-		cursor: auto;
-		min-height: auto;
-	}
-	.commentCard {
-		background-color: #fbfbfb;
-	}
-
-	.star {
-		border: 0px;
-		background: none;
-		color: var(--primaryColor);
-	}
-	.btnRandevu {
-		min-width: 250px;
-		border-radius: 8px;
-		font-size: large;
-		margin-block: auto;
-		background: var(--primaryColor);
-		padding-inline: 2rem;
-		padding-block: 1rem;
-		color: white;
-	}
-	.btnRandevu:hover {
-		background-color: #95ba8c;
-	}
-	.branch button {
-		color: var(--primaryColor);
-		background: white;
-		text-decoration: none;
-		border-radius: 10px;
-		padding: 3px 13px;
-		border: 0px;
-		font-size: small;
-		box-shadow: 0px 0px 4px #a1c39852;
-		transition-duration: 0.2s;
-	}
-	.branch button:hover {
-		background-color: var(--primaryColor);
-		color: white;
-	}
-	@media screen and (max-width: 992px) {
-		.btnRandevu {
-			padding-block: 0.5rem;
-		}
-		.btnBack {
-			display: flex !important;
-		}
-	}
-
-	.progress-bar {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		z-index: 1011;
-	}
-
-	.progress-animation {
-		width: 30%; /* width of the line */
-		height: 3px; /* adjust height as needed */
-		background-color: #597153; /* adjust color as needed */
-		animation: progress 2.5s linear infinite;
-	}
-
-	@keyframes progress {
-		0% {
-			transform: translateX(-100%);
-		}
-		100% {
-			transform: translateX(300%);
-		}
-	}
-</style>

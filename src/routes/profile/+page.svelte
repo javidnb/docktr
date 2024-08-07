@@ -202,6 +202,7 @@
 		gap: 8px;
 		border: 0px;
 		cursor: pointer;
+		border-radius: 8px;
 	}
 	.list-group-item:hover {
 		background-color: rgb(161 195 152 / 22%);

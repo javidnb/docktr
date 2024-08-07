@@ -82,8 +82,10 @@
 	<div class="input-group input-group-lg mb-3 mt-2" style="position: relative;">
 		<span
 			class="input-group-text"
-			style="background: unset; position: absolute; border: 0; z-index: 9; top: 5px; color: gray"><span class="material-symbols-outlined"> search </span></span
+			style="background: unset; position: absolute; border: 0; z-index: 9; top: 7px; color: gray; left: 0"
 		>
+			<span class="material-symbols-outlined" style="font-size: 20px;"> search </span>
+		</span>
 		<input
 			type="search"
 			class="form-control searchBox ps-5"
@@ -210,7 +212,8 @@
 		background-color: white;
 	}
 	.searchBox {
-		border-radius: 8px!important;
+		border-radius: 12px !important;
+		box-shadow: 0px 0px 6px #0000000a;
 	}
 	.searchBox::placeholder {
 		font-size: 16px;

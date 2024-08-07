@@ -218,7 +218,7 @@
 				{/if}
 			</div>
 		{:else if !$searchQuery}
-			<div class="d-flex h-100 w-100 align-items-center justify-content-center">
+			<div class="d-flex mt-5 justify-content-center">
 				<span
 					class="mobileOnly text-center"
 					style="

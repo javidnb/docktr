@@ -4,7 +4,9 @@
 	import { writable } from 'svelte/store';
 	import { doctors, selectedSymptoms, selectedBranch, mobile } from '$lib/store/dataStore';
 	import { _ } from 'svelte-i18n';
+	import { onMount } from 'svelte';
 
+    let inputElement:any;
 	const searchQuery = writable('');
 	const charMap: any = {
 		ç: 'c',
@@ -23,6 +25,10 @@
 		ə: 'e'
 	};
 	let symptoms: any = writable([]);
+
+    onMount(()=>{
+        inputElement.focus();
+    });
 
 	$: filteredResults = combineArrays($doctors, diseases).filter((item) => {
 		const query = latinize($searchQuery);
@@ -78,21 +84,24 @@
 	}
 </script>
 
-<div class="w-100">
-	<div class="input-group input-group-lg mb-3 mt-2">
+<div class="w-100 pt-0" style="max-width: 100dvw; overflow: hidden; max-height: 100dvh;">
+	<div
+		class="input-group input-group-lg mb-3"
+		style="    padding: .5rem;
+    background: var(--primaryColor);"
+	>
 		<input
-			type="text"
+			type="search"
 			class="form-control searchBox"
 			aria-label="Sizing example input"
 			aria-describedby="inputGroup-sizing-sm"
-			placeholder="{$_('home.search')} ({$_('nav.docs')}, {$_('nav.branches')}, {$_(
-				'nav.diseases'
-			)}, {$_('home.symptoms')})"
+			placeholder={$_('home.search')}
 			bind:value={$searchQuery}
+            bind:this={inputElement}
 			on:keydown={handleKeydown}
-			on:click={() => {
-				if ($mobile) goto('./search');
-			}}
+			style="border-radius: 6px;
+                border: 0;
+                border-bottom: 1px solid #ececec; height: 35px"
 		/>
 		<span
 			class="mobileOnly"
@@ -106,13 +115,19 @@
 					width: 100%;"
 			>{$_('nav.docs')}, {$_('nav.branches')}, {$_('nav.diseases')}, {$_('home.symptoms')}</span
 		>
-		{#if $searchQuery}
-			<button class="input-group-text" on:click={() => searchQuery.set('')}
-				><span class="material-symbols-outlined"> close </span></button
-			>
-		{/if}
-		<span
+		<button
 			class="input-group-text"
+			style="background: unset;
+                border: 0;
+                font-size: small;
+                height: 35px;
+                color: #404040"
+			on:click={() => {
+				history.back();
+			}}>Ləğv et</button
+		>
+		<span
+			class="input-group-text pcOnly"
 			style="background: var(--primaryColor);
     color: white;"><span class="material-symbols-outlined"> search </span></span
 		>
@@ -226,15 +241,16 @@
 		box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.34);
 		background-color: white;
 	}
+	.searchBox {
+		background: #00000017;
+		border: 0 !important;
+        color: #0c430a;
+	}
 	.searchBox::placeholder {
 		font-size: 16px;
-		color: gray;
+		color: rgb(236, 236, 236);
 	}
-	@media screen and (max-width: 992px) {
-		.searchBox::placeholder {
-			width: 4ch;
-			overflow: hidden;
-			white-space: nowrap;
-		}
+	.searchBox:focus {
+		box-shadow: unset !important;
 	}
 </style>

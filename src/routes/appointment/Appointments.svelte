@@ -201,7 +201,7 @@
 				</div>
 			{:else if upcomingAppointments.length && upcomingAppointments}
 				{#each upcomingAppointments as appointment}
-					<div class="col col-md-6 col-lg-4">
+					<div class="col-md-6 col-lg-4">
 						{#if $session?.user?.doctor}
 							<!-- APPOINTMENTS OF A DOCTOR -->
 							<div class="card mt-3 p-3 h-100">

@@ -237,49 +237,49 @@
 					{/if}
 				</div>
 				{#if $mobile}
-				<div class="row px-3 mt-5">
-					{#if !existingAppointment}
-						<button
-							class="btn btn-outline-primary d-flex justify-content-center align-items-center btnRandevu w-100"
-							on:click={openModal}
-							><span class="material-symbols-outlined">local_library</span><span
-								style="margin-inline: auto;">{$_('appointment.get')}</span
-							></button
-						>
-					{:else}
-						<div
-							class="card p-4 mt-auto"
-							style="max-height: 250px;
+					<div class="row px-3 mt-5">
+						{#if !existingAppointment}
+							<button
+								class="btn btn-outline-primary d-flex justify-content-center align-items-center btnRandevu w-100"
+								on:click={openModal}
+								><span class="material-symbols-outlined">local_library</span><span
+									style="margin-inline: auto;">{$_('appointment.get')}</span
+								></button
+							>
+						{:else}
+							<div
+								class="card p-4 mt-auto"
+								style="max-height: 250px;
 							min-width: min(100%, 350px);
 							border-radius: 8px;
 							align-self: baseline"
-						>
-							<span style="font-size: small;">{$_('appointment.planned')}: </span>
-							<span class="my-auto">{formatDate(new Date(existingAppointment.startTime))}</span>
-							<button
-								class="btn btn-outline-primary mt-2 d-flex align-items-center"
-								on:click={() => {
-									goto('../appointment');
-								}}
 							>
-								<span class="material-symbols-outlined"> info </span>
-								<span class="mx-auto">{$_('actions.details')}</span>
-							</button>
-							{#if existingAppointment.purchased}
+								<span style="font-size: small;">{$_('appointment.planned')}: </span>
+								<span class="my-auto">{formatDate(new Date(existingAppointment.startTime))}</span>
 								<button
-									class="btn btn-outline-primary mt-3 w-100 d-flex"
+									class="btn btn-outline-primary mt-2 d-flex align-items-center"
 									on:click={() => {
-										selectedUser.set($doc.uid);
-										goto('../messages');
+										goto('../appointment');
 									}}
 								>
-									<span class="material-symbols-outlined"> send </span>
-									<span class="mx-auto">{$_('actions.send_msg')}</span>
+									<span class="material-symbols-outlined"> info </span>
+									<span class="mx-auto">{$_('actions.details')}</span>
 								</button>
-							{/if}
-						</div>
-					{/if}
-				</div>
+								{#if existingAppointment.purchased}
+									<button
+										class="btn btn-outline-primary mt-3 w-100 d-flex"
+										on:click={() => {
+											selectedUser.set($doc.uid);
+											goto('../messages');
+										}}
+									>
+										<span class="material-symbols-outlined"> send </span>
+										<span class="mx-auto">{$_('actions.send_msg')}</span>
+									</button>
+								{/if}
+							</div>
+						{/if}
+					</div>
 				{/if}
 				<div class="row mt-3">
 					<div class="p-3">
@@ -369,49 +369,49 @@
 			</div>
 			<div class="col-md-4">
 				{#if !$mobile}
-				<div class="row px-3">
-					{#if !existingAppointment}
-						<button
-							class="btn btn-outline-primary d-flex justify-content-center align-items-center btnRandevu w-100"
-							on:click={openModal}
-							><span class="material-symbols-outlined">local_library</span><span
-								style="margin-inline: auto;">{$_('appointment.get')}</span
-							></button
-						>
-					{:else}
-						<div
-							class="card p-4 mt-auto"
-							style="max-height: 250px;
+					<div class="row px-3">
+						{#if !existingAppointment}
+							<button
+								class="btn btn-outline-primary d-flex justify-content-center align-items-center btnRandevu w-100"
+								on:click={openModal}
+								><span class="material-symbols-outlined">local_library</span><span
+									style="margin-inline: auto;">{$_('appointment.get')}</span
+								></button
+							>
+						{:else}
+							<div
+								class="card p-4 mt-auto"
+								style="max-height: 250px;
 							min-width: min(100%, 350px);
 							border-radius: 8px;
 							align-self: baseline"
-						>
-							<span style="font-size: small;">{$_('appointment.planned')}: </span>
-							<span class="my-auto">{formatDate(new Date(existingAppointment.startTime))}</span>
-							<button
-								class="btn btn-outline-primary mt-2 d-flex align-items-center"
-								on:click={() => {
-									goto('../appointment');
-								}}
 							>
-								<span class="material-symbols-outlined"> info </span>
-								<span class="mx-auto">{$_('actions.details')}</span>
-							</button>
-							{#if existingAppointment.purchased}
+								<span style="font-size: small;">{$_('appointment.planned')}: </span>
+								<span class="my-auto">{formatDate(new Date(existingAppointment.startTime))}</span>
 								<button
-									class="btn btn-outline-primary mt-3 w-100 d-flex"
+									class="btn btn-outline-primary mt-2 d-flex align-items-center"
 									on:click={() => {
-										selectedUser.set($doc.uid);
-										goto('../messages');
+										goto('../appointment');
 									}}
 								>
-									<span class="material-symbols-outlined"> send </span>
-									<span class="mx-auto">{$_('actions.send_msg')}</span>
+									<span class="material-symbols-outlined"> info </span>
+									<span class="mx-auto">{$_('actions.details')}</span>
 								</button>
-							{/if}
-						</div>
-					{/if}
-				</div>
+								{#if existingAppointment.purchased}
+									<button
+										class="btn btn-outline-primary mt-3 w-100 d-flex"
+										on:click={() => {
+											selectedUser.set($doc.uid);
+											goto('../messages');
+										}}
+									>
+										<span class="material-symbols-outlined"> send </span>
+										<span class="mx-auto">{$_('actions.send_msg')}</span>
+									</button>
+								{/if}
+							</div>
+						{/if}
+					</div>
 				{/if}
 				<!-- COMMENTS CONTAINER -->
 				<div class="row px-3 mt-3">

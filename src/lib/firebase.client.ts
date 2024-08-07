@@ -52,7 +52,7 @@ export function logout() {
 		})
 		.catch(() => {
 			dataLoading.set(false);
-			session.set({ user: null });
+			session.set({ user: null, loggedIn: false });
 			appointments.set([]);
 			localStorage.removeItem('user');
 		});

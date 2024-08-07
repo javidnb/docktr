@@ -4,7 +4,7 @@
 	import Nav from '$lib/components/Nav.svelte';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import type { LayoutData } from './$types';
-	import { doctors, hideNav } from '$lib/store/dataStore';
+	import { appointmentsLoading, doctors, hideNav } from '$lib/store/dataStore';
 	import '../lib/i18n';
 	import { locale, _ } from 'svelte-i18n';
 	import { session } from '$lib/session';
@@ -25,7 +25,8 @@
 	}
 
 	onMount(async () => {
-		await data.getAuthUser();
+		let usr = await data.getAuthUser();
+		if (!usr) appointmentsLoading.set(false);
 	});
 
 	$: if ($session.user?.lang) locale.set($session.user?.lang);

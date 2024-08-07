@@ -28,9 +28,15 @@
 	let upcomingAppointments;
 	let appointmentId: any = null;
 
-	$: upcomingAppointments = $appointments
-		.filter((ap) => new Date(ap.endTime) > new Date())
-		.sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
+	$: if (!$session.user) appointments.set([]);
+
+	$: upcomingAppointments = $session?.user?.doctor
+		? $appointments
+				.filter((ap) => new Date(ap.endTime) > new Date() && ap.purchased)
+				.sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime())
+		: $appointments
+				.filter((ap) => new Date(ap.endTime) > new Date())
+				.sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
 
 	onMount(() => {
 		const updateRemainingTime = () => {
@@ -44,14 +50,15 @@
 			);
 		};
 
-		updateRemainingTime();
+		if ($appointments.length) {
+			updateRemainingTime();
+		}
 		const interval = setInterval(updateRemainingTime, 1000);
 
 		return () => clearInterval(interval);
 	});
 
 	function openAppConfirmModal(appointment: any, showDP?: boolean) {
-		console.log(appointment);
 		let data = `${new Date(appointment.endTime).getDate()}
 		${monthNames[new Date(appointment.endTime).getMonth()]}
 		 , 
@@ -181,7 +188,18 @@
 <div class="container">
 	{#if !$joinVideoCall}
 		<div class="row mb-5 pb-5">
-			{#if upcomingAppointments.length}
+			{#if $appointmentsLoading}
+				<!-- APOINTMENTS LOADING -->
+				<div class="d-flex flex-column justify-content-center align-items-center my-5">
+					<div class="lds-ellipsis mt-5">
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+					<!-- <span style="color: gray; margin-top: -20px; margin-bottom: 2rem">Yüklənir ..</span> -->
+				</div>
+			{:else if upcomingAppointments.length && upcomingAppointments}
 				{#each upcomingAppointments as appointment}
 					<div class="col col-md-6 col-lg-4">
 						{#if $session?.user?.doctor}
@@ -292,28 +310,30 @@
 									</button>
 								{/if}
 
-								{#if appointment?.remainingTime?.total > 0 && appointment.status == 2}
+								{#if new Date(appointment?.startTime) > new Date() && appointment.status == 2}
 									<button
-										class="btn btn-outline-primary mt-auto mb-2 d-flex align-items-center"
+										class="btn btn-outline-primary mt-3 mb-2 d-flex align-items-center"
 										on:click={() => joinCall(appointment)}
 									>
 										<span class="material-symbols-outlined"> schedule </span>
-										<span class="mx-auto"
-											>{appointment.remainingTime.days != 0
-												? appointment.remainingTime.days +
-													' gün ' +
-													appointment.remainingTime.hours +
-													':' +
-													appointment.remainingTime.minutes +
-													':' +
-													appointment.remainingTime.seconds
-												: appointment.remainingTime.hours +
-													':' +
-													appointment.remainingTime.minutes +
-													':' +
-													appointment.remainingTime.seconds +
-													''}</span
-										>
+										{#if appointment.remainingTime}
+											<span class="mx-auto"
+												>{appointment.remainingTime?.days != 0
+													? appointment.remainingTime?.days +
+														' gün ' +
+														appointment.remainingTime?.hours +
+														':' +
+														appointment.remainingTime?.minutes +
+														':' +
+														appointment.remainingTime?.seconds
+													: appointment.remainingTime?.hours +
+														':' +
+														appointment.remainingTime?.minutes +
+														':' +
+														appointment.remainingTime?.seconds +
+														''}</span
+											>
+										{/if}
 									</button>
 								{:else if appointment.status == 2}
 									<button
@@ -322,7 +342,7 @@
 										style="background: var(--primaryColor);
 										color: white;"
 									>
-										<span class="material-symbols-outlined"> schedule </span>
+										<span class="material-symbols-outlined"> video_call </span>
 										<span class="mx-auto"
 											>{!$joinVideoCall ? 'Video görüşə qoşul' : 'Gözləyin'}</span
 										>
@@ -422,13 +442,28 @@
 										></span
 									>
 								</div>
-								{#if appointment.status == 1}
-									<span class="d-flex mt-3 gap-1" style="color: #93930a"
+								<!-- PAYMENT -->
+								{#if appointment.purchased}
+									<div class="d-flex align-items-center gap-1 mt-2" style="color: green">
+										<span class="material-symbols-outlined"> check </span>
+										<span>Uğurlu ödəniş</span>
+									</div>
+								{/if}
+								{#if !appointment.purchased}
+									<div
+										class="d-flex align-items-center gap-1 mt-2"
+										style="color: {appointment.purchased ? 'green' : '#c00909'}"
+									>
+										<span class="material-symbols-outlined"> error </span>
+										<span>Ödəniş edilməmişdir</span>
+									</div>
+								{:else if appointment.status == 1}
+									<span class="d-flex mt-2 gap-1" style="color: #93930a"
 										><span class="material-symbols-outlined"> pending </span>
 										<span>Həkimin təsdiqi gözlənilir</span>
 									</span>
 								{:else if appointment.status == 2}
-									<span class="d-flex mt-3 gap-1" style="color: green"
+									<span class="d-flex mt-2 gap-1" style="color: green"
 										><span class="material-symbols-outlined">
 											{appointment.changed ? 'change_circle' : 'check'}
 										</span>
@@ -440,49 +475,51 @@
 										>
 									</span>
 								{/if}
-								<!-- PAYMENT -->
-								{#if !appointment.purchased}
-									<div
-										class="d-flex align-items-center gap-1 mt-2"
-										style="color: {appointment.purchased ? 'green' : '#c00909'}"
-									>
-										<span class="material-symbols-outlined"> error </span>
-										<span>Ödəniş edilməmişdir</span>
-									</div>
-								{/if}
 
 								{#if !appointment.purchased}
 									<button class="btn btn-outline-primary mt-auto mb-2 d-flex align-items-center">
 										<span class="material-symbols-outlined"> shopping_cart </span>
 										<span class="mx-auto">Ödəniş et</span>
 									</button>
-								{:else if appointment?.remainingTime?.total > 0}
-									<button
-										class="btn btn-outline-primary mt-auto mb-2 d-flex align-items-center"
-										on:click={() => joinCall(appointment)}
-									>
-										<span class="material-symbols-outlined"> schedule </span>
-										<span class="mx-auto"
-											>{appointment.remainingTime.days +
-												' gün ' +
-												appointment.remainingTime.hours +
-												' saat ' +
-												appointment.remainingTime.minutes +
-												' deq ' +
-												appointment.remainingTime.seconds +
-												' san'}</span
+								{/if}
+
+								{#if appointment.status == 2}
+									{#if new Date(appointment?.startTime) > new Date()}
+										<button
+											class="btn btn-outline-primary mt-auto mb-2 d-flex align-items-center"
+											on:click={() => joinCall(appointment)}
 										>
-									</button>
-								{:else}
-									<button
-										on:click={() => joinCall(appointment)}
-										class="btn btn-outline-primary mt-auto mb-2 d-flex align-items-center"
-									>
-										<span class="material-symbols-outlined"> schedule </span>
-										<span class="mx-auto"
-											>{!$joinVideoCall ? 'Video görüşə qoşul' : 'Gözləyin'}</span
+											<span class="material-symbols-outlined"> schedule </span>
+											{#if appointment.remainingTime}
+												<span class="mx-auto"
+													>{appointment.remainingTime?.days != 0
+														? appointment.remainingTime?.days +
+															' gün ' +
+															appointment.remainingTime?.hours +
+															':' +
+															appointment.remainingTime?.minutes +
+															':' +
+															appointment.remainingTime?.seconds
+														: appointment.remainingTime?.hours +
+															':' +
+															appointment.remainingTime?.minutes +
+															':' +
+															appointment.remainingTime?.seconds +
+															''}</span
+												>
+											{/if}
+										</button>
+									{:else}
+										<button
+											on:click={() => joinCall(appointment)}
+											class="btn btn-outline-primary mt-auto mb-2 d-flex align-items-center"
 										>
-									</button>
+											<span class="material-symbols-outlined"> video_call </span>
+											<span class="mx-auto"
+												>{!$joinVideoCall ? 'Video görüşə qoşul' : 'Gözləyin'}</span
+											>
+										</button>
+									{/if}
 								{/if}
 							</div>
 						{/if}
@@ -568,5 +605,66 @@
 <style>
 	.card {
 		cursor: auto;
+	}
+
+	.lds-ellipsis,
+	.lds-ellipsis div {
+		box-sizing: border-box;
+		color: var(--primaryColor);
+	}
+	.lds-ellipsis {
+		display: inline-block;
+		position: relative;
+		width: 80px;
+		height: 80px;
+	}
+	.lds-ellipsis div {
+		position: absolute;
+		top: 33.33333px;
+		width: 13.33333px;
+		height: 13.33333px;
+		border-radius: 50%;
+		background: currentColor;
+		animation-timing-function: cubic-bezier(0, 1, 1, 0);
+	}
+	.lds-ellipsis div:nth-child(1) {
+		left: 8px;
+		animation: lds-ellipsis1 0.6s infinite;
+	}
+	.lds-ellipsis div:nth-child(2) {
+		left: 8px;
+		animation: lds-ellipsis2 0.6s infinite;
+	}
+	.lds-ellipsis div:nth-child(3) {
+		left: 32px;
+		animation: lds-ellipsis2 0.6s infinite;
+	}
+	.lds-ellipsis div:nth-child(4) {
+		left: 56px;
+		animation: lds-ellipsis3 0.6s infinite;
+	}
+	@keyframes lds-ellipsis1 {
+		0% {
+			transform: scale(0);
+		}
+		100% {
+			transform: scale(1);
+		}
+	}
+	@keyframes lds-ellipsis3 {
+		0% {
+			transform: scale(1);
+		}
+		100% {
+			transform: scale(0);
+		}
+	}
+	@keyframes lds-ellipsis2 {
+		0% {
+			transform: translate(0, 0);
+		}
+		100% {
+			transform: translate(24px, 0);
+		}
 	}
 </style>

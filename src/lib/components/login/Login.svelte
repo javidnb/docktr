@@ -46,7 +46,6 @@
 		disabled = false;
 		showError = false;
 	}
-	let recapVer: RecaptchaVerifier;
 
 	onMount(() => {
 		showError = false;

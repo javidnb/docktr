@@ -145,17 +145,22 @@
 	on:click={() => {
 		history.back();
 	}}
-	class="nav-link topnavlink btnBack mobileOnly"
+	class="nav-link topnavlink btnBack mobileOnly btn"
 	type="button"
-	style="color: rgb(213, 228, 209);
-		padding: 5px 10px;
-		gap: 0px;
-		position: absolute;
-		top: 12px;
-		left: 5px;"
+	style="position: absolute;
+    top: 10px;
+    left: 12px;
+    color: rgb(213, 228, 209);
+    border: 1px solid rgba(255, 255, 255, 0.21) !important;
+    text-align: center;
+    width: 56px;
+    display: flex !important;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    padding-left: 7px;"
 >
 	<span class="material-symbols-outlined"> arrow_back_ios </span>
-	<span>Geri</span>
 </button>
 
 <section>
@@ -180,7 +185,7 @@
 <section class="pt-3 pb-5" style="background-color: rgb(249 249 249);">
 	<div class="container pb-3">
 		<div class="row px-3">
-			<div class="col col-md-8">
+			<div class="col-md-8">
 				<div class="row">
 					<div class="col-3 col-md-2">
 						<img
@@ -231,6 +236,51 @@
 						</div>
 					{/if}
 				</div>
+				{#if $mobile}
+				<div class="row px-3 mt-5">
+					{#if !existingAppointment}
+						<button
+							class="btn btn-outline-primary d-flex justify-content-center align-items-center btnRandevu w-100"
+							on:click={openModal}
+							><span class="material-symbols-outlined">local_library</span><span
+								style="margin-inline: auto;">{$_('appointment.get')}</span
+							></button
+						>
+					{:else}
+						<div
+							class="card p-4 mt-auto"
+							style="max-height: 250px;
+							min-width: min(100%, 350px);
+							border-radius: 8px;
+							align-self: baseline"
+						>
+							<span style="font-size: small;">{$_('appointment.planned')}: </span>
+							<span class="my-auto">{formatDate(new Date(existingAppointment.startTime))}</span>
+							<button
+								class="btn btn-outline-primary mt-2 d-flex align-items-center"
+								on:click={() => {
+									goto('../appointment');
+								}}
+							>
+								<span class="material-symbols-outlined"> info </span>
+								<span class="mx-auto">{$_('actions.details')}</span>
+							</button>
+							{#if existingAppointment.purchased}
+								<button
+									class="btn btn-outline-primary mt-3 w-100 d-flex"
+									on:click={() => {
+										selectedUser.set($doc.uid);
+										goto('../messages');
+									}}
+								>
+									<span class="material-symbols-outlined"> send </span>
+									<span class="mx-auto">{$_('actions.send_msg')}</span>
+								</button>
+							{/if}
+						</div>
+					{/if}
+				</div>
+				{/if}
 				<div class="row mt-3">
 					<div class="p-3">
 						<div class="card-body d-flex flex-column">
@@ -317,7 +367,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="col col-md-4">
+			<div class="col-md-4">
+				{#if !$mobile}
 				<div class="row px-3">
 					{#if !existingAppointment}
 						<button
@@ -361,6 +412,7 @@
 						</div>
 					{/if}
 				</div>
+				{/if}
 				<!-- COMMENTS CONTAINER -->
 				<div class="row px-3 mt-3">
 					<div class="card p-3 px-4" style="position: relative;">

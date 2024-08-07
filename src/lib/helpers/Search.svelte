@@ -79,10 +79,14 @@
 </script>
 
 <div class="w-100">
-	<div class="input-group input-group-lg mb-3 mt-2">
+	<div class="input-group input-group-lg mb-3 mt-2" style="position: relative;">
+		<span
+			class="input-group-text"
+			style="background: unset; position: absolute; border: 0; z-index: 9; top: 5px; color: gray"><span class="material-symbols-outlined"> search </span></span
+		>
 		<input
-			type="text"
-			class="form-control searchBox"
+			type="search"
+			class="form-control searchBox ps-5"
 			aria-label="Sizing example input"
 			aria-describedby="inputGroup-sizing-sm"
 			placeholder="{$_('home.search')} ({$_('nav.docs')}, {$_('nav.branches')}, {$_(
@@ -94,28 +98,7 @@
 				if ($mobile) goto('./search');
 			}}
 		/>
-		<span
-			class="mobileOnly"
-			style="position: absolute;
-					bottom: -22px;
-					left: 2px;
-					color: gray;
-					background: transparent;
-					text-wrap: nowrap;
-					font-size: small;
-					width: 100%;"
-			>{$_('nav.docs')}, {$_('nav.branches')}, {$_('nav.diseases')}, {$_('home.symptoms')}</span
-		>
-		{#if $searchQuery}
-			<button class="input-group-text" on:click={() => searchQuery.set('')}
-				><span class="material-symbols-outlined"> close </span></button
-			>
-		{/if}
-		<span
-			class="input-group-text"
-			style="background: var(--primaryColor);
-    color: white;"><span class="material-symbols-outlined"> search </span></span
-		>
+
 		{#if $searchQuery}
 			<div
 				style="background-color: white;
@@ -225,6 +208,9 @@
 		margin-top: 10px;
 		box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.34);
 		background-color: white;
+	}
+	.searchBox {
+		border-radius: 8px!important;
 	}
 	.searchBox::placeholder {
 		font-size: 16px;

@@ -6,7 +6,7 @@
 	import { _ } from 'svelte-i18n';
 	import { onMount } from 'svelte';
 
-    let inputElement:any;
+	let inputElement: any;
 	const searchQuery = writable('');
 	const charMap: any = {
 		ç: 'c',
@@ -26,9 +26,9 @@
 	};
 	let symptoms: any = writable([]);
 
-    onMount(()=>{
-        inputElement.focus();
-    });
+	onMount(() => {
+		inputElement.focus();
+	});
 
 	$: filteredResults = combineArrays($doctors, diseases).filter((item) => {
 		const query = latinize($searchQuery);
@@ -84,12 +84,24 @@
 	}
 </script>
 
-<div class="w-100 pt-0" style="max-width: 100dvw; overflow: hidden; max-height: 100dvh;">
+<div class="w-100 pt-0" style="max-width: 100dvw; overflow: hidden; height: 100dvh;">
 	<div
 		class="input-group input-group-lg mb-3"
-		style="    padding: .5rem;
-    background: var(--primaryColor);"
+		style="padding: .5rem;
+        background: var(--primaryColor);"
 	>
+		<span
+			class="input-group-text d-flex align-items-center"
+			style="position: absolute;
+                background: unset;
+                border: 0px;
+                color: white;
+                left: 0;
+                top: 10px
+            "
+		>
+			<span class="material-symbols-outlined" style=" font-size: 20px;"> search </span></span
+		>
 		<input
 			type="search"
 			class="form-control searchBox"
@@ -97,30 +109,16 @@
 			aria-describedby="inputGroup-sizing-sm"
 			placeholder={$_('home.search')}
 			bind:value={$searchQuery}
-            bind:this={inputElement}
+			bind:this={inputElement}
 			on:keydown={handleKeydown}
-			style="border-radius: 6px;
-                border: 0;
-                border-bottom: 1px solid #ececec; height: 35px"
 		/>
-		<span
-			class="mobileOnly"
-			style="position: absolute;
-					bottom: -22px;
-					left: 2px;
-					color: gray;
-					background: transparent;
-					text-wrap: nowrap;
-					font-size: small;
-					width: 100%;"
-			>{$_('nav.docs')}, {$_('nav.branches')}, {$_('nav.diseases')}, {$_('home.symptoms')}</span
-		>
+
 		<button
 			class="input-group-text"
 			style="background: unset;
                 border: 0;
                 font-size: small;
-                height: 35px;
+                height: 42px;
                 color: #404040"
 			on:click={() => {
 				history.back();
@@ -131,17 +129,16 @@
 			style="background: var(--primaryColor);
     color: white;"><span class="material-symbols-outlined"> search </span></span
 		>
+	</div>
+	<div class="h-100">
 		{#if $searchQuery}
 			<div
 				style="background-color: white;
-                    
                     position: absolute;
-                    top: 3rem;
-                    border-radius: 6px;
-                    margin-left: 1px;
+                    top: 58px;
                     z-index: 99;
-                    box-shadow: 0px 0px 3px #00000038;
-                    width: 100%"
+                    box-shadow: rgba(0, 0, 0, 0.22) 0px 0px 3px;
+                    width: 100%;"
 			>
 				{#if filteredResults.length}
 					{#if $symptoms.length}
@@ -220,6 +217,19 @@
 					<div style="padding:1rem">Nəticə tapılmadı ...</div>
 				{/if}
 			</div>
+		{:else if !$searchQuery}
+			<div class="d-flex h-100 w-100 align-items-center justify-content-center">
+				<span
+					class="mobileOnly text-center"
+					style="
+                        color: gray;
+                        background: transparent;
+                        text-wrap: nowrap;
+                        font-size: small;
+                        width: 100%;"
+					>{$_('nav.docs')}, {$_('nav.branches')}, {$_('nav.diseases')}, {$_('home.symptoms')}</span
+				>
+			</div>
 		{/if}
 	</div>
 </div>
@@ -244,7 +254,13 @@
 	.searchBox {
 		background: #00000017;
 		border: 0 !important;
-        color: #0c430a;
+		color: white;
+		border-radius: 8px!important;
+		border: 0;
+		border-bottom: 1px solid #ececec;
+		height: 42px;
+		padding-left: 2.2rem;
+        font-size: 16px;
 	}
 	.searchBox::placeholder {
 		font-size: 16px;

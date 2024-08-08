@@ -101,6 +101,18 @@
 				if ($mobile) goto('./search');
 			}}
 		/>
+		<span
+			class="mobileOnly"
+			style="position: absolute;
+					bottom: -22px;
+					left: 2px;
+					color: gray;
+					background: transparent;
+					text-wrap: nowrap;
+					font-size: 16px;
+					width: 100%;"
+			>{$_('nav.docs')}, {$_('nav.branches')}, {$_('nav.diseases')}, {$_('home.symptoms')}</span
+		>
 
 		{#if $searchQuery}
 			<div

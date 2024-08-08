@@ -130,14 +130,14 @@
     color: white;"><span class="material-symbols-outlined"> search </span></span
 		>
 	</div>
-	<div class="h-100">
+	<div class="h-100 pb-3">
 		{#if $searchQuery}
 			<div
-				style="background-color: white;
-                    position: absolute;
+				class="d-flex flex-column row-gap-3 pb-3"
+				style="position: absolute;
                     top: 58px;
                     z-index: 99;
-                    box-shadow: rgba(0, 0, 0, 0.22) 0px 0px 3px;
+                    padding-top: 1rem;
                     width: 100%;"
 			>
 				{#if filteredResults.length}
@@ -145,11 +145,14 @@
 						<div
 							class="d-flex column-gap-1 p-3 align-items-center"
 							style="width: 100%;
-							overflow-x: scroll;
-							background: #ececec78;
-							border-bottom: 1px solid #dddddd;"
+								overflow-x: hidden;
+								background: rgba(236, 236, 236, 0.47);
+								border-bottom: 1px solid rgb(221, 221, 221);
+								flex-flow: row wrap;
+								max-height: 150px;
+								margin-top: -1rem"
 						>
-							<span>{$_('home.symptoms')}: </span>
+							<!-- <span>{$_('home.symptoms')}: </span> -->
 							{#each $symptoms as val}
 								<button
 									on:click={() => {
@@ -157,7 +160,7 @@
 										searchQuery.set('');
 										goto(`./diseases`);
 									}}
-									class="symptom flex-1"
+									class="symptom card flex-1"
 									style="text-wrap: nowrap; border: none">{val}</button
 								>
 							{/each}
@@ -165,12 +168,10 @@
 					{/if}
 					{#each filteredResults as item, index}
 						{#if item.type === 'doctor'}
-							<a class="d-flex gap-3 hover" href="/doctors/{item.slug}">
-								<div
-									style="min-width: 100px; max-width: 100px; overflow: hidden;
-                                display: flex; justify-content:center"
-								>
+							<a class="d-flex gap-3 hover card mx-3" href="/doctors/{item.slug}">
+								<div class="d-flex align-items-center">
 									<img style="height:80px; border-radius: 6px" src={item.img} alt={item.name} />
+									<h4 style="margin-bottom:0px; margin-inline: auto">{item.name}</h4>
 								</div>
 								<div
 									style="max-height: 80px;
@@ -179,7 +180,6 @@
                                         flex-direction: column;
                                         text-align: left;"
 								>
-									<h4 style="margin-bottom:0px">{item.name}</h4>
 									<p>{@html item.details}</p>
 								</div>
 							</a>
@@ -187,20 +187,22 @@
 							<a
 								on:click={() => selectedBranch.set(item.id)}
 								href="/doctors"
-								class="hover"
-								style="display: inline-block; width:100%"
+								class="hover card mx-3"
+								style="display: inline-block;"
 							>
 								<div style="text-align: left;">
-									<h4>{item.name}</h4>
-									<ul
-										style="list-style-type: inherit;
-											padding-left: 2rem;
+									<h4 class="ps-1 mb-0">{item.name}</h4>
+									{#if Object.entries(item.filteredConditions).length}
+										<ul
+											class="list-group list-group-flush pt-1"
+											style="list-style-type: inherit;
 											margin-bottom: 0px;"
-									>
-										{#each Object.entries(item.filteredConditions) as [key, val]}
-											<li>{key}</li>
-										{/each}
-									</ul>
+										>
+											{#each Object.entries(item.filteredConditions).slice(0, 3) as [key, val]}
+												<li class="list-group-item">{key}</li>
+											{/each}
+										</ul>
+									{/if}
 									<!-- <div class="mt-2 d-flex column-gap-1 flex-wrap">
 										{#each Object.entries(item.filteredConditions) as [key, val]}
 											<span class="symptom">{val}</span>
@@ -209,25 +211,43 @@
 								</div>
 							</a>
 						{/if}
-						{#if index < filteredResults.length - 1}
+						<!-- {#if index < filteredResults.length - 1}
 							<hr style="margin:0" />
-						{/if}
+						{/if} -->
 					{/each}
 				{:else}
 					<div style="padding:1rem">Nəticə tapılmadı ...</div>
 				{/if}
 			</div>
 		{:else if !$searchQuery}
-			<div class="d-flex mt-5 justify-content-center">
-				<span
-					class="mobileOnly text-center"
-					style="
-                        color: gray;
-                        background: transparent;
-                        text-wrap: nowrap;
-                        font-size: small;
-                        width: 100%;"
-					>{$_('nav.docs')}, {$_('nav.branches')}, {$_('nav.diseases')}, {$_('home.symptoms')}</span
+			<div class="d-flex flex-wrap gap-2 px-3 mt-4 justify-content-center">
+				<button
+					class="card py-2 align-items-center"
+					on:click={() => {
+						goto('./doctors');
+					}}
+					style="color: gray;">{$_('nav.docs')}</button
+				>
+				<button
+					class="card py-2 align-items-center"
+					on:click={() => {
+						goto('./branches');
+					}}
+					style="color: gray;">{$_('nav.branches')}</button
+				>
+				<button
+					class="card py-2 align-items-center"
+					on:click={() => {
+						goto('./diseases');
+					}}
+					style="color: gray;">{$_('nav.diseases')}</button
+				>
+				<button
+					class="card py-2 align-items-center"
+					on:click={() => {
+						goto('./diseases');
+					}}
+					style="color: gray;">{$_('home.symptoms')}</button
 				>
 			</div>
 		{/if}
@@ -244,12 +264,12 @@
 		background-color: #dedede69;
 	}
 	.symptom {
-		padding: 5px;
-		border-radius: 6px;
+		padding: 5px 10px;
 		margin: 5px;
 		margin-top: 10px;
-		box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.34);
 		background-color: white;
+		align-items: normal;
+		overflow-x: hidden;
 	}
 	.searchBox {
 		background: #00000017;

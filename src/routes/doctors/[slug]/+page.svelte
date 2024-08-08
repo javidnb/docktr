@@ -211,16 +211,27 @@
 						</div>
 					</div>
 					{#if !$session?.user?.doctor}
-						<div class="col-8  col-md-8 col-lg-10">
+						<div class="col-8 col-md-8 col-lg-10">
 							<div class="d-flex flex-column h-100 ps-3">
-								<div class="d-flex align-items-center gap-1 mt-2">
+								<!-- <div class="d-flex align-items-center gap-1 mt-2">
 									<span
 										style="color: var(--primaryColor)"
 										class="material-symbols-outlined icon-fill"
 									>
 										science
 									</span><span>17 il iş təcrübəsi</span>
-								</div>
+								</div> -->
+
+								{#if doctor?.hospital}
+									<div class="d-flex align-items-center gap-1">
+										<span
+											style="color: var(--primaryColor)"
+											class="material-symbols-outlined icon-fill"
+										>
+											home_health
+										</span><span>{JSON.parse(doctor?.hospital)[0]}</span>
+									</div>
+								{/if}
 								{#if doctor?.nationality}
 									<div class="d-flex align-items-center gap-1">
 										<span
@@ -244,7 +255,6 @@
 									</div>
 								{/if}
 							</div>
-							
 						</div>
 					{/if}
 				</div>

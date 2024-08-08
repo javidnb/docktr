@@ -379,7 +379,7 @@
 											object-position: top"
 										alt="dok pic"
 									/>
-									<div class="d-flex align-items-center w-100">
+									<div class="d-flex align-items-center w-100 docDetails">
 										<a
 											href="/doctors/{$doctors.find((d) => d.id == appointment.doctorId)?.slug}"
 											style="font-size: 1.2rem;
@@ -396,7 +396,7 @@
 												on:click={() => {
 													sendMsg(appointment, true);
 												}}
-												class="btn btn-outline-primary d-flex align-items-center ms-auto"
+												class="btn btn-outline-primary d-flex align-items-center"
 												style="width: fit-content;
 													align-self: center;
 													gap: 10px;"
@@ -406,6 +406,7 @@
 												}}
 											>
 												<span class="material-symbols-outlined"> send </span>
+												<span class="mobileOnly mx-auto">{$_('actions.send_msg')}</span>
 											</button>
 										{/if}
 									</div>

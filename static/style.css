@@ -151,7 +151,7 @@ body {
 	flex: 1;
 }
 .cursor-pointer {
-	cursor: pointer;
+	cursor: pointer!important;
 }
 /* SCROLLBAR */
 ::-webkit-scrollbar {
@@ -573,7 +573,15 @@ body {
 	background-color: var(--primaryColor);
 	color: white;
 }
+.docImageContainer {
+	background-size: cover;
+	background-position: center;
+	border-radius: 20px;
+}
 @media screen and (max-width: 992px) {
+	.docImageContainer img {
+		display: none!important;
+	}
 	.btnRandevu {
 		padding-block: 0.5rem;
 	}
@@ -591,7 +599,19 @@ body {
 	.commentor .name {
 		padding-left: 4px;
 	}
+	.branch {
+		margin-top: 1rem !important;
+	}
+	.branch button {
+		width: 100%;
+	}
 }
+
+@media screen and (min-width: 992px) {
+	.docImageContainer {
+		background-image: unset!important;
+	}
+ }
 
 .progress-bar {
 	position: absolute;
@@ -617,3 +637,17 @@ body {
 	}
 }
 /* END DOC PAGE */
+
+/* APPOINTMENTS */
+@media screen and (max-width: 993px) {
+	.docDetails {
+		flex-direction: column;
+		row-gap: 0.5rem;
+		justify-content: center;
+	}
+}
+@media screen and (min-width: 993px) {
+	.docDetails .btn {
+		margin-left: auto !important;
+	}
+}

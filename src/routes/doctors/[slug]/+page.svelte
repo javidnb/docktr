@@ -186,53 +186,65 @@
 	<div class="container pb-3">
 		<div class="row px-3">
 			<div class="col-md-8">
-				<div class="row">
-					<div class="col-3 col-md-2">
-						<img
-							src={doctor?.img
-								? doctor.img
-								: 'https://ik.imagekit.io/d2nwsj0ktvh/docktr/uploads/docplaceholder.jpg'}
-							alt={doctor?.name}
-							style="width: max(100%);
-							aspect-ratio: 1/1;
-							object-fit: cover;
-							object-position: top;
-							border-radius: 100%;
-							box-shadow: 0px 0px 6px #0000000a"
-						/>
+				<div class="row ps-1">
+					<div class="col-4 col-md-4 col-lg-2">
+						<div
+							class="docImageContainer h-100"
+							style={`background-image: url(${
+								doctor?.img
+									? doctor.img
+									: 'https://ik.imagekit.io/d2nwsj0ktvh/docktr/uploads/docplaceholder.jpg'
+							});`}
+						>
+							<img
+								src={doctor?.img
+									? doctor.img
+									: 'https://ik.imagekit.io/d2nwsj0ktvh/docktr/uploads/docplaceholder.jpg'}
+								alt={doctor?.name}
+								style="max-height: 130px;
+									aspect-ratio: 1/1;
+									object-fit: cover;
+									object-position: top;
+									border-radius: 100%;
+									box-shadow: 0px 0px 6px #0000000a"
+							/>
+						</div>
 					</div>
 					{#if !$session?.user?.doctor}
-						<div class="col-9 col-md-10 d-flex flex-column">
-							<div class="d-flex align-items-center gap-1 mt-2">
-								<span
-									style="color: var(--primaryColor)"
-									class="material-symbols-outlined icon-fill"
-								>
-									science
-								</span><span>17 il iş təcrübəsi</span>
-							</div>
-							{#if doctor?.nationality}
-								<div class="d-flex align-items-center gap-1">
+						<div class="col-8  col-md-8 col-lg-10">
+							<div class="d-flex flex-column h-100 ps-3">
+								<div class="d-flex align-items-center gap-1 mt-2">
 									<span
 										style="color: var(--primaryColor)"
 										class="material-symbols-outlined icon-fill"
 									>
-										location_on
-									</span><span>{$_(`nations.` + doctor?.nationality)}</span>
+										science
+									</span><span>17 il iş təcrübəsi</span>
 								</div>
-							{/if}
-							{#if doctor?.branches}
-								<div class="branch d-flex flex-wrap gap-2 mt-auto">
-									{#each doctor.branches as br}
-										<button
-											on:click={() => {
-												selectedBranch.set(br);
-												goto(`../doctors`);
-											}}>{getBranchName(br)}</button
+								{#if doctor?.nationality}
+									<div class="d-flex align-items-center gap-1">
+										<span
+											style="color: var(--primaryColor)"
+											class="material-symbols-outlined icon-fill"
 										>
-									{/each}
-								</div>
-							{/if}
+											location_on
+										</span><span>{$_(`nations.` + doctor?.nationality)}</span>
+									</div>
+								{/if}
+								{#if doctor?.branches}
+									<div class="branch d-flex flex-wrap gap-2 mt-auto">
+										{#each doctor.branches as br}
+											<button
+												on:click={() => {
+													selectedBranch.set(br);
+													goto(`../doctors`);
+												}}>{getBranchName(br)}</button
+											>
+										{/each}
+									</div>
+								{/if}
+							</div>
+							
 						</div>
 					{/if}
 				</div>

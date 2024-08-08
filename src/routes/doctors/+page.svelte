@@ -13,6 +13,7 @@
 		.map((d) => ({ value: d.id, label: d.name }))
 		.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base' }));
 	let selectedLangs: any = writable(null);
+	let filterNo: number = 0;
 
 	let orderBy = [
 		{ value: 1, label: $_('doctor.order_by_point') },
@@ -23,24 +24,29 @@
 	$: if ($selectedLangs || $selectedBranch || $selectedOrder) filterDocs();
 
 	function filterDocs() {
+		filterNo = 0;
 		if ($doctors.length) {
 			let docs = $doctors;
 			if ($selectedBranch) {
-				docs = docs.filter((doc: any) => doc.branches.includes($selectedBranch));
+				docs = docs.filter((doc: any) => doc.branches.includes($selectedBranch.value));
+				filterNo += 1;
 			}
 			if ($selectedLangs) {
 				docs = docs.filter((doc: any) => {
 					return doc.langs ? JSON.parse(doc.langs).includes($selectedLangs) : false;
 				});
+				filterNo += 1;
 			}
 
 			if ($selectedOrder == 1) {
 				docs = docs.sort((a, b) => b.star - a.star);
+				filterNo += 1;
 			}
 			if ($selectedOrder == 2) {
 				docs = docs.sort((a, b) =>
 					a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
 				);
+				filterNo += 1;
 			}
 			filteredDocs = docs;
 		}
@@ -68,9 +74,28 @@
 					data-bs-target="#collapseExample"
 					aria-expanded="false"
 					aria-controls="collapseExample"
+					style="position: relative;
+						box-shadow: rgba(0, 0, 0, 0.07) 0px 0px 5px;
+						border-radius: 14px;
+						padding-block: 8px;"
 				>
 					<span class="material-symbols-outlined"> filter_alt </span>
-					<span class="mx-auto">Filter</span>
+					<div class="mx-auto d-flex gap-1">
+						<span>Filter</span>
+						{#if filterNo != 0}
+							<span
+								style="background-color: rgb(0 0 0 / 41%);
+								border-radius: 100%;
+								font-size: 10px;
+								width: 15px;
+								height: 14px;
+								display: inline-flex;
+								color: white;
+								justify-content: center;
+								align-items: center;">{filterNo}</span
+							>
+						{/if}
+					</div>
 				</button>
 				<div class="collapse filterCollapse" id="collapseExample">
 					<div class="row mt-mobile row-gap-2">
@@ -81,12 +106,13 @@
 									items={diss}
 									placeholder={$_('nav.branches')}
 									id="branches"
-									--border-radius="8px"
+									value={$selectedBranch}
+									--border-radius="14px"
 									--border-focused="1px solid var(--primaryColor)"
 									--item-is-active-bg="var(--primaryColor)"
 									--item-hover-bg="#d9e1d7"
 									on:change={(event) => {
-										selectedBranch.set(event.detail.value);
+										selectedBranch.set(event.detail);
 									}}
 									on:clear={() => {
 										selectedBranch.set(null);
@@ -106,7 +132,7 @@
 								items={langs}
 								placeholder={$_('doctor.langs_spoken')}
 								id="langs"
-								--border-radius="8px"
+								--border-radius="14px"
 								--border-focused="1px solid var(--primaryColor)"
 								--item-is-active-bg="var(--primaryColor)"
 								--item-hover-bg="#d9e1d7"
@@ -130,7 +156,7 @@
 								items={orderBy}
 								placeholder={$_('doctor.order_by')}
 								id="orderBy"
-								--border-radius="8px"
+								--border-radius="14px"
 								--border-focused="1px solid var(--primaryColor)"
 								--item-is-active-bg="var(--primaryColor)"
 								--item-hover-bg="#d9e1d7"

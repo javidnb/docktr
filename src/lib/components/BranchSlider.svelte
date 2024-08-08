@@ -23,7 +23,7 @@
 		{#if item.id}
 			<button
 				on:click={() => {
-					selectedBranch.set(item.id);
+					selectedBranch.set({ value: item.id });
 					goto(`./doctors`);
 				}}
 				class="card align-items-center"

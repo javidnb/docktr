@@ -247,7 +247,7 @@
 										{#each doctor.branches as br}
 											<button
 												on:click={() => {
-													selectedBranch.set(br);
+													selectedBranch.set({ value: br });
 													goto(`../doctors`);
 												}}>{getBranchName(br)}</button
 											>

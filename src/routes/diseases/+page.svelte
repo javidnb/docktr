@@ -110,7 +110,6 @@
 				<Select
 					class="form-control"
 					{items}
-					
 					multiple
 					on:select={handleSelect}
 					on:clear={handleSelect}

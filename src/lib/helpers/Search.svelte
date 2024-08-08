@@ -116,8 +116,8 @@
 
 		{#if $searchQuery}
 			<div
-				style="background-color: white;
-                    
+				class="d-flex flex-column row-gap-3 pb-3 pt-3"
+				style="background-color: rgb(250 250 250);                    
                     position: absolute;
                     top: 3rem;
                     border-radius: 6px;
@@ -133,9 +133,10 @@
 							style="width: 100%;
 							overflow-x: scroll;
 							background: #ececec78;
-							border-bottom: 1px solid #dddddd;"
+							border-bottom: 1px solid #dddddd;
+							margin-top: -1rem"
 						>
-							<span>{$_('home.symptoms')}: </span>
+							<!-- <span>{$_('home.symptoms')}: </span> -->
 							{#each $symptoms as val}
 								<button
 									on:click={() => {
@@ -151,53 +152,58 @@
 					{/if}
 					{#each filteredResults as item, index}
 						{#if item.type === 'doctor'}
-							<a class="d-flex gap-3 hover" href="/doctors/{item.slug}">
-								<div
-									style="min-width: 100px; max-width: 100px; overflow: hidden;
-                                display: flex; justify-content:center"
-								>
-									<img style="height:80px; border-radius: 6px" src={item.img} alt={item.name} />
+							<a class="d-flex gap-3 hover card mx-3 cursor-pointer" href="/doctors/{item.slug}">
+								<div class="d-flex align-items-center">
+									<img
+										style="height:80px; border-radius: 6px"
+										src={item.img
+											? item.img
+											: 'https://ik.imagekit.io/d2nwsj0ktvh/docktr/uploads/docplaceholder.jpg'}
+										alt={item.name}
+									/>
+									<h4 style="margin-bottom:0px; margin-inline: auto">{item.name}</h4>
 								</div>
 								<div
 									style="max-height: 80px;
-                                        overflow-y: hidden;
-                                        display: flex;
-                                        flex-direction: column;
-                                        text-align: left;"
+									overflow-y: hidden;
+									display: flex;
+									flex-direction: column;
+									text-align: left;"
 								>
-									<h4 style="margin-bottom:0px">{item.name}</h4>
 									<p>{@html item.details}</p>
 								</div>
 							</a>
 						{:else if item.type === 'disease'}
 							<a
-								on:click={() => selectedBranch.set(item.id)}
+								on:click={() => selectedBranch.set({ value: item.id })}
 								href="/doctors"
-								class="hover"
-								style="display: inline-block; width:100%"
+								class="hover card mx-3 cursor-pointer"
+								style="display: inline-block;"
 							>
 								<div style="text-align: left;">
-									<h4>{item.name}</h4>
-									<ul
-										style="list-style-type: inherit;
-											padding-left: 2rem;
-											margin-bottom: 0px;"
-									>
-										{#each Object.entries(item.filteredConditions) as [key, val]}
-											<li>{key}</li>
-										{/each}
-									</ul>
+									<h4 class="ps-1 mb-0">{item.name}</h4>
+									{#if Object.entries(item.filteredConditions).length}
+										<ul
+											class="list-group list-group-flush pt-1"
+											style="list-style-type: inherit;
+									margin-bottom: 0px;"
+										>
+											{#each Object.entries(item.filteredConditions).slice(0, 3) as [key, val]}
+												<li class="list-group-item">{key}</li>
+											{/each}
+										</ul>
+									{/if}
 									<!-- <div class="mt-2 d-flex column-gap-1 flex-wrap">
-										{#each Object.entries(item.filteredConditions) as [key, val]}
-											<span class="symptom">{val}</span>
-										{/each}
-									</div> -->
+								{#each Object.entries(item.filteredConditions) as [key, val]}
+									<span class="symptom">{val}</span>
+								{/each}
+							</div> -->
 								</div>
 							</a>
 						{/if}
-						{#if index < filteredResults.length - 1}
+						<!-- {#if index < filteredResults.length - 1}
 							<hr style="margin:0" />
-						{/if}
+						{/if} -->
 					{/each}
 				{:else}
 					<div style="padding:1rem">Nəticə tapılmadı ...</div>
@@ -212,17 +218,30 @@
 		text-decoration: none;
 		color: black;
 		padding: 1rem;
+		transition-duration: .2s;
+	}
+	.symptom:hover {
+		background-color: var(--primaryColor);
+		color: white;
+		transition-duration: .2s;
 	}
 	.hover:hover {
-		background-color: #dedede69;
+		box-shadow: 0px 0px 5px #0000004d !important;
 	}
+	.list-group-item {
+		background-color: unset!important;
+	}
+	/* .hover:hover .list-group-item {
+		background-color: transparent;
+		color: white;
+	} */
 	.symptom {
-		padding: 5px;
-		border-radius: 6px;
+		padding: 5px 10px;
+		border-radius: 14px;
 		margin: 5px;
 		margin-top: 10px;
-		box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.34);
 		background-color: white;
+		box-shadow: 0px 0px 5px #00000012;
 	}
 	.searchBox {
 		border-radius: 12px !important;

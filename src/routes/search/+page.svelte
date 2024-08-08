@@ -170,7 +170,13 @@
 						{#if item.type === 'doctor'}
 							<a class="d-flex gap-3 hover card mx-3" href="/doctors/{item.slug}">
 								<div class="d-flex align-items-center">
-									<img style="height:80px; border-radius: 6px" src={item.img} alt={item.name} />
+									<img
+										style="height:80px; border-radius: 6px"
+										src={item.img
+											? item.img
+											: 'https://ik.imagekit.io/d2nwsj0ktvh/docktr/uploads/docplaceholder.jpg'}
+										alt={item.name}
+									/>
 									<h4 style="margin-bottom:0px; margin-inline: auto">{item.name}</h4>
 								</div>
 								<div
@@ -185,7 +191,7 @@
 							</a>
 						{:else if item.type === 'disease'}
 							<a
-								on:click={() => selectedBranch.set(item.id)}
+								on:click={() => selectedBranch.set({ value: item.id })}
 								href="/doctors"
 								class="hover card mx-3"
 								style="display: inline-block;"

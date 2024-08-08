@@ -133,9 +133,9 @@
 					<div class="d-flex flex-wrap gap-3 mt-3">
 						{#each $selectedDiseases as item}
 							<button
-								class="diseases p-2 px-4"
+								class="card diseases p-2 px-4 align-items-center"
 								on:click={() => {
-									selectedBranch.set(item.id);
+									selectedBranch.set({ value: item.id });
 									goto('doctors');
 								}}
 							>
@@ -146,7 +146,7 @@
 					</div>
 				</div>
 			</div>
-		{/if}		
+		{/if}
 	</div>
 </div>
 
@@ -156,8 +156,7 @@
 		width: fit-content;
 		min-width: 250px;
 		border: 0px;
-		box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.34);
-		border-radius: 6px;
+		border-radius: 14px;
 		background-color: white;
 		flex: 1;
 		max-width: 500px;

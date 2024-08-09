@@ -328,7 +328,7 @@ body {
 	.nav-link {
 		border-radius: 0px !important;
 		display: flex;
-		flex-direction: column;
+		/* flex-direction: column; */
 	}
 	.topnavlink {
 		flex-direction: unset;

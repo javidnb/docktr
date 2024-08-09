@@ -312,14 +312,11 @@
 					>
 				</li>
 				<li class="nav-item pcOnly">
-					<button
-						class="nav-link"
-						on:click={() => {
-							selectedUser.set('1TgHpEOspfZmDhanm8m1XLgm29u1');
-							contactModal = true;
-						}}
-						><span class="material-symbols-outlined"> dialpad </span>
-						<span class="navLinkText">{$_('nav.contact')}</span></button
+					<a class="nav-link" href="/contact" class:active={curPage == '/contact'}
+						><span class="material-symbols-outlined" class:icon-fill={curPage == '/contact'}>
+							dialpad
+						</span>
+						<span class="navLinkText">{$_('nav.contact')}</span></a
 					>
 				</li>
 

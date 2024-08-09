@@ -3,6 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import DoctorList from '$lib/components/admin/DoctorList.svelte';
+	import Contacts from '$lib/components/admin/Contacts.svelte';
 
 	// export let data;
 	let component = DoctorList;
@@ -26,27 +27,70 @@
 	}
 </script>
 
+<section>
+	<div class="jumbotron" style="padding-block: 1rem; background-color: #e2e9ef">
+		<h1 class="display-4">Admin Panel</h1>
+	</div>
+</section>
+
 {#if $session?.loggedIn && $session?.user?.admin}
-	<section>
-		<div class="jumbotron" style="padding-block: 1rem; background-color: #e2e9ef">
-			<h1 class="display-4">Admin Panel</h1>
-		</div>
-	</section>
 	<div class="container">
 		<div class="row py-3">
 			<div class="col-md-4 col-lg-3">
-				<div class="d-flex align-items-start w-100 ps-3" style="height: 40px;">
-					<h5 style="margin-bottom: 0">Admin Menu</h5>
-				</div>
-				<ul class="list-group list-group-flush px-2">
-					<li class="list-group-item d-flex align-items-center">
+				<button
+					class="btn btn-outline-primary btnFilter d-flex w-100 mb-3"
+					type="button"
+					data-bs-toggle="collapse"
+					data-bs-target="#collapseExample"
+					aria-expanded="false"
+					aria-controls="collapseExample"
+					style="position: relative;
+						box-shadow: rgba(0, 0, 0, 0.07) 0px 0px 5px;
+						border-radius: 14px;
+						padding-block: 8px;"
+				>
+					<span class="material-symbols-outlined"> menu </span>
+					<div class="mx-auto d-flex gap-1">
+						<span>Menu</span>
+					</div>
+				</button>
+				<ul
+					class="card list-group list-group-flush px-2 collapse filterCollapse mb-3"
+					id="collapseExample"
+					style="overflow: hidden;"
+				>
+					<li
+						class="list-group-item text-center"
+						style="background-color: var(--primaryColor); color: white"
+					>
+						Admin Menu
+					</li>
+					<button
+						on:click={() => {
+							component = DoctorList;
+						}}
+						class="list-group-item d-flex align-items-center w-100"
+						class:active={component == DoctorList}
+					>
 						<span class="material-symbols-outlined">physical_therapy </span>
 						<span class="ms-2">Həkimlər</span>
-					</li>
+					</button>
+					<button
+						on:click={() => {
+							component = Contacts;
+						}}
+						class="list-group-item d-flex align-items-center w-100"
+						class:active={component == Contacts}
+					>
+						<span class="material-symbols-outlined">dialpad</span>
+						<span class="ms-2">Əlaqə mesajları</span>
+					</button>
 				</ul>
 			</div>
-			<div class="col-md-8 col-lg-9">
-				<svelte:component this={component} />
+			<div class="col-md-8 col-lg-9 mb-5">
+				<div class="card p-3 h-100">
+					<svelte:component this={component} />
+				</div>
 				<!-- <form on:submit|preventDefault={handleSubmit}>
 					<div class="form-group">
 						<label for="name">Adı Soyad</label>
@@ -86,3 +130,33 @@
 		</div>
 	</div>
 {/if}
+
+<style>
+	.list-group {
+		padding-inline: 0 !important;
+	}
+	.list-group-item:hover {
+		color: white;
+		background: var(--primaryColor);
+	}
+	.active {
+		border-radius: 0;
+		background-color: #7a9971;
+		border: 0;
+	}
+
+	.btnFilter:not(:hover) {
+		background: white;
+	}
+
+	@media screen and (min-width: 768px) {
+		.filterCollapse {
+			display: block;
+			height: auto !important;
+			visibility: visible;
+		}
+		.btnFilter {
+			display: none !important;
+		}
+	}
+</style>

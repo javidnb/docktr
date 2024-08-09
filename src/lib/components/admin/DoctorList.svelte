@@ -282,7 +282,7 @@
 <div class="d-flex align-items-center w-100">
 	<h5 style="margin-bottom: 0; min-width: 150px">
 		{$selectedDoc == 0 ? 'Yeni Həkim' : $selectedDoc ? 'Həkim haqqında' : 'Həkimlər'}
-	</h5>
+	</h5>	
 	{#if !$selectedDoc}
 		<button
 			class="btn btn-outline-primary d-flex align-items-center ms-4"
@@ -308,7 +308,9 @@
 	{/if}
 </div>
 
-<ul class="list-group list-group-flush mt-3">
+<hr class="w-100"/>
+
+<ul class="list-group list-group-flush">
 	{#if !$selectedDoc}
 		{#each $doctors as doc}
 			<button

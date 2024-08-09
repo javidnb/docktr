@@ -146,7 +146,7 @@
 <section>
 	<div class="d-flex flex-column gap-3">
 		{#each apps as appointment}
-			<div class="card py-2 px-3 d-flex flex-row gap-3" style="background-color: #f0f0f0;">
+			<div class="card py-2 px-3 d-flex flex-row gap-3" style="background-color: white; box-shadow: 0px 0px 5px #00000012">
 				<div>
 					<img
 						src={$doctors.find((d) => d.id == appointment.doctorId)?.img}

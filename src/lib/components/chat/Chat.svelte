@@ -489,6 +489,7 @@
 		border-radius: 10px;
 		max-width: calc(100dvw - 100px);
 		background: #dddada;
+		box-shadow: 0px 0px 5px #00000012;
 		/* max-width: 0%; */
 	}
 	.sent {
@@ -496,7 +497,7 @@
 		text-align: right;
 	}
 	.received {
-		background-color: #dddada;
+		background-color: white;
 	}
 	.progress-bar {
 		background-color: var(--primaryColor);

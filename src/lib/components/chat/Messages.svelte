@@ -139,7 +139,7 @@
 		<!-- svelte-ignore a11y-no-static-element-interactions -->
 		<button
 			class={$selectedUser == uid ? 'active' : 'users'}
-			style="min-height: 60px; border-radius: 6px; border: 1px solid rgb(207 207 207);"
+			style="min-height: 60px; border-radius: 8px; border: none"
 			on:click={() => {
 				selectedUser.set(uid);
 				dispatch('changeValue', uid);
@@ -188,8 +188,9 @@
 		color: white;
 	}
 	.users {
-		background-color: #f0f0f0;
-		border-radius: 20px!important;
-		border: 1px solid #e4e4e4c2 !important
+		background-color: white;
+		border-radius: 8px!important;
+		box-shadow: 0px 0px 5px #00000012;
+		border: none;
 	}
 </style>

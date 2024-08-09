@@ -96,11 +96,10 @@
 </script>
 
 {#if !$selectedUser}
-	<h5>Dökümanlar</h5>
 	<div class="d-flex flex-column gap-2">
 		{#each messagesGroupedByUser as { user, uid }}
 			<button
-				style="min-height: 60px; border-radius: 6px; border: 1px solid #ececec"
+				class="btnUser"
 				on:click={() => {
 					selectedUser.set(uid);
 				}}
@@ -137,7 +136,7 @@
 	</div>
 {:else}
 	<button
-		class="btn btn-outline-primary d-flex align-items-center gap-1"
+		class="btn btn-outline-primary d-flex align-items-center gap-1 pcOnly"
 		on:click={() => {
 			selectedUser.set(null);
 		}}><span class="material-symbols-outlined"> chevron_backward </span> Geri</button
@@ -146,7 +145,7 @@
 		{#if selectedUserFiles.length}
 			{#each selectedUserFiles as msg}
 				<a class="fileCard" href={msg.file.url} target="_blank">
-					<span style="font-size: 30px; color: #30552e" class="material-symbols-outlined my-auto">
+					<span style="font-size: 30px;" class="material-symbols-outlined my-auto">
 						description
 					</span>
 					<span
@@ -171,7 +170,7 @@
 
 <style type="text/css">
 	.fileCard {
-		background: #ffffffb8;
+		background: white;
 		width: 80px;
 		display: flex;
 		flex-wrap: wrap;
@@ -183,7 +182,7 @@
 		overflow-x: clip;
 		height: 95px;
 		border-radius: 6px;
-		box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.226);
+		box-shadow: 0px 0px 5px #00000012;
 		cursor: pointer;
 		transition-duration: 0.2s;
 		text-decoration: none;
@@ -195,6 +194,19 @@
 		max-width: 250px;
 	}
 	.fileCard:hover {
-		background: #e2e9ef;
+		background: var(--primaryColor);
+		color: white;
+	}
+	.btnUser {
+		min-height: 60px;
+		background: white;
+		box-shadow: 0px 0px 5px #00000012;
+		border-radius: 20px;
+		border: none;
+		transition-duration: 0.2s;
+	}
+	.btnUser:hover {
+		background: var(--primaryColor);
+		color: white;
 	}
 </style>

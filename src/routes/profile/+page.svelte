@@ -142,7 +142,11 @@
 							<a class="card btn btn-outline-primary d-flex flex-row w-100" href="./admin">
 								<span class="material-symbols-outlined"> admin_panel_settings </span>Admin
 							</a>
-							<a class="card btn btn-outline-primary d-flex flex-row w-100rd" on:click={logout} href="../">
+							<a
+								class="card btn btn-outline-primary d-flex flex-row w-100rd"
+								on:click={logout}
+								href="../"
+							>
 								<span class="material-symbols-outlined"> logout </span>Çıxış
 							</a>
 						</div>
@@ -186,7 +190,7 @@
 
 <style>
 	.kont {
-		background-color: white;
+		background-color: #fbfbfb;
 		border-radius: 10px;
 		padding: 1rem;
 		box-shadow: 0px 0px 5px #00000012;
@@ -237,18 +241,16 @@
 			display: none !important;
 		}
 		.mobileList {
-			display: inline-flex!important;
+			display: inline-flex !important;
 			margin-top: 1rem;
-			gap: .5rem;
+			gap: 0.5rem;
 		}
 		.mobileList > * {
-			padding-block: .8rem;
-			background-color: #f0f0f0;
+			padding-block: 0.8rem;
+			background-color: white;
 			color: black;
-			box-shadow: none!important;
-			display: flex;
-			gap: .3rem;
-			border: 1px solid #e4e4e4c2 !important;
+			gap: 0.3rem;
+			box-shadow: 0px 0px 5px #00000012 !important;
 		}
 	}
 	@media screen and (min-width: 768px) {

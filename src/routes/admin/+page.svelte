@@ -5,6 +5,7 @@
 	import DoctorList from '$lib/components/admin/DoctorList.svelte';
 	import Contacts from '$lib/components/admin/Contacts.svelte';
 	import AwaitingComments from '$lib/components/admin/AwaitingComments.svelte';
+	import { mobile } from '$lib/store/dataStore';
 
 	// export let data;
 	let component = DoctorList;
@@ -65,7 +66,7 @@
 					background: white"
 				>
 					<li
-						class="list-group-item text-center"
+						class="list-group-item text-center pcOnly"
 						style="background-color: #52694b;
 						color: white;
 						font-weight: 600;
@@ -79,6 +80,8 @@
 						}}
 						class="list-group-item d-flex align-items-center w-100"
 						class:active={component == DoctorList}
+						data-bs-toggle={$mobile ? 'collapse' : ''}
+						data-bs-target={$mobile ? '#collapseExample' : ''}
 					>
 						<span class="material-symbols-outlined" class:icon-fill={component == DoctorList}
 							>physical_therapy
@@ -91,6 +94,8 @@
 						}}
 						class="list-group-item d-flex align-items-center w-100"
 						class:active={component == Contacts}
+						data-bs-toggle={$mobile ? 'collapse' : ''}
+						data-bs-target={$mobile ? '#collapseExample' : ''}
 					>
 						<span class="material-symbols-outlined" class:icon-fill={component == Contacts}
 							>dialpad</span
@@ -103,6 +108,8 @@
 						}}
 						class="list-group-item d-flex align-items-center w-100"
 						class:active={component == AwaitingComments}
+						data-bs-toggle={$mobile ? 'collapse' : ''}
+						data-bs-target={$mobile ? '#collapseExample' : ''}
 					>
 						<span class="material-symbols-outlined" class:icon-fill={component == AwaitingComments}
 							>comment</span

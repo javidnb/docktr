@@ -530,7 +530,9 @@
 				<!-- APOINTMENTS LOADING -->
 				<div class="card mt-3 p-3">Loading</div>
 			{:else if $session.loggedIn}
-				<div class="card mt-3 p-3">{$_('appointment.no_appointment')}</div>
+				<div class="container">
+					<div class="card mt-3 p-3">{$_('appointment.no_appointment')}</div>
+				</div>
 			{:else}
 				<div
 					class="card mt-3 p-3"

@@ -56,9 +56,13 @@
 					</div>
 				</button>
 				<ul
-					class="card list-group list-group-flush px-2 collapse filterCollapse mb-3"
+					class="list-group list-group-flush px-2 collapse filterCollapse mb-3"
 					id="collapseExample"
-					style="overflow: hidden; height: 300px!important"
+					style="overflow: hidden; 
+					border-radius: 10px; 
+					box-shadow: 0px 0px 5px #00000012; 
+					height: 400px!important;
+					background: white"
 				>
 					<li
 						class="list-group-item text-center"

@@ -279,13 +279,13 @@
 	}
 </script>
 
-<div class="d-flex align-items-center w-100 ps-3">
-	<h5 style="margin-bottom: 0; min-width: 150px; color: #52694b;">
+<div class="d-flex flex-wrap align-items-center w-100 ps-3 col-gap-5 row-gap-2">
+	<h5 style="margin-bottom: 0; min-width: 170px; color: #52694b;">
 		{$selectedDoc == 0 ? 'Yeni Həkim' : $selectedDoc ? 'Həkim haqqında' : 'Həkimlər'}
 	</h5>
 	{#if !$selectedDoc}
 		<button
-			class="btn btn-outline-primary d-flex align-items-center ms-4"
+			class="btn btn-outline-primary d-flex align-items-center"
 			style="min-width: 200px;"
 			on:click={() => {
 				selectedDoc.set('0');
@@ -296,7 +296,7 @@
 		</button>
 	{:else}
 		<button
-			class="btn btn-outline-primary d-flex align-items-center ms-4"
+			class="btn btn-outline-primary d-flex align-items-cente"
 			style="min-width: 200px;"
 			on:click={() => {
 				selectedDoc.set(null);

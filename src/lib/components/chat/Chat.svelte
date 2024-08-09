@@ -528,7 +528,7 @@
 		align-self: end;
 	}
 	.fileCard:hover {
-		background: #ffffffe3;
+		background: #e6e6e6;
 	}
 	@media screen and (min-width: 992px) {
 		.msgBox {

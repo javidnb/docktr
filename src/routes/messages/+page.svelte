@@ -6,7 +6,7 @@
 	import { onMount } from 'svelte';
 
 	onMount(() => {
-		if ($mobile==false) hideNav.set(true);
+		if ($mobile == false) hideNav.set(true);
 		return () => {
 			selectedUser.set(null);
 			hideNav.set(false);
@@ -15,7 +15,7 @@
 
 	$: if ($selectedUser) {
 		hideNav.set(true);
-	} else if($mobile) {
+	} else if ($mobile) {
 		hideNav.set(false);
 	}
 
@@ -67,7 +67,11 @@
 					</div>
 				{:else}
 					<div class="d-flex h-100 align-items-center justify-content-center pcOnly">
-						<h6 style="color: gray">Sehiyye.online</h6>
+						<img
+							src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/logo.png"
+							alt="Sehiyye logo"
+							style="width: 150px;"
+						/>
 					</div>
 				{/if}
 			</div>

@@ -3,6 +3,10 @@
 	import { dataLoading, postData } from '$lib/store/dataStore';
 	import { jsDateToSQL } from '$lib/helpers/dateFormatter';
 	import { toast } from '@zerodevx/svelte-toast';
+	import { writable } from 'svelte/store';
+
+	let btnDisabled = writable(false);
+	let btnText = $_('actions.send');
 
 	async function formSubmit(e: Event) {
 		const formData: any = new FormData(e.target as HTMLFormElement);
@@ -14,7 +18,6 @@
 		data.date = jsDateToSQL(new Date());
 
 		dataLoading.set(true);
-
 		let res = await postData('contact', { ...data });
 		if (res) {
 			let toastMsg =
@@ -31,6 +34,8 @@
 				}
 			});
 			dataLoading.set(false);
+			btnDisabled.set(true);
+			btnText = $_('actions.success');
 		}
 	}
 </script>
@@ -70,8 +75,8 @@
 				<label class="form-label" for="message">{$_('login.message')}</label>
 				<textarea id="message" name="message" class="form-control" rows="3" required></textarea>
 
-				<button class="btn btn-primary mt-3 btnLoader" disabled={$dataLoading}>
-					<span>{$_('actions.send')}</span>
+				<button class="btn btn-primary mt-3 btnLoader" disabled={$dataLoading || $btnDisabled}>
+					<span>{btnText}</span>
 					{#if $dataLoading}
 						<div class="loader"></div>
 					{/if}

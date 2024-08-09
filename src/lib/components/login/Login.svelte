@@ -397,8 +397,10 @@
 							class="form-control"
 							items={selectItems}
 							--width="80px"
-							--border-focused="1px solid var(--primaryColor)"
 							--border-radius="0px"
+							--border-focused="1px solid var(--primaryColor)"
+							--item-is-active-bg="var(--primaryColor)"
+							--item-hover-bg="#d9e1d7"
 							bind:value={selecedItem}
 							clearable={false}
 						></Select>
@@ -502,8 +504,9 @@
 		align-items: center;
 		justify-content: center;
 	}
-	.active,
+	.socials .active,
 	.socials button:hover {
 		background-color: #a5a5a5 !important;
+		border-radius: 8px;
 	}
 </style>

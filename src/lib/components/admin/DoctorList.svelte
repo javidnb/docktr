@@ -279,10 +279,10 @@
 	}
 </script>
 
-<div class="d-flex align-items-center w-100">
-	<h5 style="margin-bottom: 0; min-width: 150px">
+<div class="d-flex align-items-center w-100 ps-3">
+	<h5 style="margin-bottom: 0; min-width: 150px; color: #52694b;">
 		{$selectedDoc == 0 ? 'Yeni Həkim' : $selectedDoc ? 'Həkim haqqında' : 'Həkimlər'}
-	</h5>	
+	</h5>
 	{#if !$selectedDoc}
 		<button
 			class="btn btn-outline-primary d-flex align-items-center ms-4"
@@ -308,7 +308,7 @@
 	{/if}
 </div>
 
-<hr class="w-100"/>
+<hr class="w-100" />
 
 <ul class="list-group list-group-flush">
 	{#if !$selectedDoc}

@@ -24,7 +24,14 @@
 	};
 	let symptoms: any = writable([]);
 
-	$: filteredResults = combineArrays($doctors, diseases).filter((item) => {
+	let diss = diseases
+		.map((branch) => {
+			const doctorCount = $doctors.filter((doctor) => doctor.branches.includes(branch.id)).length;
+			return { ...branch, doctorCount };
+		})
+		.filter((b) => b.doctorCount > 0);
+
+	$: filteredResults = combineArrays($doctors, diss).filter((item) => {
 		const query = latinize($searchQuery);
 		if (item.type === 'doctor') {
 			symptoms.set(Array.from(new Set($symptoms)));
@@ -218,18 +225,18 @@
 		text-decoration: none;
 		color: black;
 		padding: 1rem;
-		transition-duration: .2s;
+		transition-duration: 0.2s;
 	}
 	.symptom:hover {
 		background-color: var(--primaryColor);
 		color: white;
-		transition-duration: .2s;
+		transition-duration: 0.2s;
 	}
 	.hover:hover {
 		box-shadow: 0px 0px 5px #0000004d !important;
 	}
 	.list-group-item {
-		background-color: unset!important;
+		background-color: unset !important;
 	}
 	/* .hover:hover .list-group-item {
 		background-color: transparent;

@@ -151,7 +151,7 @@ body {
 	flex: 1;
 }
 .cursor-pointer {
-	cursor: pointer!important;
+	cursor: pointer !important;
 }
 /* SCROLLBAR */
 ::-webkit-scrollbar {
@@ -504,6 +504,10 @@ body {
 }
 
 /* SCROLLBAR */
+.no-scrollbar ::-webkit-scrollbar {
+	display: none!important;
+}
+
 ::-webkit-scrollbar {
 	width: 3px;
 	background: transparent;
@@ -581,7 +585,7 @@ body {
 }
 @media screen and (max-width: 992px) {
 	.docImageContainer img {
-		display: none!important;
+		display: none !important;
 	}
 	.btnRandevu {
 		padding-block: 0.5rem;
@@ -610,9 +614,9 @@ body {
 
 @media screen and (min-width: 992px) {
 	.docImageContainer {
-		background-image: unset!important;
+		background-image: unset !important;
 	}
- }
+}
 
 .progress-bar {
 	position: absolute;

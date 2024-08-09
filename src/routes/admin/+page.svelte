@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import DoctorList from '$lib/components/admin/DoctorList.svelte';
 	import Contacts from '$lib/components/admin/Contacts.svelte';
+	import AwaitingComments from '$lib/components/admin/AwaitingComments.svelte';
 
 	// export let data;
 	let component = DoctorList;
@@ -57,11 +58,14 @@
 				<ul
 					class="card list-group list-group-flush px-2 collapse filterCollapse mb-3"
 					id="collapseExample"
-					style="overflow: hidden;"
+					style="overflow: hidden; height: 300px!important"
 				>
 					<li
 						class="list-group-item text-center"
-						style="background-color: var(--primaryColor); color: white"
+						style="background-color: #52694b;
+						color: white;
+						font-weight: 600;
+						border-bottom: 2px solid #00000042;"
 					>
 						Admin Menu
 					</li>
@@ -72,7 +76,9 @@
 						class="list-group-item d-flex align-items-center w-100"
 						class:active={component == DoctorList}
 					>
-						<span class="material-symbols-outlined">physical_therapy </span>
+						<span class="material-symbols-outlined" class:icon-fill={component == DoctorList}
+							>physical_therapy
+						</span>
 						<span class="ms-2">Həkimlər</span>
 					</button>
 					<button
@@ -82,8 +88,22 @@
 						class="list-group-item d-flex align-items-center w-100"
 						class:active={component == Contacts}
 					>
-						<span class="material-symbols-outlined">dialpad</span>
-						<span class="ms-2">Əlaqə mesajları</span>
+						<span class="material-symbols-outlined" class:icon-fill={component == Contacts}
+							>dialpad</span
+						>
+						<span class="ms-2">Əlaqə</span>
+					</button>
+					<button
+						on:click={() => {
+							component = AwaitingComments;
+						}}
+						class="list-group-item d-flex align-items-center w-100"
+						class:active={component == AwaitingComments}
+					>
+						<span class="material-symbols-outlined" class:icon-fill={component == AwaitingComments}
+							>comment</span
+						>
+						<span class="ms-2">Şərh təsdiq</span>
 					</button>
 				</ul>
 			</div>
@@ -135,13 +155,16 @@
 	.list-group {
 		padding-inline: 0 !important;
 	}
+	.list-group-item {
+		border-radius: 0;
+	}
 	.list-group-item:hover {
 		color: white;
 		background: var(--primaryColor);
 	}
 	.active {
 		border-radius: 0;
-		background-color: #7a9971;
+		background-color: #7a9971 !important;
 		border: 0;
 	}
 

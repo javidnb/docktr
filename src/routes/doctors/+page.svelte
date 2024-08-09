@@ -10,6 +10,11 @@
 	$: filteredDocs = $doctors;
 
 	let diss = diseases
+		.map((branch) => {
+			const doctorCount = $doctors.filter((doctor) => doctor.branches.includes(branch.id)).length;
+			return { ...branch, doctorCount };
+		})
+		.filter((b) => b.doctorCount > 0)
 		.map((d) => ({ value: d.id, label: d.name }))
 		.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base' }));
 	let selectedLangs: any = writable(null);

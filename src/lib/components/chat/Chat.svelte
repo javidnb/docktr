@@ -240,7 +240,7 @@
 	<span class="material-symbols-outlined">arrow_back_ios</span>
 </button>
 
-{#if !showDocs}
+{#if !showDocs && user}
 	<main class="d-flex flex-column h-100" style="min-height: calc(100dvh - 85px)!important">
 		<div
 			class="chat mb-3 d-flex flex-column gap-1"
@@ -257,7 +257,7 @@
 				<div class="d-flex align-items-center w-100 pt-1 py-2">
 					{#if $user?.photoURL}
 						<img
-							src={$user.photoURL}
+							src={$user?.photoURL}
 							alt="PP"
 							style="width: 35px;
 							height: 35px;
@@ -515,7 +515,7 @@
 		overflow-x: clip;
 		height: 80px;
 		border-radius: 6px;
-		box-shadow: -2px 0px 4px rgba(0, 0, 0, 0.226);
+		box-shadow: 0px 0px 5px #00000024;
 		margin-block: 0.5rem;
 		cursor: pointer;
 		transition-duration: 0.2s;

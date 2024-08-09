@@ -313,19 +313,7 @@
 										<h6 class="mb-0">{$_('doctor.about')}</h6>
 									</div>
 									<div class="mt-3 ps-3">
-										{@html truncate ? truncateString(doctor?.details, 400) : doctor?.details}
-										{#if doctor?.details.length > 400}
-											<button
-												class="btn btn-outline-primary mt-3 d-flex justify-content-center align-items-center"
-												style="max-width: 200px;"
-												on:click={() => {
-													truncate = !truncate;
-												}}
-												>{@html truncate
-													? `<span class="material-symbols-outlined">expand_all</span><span style='margin-inline:auto'>Daha çox</span>`
-													: `<span class="material-symbols-outlined">collapse_all</span><span style='margin-inline:auto'>Azalt</span>`}</button
-											>
-										{/if}
+										{@html doctor?.details}
 									</div>
 								</div>
 								{#if doctor?.hospital}

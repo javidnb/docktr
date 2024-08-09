@@ -6,7 +6,7 @@
 		type UserCredential,
 		type ConfirmationResult,
 		createUserWithEmailAndPassword,
-		updateProfile,
+		updateProfile
 	} from 'firebase/auth';
 	import { getToken } from 'firebase/messaging';
 	import { onMount } from 'svelte';
@@ -57,7 +57,6 @@
 	});
 
 	async function postData(userData: any) {
-		console.log('adding data: ', userData);
 		let dataToPost = { table: 'users', data: { ...userData } };
 		const response = await fetch('https://tekoplast.az/docktr/api/?postData', {
 			method: 'POST',
@@ -88,9 +87,7 @@
 			);
 			const result = await response.json();
 			if (result.doctor) goto('./doctor');
-			console.log('response: ', result);
 			if (!result) {
-				console.log('add user to db');
 				let usr = user.user;
 				let data = {
 					uid: usr.uid,
@@ -103,7 +100,6 @@
 				postData(data);
 				return;
 			} else {
-				console.log('getting appointments and registering for notifications');
 				getAppointments(result);
 				registerCM();
 			}
@@ -169,8 +165,6 @@
 				.catch((error) => {
 					disabled = false;
 					showError = true;
-					console.log(email);
-					console.log(password);
 					dataLoading.set(false);
 					return error;
 				});
@@ -193,16 +187,11 @@
 					})
 						.then(async (currentToken) => {
 							if (currentToken) {
-								console.log('Notification token: ' + currentToken);
-
 								let tokens: any = $session.user?.fcmToken
 									? JSON.parse($session.user?.fcmToken)
 									: [];
 
-								console.log('tokens: ', tokens);
 								if (!tokens?.includes(currentToken) && $session.user?.uid) {
-									console.log('current token exists? ', tokens?.includes(currentToken));
-									console.log('pushing token');
 									tokens.push(currentToken);
 									await putData('users', 'uid', $session.user?.uid, {
 										fcmToken: JSON.stringify(tokens)
@@ -224,7 +213,6 @@
 	// RETRIEVE EXISTING APPOINTMENTS OF LOGGED IN USER
 	async function getAppointments(user: any) {
 		try {
-			console.log(user);
 			let time = new Date().getTime();
 			let response;
 			if (user.doctor) {

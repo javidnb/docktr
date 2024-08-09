@@ -43,7 +43,15 @@
 
 <div class="container d-flex justify-content-center">
 	<div class="col col-md-8">
-		<div class="row my-5">
+		<div class="row mb-5">
+			<div class="d-flex justify-content-center" style="height: 136px;">
+				<img
+					src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/logo.png"
+					alt="Sehiyye logo"
+					style="width: 150px; margin-top: 1rem"
+				/>
+			</div>
+
 			<form class="d-flex flex-column gap-1" on:submit|preventDefault={formSubmit}>
 				<label class="form-label" for="name">{$_('login.name_surname')}</label>
 				<input name="name" id="name" type="text" class="form-control" required autocomplete="off" />

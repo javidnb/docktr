@@ -46,7 +46,8 @@
                     text-align: center;
                     margin-block: 0px;
                     font-size: large;
-                    font-weight: 600;">{props.name}</span
+                    font-weight: 600;
+					color: #52694b">{props.name}</span
 				>
 				<p
 					class="docDetails"
@@ -109,8 +110,8 @@
 		overflow: hidden;
 	}
 	.star {
-		color: var(--primaryColor)!important;
-		background-color: unset!important;
+		color: var(--primaryColor) !important;
+		background-color: unset !important;
 	}
 	.icon-fill {
 		padding: 0;

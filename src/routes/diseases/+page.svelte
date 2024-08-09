@@ -2,7 +2,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { diseases } from '$lib/store/diseases';
 	import { _ } from 'svelte-i18n';
-	import { selectedSymptoms, selectedBranch } from '$lib/store/dataStore';
+	import { selectedSymptoms, selectedBranch, doctors } from '$lib/store/dataStore';
 	import { goto } from '$app/navigation';
 	import { writable } from 'svelte/store';
 	import Select from 'svelte-select';
@@ -13,10 +13,18 @@
 
 	let selectedDiseases: any = writable([]);
 	let items: any = [];
+	let diss = diseases
+		.map((branch) => {
+			const doctorCount = $doctors.filter((doctor: any) =>
+				doctor.branches.includes(branch.id)
+			).length;
+			return { ...branch, doctorCount };
+		})
+		.filter((b) => b.doctorCount > 0);
 
 	onMount(() => {
-		if (diseases.length) {
-			for (const category of diseases) {
+		if (diss.length) {
+			for (const category of diss) {
 				for (const [conditionName, symptoms] of Object.entries(category.conditions)) {
 					symptoms.forEach((sm: any) => items.push(sm));
 				}
@@ -27,7 +35,7 @@
 
 	function filterCategories(searchString: string[]) {
 		selectedDiseases.set([]);
-		for (const category of diseases) {
+		for (const category of diss) {
 			for (const [conditionName, symptoms] of Object.entries(category.conditions)) {
 				if (searchString.every((value: any) => symptoms.includes(value))) {
 					selectedDiseases.set([

@@ -30,8 +30,8 @@
 	}
 </script>
 
-<div class="d-flex align-items-center w-100">
-	<h5 style="margin-bottom: 0; min-width: 150px">Gələn Mesajlar</h5>
+<div class="d-flex align-items-center w-100 ps-3">
+	<h5 style="margin-bottom: 0; min-width: 150px; color: #52694b">Gələn Mesajlar</h5>
 </div>
 
 <hr class="w-100" />
@@ -40,13 +40,13 @@
 	{#each $contactMessages as msg}
 		<div class="card p-3">
 			<div class="d-flex flex-wrap gap-3">
-				<div>
+				<div style="color: #52694b">
 					<div class="d-flex align-items-center gap-1">
-						<span class="material-symbols-outlined"> person </span>
+						<span class="material-symbols-outlined icon-fill"> person </span>
 						<span>{msg.name}</span>
 					</div>
 					<div class="d-flex align-items-center gap-1 mt-1">
-						<span class="material-symbols-outlined"> call </span>
+						<span class="material-symbols-outlined icon-fill"> call </span>
 						<span>{msg.contact}</span>
 					</div>
 				</div>
@@ -56,7 +56,7 @@
 				</div>
 			</div>
 			<hr class="w-100" />
-			<span>{msg.message}</span>
+			<span class="px-3">{msg.message}</span>
 		</div>
 	{/each}
 </div>

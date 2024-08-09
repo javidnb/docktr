@@ -26,11 +26,18 @@
 	};
 	let symptoms: any = writable([]);
 
+	let diss = diseases
+		.map((branch) => {
+			const doctorCount = $doctors.filter((doctor) => doctor.branches.includes(branch.id)).length;
+			return { ...branch, doctorCount };
+		})
+		.filter((b) => b.doctorCount > 0);
+
 	onMount(() => {
 		inputElement.focus();
 	});
 
-	$: filteredResults = combineArrays($doctors, diseases).filter((item) => {
+	$: filteredResults = combineArrays($doctors, diss).filter((item) => {
 		const query = latinize($searchQuery);
 		if (item.type === 'doctor') {
 			symptoms.set(Array.from(new Set($symptoms)));

@@ -70,7 +70,10 @@
 			<div class="row mt-3 pb-5">
 				<div class="col-12 col-md-4 col-lg-3">
 					{#if !mobileComponent}
-						<ul class="list-group pcOnly w-100 h-100 bg-white d-flex" style="min-height: 400px;">
+						<ul
+							class="list-group pcOnly w-100 bg-white d-flex"
+							style="height: 400px; border-radius: 8px; overflow: hidden"
+						>
 							<button
 								class="list-group-item w-100"
 								on:click={() => {
@@ -105,7 +108,7 @@
 								class="list-group-item mt-auto bg-secondary text-white"
 								on:click={logout}
 								href="../"
-								style="margin: 1rem; border-radius: 10px"
+								style="margin: 1rem; border-radius: 10px!important"
 							>
 								<span class="material-symbols-outlined"> logout </span>
 								<span class="mx-auto" style="padding-right: 1rem;">Hesabdan Çıxış</span>
@@ -143,11 +146,12 @@
 								<span class="material-symbols-outlined"> admin_panel_settings </span>Admin
 							</a>
 							<a
-								class="card btn btn-outline-primary d-flex flex-row w-100rd"
+								class="card btn btn-outline-primary d-flex flex-row w-100"
+								style="border-radius: 20px!important;"
 								on:click={logout}
 								href="../"
 							>
-								<span class="material-symbols-outlined"> logout </span>Çıxış
+								<span class="material-symbols-outlined"> logout </span>Hesabdan Çıxış
 							</a>
 						</div>
 					{/if}
@@ -259,6 +263,9 @@
 		}
 		.mobileOnly {
 			display: none !important;
+		}
+		.list-group-item {
+			border-radius: 0 !important;
 		}
 	}
 </style>

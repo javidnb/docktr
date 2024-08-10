@@ -104,4 +104,11 @@
 		display: flex;
 		align-items: center;
 	}
+
+	@media screen and (max-width: 992px) { 
+		.btnContact {
+			bottom: 4rem;
+			right: 1rem;
+		}
+	}
 </style>

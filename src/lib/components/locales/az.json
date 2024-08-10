@@ -62,7 +62,8 @@
 	},
 	"gpt": {
 		"ask_anything": "Sualınız?",
-		"error": "Xəta! Zəhmət olmasa daha sonra yenidən cəhd edin"
+		"error": "Xəta! Zəhmət olmasa daha sonra yenidən cəhd edin",
+		"clear": "Təmizlə"
 	},
 	"actions": {
 		"change": "Dəyişdir",

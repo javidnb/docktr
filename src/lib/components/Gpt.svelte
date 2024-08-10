@@ -23,12 +23,20 @@
 				}
 			}
 		}
-		return () => {
-			console.log('closed');
-			if ($messages.filter((msg: any) => msg.role == 'error').length) {
-				console.log('error');
-			}
-		};
+		// for (let i = 0; i < 10; i++) {
+		// 	messages.update((msgs) => [
+		// 		...msgs,
+		// 		{
+		// 			role: 'user',
+		// 			content:
+		// 				"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+		// 		}
+		// 	]);
+		// }
+		const container = document.getElementById('messages-container');
+		if (container) {
+			container.scrollTop = container.scrollHeight;
+		}
 	});
 
 	async function sendMessage() {
@@ -79,10 +87,11 @@
 </script>
 
 <div class="container" style="background-color: #efefef;">
-	<div class="row py-3 px-2" style="min-width: min(90dvw, 550px);">
+	<div class="row py-3 px-2" style="min-width: min(90dvw, 650px); max-width: 650px">
 		<div class="col">
 			<div
-				class="chatBox py-3 px-2 d-flex flex-column"
+				class="chatBox pt-3 pb-1 px-2 d-flex flex-column"
+				id="messages-container"
 				style="min-height: 300px; border: 1px solid #ececec; background: white; border-radius: 8px; position: relative"
 			>
 				{#if $messages.length}
@@ -90,19 +99,11 @@
 						<span class="message {msg.role == 'user' ? 'sent' : 'received'}">{msg.content}</span>
 					{/each}
 					<button
-						class="btn btn-outline-primary"
+						class="btn btn-outline-primary btnClear"
 						on:click={() => {
 							messages.set([]);
 							localStorage.removeItem('assistant');
-						}}
-						style="padding: 2px 25px;
-						width: fit-content;
-						align-self: center;
-						border-radius: 0;
-						position: absolute;
-						bottom: 0px;
-						left: 50%;
-						transform: translateX(-50%);">Təmizlə</button
+						}}>{$_('gpt.clear')}</button
 					>
 				{:else}
 					<div class="d-flex w-100 h-100 align-items-center justify-content-center my-auto">
@@ -156,5 +157,25 @@
 	}
 	.received {
 		background-color: #f1f0f0;
+	}
+
+	.btnClear {
+		padding: 2px 25px;
+		width: fit-content;
+		align-self: center;
+		border-radius: 6px;
+		position: sticky;
+		bottom: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		margin-top: auto;
+	}
+
+	.btnClear:not(:hover) {
+		background: white;
+	}
+	.chatBox {
+		max-height: 70dvh;
+		overflow-y: scroll;
 	}
 </style>

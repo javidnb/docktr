@@ -3,7 +3,7 @@
 	import { collection, addDoc, query, where, onSnapshot, orderBy } from 'firebase/firestore';
 	import { db, initializeFirebase } from '$lib/firebase.client';
 	import { session } from '$lib/session';
-	import { selectedUser, users } from '$lib/store/dataStore';
+	import { selectedUser, users, mobile } from '$lib/store/dataStore';
 	import { timestamp } from '$lib/helpers/dateFormatter';
 	import { tooltip } from 'svooltip';
 	import 'svooltip/styles.css';
@@ -19,6 +19,7 @@
 	let userId: any;
 	let user: any = writable({});
 	let showDocs: boolean = false;
+	let msgInput: HTMLElement;
 
 	$: if ($selectedUser) {
 		userId = $selectedUser;
@@ -463,6 +464,10 @@
 				bind:value={newMessage}
 				placeholder="Type a message..."
 				on:keydown={handleKeyDown}
+				bind:this={msgInput}
+				on:click={() => {
+					if ($mobile) msgInput.scrollIntoView();
+				}}
 			/>
 			<button
 				style="min-width: 60px;"
@@ -542,11 +547,11 @@
 		.msgBox {
 			width: 100% !important;
 		}
-		#msgContainer {
+		/* #msgContainer {
 			position: fixed;
 			bottom: 0;
 			left: 0;
 			width: 100%;
-		}
+		} */
 	}
 </style>

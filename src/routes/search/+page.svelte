@@ -2,12 +2,11 @@
 	import { diseases } from '$lib/store/diseases';
 	import { goto } from '$app/navigation';
 	import { writable } from 'svelte/store';
-	import { doctors, selectedSymptoms, selectedBranch, mobile } from '$lib/store/dataStore';
+	import { doctors, selectedSymptoms, selectedBranch, searchQuery } from '$lib/store/dataStore';
 	import { _ } from 'svelte-i18n';
 	import { onMount } from 'svelte';
 
 	let inputElement: any;
-	const searchQuery = writable('');
 	const charMap: any = {
 		ç: 'c',
 		ğ: 'g',
@@ -32,6 +31,8 @@
 			return { ...branch, doctorCount };
 		})
 		.filter((b) => b.doctorCount > 0);
+
+	let selection = { doctors: false, branches: false, diseases: false, symptoms: false };
 
 	onMount(() => {
 		inputElement.focus();
@@ -148,7 +149,7 @@
                     width: 100%;"
 			>
 				{#if filteredResults.length}
-					{#if $symptoms.length}
+					{#if ($symptoms.length && !selection.doctors && !selection.branches && !selection.diseases && !selection.symptoms) || selection.symptoms}
 						<div
 							class="d-flex column-gap-1 p-3 align-items-center"
 							style="width: 100%;
@@ -156,7 +157,7 @@
 								background: rgba(236, 236, 236, 0.47);
 								border-bottom: 1px solid rgb(221, 221, 221);
 								flex-flow: row wrap;
-								max-height: 150px;
+								max-height: 120px;
 								margin-top: -1rem"
 						>
 							<!-- <span>{$_('home.symptoms')}: </span> -->
@@ -174,7 +175,7 @@
 						</div>
 					{/if}
 					{#each filteredResults as item, index}
-						{#if item.type === 'doctor'}
+						{#if (item.type === 'doctor' && !selection.doctors && !selection.branches && !selection.diseases && !selection.symptoms) || selection.doctors}
 							<a class="d-flex gap-3 hover card mx-3" href="/doctors/{item.slug}">
 								<div class="d-flex align-items-center">
 									<img
@@ -236,30 +237,36 @@
 			<div class="d-flex flex-wrap gap-2 px-3 mt-4 justify-content-center">
 				<button
 					class="card py-2 align-items-center"
+					style="color: gray;"
 					on:click={() => {
-						goto('./doctors');
+						selection.doctors = !selection.doctors;
 					}}
-					style="color: gray;">{$_('nav.docs')}</button
+					class:active={selection.doctors}
 				>
+					{$_('nav.docs')}
+				</button>
 				<button
 					class="card py-2 align-items-center"
 					on:click={() => {
-						goto('./branches');
+						selection.branches = !selection.branches;
 					}}
+					class:active={selection.branches}
 					style="color: gray;">{$_('nav.branches')}</button
 				>
 				<button
 					class="card py-2 align-items-center"
 					on:click={() => {
-						goto('./diseases');
+						selection.diseases = !selection.diseases;
 					}}
+					class:active={selection.diseases}
 					style="color: gray;">{$_('nav.diseases')}</button
 				>
 				<button
 					class="card py-2 align-items-center"
 					on:click={() => {
-						goto('./diseases');
+						selection.symptoms = !selection.symptoms;
 					}}
+					class:active={selection.symptoms}
 					style="color: gray;">{$_('home.symptoms')}</button
 				>
 			</div>
@@ -301,5 +308,8 @@
 	}
 	.searchBox:focus {
 		box-shadow: unset !important;
+	}
+	.active {
+		border-radius: 20px !important;
 	}
 </style>

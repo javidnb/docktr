@@ -56,70 +56,73 @@
 						<span>Menu</span>
 					</div>
 				</button>
-				<ul
-					class="list-group list-group-flush px-2 collapse filterCollapse mb-3"
-					id="collapseExample"
-					style="overflow: hidden; 
-					border-radius: 10px; 
-					box-shadow: 0px 0px 5px #00000012; 
-					height: 400px!important;
-					background: white"
-				>
-					<li
-						class="list-group-item text-center pcOnly"
-						style="background-color: #52694b;
+				
+					<ul
+						class="list-group list-group-flush px-2 collapse filterCollapse"
+						id="collapseExample"
+						style="overflow: hidden; 
+						border-radius: 10px; 
+						box-shadow: 0px 0px 5px #00000012; 
+						height: 400px!important;
+						background: white"
+					>
+						<li
+							class="list-group-item text-center pcOnly w-100"
+							style="background-color: #52694b;
 						color: white;
 						font-weight: 600;
 						border-bottom: 2px solid #00000042;"
-					>
-						Admin Menu
-					</li>
-					<button
-						on:click={() => {
-							component = DoctorList;
-						}}
-						class="list-group-item d-flex align-items-center w-100"
-						class:active={component == DoctorList}
-						data-bs-toggle={$mobile ? 'collapse' : ''}
-						data-bs-target={$mobile ? '#collapseExample' : ''}
-					>
-						<span class="material-symbols-outlined" class:icon-fill={component == DoctorList}
-							>physical_therapy
-						</span>
-						<span class="ms-2">Həkimlər</span>
-					</button>
-					<button
-						on:click={() => {
-							component = Contacts;
-						}}
-						class="list-group-item d-flex align-items-center w-100"
-						class:active={component == Contacts}
-						data-bs-toggle={$mobile ? 'collapse' : ''}
-						data-bs-target={$mobile ? '#collapseExample' : ''}
-					>
-						<span class="material-symbols-outlined" class:icon-fill={component == Contacts}
-							>dialpad</span
 						>
-						<span class="ms-2">Əlaqə</span>
-					</button>
-					<button
-						on:click={() => {
-							component = AwaitingComments;
-						}}
-						class="list-group-item d-flex align-items-center w-100"
-						class:active={component == AwaitingComments}
-						data-bs-toggle={$mobile ? 'collapse' : ''}
-						data-bs-target={$mobile ? '#collapseExample' : ''}
-					>
-						<span class="material-symbols-outlined" class:icon-fill={component == AwaitingComments}
-							>comment</span
+							Admin Menu
+						</li>
+						<button
+							on:click={() => {
+								component = DoctorList;
+							}}
+							class="list-group-item d-flex align-items-center w-100"
+							class:active={component == DoctorList}
+							data-bs-toggle={$mobile ? 'collapse' : ''}
+							data-bs-target={$mobile ? '#collapseExample' : ''}
 						>
-						<span class="ms-2">Şərh təsdiq</span>
-					</button>
-				</ul>
+							<span class="material-symbols-outlined" class:icon-fill={component == DoctorList}
+								>physical_therapy
+							</span>
+							<span class="ms-2">Həkimlər</span>
+						</button>
+						<button
+							on:click={() => {
+								component = Contacts;
+							}}
+							class="list-group-item d-flex align-items-center w-100"
+							class:active={component == Contacts}
+							data-bs-toggle={$mobile ? 'collapse' : ''}
+							data-bs-target={$mobile ? '#collapseExample' : ''}
+						>
+							<span class="material-symbols-outlined" class:icon-fill={component == Contacts}
+								>dialpad</span
+							>
+							<span class="ms-2">Əlaqə</span>
+						</button>
+						<button
+							on:click={() => {
+								component = AwaitingComments;
+							}}
+							class="list-group-item d-flex align-items-center w-100"
+							class:active={component == AwaitingComments}
+							data-bs-toggle={$mobile ? 'collapse' : ''}
+							data-bs-target={$mobile ? '#collapseExample' : ''}
+						>
+							<span
+								class="material-symbols-outlined"
+								class:icon-fill={component == AwaitingComments}>comment</span
+							>
+							<span class="ms-2">Şərh təsdiq</span>
+						</button>
+					</ul>
+				
 			</div>
 			<div class="col-md-8 col-lg-9 mb-5">
-				<div class="card p-3 h-100">
+				<div class="card p-3 h-100 mt-mobile">
 					<svelte:component this={component} />
 				</div>
 				<!-- <form on:submit|preventDefault={handleSubmit}>

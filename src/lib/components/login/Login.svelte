@@ -507,6 +507,6 @@
 	.socials .active,
 	.socials button:hover {
 		background-color: #a5a5a5 !important;
-		border-radius: 8px;
+		border-radius: 8px!important;
 	}
 </style>

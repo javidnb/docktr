@@ -67,6 +67,8 @@
 			comments.set(result);
 			commentsLoading = false;
 
+			console.log(result);
+
 			//TODO yorumlari burdan cek, her defe fetch olunmamasi ucun
 			doc.set({ ...doctor, userComments: result });
 			console.log('doc: ', $doc);

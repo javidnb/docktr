@@ -17,6 +17,7 @@
 		"contact": "Əlaqə",
 		"account": "Hesabım",
 		"login": "Giriş",
+		"logout": "Çıxış",
 		"messages": "Mesajlar"
 	},
 	"doctor": {
@@ -58,6 +59,9 @@
 		"3": "Pasient və həkimlər arasında qurulan dialoq və paylaşılan məlumatların konfidensiallığı qorunmaqdadır.",
 		"4": "Həkimlərin təyin etmiş olduğu müalicə üsulları və dərman vasitələri onların öz məsuliyyətindədir.",
 		"5": "Platformamız bu müalicə üsulları və dərmanların təsirinə və ya təsirsizliyinə görə hər hansı bir məsuliyyət daşımamaqdadır."
+	},
+	"gpt": {
+		"ask_anything": "Sualınız?"
 	},
 	"actions": {
 		"change": "Dəyişdir",

@@ -20,6 +20,7 @@ export const users = writable([]);
 export const selectedUser = writable();
 export const hideNav = writable(false);
 export const appointmentsLoading = writable(true);
+export const searchQuery = writable('');
 
 export const langs: any = [
 	{ value: 'aze', label: 'Azərbaycanca' },

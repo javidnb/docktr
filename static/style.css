@@ -73,6 +73,9 @@ body {
 	.mt-mobile {
 		margin-top: 1rem !important;
 	}
+	.wm-100 {
+		width: 100%;
+	}
 }
 
 .material-symbols-outlined {
@@ -316,9 +319,6 @@ body {
 	.topNav {
 		margin-left: 0 !important;
 		text-wrap: nowrap;
-	}
-	.collapseContainer {
-		flex-direction: row-reverse;
 	}
 	.nav-item {
 		flex: 1 !important;

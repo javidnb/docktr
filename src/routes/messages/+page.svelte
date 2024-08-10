@@ -4,6 +4,7 @@
 	import { _ } from 'svelte-i18n';
 	import { selectedUser, hideNav, mobile } from '$lib/store/dataStore';
 	import { onMount } from 'svelte';
+	import { session } from '$lib/session';
 
 	onMount(() => {
 		if ($mobile == false) hideNav.set(true);
@@ -48,33 +49,42 @@
 <section class="py-3" style="background-color: #f8f8f8;">
 	<div class="container">
 		<div class="row msgRow justify-content-center">
-			<div class="col-md-4 col-lg-3 {$selectedUser ? 'pcOnly' : ''}">
-				<div style="height: 100%; border-right: 1px solid #ececec; padding-right: .5rem">
-					<Messages
-						on:changeValue={() => {
-							// animate = false;
-							// setTimeout(() => {
-							// 	animate = true;
-							// }, 5);
-						}}
-					/>
-				</div>
-			</div>
-			<div class="col-md-8 col-lg-9">
-				{#if $selectedUser && animate}
-					<div in:scaleFade>
-						<Chat />
-					</div>
-				{:else}
-					<div class="d-flex h-100 align-items-center justify-content-center pcOnly">
-						<img
-							src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/logo.png"
-							alt="Sehiyye logo"
-							style="width: 150px;"
+			{#if $session.user}
+				<div class="col-md-4 col-lg-3 {$selectedUser ? 'pcOnly' : ''}">
+					<div style="height: 100%; border-right: 1px solid #ececec; padding-right: .5rem">
+						<Messages
+							on:changeValue={() => {
+								// animate = false;
+								// setTimeout(() => {
+								// 	animate = true;
+								// }, 5);
+							}}
 						/>
 					</div>
-				{/if}
-			</div>
+				</div>
+				<div class="col-md-8 col-lg-9">
+					{#if $selectedUser && animate}
+						<div in:scaleFade>
+							<Chat />
+						</div>
+					{:else}
+						<div class="d-flex h-100 align-items-center justify-content-center pcOnly">
+							<img
+								src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/logo.png"
+								alt="Sehiyye logo"
+								style="width: 150px;"
+							/>
+						</div>
+					{/if}
+				</div>
+			{:else}
+				<div
+					class="d-flex w-100 h-100 align-items-center justify-content-center"
+					style="min-height: calc(100dvh - 300px);"
+				>
+					<h6 style="color: gray;">Sehiyye.online</h6>
+				</div>
+			{/if}
 		</div>
 	</div>
 </section>

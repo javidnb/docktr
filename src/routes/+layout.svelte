@@ -4,7 +4,7 @@
 	import Nav from '$lib/components/Nav.svelte';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import type { LayoutData } from './$types';
-	import { appointmentsLoading, doctors } from '$lib/store/dataStore';
+	import { appointmentsLoading, doctors, hideNav } from '$lib/store/dataStore';
 	import '../lib/i18n';
 	import { locale, _ } from 'svelte-i18n';
 	import { session } from '$lib/session';
@@ -78,15 +78,30 @@
 	<SvelteToast />
 </div>
 
-<!-- <button
+<button
 	class="btn btn-outline-primary btnContact {$hideNav ? 'd-none' : ''}"
 	on:click={() => {
 		showGPT = true;
 	}}
 >
 	<span style="font-size: 30px" class="material-symbols-outlined icon-fill"> sms </span>
-</button> -->
+</button>
 
 <Modal bind:showModal={showGPT}>
 	<Gpt />
 </Modal>
+
+<style>
+	.btnContact {
+		position: fixed;
+		bottom: 1.5rem;
+		right: 1.5rem;
+		padding: .8rem;
+		box-shadow: 0px 0px 5px #00000035;
+		background: white;
+		color: var(--primaryColor);
+		border-radius: 100%;
+		display: flex;
+		align-items: center;
+	}
+</style>

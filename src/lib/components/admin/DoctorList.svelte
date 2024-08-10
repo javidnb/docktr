@@ -15,6 +15,7 @@
 	import Editor from '@tinymce/tinymce-svelte';
 	import { _ } from 'svelte-i18n';
 	import { doc } from 'firebase/firestore';
+	import { fade } from 'svelte/transition';
 
 	let selectedDoc: any = writable(null);
 	let selectedDoctor: any;
@@ -279,13 +280,13 @@
 	}
 </script>
 
-<div class="d-flex flex-wrap align-items-center w-100 ps-3 col-gap-5 row-gap-2">
+<div class="d-flex flex-wrap align-items-center w-100 ps-3 col-gap-5 row-gap-2" transition:fade>
 	<h5 style="margin-bottom: 0; min-width: 170px; color: #52694b;">
 		{$selectedDoc == 0 ? 'Yeni Həkim' : $selectedDoc ? 'Həkim haqqında' : 'Həkimlər'}
 	</h5>
 	{#if !$selectedDoc}
 		<button
-			class="btn btn-outline-primary d-flex align-items-center"
+			class="btn btn-outline-primary d-flex align-items-center wm-100"
 			style="min-width: 200px;"
 			on:click={() => {
 				selectedDoc.set('0');
@@ -296,7 +297,7 @@
 		</button>
 	{:else}
 		<button
-			class="btn btn-outline-primary d-flex align-items-cente"
+			class="btn btn-outline-primary d-flex align-items-center wm-100"
 			style="min-width: 200px;"
 			on:click={() => {
 				selectedDoc.set(null);

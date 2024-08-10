@@ -2,10 +2,15 @@
 	import { diseases } from '$lib/store/diseases';
 	import { goto } from '$app/navigation';
 	import { writable } from 'svelte/store';
-	import { doctors, selectedSymptoms, selectedBranch, mobile } from '$lib/store/dataStore';
+	import {
+		doctors,
+		selectedSymptoms,
+		selectedBranch,
+		mobile,
+		searchQuery
+	} from '$lib/store/dataStore';
 	import { _ } from 'svelte-i18n';
 
-	const searchQuery = writable('');
 	const charMap: any = {
 		ç: 'c',
 		ğ: 'g',
@@ -82,6 +87,7 @@
 		if (event.key === 'Escape') {
 			searchQuery.set('');
 		}
+		if ($mobile) goto('/search');
 	}
 </script>
 
@@ -105,7 +111,7 @@
 			bind:value={$searchQuery}
 			on:keydown={handleKeydown}
 			on:click={() => {
-				if ($mobile) goto('./search');
+				if ($mobile) goto('/search');
 			}}
 		/>
 		<span
@@ -149,7 +155,7 @@
 									on:click={() => {
 										selectedSymptoms.set([...$selectedSymptoms, val]);
 										searchQuery.set('');
-										goto(`./diseases`);
+										goto(`/diseases`);
 									}}
 									class="symptom flex-1"
 									style="text-wrap: nowrap; border: none">{val}</button

@@ -16,6 +16,7 @@
 	import Login from './login/Login.svelte';
 	import { goto } from '$app/navigation';
 	import { locale, _ } from 'svelte-i18n';
+	import { logout } from '$lib/firebase.client';
 
 	let currentDate = new Date();
 	let showModal: boolean = false;
@@ -39,8 +40,6 @@
 	$: curPage = $page.route.id;
 
 	$: showModal = !!$loginModal;
-
-	let contactModal = false;
 
 	$: if (showModal == false) loginModal.set(false);
 </script>
@@ -196,7 +195,8 @@
 								<li class="nav-item">
 									<button
 										class="nav-link topnavlink"
-										on:click={() => goto('../admin')}
+										on:click={() => goto('/admin')}
+										class:active={curPage == '/admin'}
 										data-bs-toggle={$mobile ? 'collapse' : ''}
 										data-bs-target={$mobile ? '#navbarSupportedContent' : ''}
 									>
@@ -205,26 +205,47 @@
 									>
 								</li>
 							{/if}
-							<li class="nav-item">
+							<li class="nav-item mobileOnly">
 								<button
 									class="nav-link topnavlink"
-									on:click={() => goto('../messages')}
+									on:click={() => goto('/contact')}
+									class:active={curPage == '/contact'}
 									data-bs-toggle={$mobile ? 'collapse' : ''}
 									data-bs-target={$mobile ? '#navbarSupportedContent' : ''}
+									><span class="material-symbols-outlined icon-fill"> contacts_product </span>
+									<span>{$_('nav.contact')}</span></button
 								>
-									<span class="material-symbols-outlined icon-fill"> mail </span>
-									{$_('nav.messages')}
-								</button>
 							</li>
-							<li class="nav-item">
+							<li class="nav-item pcOnly">
 								<button
 									class="nav-link topnavlink"
-									on:click={() => goto('../profile')}
+									on:click={() => goto('/messages')}
+									class:active={curPage == '/messages'}
+									><span class="material-symbols-outlined icon-fill"> mail </span>
+									<span>{$_('nav.messages')}</span></button
+								>
+							</li>
+							<li class="nav-item pcOnly">
+								<button
+									class="nav-link topnavlink"
+									on:click={() => goto('/profile')}
+									class:active={curPage == '/profile'}
 									data-bs-toggle={$mobile ? 'collapse' : ''}
 									data-bs-target={$mobile ? '#navbarSupportedContent' : ''}
 								>
 									<span class="material-symbols-outlined icon-fill"> account_circle </span>
-									<span>{$_('nav.account') ?? 'Login'}</span>
+									<span>{$_('nav.account')}</span>
+								</button>
+							</li>
+							<li class="nav-item mobileOnly">
+								<button
+									class="nav-link topnavlink"
+									on:click={logout}
+									data-bs-toggle={$mobile ? 'collapse' : ''}
+									data-bs-target={$mobile ? '#navbarSupportedContent' : ''}
+								>
+									<span class="material-symbols-outlined icon-fill"> logout </span>
+									<span>{$_('nav.logout')}</span>
 								</button>
 							</li>
 						{/if}
@@ -449,9 +470,6 @@
 		.topNav {
 			margin-left: 0 !important;
 			text-wrap: nowrap;
-		}
-		.collapseContainer {
-			flex-direction: row-reverse;
 		}
 		.nav-item {
 			flex: 1 !important;

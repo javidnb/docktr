@@ -34,7 +34,7 @@
 	}
 </script>
 
-<div class="d-flex align-items-center w-100 ps-3">
+<div class="d-flex align-items-center w-100 ps-3" style="height: 36px;">
 	<h5 style="margin-bottom: 0; min-width: 150px; color: #52694b">Təsdiq Gözləyən Şərhlər</h5>
 </div>
 

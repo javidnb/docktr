@@ -61,7 +61,8 @@
 		"5": "Platformamız bu müalicə üsulları və dərmanların təsirinə və ya təsirsizliyinə görə hər hansı bir məsuliyyət daşımamaqdadır."
 	},
 	"gpt": {
-		"ask_anything": "Sualınız?"
+		"ask_anything": "Sualınız?",
+		"error": "Xəta! Zəhmət olmasa daha sonra yenidən cəhd edin"
 	},
 	"actions": {
 		"change": "Dəyişdir",

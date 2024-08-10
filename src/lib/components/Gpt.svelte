@@ -23,6 +23,12 @@
 				}
 			}
 		}
+		return () => {
+			console.log('closed');
+			if ($messages.filter((msg: any) => msg.role == 'error').length) {
+				console.log('error');
+			}
+		};
 	});
 
 	async function sendMessage() {
@@ -49,18 +55,26 @@
 			})
 		});
 
+		if (!response.ok) {
+			messages.update((msgs) => [...msgs, { role: 'error', content: $_('gpt.error') }]);
+			awaitingResponse.set(false);
+			return;
+		}
+
 		const data = await response.json();
 
 		// Update the store with the assistant's response
-		messages.update((msgs) => [
-			...msgs,
-			{ role: 'assistant', content: data.choices[0].message.content }
-		]);
+		if (data?.choices?.length) {
+			messages.update((msgs) => [
+				...msgs,
+				{ role: 'assistant', content: data.choices[0].message.content }
+			]);
+		}
 
 		localStorage.setItem('assistant', JSON.stringify($messages));
 
 		awaitingResponse.set(false);
-		return data.choices[0].message.content.trim();
+		return data?.choices?.length ? data.choices[0].message.content.trim() : 'error';
 	}
 </script>
 

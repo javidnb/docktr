@@ -266,6 +266,8 @@
 			// 	.on('camera-error', handleDeviceError)
 			// 	.on('app-message', handleAppMessage);
 
+			callObject.on('participant-left', leaveCall);
+
 			// Handle local participant stream
 			callObject.on('participant-updated', (event: any) => {
 				const videoTrack = event.participant.tracks.video?.track;
@@ -354,10 +356,56 @@
 		callObject.setLocalAudio(!currentAudio);
 	};
 
-	const cycleCamera = () => {
-		if (!callObject) return;
-		callObject.cycleCamera();
-	};
+	async function cycleCamera() {
+		try {
+			// Get current video device ID
+			const currentDeviceId = stream.getVideoTracks()[0].getSettings().deviceId;
+
+			// List all video input devices (cameras)
+			const devices = await navigator.mediaDevices.enumerateDevices();
+			const videoDevices = devices.filter((device) => device.kind === 'videoinput');
+
+			// Find the next device (camera) in the list
+			const currentIndex = videoDevices.findIndex((device) => device.deviceId === currentDeviceId);
+			const nextDevice = videoDevices[(currentIndex + 1) % videoDevices.length];
+
+			if (!nextDevice) {
+				console.warn('No other video devices found.');
+				return;
+			}
+
+			// Stop current video track
+			stream.getVideoTracks().forEach((track: any) => track.stop());
+
+			// Switch to the new camera
+			stream = await navigator.mediaDevices.getUserMedia({
+				video: { deviceId: { exact: nextDevice.deviceId } },
+				audio: true
+			});
+
+			// Update the Daily call object with the new video track
+			if (callObject) {
+				await callObject.setInputDevicesAsync({
+					videoDeviceId: nextDevice.deviceId
+				});
+			}
+
+			// Update the local video reference
+			if (localVideoRef) {
+				localVideoRef.srcObject = stream;
+			}
+		} catch (error) {
+			console.error('Error switching camera:', error);
+		}
+	}
+
+	function switchMinimizedVideo() {
+		if (remoteVideoRef.srcObject) {
+			let local = localVideoRef.srcObject;
+			localVideoRef.srcObject = remoteVideoRef.srcObject;
+			remoteVideoRef.srcObject = local;
+		}
+	}
 </script>
 
 <!-- <div class="video-container" bind:this={videoContainer}></div> -->
@@ -381,6 +429,7 @@
 			playsinline
 			class:minimize={remoteVideoRef?.srcObject}
 			class="transition responsiveVideo"
+			on:click={switchMinimizedVideo}
 		></video>
 		<!-- svelte-ignore a11y-media-has-caption -->
 		<video
@@ -492,7 +541,7 @@
 <style>
 	.minimize {
 		position: fixed;
-		bottom: 1rem;
+		bottom: 6rem;
 		right: 1rem;
 		max-width: 30%;
 		max-height: 300px !important;

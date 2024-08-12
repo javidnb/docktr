@@ -10,7 +10,10 @@
 		showBtnEndCall,
 		joinVideoCall,
 		ongoingAppointment,
-		selectedUser
+		selectedUser,
+
+		hideNav
+
 	} from '$lib/store/dataStore';
 	import { onMount } from 'svelte';
 	import { monthNames } from '$lib/helpers/dateFormatter';
@@ -151,6 +154,7 @@
 		ongoingAppointment.set(appointment);
 		dataLoading.set(true);
 		appointmentId = appointment.id;
+		hideNav.set(true);
 		joinVideoCall.set(true);
 	}
 
@@ -582,15 +586,15 @@
 					call_end
 				</span></button
 			>
-		{:else}
+		<!-- {:else}
 			<div
 				style="width: 100dvw; height: 100dvh; position:absolute; top:0; 
 			left:0; 
 			display: flex; align-items:center; justify-content:center; z-index: 1"
 			>
-				<!-- VIDEO CALL LOADING-->
+				 VIDEO CALL LOADING
 				Loading
-			</div>
+			</div> -->
 		{/if}
 
 		<VideoCall {appointmentId} />

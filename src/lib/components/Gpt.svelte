@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { onMount } from 'svelte';
+	import { afterUpdate, onMount } from 'svelte';
 	import { get, writable } from 'svelte/store';
 	import { _ } from 'svelte-i18n';
 
 	let newMessage: string = '';
-	const MODEL = 'gpt-3.5-turbo';
+	const MODEL = 'gpt-4o-mini';
 	let messages = writable<{ role: string; content: string }[]>([]);
 	let awaitingResponse = writable(false);
 
@@ -33,11 +33,19 @@
 		// 		}
 		// 	]);
 		// }
+		scrollToBottom();
+	});
+
+	afterUpdate(() => {
+		scrollToBottom();
+	});
+
+	function scrollToBottom() {
 		const container = document.getElementById('messages-container');
 		if (container) {
 			container.scrollTop = container.scrollHeight;
 		}
-	});
+	}
 
 	async function sendMessage() {
 		// Update the store with the new user message
@@ -90,9 +98,10 @@
 	<div class="row py-3 px-2" style="min-width: min(90dvw, 650px); max-width: 650px">
 		<div class="col">
 			<div
-				class="chatBox pt-3 pb-1 px-2 d-flex flex-column"
+				class="chatBox pt-3 pb-2 px-2 d-flex flex-column"
 				id="messages-container"
-				style="min-height: 300px; border: 1px solid #ececec; background: white; border-radius: 8px; position: relative"
+				style="min-height: 300px; border: 1px solid #ececec; 
+				background: white; border-radius: 8px; position: relative"
 			>
 				{#if $messages.length}
 					{#each $messages as msg}

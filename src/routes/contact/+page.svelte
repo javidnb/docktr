@@ -90,4 +90,7 @@
 	.form-label {
 		margin-bottom: 0;
 	}
+	input::placeholder {
+		color: darkgray;
+	}
 </style>

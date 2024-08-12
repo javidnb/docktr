@@ -257,12 +257,15 @@
 		box-shadow: 0px 0px 5px #00000012;
 	}
 	.searchBox {
-		border-radius: 12px !important;
+		border-radius: 14px !important;
 		box-shadow: 0px 0px 6px #0000000a;
 	}
 	.searchBox::placeholder {
 		font-size: 16px;
 		color: gray;
+	}
+	.searchBox:focus {
+		border: 1px solid var(--primaryColor);
 	}
 	@media screen and (max-width: 992px) {
 		.searchBox::placeholder {

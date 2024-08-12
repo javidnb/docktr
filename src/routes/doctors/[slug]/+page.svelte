@@ -17,10 +17,6 @@
 	import Appointment from '$lib/components/Appointment.svelte';
 	import Modal from '$lib/helpers/Modal.svelte';
 
-	export let data;
-	const { ...commentss } = data;
-
-	const keysToParse = ['certificates'];
 	$: doctor = $doctors.find((d) => d.slug == $page.params.slug);
 
 	const doc = writable<any>(doctor);
@@ -30,11 +26,9 @@
 		existingAppointment = $appointments.find(
 			(ap) => ap.doctorId == doctor.id && new Date(ap.startTime) > new Date()
 		);
-	$: console.log('next appointment: ', existingAppointment);
 
 	$: btnCommentText = $_('actions.send');
 	let btnCommentDisabled: boolean = false;
-	let truncate: boolean = true;
 	let selectedStarPoint: number = 0;
 	let showModal: boolean = false;
 	let commentsLoading: boolean = true;
@@ -46,7 +40,13 @@
 
 	const today = new Date();
 	onMount(async () => {
-		getComments();
+		if (!doctor?.userComments) {
+			getComments();
+		} else {
+			comments.set(doctor.userComments);
+			commentsLoading = false;
+			console.log(doctor);
+		}
 	});
 
 	$: {
@@ -57,21 +57,18 @@
 
 	async function getComments() {
 		try {
-			commentsLoading = true;
-			let time = new Date().getTime();
-			const response = await fetch(
-				`https://tekoplast.az/docktr/api/?comments&doctor=${doctor?.id}&t=${time}`
-			);
-			let result = await response.json();
-			result = result.filter((c: any) => c.status == 1 || c.userId == $session?.user?.uid);
-			comments.set(result);
-			commentsLoading = false;
-
-			console.log(result);
-
-			//TODO yorumlari burdan cek, her defe fetch olunmamasi ucun
-			doc.set({ ...doctor, userComments: result });
-			console.log('doc: ', $doc);
+			if (doctor) {
+				// commentsLoading = true;
+				let time = new Date().getTime();
+				const response = await fetch(
+					`https://tekoplast.az/docktr/api/?comments&doctor=${doctor?.id}&t=${time}`
+				);
+				let result = await response.json();
+				result = result.filter((c: any) => c.status == 1 || c.userId == $session?.user?.uid);
+				comments.set(result);
+				commentsLoading = false;
+				doctor.userComments = result;
+			}
 		} catch (error) {
 			commentsLoading = false;
 		}
@@ -80,15 +77,6 @@
 	function getBranchName(id: number) {
 		let d = diseases.find((d) => d.id == id);
 		return d?.name;
-	}
-
-	function getBranchSlug(id: number) {
-		let d = diseases.find((d) => d.id == id);
-		return d?.slug;
-	}
-
-	function truncateString(str: string, maxLength: number) {
-		return str.length > maxLength ? str.slice(0, maxLength) + '...' : str;
 	}
 
 	async function postComment(e: SubmitEvent) {
@@ -109,8 +97,6 @@
 			date: formatDate(today, true)
 		};
 
-		console.log(postData);
-
 		let dataToPost = { table: 'comments', data: { ...postData } };
 		const response = await fetch('https://tekoplast.az/docktr/api/?postData', {
 			method: 'POST',
@@ -124,6 +110,7 @@
 		if (response.ok) {
 			console.log('Success');
 			btnCommentText = 'Uğurlu! Şərhiniz təsdiq gözləyir..';
+			getComments();
 			dataLoading.set(false);
 		} else {
 			console.log('error');

@@ -90,7 +90,8 @@
 		"mic_on": "Mikrofonu yandır",
 		"end": "Görüşü sonlandır",
 		"no": "Xeyr",
-		"yes": "Sonladır"
+		"yes": "Sonladır",
+		"ended": "Görüş sonlandırıldı"
 	},
 	"login": {
 		"login_header": "Hesaba giriş",

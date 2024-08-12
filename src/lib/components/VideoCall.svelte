@@ -14,9 +14,9 @@
 	import { session } from '$lib/session';
 	import { _ } from 'svelte-i18n';
 	import { browser } from '$app/environment';
-	import { tooltip } from 'svooltip';
 	import Confirm from '$lib/helpers/Confirm.svelte';
 	import Chat from './chat/Chat.svelte';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	export let appointmentId: number;
 	let callFrame: DailyCall | any = null;
@@ -334,6 +334,15 @@
 		// Clear video references to ensure they are reset
 		if (localVideoRef) localVideoRef.srcObject = null;
 		if (remoteVideoRef) remoteVideoRef.srcObject = null;
+
+		toast.push($_('call.ended'), {
+			duration: 2000,
+			theme: {
+				'--toastColor': 'mintcream',
+				'--toastBackground': 'rgb(91 144 77)',
+				'--toastBarBackground': '#1d5b3c'
+			}
+		});
 	}
 
 	const setLocalDevices = () => {
@@ -357,45 +366,15 @@
 	};
 
 	async function cycleCamera() {
-		try {
-			// Get current video device ID
-			const currentDeviceId = stream.getVideoTracks()[0].getSettings().deviceId;
-
-			// List all video input devices (cameras)
-			const devices = await navigator.mediaDevices.enumerateDevices();
-			const videoDevices = devices.filter((device) => device.kind === 'videoinput');
-
-			// Find the next device (camera) in the list
-			const currentIndex = videoDevices.findIndex((device) => device.deviceId === currentDeviceId);
-			const nextDevice = videoDevices[(currentIndex + 1) % videoDevices.length];
-
-			if (!nextDevice) {
-				console.warn('No other video devices found.');
-				return;
+		if (callObject) {
+			try {
+				const cameraCycleResult = await callObject.cycleCamera();
+				console.log('Camera switched:', cameraCycleResult);
+			} catch (error) {
+				console.error('Error switching camera:', error);
 			}
-
-			// Stop current video track
-			stream.getVideoTracks().forEach((track: any) => track.stop());
-
-			// Switch to the new camera
-			stream = await navigator.mediaDevices.getUserMedia({
-				video: { deviceId: { exact: nextDevice.deviceId } },
-				audio: true
-			});
-
-			// Update the Daily call object with the new video track
-			if (callObject) {
-				await callObject.setInputDevicesAsync({
-					videoDeviceId: nextDevice.deviceId
-				});
-			}
-
-			// Update the local video reference
-			if (localVideoRef) {
-				localVideoRef.srcObject = stream;
-			}
-		} catch (error) {
-			console.error('Error switching camera:', error);
+		} else {
+			console.warn('Daily call object is not initialized.');
 		}
 	}
 
@@ -411,7 +390,7 @@
 <!-- <div class="video-container" bind:this={videoContainer}></div> -->
 
 <div
-	style="position: absolute; top: 0px; left: 0; width: 100%; z-index: 99"
+	style="position: absolute; top: 0px; left: 0; width: 100%; z-index: 9999"
 	class:d-none={!localVideoRef?.srcObject}
 >
 	<!-- <h3>Local Video</h3> -->
@@ -541,7 +520,7 @@
 <style>
 	.minimize {
 		position: fixed;
-		bottom: 6rem;
+		bottom: 1rem;
 		right: 1rem;
 		max-width: 30%;
 		max-height: 300px !important;
@@ -584,6 +563,9 @@
 	@media screen and (max-width: 992px) {
 		.responsiveVideo {
 			width: 100%;
+		}
+		.minimize {
+			bottom: 6rem;
 		}
 	}
 	.red {

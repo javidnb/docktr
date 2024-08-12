@@ -85,6 +85,10 @@
 		"message_sent": "Mesaj göndərildi!",
 		"thank_for_contact": "Əlaqə saxladığınız üçün təşəkkürlər"
 	},
+	"call": {
+		"mic_off": "Mikrofonu söndür",
+		"mic_on": "Mikrofonu yandır"
+	},
 	"login": {
 		"login_header": "Hesaba giriş",
 		"mobile": "Mobil",

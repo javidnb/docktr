@@ -14,29 +14,32 @@
 	import { session } from '$lib/session';
 	import { _ } from 'svelte-i18n';
 	import { browser } from '$app/environment';
+	import { tooltip } from 'svooltip';
 
 	export let appointmentId: number;
-	let callFrame: DailyCall | null = null;
+	let callFrame: DailyCall | any = null;
 	let callObject: any;
 	let localVideoRef: any = null;
 	let remoteVideoRef: any = null;
+	let camOn: any = true;
+	let micOn: any = true;
 	let roomUrl: string = 'https://sehiyye.daily.co/';
-	let videoContainer: HTMLDivElement;
 	let API_KEY = import.meta.env.VITE_DAILY_API_KEY;
 	let DAILY_API_URL = 'https://api.daily.co/v1/';
 	let stream: any;
 
 	onMount(() => {
 		getRoom();
+		setLocalDevices();
 	});
 
 	onDestroy(() => {
-		// if (callFrame) {
-		// 	callFrame.leave();
-		// 	callFrame.destroy();
-		// }
+		if (callFrame) {
+			callFrame.leave();
+			callFrame.destroy();
+		}
 		if (!browser) return;
-		videoChat();
+		dataLoading.set(false);
 	});
 
 	async function getRoom() {
@@ -64,7 +67,6 @@
 
 				if (dailyRoomExits?.id) {
 					roomUrl += result.roomId;
-					// launchVideoChatUI();
 					videoChat();
 				} else {
 					createRoom();
@@ -226,6 +228,29 @@
 				videoDeviceId: stream.getVideoTracks()[0].getSettings().deviceId
 			});
 
+			callObject.on('left-meeting', async () => {
+				joinVideoCall.set(false);
+				ongoingAppointment.set(false);
+				let session = callObject?.meetingSessionSummary();
+
+				const headers = new Headers({
+					Authorization: `Bearer ${API_KEY}`,
+					'Content-Type': 'application/json'
+				});
+
+				fetch(`${DAILY_API_URL}/meetings/${session?.id}`, {
+					method: 'GET',
+					headers: headers
+				})
+					.then((response) => response.json())
+					.then((data) => {
+						console.log('Session Details:', data);
+					})
+					.catch((error) => {
+						console.error('Error fetching session details:', error);
+					});
+			});
+
 			// callObject
 			// 	.on('joining-meeting', updateParticpants)
 			// 	.on('joined-meeting', handleJoinedMeeting)
@@ -250,6 +275,27 @@
 				}
 			});
 
+			if (callObject.participantCounts().present != 2) {
+				if ($session.user?.uid == $ongoingAppointment.userId) {
+					console.log('sending notification');
+					sendNotification(
+						$ongoingAppointment.doctorId,
+						true,
+						'Pls Join Video Call',
+						'Click to join',
+						'https://sehiyye.online/appointment'
+					);
+				} else {
+					sendNotification(
+						$ongoingAppointment.userId,
+						false,
+						'Pls Join Video Call',
+						'Click to join',
+						'https://sehiyye.online/appointment'
+					);
+				}
+			}
+
 			// Join the call with the name set in the Home.vue form
 			try {
 				await callObject.join();
@@ -268,6 +314,8 @@
 			tracks.forEach((track: any) => track.stop());
 		}
 
+		joinVideoCall.set(false);
+
 		// Leave the Daily call and destroy the call object
 		if (callObject) {
 			await callObject.leave();
@@ -275,7 +323,6 @@
 		}
 
 		// Reset relevant states
-		joinVideoCall.set(false);
 		hideNav.set(false);
 		stream = null;
 
@@ -283,12 +330,37 @@
 		if (localVideoRef) localVideoRef.srcObject = null;
 		if (remoteVideoRef) remoteVideoRef.srcObject = null;
 	}
+
+	const setLocalDevices = () => {
+		console.log('setting devices');
+		if (!callObject) return;
+		camOn = callObject.localVideo();
+		micOn = callObject.localAudio();
+	};
+
+	const toggleVideo = () => {
+		if (!callObject) return;
+		const currentVid = callObject.localVideo();
+		camOn = !currentVid;
+		callObject.setLocalVideo(!currentVid);
+	};
+	const toggleAudio = () => {
+		if (!callObject) return;
+		const currentAudio = callObject.localAudio();
+		micOn = !currentAudio;
+		callObject.setLocalAudio(!currentAudio);
+	};
+
+	const cycleCamera = () => {
+		if (!callObject) return;
+		callObject.cycleCamera();
+	};
 </script>
 
 <!-- <div class="video-container" bind:this={videoContainer}></div> -->
 
 <div
-	style="position: absolute; top: 0px; left: 0; width: 100%"
+	style="position: absolute; top: 0px; left: 0; width: 100%; z-index: 99"
 	class:d-none={!localVideoRef?.srcObject}
 >
 	<!-- <h3>Local Video</h3> -->
@@ -308,16 +380,21 @@
 			class="transition responsiveVideo"
 		></video>
 		<!-- svelte-ignore a11y-media-has-caption -->
-		<video bind:this={remoteVideoRef} autoplay playsinline class:d-none={!remoteVideoRef?.srcObject}
+		<video
+			style="height: 100%; max-width: 100%"
+			bind:this={remoteVideoRef}
+			autoplay
+			playsinline
+			class:d-none={!remoteVideoRef?.srcObject}
 		></video>
 
 		{#if localVideoRef?.srcObject}
 			{#if !remoteVideoRef?.srcObject}
 				<div
 					class="d-flex align-items-center justify-content-center"
-					style="min-width: 60dvh;
+					style="
 						background: rgba(0, 0, 0, 0.37);
-						padding-block: 0.5rem;
+						padding: 0.5rem 2rem;
 						border-radius: 20px;
 						position: absolute;
 						bottom: 6rem;
@@ -328,36 +405,55 @@
 					Zəhmət olmasa gözləyin
 				</div>
 			{/if}
-			<div
-				class="d-flex align-items-center justify-content-center"
-				style="min-width: 60dvh; background: rgba(0, 0, 0, 0.368); padding-block: .5rem; border-radius: 20px;
-					position: absolute; bottom: 1rem; 
-						left: 50%; transform: translateX(-50%);"
-			>
+			<div class="videoControlContainer d-flex align-items-center gap-3 px-3">
+				{#if $dataLoading}
+					<div class="progress-bar">
+						<div class="progress-animation"></div>
+					</div>
+				{/if}
 				<button
-					class="btn d-flex"
+					class="btn d-flex videoControlBtn"
+					on:click={toggleAudio}
+					class:red={!micOn}
+					disabled={$dataLoading}
+				>
+					<span class="material-symbols-outlined icon-fill" style="font-size: 30px">
+						{micOn ? 'mic' : 'mic_off'}
+					</span>
+				</button>
+				<button
+					class="btn d-flex videoControlBtn"
+					on:click={toggleVideo}
+					class:red={!camOn}
+					disabled={$dataLoading}
+				>
+					<span class="material-symbols-outlined icon-fill" style="font-size: 30px">
+						{camOn ? 'videocam' : 'videocam_off'}
+					</span>
+				</button>
+				<button
+					class="btn d-flex mx-auto videoControlBtn endCallBtn"
 					on:click={leaveCall}
-					style="border-radius: 100%; background: #a51f1f; padding: .8rem; color: white; font-size: 20px"
+					style="background: #a51f1f; color: white;"
 				>
 					<span class="material-symbols-outlined icon-fill" style="font-size: 30px">
 						call_end
 					</span>
 				</button>
+				<button class="btn d-flex videoControlBtn" on:click={leaveCall} disabled={$dataLoading}>
+					<span class="material-symbols-outlined icon-fill" style="font-size: 30px"> mail </span>
+				</button>
+				<button class="btn d-flex videoControlBtn" on:click={cycleCamera} disabled={$dataLoading}>
+					<span class="material-symbols-outlined icon-fill" style="font-size: 30px">
+						cameraswitch
+					</span>
+				</button>
 			</div>
 		{/if}
 	</div>
-
-	<!-- <h3>Remote Video</h3> -->
-	<!-- svelte-ignore a11y-media-has-caption -->
 </div>
 
 <style>
-	/* .video-container {
-		width: 100%;
-		height: 100%;
-		min-height: 300px;
-		margin: 10px;
-	} */
 	.minimize {
 		position: fixed;
 		bottom: 1rem;
@@ -371,6 +467,30 @@
 	.transition {
 		transition-duration: 0.5s;
 	}
+	.videoControlContainer {
+		border: 1px solid #ececec33;
+		background: rgba(0, 0, 0, 0.368);
+		padding-block: 0.5rem;
+		border-radius: 20px;
+		position: absolute;
+		bottom: 1rem;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+	.videoControlBtn {
+		border-radius: 100%;
+		background: rgb(0 0 0 / 33%);
+		padding: 0.8rem;
+		color: white;
+		font-size: 20px;
+		border: 1px solid #ececec33;
+	}
+	.videoControlBtn:hover {
+		background: rgba(0, 0, 0, 0.55) !important;
+	}
+	.endCallBtn:hover {
+		background-color: rgb(134 30 30) !important;
+	}
 	@media screen and (min-width: 992px) {
 		.responsiveVideo {
 			height: 100%;
@@ -380,5 +500,8 @@
 		.responsiveVideo {
 			width: 100%;
 		}
+	}
+	.red {
+		color: red !important;
 	}
 </style>

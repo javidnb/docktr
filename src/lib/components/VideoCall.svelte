@@ -15,6 +15,8 @@
 	import { _ } from 'svelte-i18n';
 	import { browser } from '$app/environment';
 	import { tooltip } from 'svooltip';
+	import Confirm from '$lib/helpers/Confirm.svelte';
+	import Chat from './chat/Chat.svelte';
 
 	export let appointmentId: number;
 	let callFrame: DailyCall | any = null;
@@ -27,6 +29,7 @@
 	let API_KEY = import.meta.env.VITE_DAILY_API_KEY;
 	let DAILY_API_URL = 'https://api.daily.co/v1/';
 	let stream: any;
+	let endCallModal: boolean = false;
 
 	onMount(() => {
 		getRoom();
@@ -400,7 +403,8 @@
 						bottom: 6rem;
 						left: 50%;
 						transform: translateX(-50%);
-						color: #ffffffc2; font-size: small"
+						color: #ffffffc2; font-size: small;
+						white-space: nowrap"
 				>
 					Zəhmət olmasa gözləyin
 				</div>
@@ -433,14 +437,23 @@
 				</button>
 				<button
 					class="btn d-flex mx-auto videoControlBtn endCallBtn"
-					on:click={leaveCall}
+					on:click={() => {
+						endCallModal = true;
+					}}
 					style="background: #a51f1f; color: white;"
 				>
 					<span class="material-symbols-outlined icon-fill" style="font-size: 30px">
 						call_end
 					</span>
 				</button>
-				<button class="btn d-flex videoControlBtn" on:click={leaveCall} disabled={$dataLoading}>
+				<button
+					class="btn d-flex videoControlBtn"
+					disabled={$dataLoading}
+					data-bs-toggle="collapse"
+					data-bs-target="#endCall"
+					aria-expanded="false"
+					aria-controls="endCall"
+				>
 					<span class="material-symbols-outlined icon-fill" style="font-size: 30px"> mail </span>
 				</button>
 				<button class="btn d-flex videoControlBtn" on:click={cycleCamera} disabled={$dataLoading}>
@@ -450,8 +463,31 @@
 				</button>
 			</div>
 		{/if}
+
+		<div
+			class="collapse"
+			id="endCall"
+			style="position: absolute;
+			bottom: 6rem;
+			background: white;
+			border-radius: 20px;"
+		>
+			<Chat />
+		</div>
 	</div>
 </div>
+
+{#if endCallModal}
+	<Confirm
+		message="{$_('call.end')}?"
+		no={$_('call.no')}
+		yes={$_('call.yes')}
+		onConfirm={leaveCall}
+		onCancel={() => {
+			endCallModal = false;
+		}}
+	/>
+{/if}
 
 <style>
 	.minimize {

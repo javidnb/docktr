@@ -1,5 +1,7 @@
 <script lang="ts">
 	export let message: string;
+	export let no: string = $_('actions.close');
+	export let yes: string = $_('actions.confirm');
 	export let onConfirm: () => void;
 	export let onCancel: () => void;
 	import { _ } from 'svelte-i18n';
@@ -19,11 +21,11 @@
 		<div class="d-flex gap-2 mt-3">
 			<button class="btn btn-secondary flex-1 d-flex align-items-center" on:click={cancel}>
 				<span class="material-symbols-outlined"> close </span>
-				<span class="mx-auto">{$_('actions.close')}</span>
+				<span class="mx-auto">{no}</span>
 			</button>
 			<button class="btn btn-primary flex-1 d-flex align-items-center" on:click={confirm}>
 				<span class="material-symbols-outlined"> check </span>
-				<span class="mx-auto">{$_('actions.confirm')}</span>
+				<span class="mx-auto">{yes}</span>
 			</button>
 		</div>
 	</div>

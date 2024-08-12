@@ -87,7 +87,10 @@
 	},
 	"call": {
 		"mic_off": "Mikrofonu söndür",
-		"mic_on": "Mikrofonu yandır"
+		"mic_on": "Mikrofonu yandır",
+		"end": "Görüşü sonlandır",
+		"no": "Xeyr",
+		"yes": "Sonladır"
 	},
 	"login": {
 		"login_header": "Hesaba giriş",

@@ -292,6 +292,15 @@
 						<span class="navLinkText">{$_('nav.diseases')}</span></a
 					>
 				</li>
+				<li class="nav-item mobileOnly pt-1">
+					<a class="nav-link" href="/search" class:active={curPage == '/messages'}>
+						<img
+							src="https://ik.imagekit.io/d2nwsj0ktvh/logo_hyRmOQCNQ.png?updatedAt=1722624724577"
+							alt="Sehiyye logo"
+							style="width: 25px;"
+						/>
+					</a>
+				</li>
 				<li class="nav-item">
 					<a
 						class="nav-link"
@@ -314,7 +323,8 @@
 						{/if}
 					</a>
 				</li>
-				<li class="nav-item mobileOnly">
+
+				<!-- <li class="nav-item mobileOnly">
 					<button
 						class="nav-link"
 						on:click={() => ($session.loggedIn ? goto('/messages') : loginModal.set(true))}
@@ -325,7 +335,7 @@
 						</span>
 						<span class="navLinkText">{$_('nav.messages')}</span>
 					</button>
-				</li>
+				</li> -->
 				<li class="nav-item pcOnly">
 					<a class="nav-link" href="/"
 						><span class="material-symbols-outlined"> rss_feed </span>

@@ -358,6 +358,7 @@
 		camOn = !currentVid;
 		callObject.setLocalVideo(!currentVid);
 	};
+
 	const toggleAudio = () => {
 		if (!callObject) return;
 		const currentAudio = callObject.localAudio();

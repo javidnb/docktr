@@ -9,6 +9,7 @@
 	import { dataLoading, loginModal, mobile } from '$lib/store/dataStore';
 	import Chat from '$lib/components/chat/Chat.svelte';
 	import Documents from '$lib/components/profile/Documents.svelte';
+	import Messages from '$lib/components/chat/Messages.svelte';
 
 	export let data;
 	let userEmail: any = '';
@@ -126,11 +127,20 @@
 							<button
 								class="card btn btn-outline-primary d-flex flex-row w-100"
 								on:click={() => {
+									changeComponent(Messages, true);
+								}}
+							>
+								<span class="material-symbols-outlined"> mail </span>Mesajlar
+							</button>
+							<button
+								class="card btn btn-outline-primary d-flex flex-row w-100"
+								on:click={() => {
 									changeComponent(History, true);
 								}}
 							>
 								<span class="material-symbols-outlined"> history </span>Görüşlərim
 							</button>
+
 							<button
 								class="card btn btn-outline-primary d-flex flex-row w-100"
 								on:click={() => {

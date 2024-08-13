@@ -358,13 +358,9 @@
 				<li class="nav-item mobileOnly">
 					<button
 						class="nav-link"
+						class:active={curPage == '/profile'}
 						on:click={() => ($session.loggedIn ? goto('/profile') : loginModal.set(true))}
-						><span
-							class="material-symbols-outlined"
-							class:icon-fill={curPage == '/profile' ||
-								curPage == '/login' ||
-								curPage == '/register'}
-						>
+						><span class="material-symbols-outlined" class:icon-fill={curPage == '/profile'}>
 							account_circle
 						</span>
 						<span class="navLinkText">{$_('nav.account')}</span></button

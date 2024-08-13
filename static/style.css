@@ -531,6 +531,7 @@ body {
 		width: 100dvw;
 		border-radius: 0px;
 		overflow: inherit;
+		padding-bottom: 5px;
 	}
 	.homeNavContainer .active {
 		border-radius: 0;
@@ -559,6 +560,7 @@ body {
 	.topNav {
 		margin-left: 0 !important;
 		text-wrap: nowrap;
+		gap: 5px;
 	}
 	.nav-item {
 		flex: 1 !important;
@@ -572,6 +574,7 @@ body {
 	}
 	.topnavlink {
 		flex-direction: unset;
+		gap: 5px;
 	}
 	.topnavlink .icon-fill {
 		background: unset;
@@ -644,7 +647,7 @@ body {
 	border-radius: 40px !important;
 }
 .langSelector::before {
-	display: none;
+	display: none!important;
 }
 .dropdown-menu {
 	top: 35px;

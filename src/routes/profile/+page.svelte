@@ -124,14 +124,12 @@
 							>
 								<span class="material-symbols-outlined"> for_you </span>Hesap Bilgileri
 							</button>
-							<button
+							<a
 								class="card btn btn-outline-primary d-flex flex-row w-100"
-								on:click={() => {
-									changeComponent(Messages, true);
-								}}
+								href="/messages"
 							>
 								<span class="material-symbols-outlined"> mail </span>Mesajlar
-							</button>
+							</a>
 							<button
 								class="card btn btn-outline-primary d-flex flex-row w-100"
 								on:click={() => {

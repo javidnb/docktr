@@ -374,7 +374,7 @@
 			{:else if method == 'mobile'}
 				{#if !showConfimationInput}
 					<div class="p-0 input-group">
-						{#if type != 'register'}
+						<!-- {#if type != 'register'}
 							{#if selecedItem.value == '+994'}
 								<div class="d-flex p-1 align-items-center">
 									<img
@@ -392,12 +392,12 @@
 									/>
 								</div>
 							{/if}
-						{/if}
+						{/if} -->
 						<Select
 							class="form-control"
 							items={selectItems}
 							--width="80px"
-							--border-radius="0px"
+							--border-top-left-radius="10px"
 							--border-focused="1px solid var(--primaryColor)"
 							--item-is-active-bg="var(--primaryColor)"
 							--item-hover-bg="#d9e1d7"
@@ -406,7 +406,7 @@
 						></Select>
 						<input
 							class="form-control"
-							style="padding: .5rem;"
+							style="padding: .5rem; margin-left: -5px"
 							bind:value={phoneNumber}
 							on:input={handleInput}
 							type="text"
@@ -508,5 +508,8 @@
 	.socials button:hover {
 		background-color: #a5a5a5 !important;
 		border-radius: 8px!important;
+	}
+	.socials .active .material-symbols-outlined {
+		color: white!important;
 	}
 </style>

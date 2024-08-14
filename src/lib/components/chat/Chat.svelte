@@ -10,8 +10,7 @@
 	import { _ } from 'svelte-i18n';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { writable } from 'svelte/store';
-	import Documents from '../profile/Documents.svelte';
-	import selectedUserId from '../profile/Documents.svelte';
+	import DocumentsByUser from '../DocumentsByUser.svelte';
 
 	let messages: any = [];
 	let newMessage = '';
@@ -20,6 +19,7 @@
 	let user: any = writable({});
 	let showDocs: boolean = false;
 	let msgInput: HTMLElement;
+	let files: any = [];
 
 	$: if ($selectedUser) {
 		userId = $selectedUser;
@@ -54,6 +54,9 @@
 					.filter((doc) => doc.data().participants.includes(userId))
 					.map((doc) => doc.data());
 				scrollToBottom();
+
+				console.log(messages);
+				files = messages.filter((m: any) => m.file);
 			});
 
 			return () => {
@@ -77,7 +80,7 @@
 				fromUser: currentUser,
 				toUser: userId,
 				message: msg,
-				participants: [currentUser, userId],
+				participants: [currentUser, userId].sort(),
 				timestamp: new Date(),
 				file
 			});
@@ -328,9 +331,9 @@
 								class="material-symbols-outlined icon-fill">account_circle</span
 							>
 						{/if}
-					{:else if $user.photoURL}
+					{:else if $user?.photoURL}
 						<img
-							src={$user.photoURL}
+							src={$user?.photoURL}
 							alt="PP"
 							style="width: 35px;
 						height: 35px;
@@ -479,7 +482,16 @@
 	</main>
 {:else}
 	<div class="d-flex flex-column h-100">
-		<Documents />
+		<button
+			class="btn btn-outline-primary mb-3 px-3 d-flex"
+			style="width: fit-content;"
+			on:click={() => {
+				showDocs = false;
+			}}
+			><span class="material-symbols-outlined"> arrow_back_ios </span>
+			<span>{$_('actions.back')}</span></button
+		>
+		<DocumentsByUser {files} newFile={true} />
 	</div>
 {/if}
 

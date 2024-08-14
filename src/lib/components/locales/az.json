@@ -83,7 +83,8 @@
 		"details": "Ətraflı",
 		"send_msg": "Mesaj göndər",
 		"message_sent": "Mesaj göndərildi!",
-		"thank_for_contact": "Əlaqə saxladığınız üçün təşəkkürlər"
+		"thank_for_contact": "Əlaqə saxladığınız üçün təşəkkürlər",
+		"back": "Geri"
 	},
 	"call": {
 		"mic_off": "Mikrofonu söndür",

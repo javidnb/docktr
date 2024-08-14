@@ -4,6 +4,7 @@
 	import { dataLoading, users, selectedUser } from '$lib/store/dataStore';
 	import { collection, getDocs, query, where, type CollectionReference } from 'firebase/firestore';
 	import { onMount } from 'svelte';
+	import DocumentsByUser from '../DocumentsByUser.svelte';
 
 	let messagesCollection: CollectionReference;
 	let messagesGroupedByUser: any = [];
@@ -20,26 +21,34 @@
 	async function getMsgs() {
 		dataLoading.set(true);
 		if (messagesCollection) {
-			const q = query(messagesCollection, where('file', '!=', null));
+			const q = query(
+				messagesCollection,
+				where('participants', 'array-contains', $session.user?.uid)
+			);
 			const querySnapshot = await getDocs(q);
+
+			console.log(querySnapshot);
 
 			const groupedMessages: any = {};
 			let uids: string[] = [];
 
 			querySnapshot.forEach((doc) => {
 				const data = doc.data();
-				const fromUser = data.fromUser == $session.user?.uid ? data.toUser : data.fromUser;
+				console.log(data);
+				if (data.file) {
+					const fromUser = data.fromUser == $session.user?.uid ? data.toUser : data.fromUser;
 
-				uids.push(fromUser);
+					uids.push(fromUser);
 
-				if (!groupedMessages[fromUser]) {
-					groupedMessages[fromUser] = [];
+					if (!groupedMessages[fromUser]) {
+						groupedMessages[fromUser] = [];
+					}
+
+					groupedMessages[fromUser].push({
+						id: doc.id,
+						...data
+					});
 				}
-
-				groupedMessages[fromUser].push({
-					id: doc.id,
-					...data
-				});
 			});
 
 			// GET USERS DATA
@@ -137,66 +146,20 @@
 {:else}
 	<button
 		class="btn btn-outline-primary d-flex align-items-center gap-1 pcOnly"
+		style="width: fit-content;"
 		on:click={() => {
 			selectedUser.set(null);
 		}}><span class="material-symbols-outlined"> chevron_backward </span> Geri</button
 	>
-	<div class="d-flex flex-wrap gap-3 mt-3">
-		{#if selectedUserFiles.length}
-			{#each selectedUserFiles as msg}
-				<a class="fileCard" href={msg.file.url} target="_blank">
-					<span style="font-size: 30px;" class="material-symbols-outlined my-auto">
-						description
-					</span>
-					<span
-						style="padding-inline: 5px;
-                        font-size: smaller;
-                        overflow-wrap: break-word;
-                        max-height: 28px;
-                        overflow-y: hidden;
-                        line-height: normal;
-                        text-decoration: none;
-                        color: unset;
-                        margin-bottom: 10px;
-                        max-width: 80%"
-					>
-						{msg.file.name}
-					</span>
-				</a>
-			{/each}
-		{/if}
-	</div>
+
+	{#if selectedUserFiles.length}
+		<div class="mt-3">
+			<DocumentsByUser files={selectedUserFiles} />
+		</div>
+	{/if}
 {/if}
 
 <style type="text/css">
-	.fileCard {
-		background: white;
-		width: 80px;
-		display: flex;
-		flex-wrap: wrap;
-		text-wrap: balance;
-		text-align: center;
-		justify-content: center;
-		align-items: center;
-		font-size: small;
-		overflow-x: clip;
-		height: 95px;
-		border-radius: 6px;
-		box-shadow: 0px 0px 5px #00000012;
-		cursor: pointer;
-		transition-duration: 0.2s;
-		text-decoration: none;
-		color: unset;
-		width: min-content;
-		flex-direction: column;
-		flex: 1;
-		min-width: 150px;
-		max-width: 250px;
-	}
-	.fileCard:hover {
-		background: var(--primaryColor);
-		color: white;
-	}
 	.btnUser {
 		min-height: 60px;
 		background: white;

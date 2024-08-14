@@ -186,6 +186,7 @@
 <style>
 	.active {
 		color: white;
+		background-color: var(--primaryColor);
 	}
 	.users {
 		background-color: white;

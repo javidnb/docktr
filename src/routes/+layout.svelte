@@ -95,7 +95,7 @@
 		position: fixed;
 		bottom: 1.5rem;
 		right: 1.5rem;
-		padding: .8rem;
+		padding: 0.8rem;
 		box-shadow: 0px 0px 5px #00000035;
 		background: white;
 		color: var(--primaryColor);
@@ -104,7 +104,11 @@
 		align-items: center;
 	}
 
-	@media screen and (max-width: 992px) { 
+	.btnContact:hover {
+		box-shadow: 0px 0px 6px #00000050;
+	}
+
+	@media screen and (max-width: 992px) {
 		.btnContact {
 			bottom: 4rem;
 			right: 1rem;

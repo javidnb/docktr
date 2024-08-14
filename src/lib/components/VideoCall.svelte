@@ -9,14 +9,16 @@
 		joinVideoCall,
 		ongoingAppointment,
 		sendNotification,
-		hideNav
+		hideNav,
+		selectedUser
 	} from '$lib/store/dataStore';
 	import { session } from '$lib/session';
 	import { _ } from 'svelte-i18n';
 	import { browser } from '$app/environment';
 	import Confirm from '$lib/helpers/Confirm.svelte';
-	import Chat from './chat/Chat.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
+	import Documents from './profile/Documents.svelte';
+	import DocumentsByUser from './DocumentsByUser.svelte';
 
 	export let appointmentId: number;
 	let callFrame: DailyCall | any = null;
@@ -320,6 +322,7 @@
 		}
 
 		joinVideoCall.set(false);
+		selectedUser.set(null);
 
 		// Leave the Daily call and destroy the call object
 		if (callObject) {
@@ -483,7 +486,9 @@
 					aria-expanded="false"
 					aria-controls="endCall"
 				>
-					<span class="material-symbols-outlined icon-fill" style="font-size: 30px"> mail </span>
+					<span class="material-symbols-outlined icon-fill" style="font-size: 30px">
+						attach_file
+					</span>
 				</button>
 				<button class="btn d-flex videoControlBtn" on:click={cycleCamera} disabled={$dataLoading}>
 					<span class="material-symbols-outlined icon-fill" style="font-size: 30px">
@@ -498,10 +503,13 @@
 			id="endCall"
 			style="position: absolute;
 			bottom: 6rem;
-			background: white;
-			border-radius: 20px;"
+			background: rgb(255 255 255 / 90%);
+			border-radius: 14px;
+			padding: 1rem;
+			width: min(90dvw, 380px);
+			max-height: min(70dvh, 450px); overflow-y: scroll; padding: 10px"
 		>
-			<Chat />
+			<DocumentsByUser userId={$selectedUser} newFile={true} />
 		</div>
 	</div>
 </div>
@@ -541,6 +549,7 @@
 		bottom: 1rem;
 		left: 50%;
 		transform: translateX(-50%);
+		width: min(90dvw, 380px);
 	}
 	.videoControlBtn {
 		border-radius: 100%;
@@ -551,7 +560,7 @@
 		border: 1px solid #ececec33;
 	}
 	.videoControlBtn:hover {
-		background: rgba(0, 0, 0, 0.55) !important;
+		background: #ffffff12 !important;
 	}
 	.endCallBtn:hover {
 		background-color: rgb(134 30 30) !important;

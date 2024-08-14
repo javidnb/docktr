@@ -72,7 +72,7 @@
 						gap: 0;"
 				>
 					<span class="material-symbols-outlined"> arrow_back_ios </span>
-					<span>Geri</span>
+					<span>{$_('actions.back')}</span>
 				</button>
 			{:else}
 				<p class="d-flex align-items mb-0 time" style="color: white;"></p>

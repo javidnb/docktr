@@ -153,6 +153,13 @@
 		dataLoading.set(true);
 		appointmentId = appointment.id;
 		joinVideoCall.set(true);
+		if ($session.user) {
+			if (appointment.userId == $session.user.uid) {
+				selectedUser.set($doctors.find((doc) => doc.id == appointment.doctorId)?.uid);
+			} else {
+				selectedUser.set(appointment.userId);
+			}
+		}
 	}
 
 	function checkTime(appointment: any) {

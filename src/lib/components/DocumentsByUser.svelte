@@ -173,7 +173,7 @@
 
 <div
 	style="display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
+    grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); 
     gap: 1rem; max-height: 60dvh; overflow-y: scroll;
     padding: 5px"
 >
@@ -265,11 +265,11 @@
 		transition-duration: 0.2s;
 		text-decoration: none;
 		color: unset;
-		width: min-content;
+		width: 100%!important;
 		flex-direction: column;
 		flex: 1;
-		min-width: 150px;
-		max-width: 250px;
+		min-width: unset;
+		max-width: unset;
 	}
 	.fileCard:hover {
 		background: var(--primaryColor);

@@ -7,7 +7,8 @@
 		getDocs,
 		query,
 		where,
-		type CollectionReference
+		type CollectionReference,
+		onSnapshot
 	} from 'firebase/firestore';
 	import { onMount } from 'svelte';
 	import { _ } from 'svelte-i18n';
@@ -21,25 +22,31 @@
 	let uploading = false;
 	const messagesCollection = collection(db, 'messages');
 
-	onMount(async () => {
-		if (userId) {
-			await initializeFirebase();
-			if (db) {
-				let messagesCollection: CollectionReference;
-				let participants = [$session.user?.uid, userId].sort();
-				messagesCollection = collection(db, 'messages');
-				if ($session.user) {
-					const q = query(messagesCollection, where('participants', '==', participants));
-					const querySnapshot = await getDocs(q);
-					querySnapshot.forEach((doc) => {
-						const data = doc.data();
-						if (data.file) {
-							files = [...files, data];
-						}
-					});
+	onMount(() => {
+		const initialize = async () => {
+			if (userId) {
+				await initializeFirebase();
+				if (db) {
+					let messagesCollection: CollectionReference;
+					let participants = [$session.user?.uid, userId].sort();
+					messagesCollection = collection(db, 'messages');
+					if ($session.user) {
+						const q = query(messagesCollection, where('participants', '==', participants));
+						const unsubscribe = onSnapshot(q, (querySnapshot) => {
+							files = querySnapshot.docs.map((doc) => doc.data()).filter((data) => data.file);
+						});
+
+						// Cleanup listener when component is destroyed
+						return unsubscribe;
+					}
 				}
 			}
-		}
+		};
+
+		initialize();
+
+		// Return void explicitly to avoid the type error
+		return;
 	});
 
 	const onFileSelected = (e: any) => {
@@ -265,7 +272,7 @@
 		transition-duration: 0.2s;
 		text-decoration: none;
 		color: unset;
-		width: 100%!important;
+		width: 100% !important;
 		flex-direction: column;
 		flex: 1;
 		min-width: unset;

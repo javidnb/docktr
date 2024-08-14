@@ -36,9 +36,12 @@
 	onMount(() => {
 		getRoom();
 		setLocalDevices();
+
+		document.body.classList.add('prevent-pull-to-refresh');
 	});
 
 	onDestroy(() => {
+		document.body.classList.remove('prevent-pull-to-refresh');
 		if (callFrame) {
 			callFrame.leave();
 			callFrame.destroy();
@@ -507,7 +510,7 @@
 			border-radius: 14px;
 			padding: 1rem;
 			width: min(90dvw, 380px);
-			max-height: min(70dvh, 450px); overflow-y: scroll; padding: 10px"
+			padding: 10px"
 		>
 			<DocumentsByUser userId={$selectedUser} newFile={true} />
 		</div>

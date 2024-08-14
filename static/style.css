@@ -40,6 +40,11 @@ body {
 	border-radius: 20px;
 	cursor: pointer;
 }
+
+.prevent-pull-to-refresh {
+	overscroll-behavior-y: contain;
+}
+
 @media screen and (min-width: 992px) {
 	.homeNav .active {
 		background-color: var(--primaryColor) !important;
@@ -485,8 +490,8 @@ body {
 	}
 	.homeNav .active {
 		height: 100%;
-		background-color: var(--primaryColor)!important;
-		color: white!important;
+		background-color: var(--primaryColor) !important;
+		color: white !important;
 	}
 }
 .homeNav {
@@ -500,10 +505,10 @@ body {
 	color: #415d3a;
 	padding-block: 15px;
 }
-.homeNavContainer .active {	
+.homeNavContainer .active {
 	border-radius: 40px;
 	transition-duration: 0.3s;
-	font-weight: 450;	
+	font-weight: 450;
 }
 .nav-link {
 	display: flex;
@@ -535,7 +540,7 @@ body {
 	}
 	.homeNavContainer .active {
 		border-radius: 0;
-		background-color: white!important;
+		background-color: white !important;
 	}
 	.homeNav .nav-item:not(:last-child) {
 		border-right: 0px;
@@ -647,7 +652,7 @@ body {
 	border-radius: 40px !important;
 }
 .langSelector::before {
-	display: none!important;
+	display: none !important;
 }
 .dropdown-menu {
 	top: 35px;

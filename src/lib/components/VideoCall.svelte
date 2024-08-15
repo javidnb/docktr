@@ -23,6 +23,7 @@
 	export let appointmentId: number;
 	let callFrame: DailyCall | any = null;
 	let callObject: any;
+	let conferenceContainer: any;
 	let localVideoRef: any = null;
 	let remoteVideoRef: any = null;
 	let camOn: any = true;
@@ -54,6 +55,15 @@
 		try {
 			stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
 			localVideoRef!.srcObject = stream;
+
+			if (conferenceContainer.requestFullscreen) {
+				conferenceContainer.requestFullscreen();
+			} else if (conferenceContainer.webkitRequestFullscreen) {
+				conferenceContainer.webkitRequestFullscreen();
+			} else if (conferenceContainer.msRequestFullscreen) {
+				conferenceContainer.msRequestFullscreen();
+			}
+
 			let time = new Date().getTime();
 			let response;
 			response = await fetch(
@@ -399,6 +409,7 @@
 <div
 	style="position: absolute; top: 0px; left: 0; width: 100%; z-index: 9999"
 	class:d-none={!localVideoRef?.srcObject}
+	bind:this={conferenceContainer}
 >
 	<!-- <h3>Local Video</h3> -->
 	<div

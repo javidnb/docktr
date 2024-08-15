@@ -289,17 +289,14 @@
 		callObject.setLocalAudio(!currentAudio);
 	};
 
-	async function cycleCamera() {
+	async function switchCams() {
 		if (callObject) {
 			try {
-				const cameraCycleResult = await callObject.cycleCamera();
-				console.log('Camera switched:', cameraCycleResult);
+				callObject.cycleCamera();
 			} catch (error) {
-				console.error('Error switching camera:', error);
-				alert(error);
+				console.warn(error);
 			}
 		} else {
-			alert('no call obj');
 			console.warn('Daily call object is not initialized.');
 		}
 	}
@@ -440,7 +437,7 @@
 						attach_file
 					</span>
 				</button>
-				<button class="btn d-flex videoControlBtn" on:click={cycleCamera} disabled={$dataLoading}>
+				<button class="btn d-flex videoControlBtn" on:click={switchCams} disabled={$dataLoading}>
 					<span class="material-symbols-outlined icon-fill" style="font-size: 30px">
 						cameraswitch
 					</span>

@@ -399,33 +399,36 @@
 	};
 
 	async function cycleCamera() {
-    if (callObject) {
-        try {
-            const currentDevices = await callObject.getInputDevices();
-            const currentVideoDeviceId = currentDevices.videoDeviceId;
+  if (!callObject) {
+    console.warn('Daily call object is not initialized.');
+    return;
+  }
 
-            const devices = await navigator.mediaDevices.enumerateDevices();
-            const videoDevices = devices.filter(device => device.kind === 'videoinput');
+  try {
+    // Get all available video devices
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const videoDevices = devices.filter(device => device.kind === 'videoinput');
 
-            if (videoDevices.length < 2) {
-                console.warn('Only one camera available. Cannot switch.');
-                return;
-            }
-
-            let nextDevice = videoDevices.find(device => device.deviceId !== currentVideoDeviceId);
-
-            if (nextDevice) {
-                await callObject.setInputDevicesAsync({ videoDeviceId: nextDevice.deviceId });
-                console.log('Camera switched to:', nextDevice.label);
-            } else {
-                console.warn('Could not find next camera device.');
-            }
-        } catch (error) {
-            console.error('Error switching camera:', error);
-        }
-    } else {
-        console.warn('Daily call object is not initialized.');
+    if (videoDevices.length < 2) {
+      console.warn('Only one camera available. Cannot switch.');
+      return;
     }
+
+    // Get current video device
+    const { camera } = await callObject.getInputDevices();
+    const currentDeviceId = camera.deviceId;
+
+    // Find the next device in the list
+    const currentIndex = videoDevices.findIndex(device => device.deviceId === currentDeviceId);
+    const nextIndex = (currentIndex + 1) % videoDevices.length;
+    const nextDevice = videoDevices[nextIndex];
+
+    // Set the new video device
+    await callObject.setInputDevicesAsync({ videoDeviceId: nextDevice.deviceId });
+    console.log('Camera switched to:', nextDevice.label);
+  } catch (error) {
+    console.error('Error switching camera:', error);
+  }
 }
 
 	function switchMinimizedVideo() {

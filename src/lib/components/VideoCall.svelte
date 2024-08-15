@@ -405,29 +405,55 @@
 		}
 
 		try {
-			// Get all available video devices
+			console.log('Attempting to cycle camera...');
+
 			const devices = await navigator.mediaDevices.enumerateDevices();
 			const videoDevices = devices.filter((device) => device.kind === 'videoinput');
+			console.log('Available video devices:', videoDevices);
 
 			if (videoDevices.length < 2) {
-				alert('Only one camera available. Cannot switch.');
+				console.warn('Only one camera available. Cannot switch.');
 				return;
 			}
 
-			// Get current video device
 			const { camera } = await callObject.getInputDevices();
 			const currentDeviceId = camera.deviceId;
 
-			// Find the next device in the list
-			const currentIndex = videoDevices.findIndex((device) => device.deviceId === currentDeviceId);
-			const nextIndex = (currentIndex + 1) % videoDevices.length;
-			const nextDevice = videoDevices[nextIndex];
+			// Function to test if a camera is working
+			async function isCameraWorking(deviceId: any) {
+				try {
+					const stream = await navigator.mediaDevices.getUserMedia({
+						video: { deviceId: { exact: deviceId } }
+					});
+					const videoTrack = stream.getVideoTracks()[0];
+					const settings: any = videoTrack.getSettings();
+					stream.getTracks().forEach((track) => track.stop());
+					return settings.width > 0 && settings.height > 0;
+				} catch (error) {
+					console.warn(`Camera ${deviceId} is not working:`, error);
+					return false;
+				}
+			}
 
-			// Set the new video device
-			await callObject.setInputDevicesAsync({ videoDeviceId: nextDevice.deviceId });
-			alert('Camera switched to:' + nextDevice.label);
+			// Find the next working camera
+			let nextDevice;
+			let currentIndex = videoDevices.findIndex((device) => device.deviceId === currentDeviceId);
+			for (let i = 1; i <= videoDevices.length; i++) {
+				const index = (currentIndex + i) % videoDevices.length;
+				if (await isCameraWorking(videoDevices[index].deviceId)) {
+					nextDevice = videoDevices[index];
+					break;
+				}
+			}
+
+			if (nextDevice) {
+				await callObject.setInputDevicesAsync({ videoDeviceId: nextDevice.deviceId });
+				console.log('Camera switched to:', nextDevice.label);
+			} else {
+				console.warn('No working camera found to switch to.');
+			}
 		} catch (error) {
-			alert('Error switching camera:');
+			console.error('Error switching camera:', error);
 		}
 	}
 

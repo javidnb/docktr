@@ -56,13 +56,16 @@
 		try {
 			stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
 			localVideoRef!.srcObject = stream;
-			if (conferenceContainer.requestFullscreen) {
-				conferenceContainer.requestFullscreen();
-			} else if (conferenceContainer.webkitRequestFullscreen) {
-				conferenceContainer.webkitRequestFullscreen();
-			} else if (conferenceContainer.msRequestFullscreen) {
-				conferenceContainer.msRequestFullscreen();
+			if (conferenceContainer) {
+				if (conferenceContainer.requestFullscreen) {
+					conferenceContainer.requestFullscreen();
+				} else if (conferenceContainer.webkitRequestFullscreen) {
+					conferenceContainer.webkitRequestFullscreen();
+				} else if (conferenceContainer.msRequestFullscreen) {
+					conferenceContainer.msRequestFullscreen();
+				}
 			}
+
 			let time = new Date().getTime();
 			let response;
 			response = await fetch(
@@ -148,7 +151,7 @@
 			});
 
 			// callObject!.setInputDevicesAsync({
-			// 	videoDeviceId: stream.getVideoTracks()[0].getSettings().deviceId,
+			// 	videoDeviceId: stream.getVideoTracks()[0].getSettings().deviceId
 			// });
 
 			callObject.on('left-meeting', async () => {
@@ -186,16 +189,23 @@
 			// 	.on('camera-error', handleDeviceError)
 			// 	.on('app-message', handleAppMessage);
 
+			callObject.on('participant-joined', (event: any) => {
+				console.log('part joined');
+				alert('joined');
+			});
+
 			callObject.on('participant-left', leaveCall);
 
 			// Handle local participant stream
 			callObject.on('participant-updated', (event: any) => {
+				console.log('updated');
 				const videoTrack = event.participant.tracks.video?.track;
 
 				if (event.participant.local && videoTrack) {
 					localVideoRef!.srcObject = new MediaStream([videoTrack]);
 					dataLoading.set(false);
 				} else if (!event.participant.local && videoTrack) {
+					console.log('this part whatever');
 					remoteVideoRef!.srcObject = new MediaStream([videoTrack]);
 				}
 			});
@@ -289,14 +299,15 @@
 		callObject.setLocalAudio(!currentAudio);
 	};
 
-	async function switchCams() {
+	async function cycleCamera() {
 		if (callObject) {
 			try {
-				callObject.cycleCamera();
+				await callObject.cycleCamera();
 			} catch (error) {
-				console.warn(error);
+				alert(error);
 			}
 		} else {
+			alert('no call obj');
 			console.warn('Daily call object is not initialized.');
 		}
 	}
@@ -437,7 +448,7 @@
 						attach_file
 					</span>
 				</button>
-				<button class="btn d-flex videoControlBtn" on:click={switchCams} disabled={$dataLoading}>
+				<button class="btn d-flex videoControlBtn" on:click={cycleCamera} disabled={$dataLoading}>
 					<span class="material-symbols-outlined icon-fill" style="font-size: 30px">
 						cameraswitch
 					</span>

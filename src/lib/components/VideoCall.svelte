@@ -19,6 +19,7 @@
 	import { toast } from '@zerodevx/svelte-toast';
 	import Documents from './profile/Documents.svelte';
 	import DocumentsByUser from './DocumentsByUser.svelte';
+	import { error } from '@sveltejs/kit';
 
 	export let appointmentId: number;
 	let callFrame: DailyCall | any = null;
@@ -281,9 +282,33 @@
 			// 	.on('camera-error', handleDeviceError)
 			// 	.on('app-message', handleAppMessage);
 
-			callObject.on('participant-left', leaveCall);
+			callObject.on('joined-meeting', () => {
+				if (callObject.participantCounts().present != 2) {
+					if ($session.user?.uid == $ongoingAppointment.userId) {
+						console.log('sending notification');
+						sendNotification(
+							$ongoingAppointment.doctorId,
+							true,
+							'Pls Join Video Call',
+							'Click to join',
+							'https://sehiyye.online/appointment'
+						);
+					} else {
+						sendNotification(
+							$ongoingAppointment.userId,
+							false,
+							'Pls Join Video Call',
+							'Click to join',
+							'https://sehiyye.online/appointment'
+						);
+					}
+				}
+			});
 
-			// Handle local participant stream
+			callObject.on('participant-left', () => {
+				endCallModal = true;
+			});
+
 			callObject.on('participant-updated', (event: any) => {
 				const videoTrack = event.participant.tracks.video?.track;
 
@@ -295,34 +320,10 @@
 				}
 			});
 
-			if (callObject.participantCounts().present != 2) {
-				if ($session.user?.uid == $ongoingAppointment.userId) {
-					console.log('sending notification');
-					sendNotification(
-						$ongoingAppointment.doctorId,
-						true,
-						'Pls Join Video Call',
-						'Click to join',
-						'https://sehiyye.online/appointment'
-					);
-				} else {
-					sendNotification(
-						$ongoingAppointment.userId,
-						false,
-						'Pls Join Video Call',
-						'Click to join',
-						'https://sehiyye.online/appointment'
-					);
-				}
-			}
-
-			// Join the call with the name set in the Home.vue form
 			try {
 				await callObject.join();
-				// reset possible existing error message
-				// dailyErrorMessage.set('');
 			} catch (e) {
-				// dailyErrorMessage.set(e);
+				console.log(error);
 			}
 		}
 	}
@@ -521,7 +522,8 @@
 			border-radius: 14px;
 			padding: 1rem;
 			width: min(90dvw, 380px);
-			padding: 10px"
+			padding: 10px;
+			z-index: 99"
 		>
 			<DocumentsByUser userId={$selectedUser} newFile={true} />
 		</div>

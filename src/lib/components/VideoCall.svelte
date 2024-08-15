@@ -318,6 +318,21 @@
 				} else if (!event.participant.local && videoTrack) {
 					remoteVideoRef!.srcObject = new MediaStream([videoTrack]);
 				}
+
+				// const audioTrack = event.participant.tracks.audio?.track;
+				// if (audioTrack && event.participant.audio) {
+				// 	console.log('Audio track is active for participant:', event.participant.user_name);
+				// } else {
+				// 	console.warn('No audio track for participant:', event.participant.user_name);
+				// }
+
+				// const audioTracks = stream.getAudioTracks();
+				// console.log(audioTracks);
+				// if (audioTracks.length === 0) {
+				// 	console.error('No audio track found');
+				// } else if (!audioTracks[0].enabled) {
+				// 	console.error('Audio track is disabled');
+				// }
 			});
 
 			try {
@@ -384,17 +399,34 @@
 	};
 
 	async function cycleCamera() {
-		if (callObject) {
-			try {
-				const cameraCycleResult = await callObject.cycleCamera();
-				console.log('Camera switched:', cameraCycleResult);
-			} catch (error) {
-				console.error('Error switching camera:', error);
-			}
-		} else {
-			console.warn('Daily call object is not initialized.');
-		}
-	}
+    if (callObject) {
+        try {
+            const currentDevices = await callObject.getInputDevices();
+            const currentVideoDeviceId = currentDevices.videoDeviceId;
+
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const videoDevices = devices.filter(device => device.kind === 'videoinput');
+
+            if (videoDevices.length < 2) {
+                console.warn('Only one camera available. Cannot switch.');
+                return;
+            }
+
+            let nextDevice = videoDevices.find(device => device.deviceId !== currentVideoDeviceId);
+
+            if (nextDevice) {
+                await callObject.setInputDevicesAsync({ videoDeviceId: nextDevice.deviceId });
+                console.log('Camera switched to:', nextDevice.label);
+            } else {
+                console.warn('Could not find next camera device.');
+            }
+        } catch (error) {
+            console.error('Error switching camera:', error);
+        }
+    } else {
+        console.warn('Daily call object is not initialized.');
+    }
+}
 
 	function switchMinimizedVideo() {
 		if (remoteVideoRef.srcObject) {
@@ -528,19 +560,19 @@
 			<DocumentsByUser userId={$selectedUser} newFile={true} />
 		</div>
 	</div>
-</div>
 
-{#if endCallModal}
-	<Confirm
-		message="{$_('call.end')}?"
-		no={$_('call.no')}
-		yes={$_('call.yes')}
-		onConfirm={leaveCall}
-		onCancel={() => {
-			endCallModal = false;
-		}}
-	/>
-{/if}
+	{#if endCallModal}
+		<Confirm
+			message="{$_('call.end')}?"
+			no={$_('call.no')}
+			yes={$_('call.yes')}
+			onConfirm={leaveCall}
+			onCancel={() => {
+				endCallModal = false;
+			}}
+		/>
+	{/if}
+</div>
 
 <style>
 	.minimize {

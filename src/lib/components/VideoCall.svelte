@@ -1,7 +1,5 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
-	import DailyIframe from '@daily-co/daily-js';
-	import type { DailyCall } from '@daily-co/daily-js';
 	import daily from '@daily-co/daily-js';
 	import {
 		dataLoading,
@@ -21,11 +19,11 @@
 	import { error } from '@sveltejs/kit';
 
 	export let appointmentId: number;
-	let callFrame: DailyCall | any = null;
 	let callObject: any;
 	let conferenceContainer: any;
 	let localVideoRef: any = null;
 	let remoteVideoRef: any = null;
+	let fullscreen: boolean = false;
 	let camOn: any = true;
 	let micOn: any = true;
 	let roomUrl: string = 'https://sehiyye.daily.co/';
@@ -39,13 +37,15 @@
 		setLocalDevices();
 
 		document.body.classList.add('prevent-pull-to-refresh');
+
+		console.log($ongoingAppointment);
 	});
 
 	onDestroy(() => {
 		document.body.classList.remove('prevent-pull-to-refresh');
-		if (callFrame) {
-			callFrame.leave();
-			callFrame.destroy();
+		if (callObject) {
+			callObject.leave();
+			callObject.destroy();
 		}
 		if (!browser) return;
 		dataLoading.set(false);
@@ -56,13 +56,7 @@
 			stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
 			localVideoRef!.srcObject = stream;
 
-			if (conferenceContainer.requestFullscreen) {
-				conferenceContainer.requestFullscreen();
-			} else if (conferenceContainer.webkitRequestFullscreen) {
-				conferenceContainer.webkitRequestFullscreen();
-			} else if (conferenceContainer.msRequestFullscreen) {
-				conferenceContainer.msRequestFullscreen();
-			}
+			toggleFullscreen();
 
 			let time = new Date().getTime();
 			let response;
@@ -140,100 +134,6 @@
 			dataLoading.set(false);
 		}
 	}
-
-	// function launchVideoChatUI() {
-	// 	callFrame = DailyIframe.createFrame(videoContainer, {
-	// 		showLeaveButton: false,
-	// 		showUserNameChangeUI: false,
-	// 		showFullscreenButton: true,
-	// 		iframeStyle: {
-	// 			position: 'absolute',
-	// 			width: '100vw',
-	// 			height: 'calc(100dvh + 30px)',
-	// 			border: 'none',
-	// 			top: '-31px',
-	// 			left: '0px',
-	// 			zIndex: '99'
-	// 		}
-	// 	});
-
-	// 	callFrame.join({ url: roomUrl, videoSource: true, audioSource: true }).then(() => {
-	// 		// SET USERNAME
-	// 		if (callFrame && $session.user?.displayName) {
-	// 			callFrame?.setUserName($session.user?.displayName);
-	// 		}
-	// 		// showBtnEndCall.set(true);
-	// 		joinVideoCall.set(true);
-	// 		dataLoading.set(false);
-	// 		if (!callFrame) return;
-
-	// 		callFrame?.updateCustomTrayButtons({
-	// 			btnLeave: {
-	// 				iconPath: 'https://sehiyye.online/uploads/4b9971e19fc01e7804afeb41061f7ba0.png',
-	// 				iconPathDarkMode: 'https://sehiyye.online/uploads/4b9971e19fc01e7804afeb41061f7ba0.png',
-	// 				label: $_('actions.leave'),
-	// 				tooltip: $_('actions.leave_call')
-	// 			}
-	// 		});
-
-	// 		if (callFrame.participantCounts().present != 2) {
-	// 			if ($session.user?.uid == $ongoingAppointment.userId) {
-	// 				sendNotification(
-	// 					$ongoingAppointment.doctorId,
-	// 					true,
-	// 					'Pls Join Video Call',
-	// 					'Click to join',
-	// 					'https://sehiyye.online/appointment'
-	// 				);
-	// 			} else {
-	// 				sendNotification(
-	// 					$ongoingAppointment.userId,
-	// 					false,
-	// 					'Pls Join Video Call',
-	// 					'Click to join',
-	// 					'https://sehiyye.online/appointment'
-	// 				);
-	// 			}
-	// 		}
-	// 	});
-
-	// 	callFrame?.on('custom-button-click', (ev) => {
-	// 		const buttonID = ev.button_id;
-	// 		if (buttonID !== 'btnLeave') return;
-	// 		callFrame?.leave();
-	// 		callFrame?.destroy();
-	// 	});
-
-	// 	callFrame.on('left-meeting', async (event) => {
-	// 		joinVideoCall.set(false);
-	// 		ongoingAppointment.set(false);
-	// 		let session = callFrame?.meetingSessionSummary();
-
-	// 		const headers = new Headers({
-	// 			Authorization: `Bearer ${API_KEY}`,
-	// 			'Content-Type': 'application/json'
-	// 		});
-
-	// 		fetch(`${DAILY_API_URL}/meetings/${session?.id}`, {
-	// 			method: 'GET',
-	// 			headers: headers
-	// 		})
-	// 			.then((response) => response.json())
-	// 			.then((data) => {
-	// 				console.log('Session Details:', data);
-	// 			})
-	// 			.catch((error) => {
-	// 				console.error('Error fetching session details:', error);
-	// 			});
-	// 	});
-
-	// 	return () => {
-	// 		if (callFrame) {
-	// 			callFrame.leave();
-	// 			callFrame.destroy();
-	// 		}
-	// 	};
-	// }
 
 	async function videoChat() {
 		if ($joinVideoCall) {
@@ -456,6 +356,27 @@
 		}
 	}
 
+	function toggleFullscreen() {
+		if (!fullscreen) {
+			if (conferenceContainer.requestFullscreen) {
+				conferenceContainer.requestFullscreen();
+			} else if (conferenceContainer.webkitRequestFullscreen) {
+				conferenceContainer.webkitRequestFullscreen();
+			} else if (conferenceContainer.msRequestFullscreen) {
+				conferenceContainer.msRequestFullscreen();
+			}
+		} else {
+			if (document.exitFullscreen) {
+				document.exitFullscreen();
+			} else if (conferenceContainer.webkitExitFullscreen) {
+				conferenceContainer.webkitExitFullscreen();
+			} else if (conferenceContainer.msExitFullscreen) {
+				conferenceContainer.msExitFullscreen();
+			}
+		}
+		fullscreen = !fullscreen;
+	}
+
 	function switchMinimizedVideo() {
 		if (remoteVideoRef.srcObject) {
 			let local = localVideoRef.srcObject;
@@ -472,7 +393,6 @@
 	class:d-none={!localVideoRef?.srcObject}
 	bind:this={conferenceContainer}
 >
-	<!-- <h3>Local Video</h3> -->
 	<div
 		class="d-flex jusify-content-center align-items-center"
 		style="height: 100dvh;
@@ -507,7 +427,7 @@
 						padding: 0.5rem 2rem;
 						border-radius: 20px;
 						position: absolute;
-						bottom: 6rem;
+						bottom: 12rem;
 						left: 50%;
 						transform: translateX(-50%);
 						color: #ffffffc2; font-size: small;
@@ -516,12 +436,66 @@
 					Zəhmət olmasa gözləyin
 				</div>
 			{/if}
-			<div class="videoControlContainer d-flex align-items-center gap-3 px-3">
+
+			<div
+				class="videoControlContainer d-flex align-items-center gap-4"
+				style="justify-content: center; background: none; border: none"
+			>
 				{#if $dataLoading}
 					<div class="progress-bar">
 						<div class="progress-animation"></div>
 					</div>
 				{/if}
+				<button
+					class="btn d-flex videoControlBtn"
+					disabled={$dataLoading}
+					data-bs-toggle="collapse"
+					data-bs-target="#moreBtns"
+					aria-expanded="false"
+					aria-controls="moreBtns"
+				>
+					<span class="material-symbols-outlined icon-fill" style="font-size: 30px">
+						more_vert
+					</span>
+				</button>
+				<button
+					class="btn d-flex videoControlBtn endCallBtn"
+					on:click={() => {
+						endCallModal = true;
+					}}
+					style="background: #a51f1f; color: white; padding: 15px"
+				>
+					<span class="material-symbols-outlined icon-fill" style="font-size: 30px">
+						call_end
+					</span>
+				</button>
+				<button
+					class="btn d-flex videoControlBtn"
+					disabled={$dataLoading}
+					data-bs-toggle="collapse"
+					data-bs-target="#endCall"
+					aria-expanded="false"
+					aria-controls="endCall"
+				>
+					<span class="material-symbols-outlined icon-fill" style="font-size: 30px">
+						attach_file
+					</span>
+				</button>
+			</div>
+		{/if}
+
+		<div
+			class="collapse"
+			id="moreBtns"
+			style="position: absolute;
+			bottom: 6rem;
+			background: rgba(0, 0, 0, 0.368);
+			border-radius: 14px;
+			padding: 10px;
+			width: min(90dvw, 380px);
+			z-index: 99;"
+		>
+			<div class="d-flex w-100 justify-content-around">
 				<button
 					class="btn d-flex videoControlBtn"
 					on:click={toggleAudio}
@@ -542,36 +516,22 @@
 						{camOn ? 'videocam' : 'videocam_off'}
 					</span>
 				</button>
-				<button
-					class="btn d-flex mx-auto videoControlBtn endCallBtn"
-					on:click={() => {
-						endCallModal = true;
-					}}
-					style="background: #a51f1f; color: white;"
-				>
-					<span class="material-symbols-outlined icon-fill" style="font-size: 30px">
-						call_end
-					</span>
-				</button>
-				<button
-					class="btn d-flex videoControlBtn"
-					disabled={$dataLoading}
-					data-bs-toggle="collapse"
-					data-bs-target="#endCall"
-					aria-expanded="false"
-					aria-controls="endCall"
-				>
-					<span class="material-symbols-outlined icon-fill" style="font-size: 30px">
-						attach_file
-					</span>
-				</button>
 				<button class="btn d-flex videoControlBtn" on:click={cycleCamera} disabled={$dataLoading}>
 					<span class="material-symbols-outlined icon-fill" style="font-size: 30px">
 						cameraswitch
 					</span>
 				</button>
+				<button
+					class="btn d-flex videoControlBtn"
+					on:click={toggleFullscreen}
+					disabled={$dataLoading}
+				>
+					<span class="material-symbols-outlined icon-fill" style="font-size: 30px">
+						fullscreen
+					</span>
+				</button>
 			</div>
-		{/if}
+		</div>
 
 		<div
 			class="collapse"

@@ -17,12 +17,12 @@
 	import { browser } from '$app/environment';
 	import Confirm from '$lib/helpers/Confirm.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
-	import Documents from './profile/Documents.svelte';
 	import DocumentsByUser from './DocumentsByUser.svelte';
 
 	export let appointmentId: number;
 	let callFrame: DailyCall | any = null;
 	let callObject: any;
+	let conferenceContainer: any;
 	let localVideoRef: any = null;
 	let remoteVideoRef: any = null;
 	let camOn: any = true;
@@ -38,10 +38,12 @@
 		setLocalDevices();
 
 		document.body.classList.add('prevent-pull-to-refresh');
+		addTouchListeners();
 	});
 
 	onDestroy(() => {
 		document.body.classList.remove('prevent-pull-to-refresh');
+		removeTouchListeners();
 		if (callFrame) {
 			callFrame.leave();
 			callFrame.destroy();
@@ -54,6 +56,13 @@
 		try {
 			stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
 			localVideoRef!.srcObject = stream;
+			if (conferenceContainer.requestFullscreen) {
+				conferenceContainer.requestFullscreen();
+			} else if (conferenceContainer.webkitRequestFullscreen) {
+				conferenceContainer.webkitRequestFullscreen();
+			} else if (conferenceContainer.msRequestFullscreen) {
+				conferenceContainer.msRequestFullscreen();
+			}
 			let time = new Date().getTime();
 			let response;
 			response = await fetch(
@@ -131,100 +140,6 @@
 		}
 	}
 
-	// function launchVideoChatUI() {
-	// 	callFrame = DailyIframe.createFrame(videoContainer, {
-	// 		showLeaveButton: false,
-	// 		showUserNameChangeUI: false,
-	// 		showFullscreenButton: true,
-	// 		iframeStyle: {
-	// 			position: 'absolute',
-	// 			width: '100vw',
-	// 			height: 'calc(100dvh + 30px)',
-	// 			border: 'none',
-	// 			top: '-31px',
-	// 			left: '0px',
-	// 			zIndex: '99'
-	// 		}
-	// 	});
-
-	// 	callFrame.join({ url: roomUrl, videoSource: true, audioSource: true }).then(() => {
-	// 		// SET USERNAME
-	// 		if (callFrame && $session.user?.displayName) {
-	// 			callFrame?.setUserName($session.user?.displayName);
-	// 		}
-	// 		// showBtnEndCall.set(true);
-	// 		joinVideoCall.set(true);
-	// 		dataLoading.set(false);
-	// 		if (!callFrame) return;
-
-	// 		callFrame?.updateCustomTrayButtons({
-	// 			btnLeave: {
-	// 				iconPath: 'https://sehiyye.online/uploads/4b9971e19fc01e7804afeb41061f7ba0.png',
-	// 				iconPathDarkMode: 'https://sehiyye.online/uploads/4b9971e19fc01e7804afeb41061f7ba0.png',
-	// 				label: $_('actions.leave'),
-	// 				tooltip: $_('actions.leave_call')
-	// 			}
-	// 		});
-
-	// 		if (callFrame.participantCounts().present != 2) {
-	// 			if ($session.user?.uid == $ongoingAppointment.userId) {
-	// 				sendNotification(
-	// 					$ongoingAppointment.doctorId,
-	// 					true,
-	// 					'Pls Join Video Call',
-	// 					'Click to join',
-	// 					'https://sehiyye.online/appointment'
-	// 				);
-	// 			} else {
-	// 				sendNotification(
-	// 					$ongoingAppointment.userId,
-	// 					false,
-	// 					'Pls Join Video Call',
-	// 					'Click to join',
-	// 					'https://sehiyye.online/appointment'
-	// 				);
-	// 			}
-	// 		}
-	// 	});
-
-	// 	callFrame?.on('custom-button-click', (ev) => {
-	// 		const buttonID = ev.button_id;
-	// 		if (buttonID !== 'btnLeave') return;
-	// 		callFrame?.leave();
-	// 		callFrame?.destroy();
-	// 	});
-
-	// 	callFrame.on('left-meeting', async (event) => {
-	// 		joinVideoCall.set(false);
-	// 		ongoingAppointment.set(false);
-	// 		let session = callFrame?.meetingSessionSummary();
-
-	// 		const headers = new Headers({
-	// 			Authorization: `Bearer ${API_KEY}`,
-	// 			'Content-Type': 'application/json'
-	// 		});
-
-	// 		fetch(`${DAILY_API_URL}/meetings/${session?.id}`, {
-	// 			method: 'GET',
-	// 			headers: headers
-	// 		})
-	// 			.then((response) => response.json())
-	// 			.then((data) => {
-	// 				console.log('Session Details:', data);
-	// 			})
-	// 			.catch((error) => {
-	// 				console.error('Error fetching session details:', error);
-	// 			});
-	// 	});
-
-	// 	return () => {
-	// 		if (callFrame) {
-	// 			callFrame.leave();
-	// 			callFrame.destroy();
-	// 		}
-	// 	};
-	// }
-
 	async function videoChat() {
 		if ($joinVideoCall) {
 			callObject = daily.createCallObject({
@@ -232,9 +147,9 @@
 				userName: $session.user?.displayName || ''
 			});
 
-			callObject!.setInputDevicesAsync({
-				videoDeviceId: stream.getVideoTracks()[0].getSettings().deviceId
-			});
+			// callObject!.setInputDevicesAsync({
+			// 	videoDeviceId: stream.getVideoTracks()[0].getSettings().deviceId,
+			// });
 
 			callObject.on('left-meeting', async () => {
 				joinVideoCall.set(false);
@@ -285,26 +200,28 @@
 				}
 			});
 
-			if (callObject.participantCounts().present != 2) {
-				if ($session.user?.uid == $ongoingAppointment.userId) {
-					console.log('sending notification');
-					sendNotification(
-						$ongoingAppointment.doctorId,
-						true,
-						'Pls Join Video Call',
-						'Click to join',
-						'https://sehiyye.online/appointment'
-					);
-				} else {
-					sendNotification(
-						$ongoingAppointment.userId,
-						false,
-						'Pls Join Video Call',
-						'Click to join',
-						'https://sehiyye.online/appointment'
-					);
+			callObject.on('joined-meeting', () => {
+				if (callObject.participantCounts().present != 2) {
+					if ($session.user?.uid == $ongoingAppointment.userId) {
+						console.log('sending notification');
+						sendNotification(
+							$ongoingAppointment.doctorId,
+							true,
+							'Pasient sizi gözləyir. Zəhmət olmasa görüşə qoşulun',
+							'Qoşulmaq üçün klikləyin',
+							'https://sehiyye.online/appointment'
+						);
+					} else {
+						sendNotification(
+							$ongoingAppointment.userId,
+							false,
+							'Həkim sizi gözləyir. Zəhmət olmasa görüşə qoşulun',
+							'Qoşulmaq üçün klikləyin',
+							'https://sehiyye.online/appointment'
+						);
+					}
 				}
-			}
+			});
 
 			// Join the call with the name set in the Home.vue form
 			try {
@@ -392,6 +309,32 @@
 			remoteVideoRef.srcObject = local;
 		}
 	}
+
+	// PREVENT SWIPE TO GO BACK
+	let startX = 0;
+	const threshold = 100; // Minimum distance for swipe
+	function handleTouchStart(event: TouchEvent) {
+		startX = event.touches[0].clientX;
+	}
+
+	function handleTouchMove(event: TouchEvent) {
+		const moveX = event.touches[0].clientX;
+		const diffX = moveX - startX;
+
+		if (diffX > threshold) {
+			event.preventDefault(); // Prevent the swipe gesture
+		}
+	}
+
+	function addTouchListeners() {
+		document.addEventListener('touchstart', handleTouchStart, { passive: false });
+		document.addEventListener('touchmove', handleTouchMove, { passive: false });
+	}
+
+	function removeTouchListeners() {
+		document.removeEventListener('touchstart', handleTouchStart);
+		document.removeEventListener('touchmove', handleTouchMove);
+	}
 </script>
 
 <!-- <div class="video-container" bind:this={videoContainer}></div> -->
@@ -399,6 +342,7 @@
 <div
 	style="position: absolute; top: 0px; left: 0; width: 100%; z-index: 9999"
 	class:d-none={!localVideoRef?.srcObject}
+	bind:this={conferenceContainer}
 >
 	<!-- <h3>Local Video</h3> -->
 	<div
@@ -409,6 +353,7 @@
 			background: rgb(55 58 55);"
 	>
 		<!-- svelte-ignore a11y-media-has-caption -->
+
 		<video
 			bind:this={localVideoRef}
 			autoplay
@@ -510,24 +455,24 @@
 			border-radius: 14px;
 			padding: 1rem;
 			width: min(90dvw, 380px);
-			padding: 10px"
+			padding: 10px; z-index: 99"
 		>
 			<DocumentsByUser userId={$selectedUser} newFile={true} />
 		</div>
 	</div>
-</div>
 
-{#if endCallModal}
-	<Confirm
-		message="{$_('call.end')}?"
-		no={$_('call.no')}
-		yes={$_('call.yes')}
-		onConfirm={leaveCall}
-		onCancel={() => {
-			endCallModal = false;
-		}}
-	/>
-{/if}
+	{#if endCallModal}
+		<Confirm
+			message="{$_('call.end')}?"
+			no={$_('call.no')}
+			yes={$_('call.yes')}
+			onConfirm={leaveCall}
+			onCancel={() => {
+				endCallModal = false;
+			}}
+		/>
+	{/if}
+</div>
 
 <style>
 	.minimize {

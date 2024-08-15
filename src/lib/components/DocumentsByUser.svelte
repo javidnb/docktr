@@ -186,7 +186,15 @@
 >
 	{#if files.length}
 		{#each files as file}
-			<a class="fileCard w-100" href={file.file.url} target="_blank">
+			<button
+				class="fileCard w-100"
+				on:click={() => {
+					window.open(file.file.url, '_blank');
+				}}
+				data-bs-toggle="collapse"
+				data-bs-target="#endCall"
+                style="border:none"
+			>
 				<span style="font-size: 30px;" class="material-symbols-outlined my-auto">
 					description
 				</span>
@@ -204,7 +212,7 @@
 				>
 					{file.file?.name || ''}
 				</span>
-			</a>
+			</button>
 		{/each}
 	{/if}
 </div>

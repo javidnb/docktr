@@ -296,8 +296,10 @@
 				console.log('Camera switched:', cameraCycleResult);
 			} catch (error) {
 				console.error('Error switching camera:', error);
+				alert(error);
 			}
 		} else {
+			alert('no call obj');
 			console.warn('Daily call object is not initialized.');
 		}
 	}

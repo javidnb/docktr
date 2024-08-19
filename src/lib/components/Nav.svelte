@@ -10,7 +10,8 @@
 		putData,
 		selectedUser,
 		mobile,
-		hideNav
+		hideNav,
+		showGPT
 	} from '$lib/store/dataStore';
 	import Modal from '$lib/helpers/Modal.svelte';
 	import Login from './login/Login.svelte';
@@ -82,7 +83,14 @@
 				style="width: 30px; filter: grayscale(1) brightness(2)"
 				alt="Sehiyye Logo"
 			/> -->
-			<a class="navbar-brand mx-auto" style="margin-left: auto;" href="../">
+			<a
+				class="navbar-brand mx-auto"
+				style="margin-left: auto;"
+				href="../"
+				on:click={() => {
+					showGPT.set(false);
+				}}
+			>
 				Səhiyyə<span style="font-size: x-large; color: rgb(0 0 0 / 70%)"
 					>.{websiteName.endsWith('.net') ? 'net' : 'online'}</span
 				></a

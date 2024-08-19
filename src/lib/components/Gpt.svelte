@@ -9,7 +9,7 @@
 	const MODEL = 'gpt-4o-mini';
 	let messages = writable<{ role: string; content: string }[]>([]);
 	let awaitingResponse = writable(false);
-	let inputFocused = false;
+	let chatBoxContainer: HTMLElement | null = null;
 
 	onMount(() => {
 		if (browser && localStorage.getItem('assistant')) {
@@ -100,6 +100,13 @@
 		awaitingResponse.set(false);
 		return data?.choices?.length ? data.choices[0].message.content.trim() : 'error';
 	}
+
+	function adjustHeight() {
+		if (chatBoxContainer) {
+			const viewportHeight = window.visualViewport?.height || window.innerHeight;
+			chatBoxContainer.style.height = `${viewportHeight - 195}px`;
+		}
+	}
 </script>
 
 {#if $mobile}
@@ -111,7 +118,7 @@
 {/if}
 <div
 	class="chatBoxContainer"
-	class:minimizedHeight={inputFocused}
+	bind:this={chatBoxContainer}
 	style="background-color: #efefef;min-width: min(90dvw, 650px); max-width: 650px"
 >
 	<div
@@ -165,8 +172,8 @@
 			type="text"
 			class="form-control"
 			placeholder={$_('gpt.ask_anything')}
-			on:focus={() => (inputFocused = true)}
-			on:blur={() => (inputFocused = false)}
+			on:focus={adjustHeight}
+			on:blur={adjustHeight}
 		/>
 
 		<button

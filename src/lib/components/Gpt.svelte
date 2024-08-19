@@ -106,7 +106,7 @@
 			if (event.type === 'focus') {
 				setTimeout(() => {
 					const viewportHeight = window.visualViewport?.height || window.innerHeight;
-					if (chatBoxContainer) chatBoxContainer.style.height = `${viewportHeight - 550}px`;
+					if (chatBoxContainer) chatBoxContainer.style.height = `${viewportHeight - 450}px`;
 				}, 300);
 			} else if (event.type === 'blur') {
 				chatBoxContainer.style.height = 'calc(100dvh - 195px)';

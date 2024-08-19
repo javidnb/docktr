@@ -86,7 +86,7 @@
 				`https://tekoplast.az/docktr/api/?user&id=${user.user.uid}&t=${time}`
 			);
 			const result = await response.json();
-			if (result.doctor) goto('./doctor');
+			if (result?.doctor) goto('./doctor');
 			if (!result) {
 				let usr = user.user;
 				let data = {
@@ -130,6 +130,7 @@
 				.then(async (userCredential: UserCredential) => {
 					// Signed up
 					const user = userCredential;
+					console.log(user);
 					updateProfile(user.user, { displayName });
 					await getUser(user);
 					toast.push(`Xoş gəldiniz ${user.user.displayName ?? ''}!`, {
@@ -507,9 +508,9 @@
 	.socials .active,
 	.socials button:hover {
 		background-color: #a5a5a5 !important;
-		border-radius: 8px!important;
+		border-radius: 8px !important;
 	}
 	.socials .active .material-symbols-outlined {
-		color: white!important;
+		color: white !important;
 	}
 </style>

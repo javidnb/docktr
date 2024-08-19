@@ -8,7 +8,9 @@
 		ongoingAppointment,
 		sendNotification,
 		hideNav,
-		selectedUser
+		selectedUser,
+		reviewModal,
+		appointments
 	} from '$lib/store/dataStore';
 	import { session } from '$lib/session';
 	import { _ } from 'svelte-i18n';
@@ -31,23 +33,29 @@
 	let DAILY_API_URL = 'https://api.daily.co/v1/';
 	let stream: any;
 	let endCallModal: boolean = false;
+	let infoText =
+		$ongoingAppointment.userId == $session.user?.uid
+			? "<br/><span class='endCallInfoText'>Sonlandırığınız təqdirdə 2 həftə ərzində ödənişsiz təkrar görüşmək üçün 1 haqqınız qalacaq.</span>"
+			: '';
 
 	onMount(() => {
 		getRoom();
 		setLocalDevices();
 
 		document.body.classList.add('prevent-pull-to-refresh');
-
-		console.log($ongoingAppointment);
 	});
 
 	onDestroy(() => {
+		if (!browser) return;
 		document.body.classList.remove('prevent-pull-to-refresh');
 		if (callObject) {
 			callObject.leave();
 			callObject.destroy();
 		}
-		if (!browser) return;
+		if ($ongoingAppointment.userId == $session.user?.uid) {
+			reviewModal.set(true);
+		}
+		// ongoingAppointment.set(null);
 		dataLoading.set(false);
 	});
 
@@ -148,7 +156,6 @@
 
 			callObject.on('left-meeting', async () => {
 				joinVideoCall.set(false);
-				ongoingAppointment.set(false);
 				let session = callObject?.meetingSessionSummary();
 
 				const headers = new Headers({
@@ -188,16 +195,16 @@
 						sendNotification(
 							$ongoingAppointment.doctorId,
 							true,
-							'Pls Join Video Call',
-							'Click to join',
+							'Pasiyent görüşə qoşulmağınızı gözləyir',
+							'Qoşulmaq üçün klikləyin',
 							'https://sehiyye.online/appointment'
 						);
 					} else {
 						sendNotification(
 							$ongoingAppointment.userId,
 							false,
-							'Pls Join Video Call',
-							'Click to join',
+							'Həkim görüşə qoşulmağınızı gözləyir',
+							'Qoşulmaq üçün klikləyin',
 							'https://sehiyye.online/appointment'
 						);
 					}
@@ -251,6 +258,10 @@
 
 		joinVideoCall.set(false);
 		selectedUser.set(null);
+
+		appointments.update((arr) =>
+			arr.map((item) => (item.id === $ongoingAppointment.id ? { ...item, ended: true } : item))
+		);
 
 		// Leave the Daily call and destroy the call object
 		if (callObject) {
@@ -551,7 +562,7 @@
 
 	{#if endCallModal}
 		<Confirm
-			message="{$_('call.end')}?"
+			message="{$_('call.end')}? {infoText}"
 			no={$_('call.no')}
 			yes={$_('call.yes')}
 			onConfirm={leaveCall}

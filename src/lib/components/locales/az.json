@@ -18,7 +18,8 @@
 		"account": "Hesabım",
 		"login": "Giriş",
 		"logout": "Çıxış",
-		"messages": "Mesajlar"
+		"messages": "Mesajlar",
+		"about": "Haqqımızda"
 	},
 	"doctor": {
 		"about": "Həkim Haqqında",
@@ -109,6 +110,19 @@
 		"try_again": "Zəhmət olmasa yenidən cəhd edin",
 		"contact": "Əlaqə vasitəsi",
 		"message": "Mesajınız"
+	},
+	"usage": {
+		"header": "İstifadə Qaydaları",
+		"register": "Qeydiyyat",
+		"register_details": "İlk olaraq platformada qeydiyyatdan keçərək özünüzə şəxsi profil hesabı yaradın. Adınızı, email ünvanınızı və ya telefon nömrənizi daxil edin. Bu şəxsi profilinizdə daha sonra tibbi məlumatlarınız və konsultasiya keçmişiniz olacaqdır. İstədiyiniz təqdirdə bu məlumatları daha sonra silə vəya dəyişdirə bilərsiniz.",
+		"get_appointment": "Randevu Alın",
+		"get_appointment_details": "Qeydiyyatdan keçdikdən sonra, hesabınıza daxil olun və 'Randevu Al' bölməsinə keçin. Burada ixtisas sahəsi üzrə həkiminizi seçərək uyğun vaxt təyin edin.",
+		"payment": "Ödəniş edin",
+		"payment_details": "Xidmət haqqını randevudan əvvəl online olaraq ödəyə bilərsiniz. Ödənişiniz keçdikdən sonra randevunuz aktivləşmiş hesab olunur.",
+		"join_appointment": "Həkimlə görüş",
+		"join_appointment_details": "Təyin etdiyiniz vaxtda platformaya daxil olun və 'Mənim Randevularım' bölməsindən video zəngə qoşulun. Həkiminizlə suallarınızı müzakirə edin. Almış olduğunuz randevu sizə həkiminizlə 5 mesaj və iki dəfə video görüş haqqı tanıyır. Əgər həkiminiz sizdən bəzi analizlər tələb edərsə bunları olduğunuz şəhərin klinika vəya laboratoriyalarında verərək həkiminizə yollaya bilərsiniz. Daha sonra analiz nəticələrinizi müzakirə üçün həkiminizə yenidən randevu alaraq ikinci dəfə ödənişsiz görüş haqqınızdan istifadə edə bilərsiniz.",
+		"check_appointment": "Məlumatlara baxış",
+		"check_appointment_details": "Hər bir randevudan sonra öz profilinizdə həkimlə yazışmalarınız, konsultasiya keçmişiniz və bütün digər məlumatlarınızı görə bilərsiniz."
 	},
 	"months": {
 		"1": "Yanvar",

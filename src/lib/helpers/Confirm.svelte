@@ -17,7 +17,7 @@
 
 <div class="modal">
 	<div class="modal-content">
-		<h5>{message}</h5>
+		<h5>{@html message}</h5>
 		<div class="d-flex gap-2 mt-3">
 			<button class="btn btn-secondary flex-1 d-flex align-items-center" on:click={cancel}>
 				<span class="material-symbols-outlined"> close </span>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Modal from '$lib/helpers/Modal.svelte';
-	import { confirmationModal } from '$lib/store/dataStore';
+	import { confirmationModal, dataLoading } from '$lib/store/dataStore';
 	import DatePicker from './DatePicker.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { monthNames } from '$lib/helpers/dateFormatter';
@@ -87,6 +87,7 @@
 									text: confirmationData.text,
 									data: confirmationData.data ?? null
 								})}
+							disabled={$dataLoading}
 							><span class="material-symbols-outlined"> check </span>
 							<span class="mx-auto">{confirmationData.button2 ?? 'Təsdiqlə'}</span>
 						</button>

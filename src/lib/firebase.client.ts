@@ -42,13 +42,15 @@ export const initializeFirebase = (): Promise<void> => {
 };
 
 export function logout() {
-	session.set({ user: null, loggedIn: false });
-	appointments.set([]);
-	localStorage.removeItem('user');
 	auth
 		.signOut()
 		.then(() => {
-			dataLoading.set(false);
+			setTimeout(() => {
+				session.set({ user: null, loggedIn: false });
+				appointments.set([]);
+				localStorage.removeItem('user');
+				dataLoading.set(false);
+			}, 100);
 		})
 		.catch(() => {
 			dataLoading.set(false);

@@ -103,7 +103,7 @@
 			</button>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<div class="collapseContainer d-flex align-items-center justify-content-center">
-					<div class="dropdown dropstart">
+					<div class="dropdown drowpown-center">
 						<button
 							class="btn btn-outline-primary dropdown-toggle d-flex align-items-center gap-1 langSelector"
 							type="button"

@@ -45,6 +45,15 @@ body {
 	overscroll-behavior-y: contain;
 }
 
+.endCallInfoText {
+	color: gray;
+	line-height: 1;
+	font-size: small;
+	display: flex;
+	flex-wrap: wrap;
+	margin-top: 1rem;
+}
+
 @media screen and (min-width: 992px) {
 	.homeNav .active {
 		background-color: var(--primaryColor) !important;
@@ -558,7 +567,7 @@ body {
 		color: gray;
 		margin-top: -2px;
 	}
-	.active .material-symbols-outlined,
+	.homeNavContainer .active .material-symbols-outlined,
 	.active .navLinkText {
 		color: var(--primaryColor) !important;
 	}
@@ -657,6 +666,12 @@ body {
 .dropdown-menu {
 	top: 35px;
 	right: 0;
+}
+.dropdown-menu li {
+	display: flex;
+}
+.dropdown-item {
+	width: 100%;
 }
 .midButton {
 	position: relative;

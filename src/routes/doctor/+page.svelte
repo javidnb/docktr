@@ -8,6 +8,7 @@
 	import Appointments from '../appointment/Appointments.svelte';
 	import { _ } from 'svelte-i18n';
 	import { appointmentsLoading } from '$lib/store/dataStore';
+	import { goto } from '$app/navigation';
 
 	let isCollapsed = false;
 	export let data;
@@ -73,10 +74,15 @@
 			style="height: 100dvh; background: #f0f0f0"
 		>
 			<div class="img-responsive">
+				<!-- svelte-ignore a11y-click-events-have-key-events -->
+				<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 				<img
 					src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/logo.png"
 					alt="Sehiyye logo"
-					style="width: 150px; margin-top: 1rem"
+					style="width: 150px; margin-top: 1rem; cursor: pointer"
+					on:click={() => {
+						goto('./');
+					}}
 				/>
 			</div>
 

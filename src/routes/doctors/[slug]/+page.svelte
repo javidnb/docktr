@@ -14,7 +14,7 @@
 	} from '$lib/store/dataStore';
 	import { writable } from 'svelte/store';
 	import { formatDate } from '$lib/helpers/dateFormatter';
-	import Appointment from '$lib/components/Appointment.svelte';
+	import GetAppointment from '$lib/components/GetAppointment.svelte';
 	import Modal from '$lib/helpers/Modal.svelte';
 
 	$: doctor = $doctors.find((d) => d.slug == $page.params.slug);
@@ -167,7 +167,7 @@
 	<!-- <h4 slot="header" class="px-3 pt-2">Görüş</h4> -->
 
 	<ol class="px-0 mt-3">
-		<Appointment doc={$doc} />
+		<GetAppointment doc={doctor} />
 	</ol>
 </Modal>
 
@@ -280,7 +280,7 @@
 									<button
 										class="btn btn-outline-primary mt-3 w-100 d-flex"
 										on:click={() => {
-											selectedUser.set($doc.uid);
+											selectedUser.set(doctor?.uid);
 											goto('../messages');
 										}}
 									>
@@ -400,7 +400,7 @@
 									<button
 										class="btn btn-outline-primary mt-3 w-100 d-flex"
 										on:click={() => {
-											selectedUser.set($doc.uid);
+											selectedUser.set(doctor?.uid);
 											goto('../messages');
 										}}
 									>

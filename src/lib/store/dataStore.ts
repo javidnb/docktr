@@ -10,6 +10,7 @@ export const showModalSig = writable(false);
 export const loginModal = writable(false);
 export const appointmentModal = writable(false);
 export const confirmationModal = writable(false);
+export const reviewModal = writable(false);
 export const selectedAppointmentDate = writable({ day: null, time: null, start: null, end: null });
 export const selectedBranch: any = writable();
 export const selectedSymptoms: any = writable([]);

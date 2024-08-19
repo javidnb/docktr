@@ -94,7 +94,7 @@
 	}
 </script>
 
-<div class="container" style="background-color: #efefef;">
+<div class="container h-100" style="background-color: #efefef;">
 	<div class="row py-3 px-2" style="min-width: min(90dvw, 650px); max-width: 650px">
 		<div class="col">
 			<div

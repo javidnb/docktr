@@ -8,10 +8,7 @@
 	import { locale, _ } from 'svelte-i18n';
 	import { session } from '$lib/session';
 	import { page } from '$app/stores';
-	import Modal from '$lib/helpers/Modal.svelte';
-	import Gpt from '$lib/components/Gpt.svelte';
 	export let data: LayoutData;
-	let showGPT: boolean = false;
 
 	if (data?.doctors?.length) {
 		const dooc = data.doctors
@@ -60,15 +57,25 @@
 
 	{#if curPage !== '/messages' && curPage !== '/doctor' && curPage !== '/search'}
 		<section
-			class="py-3 footer pcOnly"
+			class="py-3 footer"
 			style="border-top: 1px solid rgb(236, 236, 236);
 				background: var(--primaryColor);
 				color: white; margin-top: auto"
 		>
 			<div class="container">
-				<div class="row align-items-center">
-					<div class="col">
-						<span>© Səhiyyə.online 2023-2024</span>
+				<div class="row align-items-center py-3">
+					<div class="col-12 col-md-9">
+						<div class="d-flex gap-3">
+							<a class="footerLink" href="/legal">{$_('usage.header')}</a>
+							<a class="footerLink" href="/contact">{$_('nav.about')}</a>
+							<a class="footerLink" href="/contact">{$_('nav.contact')}</a>
+						</div>
+					</div>
+					<div class="col-12 col-md-3">
+						<div class="d-flex gap-2 align-items-center">
+							<span>© Səhiyyə.online</span>
+							<span>2023-{new Date().getFullYear()}</span>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -77,41 +84,12 @@
 	<SvelteToast />
 </div>
 
-<button
-	class="btn btn-outline-primary btnContact {$hideNav ? 'd-none' : ''}"
-	on:click={() => {
-		showGPT = true;
-	}}
->
-	<span style="font-size: 30px" class="material-symbols-outlined icon-fill"> sms </span>
-</button>
-
-<Modal bind:showModal={showGPT}>
-	<Gpt />
-</Modal>
-
 <style>
-	.btnContact {
-		position: fixed;
-		bottom: 1.5rem;
-		right: 1.5rem;
-		padding: 0.8rem;
-		box-shadow: 0px 0px 5px #00000035;
-		background: white;
-		color: var(--primaryColor);
-		border-radius: 100%;
-		display: flex;
-		align-items: center;
+	.footerLink {
+		text-decoration: none;
+		color: white;
 	}
-
-	.btnContact:hover {
-		box-shadow: 0px 0px 6px #00000050;
-	}
-
-	@media screen and (max-width: 992px) {
-		.btnContact {
-			bottom: 4rem;
-			right: 1rem;
-		}
+	.footerLink:hover {
+		color: rgb(239, 239, 239);
 	}
 </style>

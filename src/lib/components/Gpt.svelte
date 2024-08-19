@@ -101,11 +101,17 @@
 		return data?.choices?.length ? data.choices[0].message.content.trim() : 'error';
 	}
 
-	function adjustHeight() {
-		if (chatBoxContainer) {
-			const viewportHeight = window.visualViewport?.height || window.innerHeight;
-			chatBoxContainer.style.height = `${viewportHeight - 195}px`;
-		}
+	function adjustHeight(event: FocusEvent) {
+		setTimeout(() => {
+			if (chatBoxContainer && $mobile) {
+				if (event.type === 'focus') {
+					const viewportHeight = window.visualViewport?.height || window.innerHeight;
+					chatBoxContainer.style.height = `${viewportHeight - 195}px`;
+				} else if (event.type === 'blur') {
+					chatBoxContainer.style.height = 'calc(100dvh - 195px)';
+				}
+			}
+		}, 300);
 	}
 </script>
 

@@ -102,16 +102,16 @@
 	}
 
 	function adjustHeight(event: FocusEvent) {
-		setTimeout(() => {
-			if (chatBoxContainer && $mobile) {
-				if (event.type === 'focus') {
+		if (chatBoxContainer && $mobile) {
+			if (event.type === 'focus') {
+				setTimeout(() => {
 					const viewportHeight = window.visualViewport?.height || window.innerHeight;
-					chatBoxContainer.style.height = `${viewportHeight - 195}px`;
-				} else if (event.type === 'blur') {
-					chatBoxContainer.style.height = 'calc(100dvh - 195px)';
-				}
+					if (chatBoxContainer) chatBoxContainer.style.height = `${viewportHeight - 255}px`;
+				}, 300);
+			} else if (event.type === 'blur') {
+				chatBoxContainer.style.height = 'calc(100dvh - 195px)';
 			}
-		}, 300);
+		}
 	}
 </script>
 

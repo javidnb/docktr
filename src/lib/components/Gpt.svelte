@@ -147,11 +147,14 @@
 				<img
 					src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/logo.png"
 					alt="Sehiyye logo"
-					style="width: 150px; margin-top: auto"
+					style="width: 150px;"
+					class:mt-auto={!inputFocused}
 				/>
 				{#if $mobile}
 					<button
-						class="btn btn-outline-primary btnClose mt-auto"
+						class="btn btn-outline-primary btnClose"
+						class:mt-auto={!inputFocused}
+						class:mt-3={inputFocused}
 						on:click={() => {
 							showGPT.set(false);
 						}}>{$_('actions.close')}</button
@@ -221,7 +224,7 @@
 	}
 	.chatBox {
 		overflow-y: scroll;
-		transition-duration: .2s;
+		transition-duration: 0.2s;
 	}
 	@media screen and (min-width: 992px) {
 		.chatBoxContainer {
@@ -238,7 +241,9 @@
 			transition-duration: 0.2s;
 		}
 		.minimizedHeight {
-			height: 300px !important;
+			max-height: 300px !important;
+			height: unset!important;
+			transition-duration: .2s;
 		}
 		.msgInput {
 			padding: 10px;

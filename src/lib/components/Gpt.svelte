@@ -9,7 +9,7 @@
 	const MODEL = 'gpt-4o-mini';
 	let messages = writable<{ role: string; content: string }[]>([]);
 	let awaitingResponse = writable(false);
-	let chatBoxContainer: HTMLElement | null = null;
+	let inputFocused: boolean = false;
 
 	onMount(() => {
 		if (browser && localStorage.getItem('assistant')) {
@@ -100,19 +100,6 @@
 		awaitingResponse.set(false);
 		return data?.choices?.length ? data.choices[0].message.content.trim() : 'error';
 	}
-
-	function adjustHeight(event: FocusEvent) {
-		if (chatBoxContainer && $mobile) {
-			if (event.type === 'focus') {
-				setTimeout(() => {
-					const viewportHeight = window.visualViewport?.height || window.innerHeight;
-					if (chatBoxContainer) chatBoxContainer.style.height = `${viewportHeight - 450}px`;
-				}, 300);
-			} else if (event.type === 'blur') {
-				chatBoxContainer.style.height = 'calc(100dvh - 195px)';
-			}
-		}
-	}
 </script>
 
 {#if $mobile}
@@ -124,7 +111,6 @@
 {/if}
 <div
 	class="chatBoxContainer"
-	bind:this={chatBoxContainer}
 	style="background-color: #efefef;min-width: min(90dvw, 650px); max-width: 650px"
 >
 	<div
@@ -132,6 +118,7 @@
 		id="messages-container"
 		style="min-height: 300px; border: 1px solid #ececec; 
 				background: white; border-radius: 8px; position: relative"
+		class:minimizedHeight={inputFocused}
 	>
 		{#if $messages.length}
 			{#each $messages as msg}
@@ -177,10 +164,14 @@
 		<input
 			bind:value={newMessage}
 			type="text"
-			class="form-control"
+			class="form-control msgInput"
 			placeholder={$_('gpt.ask_anything')}
-			on:focus={adjustHeight}
-			on:blur={adjustHeight}
+			on:focus={() => {
+				inputFocused = true;
+			}}
+			on:blur={() => {
+				inputFocused = false;
+			}}
 		/>
 
 		<button
@@ -230,6 +221,7 @@
 	}
 	.chatBox {
 		overflow-y: scroll;
+		transition-duration: .2s;
 	}
 	@media screen and (min-width: 992px) {
 		.chatBoxContainer {
@@ -246,7 +238,10 @@
 			transition-duration: 0.2s;
 		}
 		.minimizedHeight {
-			height: 50dvh !important;
+			height: 300px !important;
+		}
+		.msgInput {
+			padding: 10px;
 		}
 	}
 </style>

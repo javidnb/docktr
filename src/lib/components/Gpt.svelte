@@ -106,7 +106,7 @@
 			if (event.type === 'focus') {
 				setTimeout(() => {
 					const viewportHeight = window.visualViewport?.height || window.innerHeight;
-					if (chatBoxContainer) chatBoxContainer.style.height = `${viewportHeight - 350}px`;
+					if (chatBoxContainer) chatBoxContainer.style.height = `${viewportHeight - 550}px`;
 				}, 300);
 			} else if (event.type === 'blur') {
 				chatBoxContainer.style.height = 'calc(100dvh - 195px)';
@@ -143,6 +143,7 @@
 					on:click={() => {
 						messages.set([]);
 						localStorage.removeItem('assistant');
+						newMessage = '';
 					}}>{$_('gpt.clear')}</button
 				>
 				{#if $mobile}

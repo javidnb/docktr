@@ -3,12 +3,13 @@
 	import { afterUpdate, onMount } from 'svelte';
 	import { get, writable } from 'svelte/store';
 	import { _ } from 'svelte-i18n';
-	import { mobile, showGPT } from '$lib/store/dataStore';
+	import { hideNav, mobile, showGPT } from '$lib/store/dataStore';
 
 	let newMessage: string = '';
 	const MODEL = 'gpt-4o-mini';
 	let messages = writable<{ role: string; content: string }[]>([]);
 	let awaitingResponse = writable(false);
+	let inputFocused = false;
 
 	onMount(() => {
 		if (browser && localStorage.getItem('assistant')) {
@@ -24,6 +25,7 @@
 				}
 			}
 		}
+		if ($mobile) hideNav.set(true);
 		// for (let i = 0; i < 10; i++) {
 		// 	messages.update((msgs) => [
 		// 		...msgs,
@@ -35,6 +37,9 @@
 		// 	]);
 		// }
 		scrollToBottom();
+		return () => {
+			hideNav.set(false);
+		};
 	});
 
 	afterUpdate(() => {
@@ -106,6 +111,7 @@
 {/if}
 <div
 	class="chatBoxContainer"
+	class:minimizedHeight={inputFocused}
 	style="background-color: #efefef;min-width: min(90dvw, 650px); max-width: 650px"
 >
 	<div
@@ -140,7 +146,7 @@
 				<img
 					src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/logo.png"
 					alt="Sehiyye logo"
-					style="width: 150px; margin-top: 1rem"
+					style="width: 150px; margin-top: auto"
 				/>
 				{#if $mobile}
 					<button
@@ -159,6 +165,8 @@
 			type="text"
 			class="form-control"
 			placeholder={$_('gpt.ask_anything')}
+			on:focus={() => (inputFocused = true)}
+			on:blur={() => (inputFocused = false)}
 		/>
 
 		<button
@@ -219,8 +227,12 @@
 	}
 	@media screen and (max-width: 992px) {
 		.chatBoxContainer {
-			height: calc(100dvh - 255px);
+			height: calc(100dvh - 195px);
 			padding: 10px;
+			transition-duration: 0.2s;
+		}
+		.minimizedHeight {
+			height: 50dvh !important;
 		}
 	}
 </style>

@@ -128,7 +128,7 @@
 
 {#if !$showGPT}
 <button
-	class="btn btn-outline-primary btnContact {$hideNav ? 'd-none' : ''}"
+	class="btn btn-outline-primary btnContact"
 	on:click={() => {
 		showGPT.set(!$showGPT);
 	}}

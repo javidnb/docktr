@@ -3,6 +3,7 @@
 	import { afterUpdate, onMount } from 'svelte';
 	import { get, writable } from 'svelte/store';
 	import { _ } from 'svelte-i18n';
+	import { mobile, showGPT } from '$lib/store/dataStore';
 
 	let newMessage: string = '';
 	const MODEL = 'gpt-4o-mini';
@@ -49,9 +50,11 @@
 
 	async function sendMessage() {
 		// Update the store with the new user message
-		messages.update((msgs) => [...msgs, { role: 'user', content: newMessage }]);
-		newMessage = '';
-		await getChatGPTResponse();
+		if (newMessage.length) {
+			messages.update((msgs) => [...msgs, { role: 'user', content: newMessage }]);
+			newMessage = '';
+			await getChatGPTResponse();
+		}
 	}
 
 	async function getChatGPTResponse() {
@@ -94,58 +97,82 @@
 	}
 </script>
 
-<div class="container h-100" style="background-color: #efefef;">
-	<div class="row py-3 px-2" style="min-width: min(90dvw, 650px); max-width: 650px">
-		<div class="col">
-			<div
-				class="chatBox pt-3 pb-2 px-2 d-flex flex-column"
-				id="messages-container"
-				style="min-height: 300px; border: 1px solid #ececec; 
+{#if $mobile}
+	<section>
+		<div class="jumbotron" style="padding-block: 1rem; background-color: #e2e9ef">
+			<h1 class="display-4">{$_('gpt.ask_anything')}</h1>
+		</div>
+	</section>
+{/if}
+<div
+	class="chatBoxContainer"
+	style="background-color: #efefef;min-width: min(90dvw, 650px); max-width: 650px"
+>
+	<div
+		class="chatBox pt-3 pb-2 px-2 d-flex flex-column h-100"
+		id="messages-container"
+		style="min-height: 300px; border: 1px solid #ececec; 
 				background: white; border-radius: 8px; position: relative"
-			>
-				{#if $messages.length}
-					{#each $messages as msg}
-						<span class="message {msg.role == 'user' ? 'sent' : 'received'}">{msg.content}</span>
-					{/each}
+	>
+		{#if $messages.length}
+			{#each $messages as msg}
+				<span class="message {msg.role == 'user' ? 'sent' : 'received'}">{msg.content}</span>
+			{/each}
+			<div class="d-flex justify-content-center gap-2 mt-auto">
+				<button
+					class="btn btn-outline-primary btnClear"
+					on:click={() => {
+						messages.set([]);
+						localStorage.removeItem('assistant');
+					}}>{$_('gpt.clear')}</button
+				>
+				{#if $mobile}
 					<button
-						class="btn btn-outline-primary btnClear"
+						class="btn btn-outline-primary btnClose"
 						on:click={() => {
-							messages.set([]);
-							localStorage.removeItem('assistant');
-						}}>{$_('gpt.clear')}</button
+							showGPT.set(false);
+						}}>{$_('actions.close')}</button
 					>
-				{:else}
-					<div class="d-flex w-100 h-100 align-items-center justify-content-center my-auto">
-						<img
-							src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/logo.png"
-							alt="Sehiyye logo"
-							style="width: 150px; margin-top: 1rem"
-						/>
-					</div>
 				{/if}
 			</div>
-			<div class="input-group mt-3">
-				<input
-					bind:value={newMessage}
-					type="text"
-					class="form-control"
-					placeholder={$_('gpt.ask_anything')}
+		{:else}
+			<div class="d-flex flex-column w-100 h-100 align-items-center justify-content-center my-auto">
+				<img
+					src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/logo.png"
+					alt="Sehiyye logo"
+					style="width: 150px; margin-top: 1rem"
 				/>
-
-				<button
-					style="min-width: 60px;"
-					class="btn btn-primary d-flex align-items-center justify-content-center"
-					on:click={sendMessage}
-					disabled={$awaitingResponse}
-				>
-					{#if !$awaitingResponse}
-						<span class="material-symbols-outlined"> send </span>
-					{:else}
-						<div class="loader" style="right: 20px"></div>
-					{/if}
-				</button>
+				{#if $mobile}
+					<button
+						class="btn btn-outline-primary btnClose mt-auto"
+						on:click={() => {
+							showGPT.set(false);
+						}}>{$_('actions.close')}</button
+					>
+				{/if}
 			</div>
-		</div>
+		{/if}
+	</div>
+	<div class="input-group mt-3">
+		<input
+			bind:value={newMessage}
+			type="text"
+			class="form-control"
+			placeholder={$_('gpt.ask_anything')}
+		/>
+
+		<button
+			style="min-width: 60px;"
+			class="btn btn-primary d-flex align-items-center justify-content-center"
+			on:click={sendMessage}
+			disabled={$awaitingResponse || !newMessage.length}
+		>
+			{#if !$awaitingResponse}
+				<span class="material-symbols-outlined"> send </span>
+			{:else}
+				<div class="loader" style="right: 20px"></div>
+			{/if}
+		</button>
 	</div>
 </div>
 
@@ -168,23 +195,32 @@
 		background-color: #f1f0f0;
 	}
 
-	.btnClear {
+	.btnClear,
+	.btnClose {
 		padding: 2px 25px;
 		width: fit-content;
 		align-self: center;
 		border-radius: 6px;
-		position: sticky;
-		bottom: 0;
-		left: 50%;
-		transform: translateX(-50%);
-		margin-top: auto;
 	}
 
 	.btnClear:not(:hover) {
 		background: white;
 	}
 	.chatBox {
-		max-height: 70dvh;
 		overflow-y: scroll;
+	}
+	@media screen and (min-width: 992px) {
+		.chatBoxContainer {
+			padding: 1rem;
+		}
+		.chatBox {
+			max-height: 70dvh;
+		}
+	}
+	@media screen and (max-width: 992px) {
+		.chatBoxContainer {
+			height: calc(100dvh - 255px);
+			padding: 10px;
+		}
 	}
 </style>

@@ -22,6 +22,7 @@ export const selectedUser = writable();
 export const hideNav = writable(false);
 export const appointmentsLoading = writable(true);
 export const searchQuery = writable('');
+export const showGPT = writable(false);
 
 export const langs: any = [
 	{ value: 'aze', label: 'Azərbaycanca' },

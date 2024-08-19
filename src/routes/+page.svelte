@@ -4,12 +4,10 @@
 	import { _ } from 'svelte-i18n';
 	import Modal from '$lib/helpers/Modal.svelte';
 	import Gpt from '$lib/components/Gpt.svelte';
-	import { hideNav, mobile } from '$lib/store/dataStore';
-
-	let showGPT: boolean = false;
+	import { hideNav, mobile, showGPT } from '$lib/store/dataStore';
 </script>
 
-{#if $mobile && showGPT}
+{#if $mobile && $showGPT}
 	<Gpt />
 {:else}
 	<section>
@@ -128,19 +126,21 @@
 	</section>
 {/if}
 
+{#if !$showGPT}
 <button
 	class="btn btn-outline-primary btnContact {$hideNav ? 'd-none' : ''}"
 	on:click={() => {
-		showGPT = !showGPT;
+		showGPT.set(!$showGPT);
 	}}
 >
 	<span style="font-size: 30px" class="material-symbols-outlined icon-fill">
-		{showGPT ? 'close' : 'sms'}
+		sms
 	</span>
 </button>
+{/if}
 
 {#if !$mobile}
-	<Modal bind:showModal={showGPT}>
+	<Modal bind:showModal={$showGPT}>
 		<Gpt />
 	</Modal>
 {/if}

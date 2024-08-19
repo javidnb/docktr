@@ -57,7 +57,7 @@
 
 	{#if curPage !== '/messages' && curPage !== '/doctor' && curPage !== '/search'}
 		<section
-			class="py-3 footer"
+			class="py-3 footer pcOnly"
 			style="border-top: 1px solid rgb(236, 236, 236);
 				background: var(--primaryColor);
 				color: white; margin-top: auto"

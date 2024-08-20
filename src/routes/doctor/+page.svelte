@@ -41,7 +41,7 @@
 	{#if $session.loggedIn && $session?.user?.doctor}
 		<div class="sidenavContainer">
 			<button
-				class="closebtn btn"
+				class="closebtn btn mobileOnly"
 				on:click={toggleCollapse}
 				data-bs-toggle="collapse"
 				data-bs-target="#sideCollapse"
@@ -53,11 +53,21 @@
 			</button>
 			<!-- svelte-ignore a11y-missing-attribute -->
 			<div
-				class="sidenav pt-5 flex-column collapse collapse-horizontal"
+				class="sidenav flex-column collapse collapse-horizontal"
 				id="sideCollapse"
 				class:collapsed={isCollapsed}
 			>
 				<div class="d-flex flex-column sidenavContent">
+					<div class="d-flex justify-content-center title gap-2">
+						<img
+							src="https://ik.imagekit.io/d2nwsj0ktvh/logo_hyRmOQCNQ.png?updatedAt=1722624724577"
+							alt="Sehiyye logo"
+							style="width: 24px;"
+						/>
+						<span
+							>Səhiyyə<span style="font-size: smaller; color: rgb(0 0 0 / 70%)">.online</span></span
+						>
+					</div>
 					<a class="mt-3 d-flex align-items-center gap-2" href="#">
 						<span class="material-symbols-outlined"> home </span>
 						<span class="navtext">Görüşlər</span>
@@ -79,9 +89,11 @@
 				</div>
 			</div>
 			<div class="content" style="background-color: #f0f0f0; min-height: 100dvh">
+				<h5 class="ps-5 title">
+					{$_('nav.appointments')}
+				</h5>
 				<div class="container">
 					<div class="row" style="max-height: 100vh; overflow-y: scroll; padding-top: 10px">
-						<h5>{$_('nav.appointments')}</h5>
 						<Appointments />
 					</div>
 				</div>
@@ -132,82 +144,67 @@
 	</div>
 {/if}
 
-<!-- <style>
-	.sidenav {
-		height: 100%;
-		width: 250px;
-		position: fixed;
-		top: 0;
-		left: 0;
+<style>
+	@import url('https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap');
+
+	.title {
+		background: white;
+		color: #749675;
+		padding-block: 0.7rem;
+		text-align: center;
+		box-shadow: 0px 4px 6px -2px rgba(0, 0, 0, 0.1);
+		font-family: 'Cabin', sans-serif;
+		font-weight: 400;
+	}
+	.sidenavContent {
+		height: 100dvh;
+		background-color: white;
 		background: rgb(98, 126, 90);
 		background: linear-gradient(45deg, rgba(98, 126, 90, 1) 0%, rgba(161, 195, 152, 1) 100%);
 		background:
 			linear-gradient(45deg, rgb(98 126 90 / 90%) 0%, rgb(161 195 152 / 90%) 100%),
 			url(https://tekoplast.az/img/docktrbg.png) center center;
-		overflow-x: hidden;
-		transition: 0.5s;
-		padding-top: 20px;
 	}
-
 	.sidenav a {
+		text-decoration: none;
+		color: green;
 		padding: 8px 8px 8px 16px;
 		text-decoration: none;
-		font-size: 20px;
+		/* font-size: 20px; */
 		color: #0f3c22;
 		display: block;
 		transition: 0.3s;
+		font-family: 'Cabin', sans-serif;
 	}
 
 	.sidenav a:hover {
 		color: #f1f1f1;
 	}
 
-	.sidenav .closebtn {
-		position: absolute;
-		top: 0;
-		right: 25px;
-		font-size: 36px;
-		margin-left: 50px;
+	@media screen and (max-width: 992px) {
+		.sidenav {
+			position: absolute;
+			top: 15px;
+			left: 0;
+			z-index: 99;
+			padding-top: 2rem;
+		}
+		.sidenavContent {
+			height: calc(100vh - 47px);
+			width: 80vw;
+		}
 	}
-
-	.collapsed {
-		width: 80px;
-	}
-
-	.collapsed .closebtn {
-		margin-right: 6px;
-	}
-
-	.collapsed a {
-		text-align: center;
-		font-size: 18px;
-		padding-inline: 0;
-		justify-content: center;
-	}
-
-	.collapsed a span {
-		display: none;
-	}
-
-	.collapsed .material-symbols-outlined {
-		display: flex;
-		justify-content: center;
-		padding-inline: 0;
-	}
-
-	.collapsed a .material-symbols-outlined {
-		font-size: 25px;
-	}
-
-	.content {
-		margin-left: 250px; /* Adjust according to the width of your sidenav */
-		padding: 20px;
-		flex-grow: 1;
-		transition: margin-left 0.5s;
-	}
-
-	.collapsed ~ .content {
-		margin-left: 80px; /* Adjust according to the width of your collapsed sidenav */
+	@media screen and (min-width: 992px) {
+		.sidenavContainer {
+			display: flex;
+		}
+		.sidenav {
+			display: block;
+			width: 190px;
+		}
+		.content {
+			flex: 1;
+		}
 	}
 
 	.lds-ellipsis,
@@ -268,64 +265,6 @@
 		}
 		100% {
 			transform: translate(24px, 0);
-		}
-	}
-
-	.no-scrollbar ::-webkit-scrollbar {
-		width: 6px;
-		background: transparent;
-		display: none;
-		transition: 0.3s ease;
-	}
-</style> -->
-
-<style>
-	.sidenav {
-		position: absolute;
-		top: 0;
-		left: 0;
-		z-index: 99;
-		min-width: 55px !important;
-	}
-
-	.sidenavContent {
-		height: calc(100dvh - 50px);
-		background-color: white;
-		background: rgb(98, 126, 90);
-		background: linear-gradient(45deg, rgba(98, 126, 90, 1) 0%, rgba(161, 195, 152, 1) 100%);
-		background:
-			linear-gradient(45deg, rgb(98 126 90 / 90%) 0%, rgb(161 195 152 / 90%) 100%),
-			url(https://tekoplast.az/img/docktrbg.png) center center;
-	}
-	.sidenav a {
-		text-decoration: none;
-		color: green;
-		padding: 8px 8px 8px 16px;
-		text-decoration: none;
-		/* font-size: 20px; */
-		color: #0f3c22;
-		display: block;
-		transition: 0.3s;
-	}
-
-	.sidenav a:hover {
-		color: #f1f1f1;
-	}
-
-	.collapse:not(.show) {
-		display: block;
-	}
-
-	.collapse:not(.show) .navtext {
-		display: none;
-	}
-	:global(.show) {
-		width: 150px !important;
-	}
-
-	@media screen and (max-width: 992px) {
-		.content {
-			padding-left: 3.5rem;
 		}
 	}
 </style>

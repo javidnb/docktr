@@ -45,16 +45,16 @@
 	});
 
 	afterUpdate(() => {
-		setTimeout(() => {
-			scrollToBottom();
-		}, 5);
+		scrollToBottom();
 	});
 
 	function scrollToBottom() {
-		const container = document.getElementById('messages-container');
-		if (container) {
-			container.scrollTop = container.scrollHeight;
-		}
+		setTimeout(() => {
+			const container = document.getElementById('messages-container');
+			if (container) {
+				container.scrollTop = container.scrollHeight;
+			}
+		}, 5);
 	}
 
 	async function sendMessage() {
@@ -190,6 +190,7 @@
 			placeholder={$_('gpt.ask_anything')}
 			on:focus={() => {
 				inputFocused = true;
+				scrollToBottom();
 			}}
 			on:blur={() => {
 				setTimeout(() => {
@@ -260,7 +261,7 @@
 			top: -16px;
 			left: 50%;
 			transform: translateX(-50%);
-			width: 90%!important;
+			width: 90% !important;
 			margin: 0;
 			background: #e2e1e1;
 			cursor: not-allowed;
@@ -283,9 +284,12 @@
 		.msgInput {
 			padding: 10px;
 		}
+		/* .d-none-mobile {
+			display: none !important;
+		} */
 		.d-none-mobile {
-			min-height: unset!important;
-			height: 200px!important
+			min-height: unset !important;
+			height: 200px !important;
 		}
 	}
 </style>

@@ -111,7 +111,7 @@
 			</button>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<div class="collapseContainer d-flex align-items-center justify-content-center">
-					<div class="dropdown drowpown-center">
+					<div class="dropdown drowpown-end">
 						<button
 							class="btn btn-outline-primary dropdown-toggle d-flex align-items-center gap-1 langSelector"
 							type="button"
@@ -123,7 +123,7 @@
 								?.toUpperCase()
 								.slice(0, 2)}
 						</button>
-						<ul class="dropdown-menu">
+						<ul class="dropdown-menu" style="width: 180px;">
 							<li>
 								<button
 									class="dropdown-item"

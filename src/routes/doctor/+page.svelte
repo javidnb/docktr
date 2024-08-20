@@ -80,7 +80,7 @@
 			</div>
 			<div class="content" style="background-color: #f0f0f0; min-height: 100dvh">
 				<div class="container">
-					<div class="row pt-2" style="max-height: 100vh; overflow-y: scroll;">
+					<div class="row" style="max-height: 100vh; overflow-y: scroll; padding-top: 10px">
 						<h5>{$_('nav.appointments')}</h5>
 						<Appointments />
 					</div>

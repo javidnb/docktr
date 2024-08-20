@@ -116,13 +116,6 @@
 	}
 </script>
 
-{#if $mobile}
-	<section>
-		<div class="jumbotron" style="padding-block: 1rem; background-color: #e2e9ef">
-			<h1 class="display-4">{$_('gpt.ask_anything')}</h1>
-		</div>
-	</section>
-{/if}
 <div
 	class="chatBoxContainer"
 	style="background-color: #efefef;min-width: min(90dvw, 650px); max-width: 650px"
@@ -184,7 +177,7 @@
 				clicked = true;
 			}}
 			class="message received warning my-3"
-			style="font-size: small"
+			style="font-size: small; width: fit-content"
 			class:d-none={clicked}
 			>Bu chat suni intellektdən istifadə edir. Sizə daha yaxşı xidmət göstərə bilmək üçün
 			mesajlarınız qeydə alınır.</span
@@ -277,7 +270,7 @@
 	}
 	@media screen and (max-width: 992px) {
 		.chatBoxContainer {
-			height: calc(100dvh - 195px);
+			height: calc(100dvh - 120px);
 			padding: 10px;
 			transition-duration: 0.2s;
 		}

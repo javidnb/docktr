@@ -128,7 +128,7 @@
 						data-bs-target={$mobile ? '#collapseExample' : ''}
 					>
 						<span class="material-symbols-outlined" class:icon-fill={component == AiChat}
-							>comment</span
+							>automation</span
 						>
 						<span class="ms-2">GPT Chat</span>
 					</button>

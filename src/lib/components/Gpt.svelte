@@ -260,9 +260,10 @@
 			top: -16px;
 			left: 50%;
 			transform: translateX(-50%);
-			width: 90%;
+			width: 90%!important;
 			margin: 0;
 			background: #e2e1e1;
+			cursor: not-allowed;
 		}
 		.top-padding {
 			padding-top: 4rem !important;
@@ -283,7 +284,8 @@
 			padding: 10px;
 		}
 		.d-none-mobile {
-			display: none !important;
+			min-height: unset!important;
+			height: 200px!important
 		}
 	}
 </style>

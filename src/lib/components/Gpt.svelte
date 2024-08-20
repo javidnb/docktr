@@ -3,7 +3,8 @@
 	import { afterUpdate, onMount } from 'svelte';
 	import { get, writable } from 'svelte/store';
 	import { _ } from 'svelte-i18n';
-	import { hideNav, mobile, showGPT } from '$lib/store/dataStore';
+	import { hideNav, mobile, postData, showGPT } from '$lib/store/dataStore';
+	import { session } from '$lib/session';
 
 	let newMessage: string = '';
 	const MODEL = 'ft:gpt-4o-mini-2024-07-18:personal:sehiyye:9yEr2roV';
@@ -11,6 +12,7 @@
 	let messages = writable<any[]>([]);
 	let awaitingResponse = writable(false);
 	let inputFocused: boolean = false;
+	let clicked: boolean = false; // for hiding warning text
 
 	onMount(() => {
 		if (browser && localStorage.getItem('assistant')) {
@@ -60,6 +62,7 @@
 		if (newMessage.length) {
 			messages.update((msgs) => [...msgs, { role: 'user', content: newMessage }]);
 			newMessage = '';
+			clicked = true;
 			await getChatGPTResponse();
 		}
 	}
@@ -100,6 +103,15 @@
 		localStorage.setItem('assistant', JSON.stringify($messages));
 
 		awaitingResponse.set(false);
+
+		let gptData: any = { userId: $session.user ? $session.user.uid : null };
+		$messages.slice(-2).forEach((d) => {
+			if (d.role == 'user') gptData = { ...gptData, user: d.content };
+			if (d.role == 'assistant') gptData = { ...gptData, assistant: d.content };
+		});
+
+		postData('gpt', gptData);
+
 		return data?.choices?.length ? data.choices[0].message.content.trim() : 'error';
 	}
 </script>
@@ -115,9 +127,11 @@
 	class="chatBoxContainer"
 	style="background-color: #efefef;min-width: min(90dvw, 650px); max-width: 650px"
 >
+	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div
 		class="chatBox pt-3 pb-2 px-2 d-flex flex-column h-100"
 		class:d-none-mobile={inputFocused}
+		class:top-padding={!clicked}
 		id="messages-container"
 		style="min-height: 300px; border: 1px solid #ececec; 
 				background: white; border-radius: 8px; position: relative"
@@ -164,6 +178,17 @@
 				{/if}
 			</div>
 		{/if}
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<span
+			on:click={() => {
+				clicked = true;
+			}}
+			class="message received warning my-3"
+			style="font-size: small"
+			class:d-none={clicked}
+			>Bu chat suni intellektdən istifadə edir. Sizə daha yaxşı xidmət göstərə bilmək üçün
+			mesajlarınız qeydə alınır.</span
+		>
 	</div>
 	<div class="input-group mt-3">
 		<textarea
@@ -236,6 +261,18 @@
 		}
 		.chatBox {
 			max-height: 70dvh;
+		}
+		.warning {
+			position: absolute;
+			top: -16px;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 90%;
+			margin: 0;
+			background: #e2e1e1;
+		}
+		.top-padding {
+			padding-top: 4rem !important;
 		}
 	}
 	@media screen and (max-width: 992px) {

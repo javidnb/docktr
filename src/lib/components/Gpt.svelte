@@ -6,8 +6,9 @@
 	import { hideNav, mobile, showGPT } from '$lib/store/dataStore';
 
 	let newMessage: string = '';
-	const MODEL = 'gpt-4o-mini';
-	let messages = writable<{ role: string; content: string }[]>([]);
+	const MODEL = 'ft:gpt-4o-mini-2024-07-18:personal:sehiyye:9yEr2roV';
+	const api_endpoint = 'https://api.openai.com/v1/chat/completions';
+	let messages = writable<any[]>([]);
 	let awaitingResponse = writable(false);
 	let inputFocused: boolean = false;
 
@@ -66,7 +67,7 @@
 		awaitingResponse.set(true);
 		const currentMessages = get(messages);
 
-		const response = await fetch('https://api.openai.com/v1/chat/completions', {
+		const response = await fetch(api_endpoint, {
 			method: 'POST',
 			headers: {
 				Authorization: `Bearer ${import.meta.env.VITE_GPT_API}`,
@@ -242,8 +243,8 @@
 		}
 		.minimizedHeight {
 			max-height: 300px !important;
-			height: unset!important;
-			transition-duration: .2s;
+			height: unset !important;
+			transition-duration: 0.2s;
 		}
 		.msgInput {
 			padding: 10px;

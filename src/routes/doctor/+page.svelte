@@ -7,8 +7,10 @@
 	import { writable } from 'svelte/store';
 	import Appointments from '../appointment/Appointments.svelte';
 	import { _ } from 'svelte-i18n';
-	import { appointmentsLoading } from '$lib/store/dataStore';
+	import { appointmentsLoading, selectedUser } from '$lib/store/dataStore';
 	import { goto } from '$app/navigation';
+	import Messages from '$lib/components/chat/Messages.svelte';
+	import Chat from '$lib/components/chat/Chat.svelte';
 
 	let isCollapsed = false;
 	export let data;
@@ -37,41 +39,58 @@
 
 {#if !$appointmentsLoading}
 	{#if $session.loggedIn && $session?.user?.doctor}
-		<div>
+		<div class="sidenavContainer">
+			<button
+				class="closebtn btn"
+				on:click={toggleCollapse}
+				data-bs-toggle="collapse"
+				data-bs-target="#sideCollapse"
+				aria-expanded="false"
+				aria-controls="sideCollapse"
+				style="z-index: 999; position: absolute; left: 3px"
+			>
+				<span class="material-symbols-outlined"> menu </span>
+			</button>
 			<!-- svelte-ignore a11y-missing-attribute -->
-			<div class="sidenav pt-5 d-flex flex-column" class:collapsed={isCollapsed}>
-				<a href="javascript:void(0)" class="closebtn" on:click={toggleCollapse}> &times; </a>
-
-				<a class="mt-3 d-flex align-items-center gap-2" href="#">
-					<span class="material-symbols-outlined"> home </span>
-					<span>Home</span>
-				</a>
-				<a href="#" class="d-flex align-items-center gap-2">
-					<span class="material-symbols-outlined"> home </span>
-					<span>Profile</span>
-				</a>
-				<a href="#" class="d-flex align-items-center gap-2">
-					<span class="material-symbols-outlined"> home </span>
-					<span>Settings</span>
-				</a>
-				<!-- svelte-ignore a11y-click-events-have-key-events -->
-				<!-- svelte-ignore a11y-no-static-element-interactions -->
-				<a on:click={logout} class="mt-auto mb-2 d-flex align-items-center gap-2 cursor-pointer">
-					<span class="material-symbols-outlined"> logout </span>
-					<span>Çıxış</span>
-				</a>
+			<div
+				class="sidenav pt-5 flex-column collapse collapse-horizontal"
+				id="sideCollapse"
+				class:collapsed={isCollapsed}
+			>
+				<div class="d-flex flex-column sidenavContent">
+					<a class="mt-3 d-flex align-items-center gap-2" href="#">
+						<span class="material-symbols-outlined"> home </span>
+						<span class="navtext">Görüşlər</span>
+					</a>
+					<a href="#" class="d-flex align-items-center gap-2">
+						<span class="material-symbols-outlined"> mail </span>
+						<span class="navtext">Mesajlar</span>
+					</a>
+					<a href="#" class="d-flex align-items-center gap-2">
+						<span class="material-symbols-outlined"> settings </span>
+						<span class="navtext">Ayarlar</span>
+					</a>
+					<!-- svelte-ignore a11y-click-events-have-key-events -->
+					<!-- svelte-ignore a11y-no-static-element-interactions -->
+					<a on:click={logout} class="mt-auto mb-2 d-flex align-items-center gap-2 cursor-pointer">
+						<span class="material-symbols-outlined"> logout </span>
+						<span class="navtext">Çıxış</span>
+					</a>
+				</div>
 			</div>
 			<div class="content" style="background-color: #f0f0f0; min-height: 100dvh">
 				<div class="container">
-					<h5>{$_('nav.appointments')}</h5>
-					<Appointments />
+					<div class="row pt-2" style="max-height: 100vh; overflow-y: scroll;">
+						<h5>{$_('nav.appointments')}</h5>
+						<Appointments />
+					</div>
 				</div>
 			</div>
 		</div>
 	{:else}
 		<div
 			class="d-flex flex-column w-100 align-items-center"
-			style="height: 100dvh; background: #f0f0f0"
+			style="height: 100dvh; background: #f0f0f0; "
 		>
 			<div class="img-responsive">
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -113,7 +132,7 @@
 	</div>
 {/if}
 
-<style>
+<!-- <style>
 	.sidenav {
 		height: 100%;
 		width: 250px;
@@ -257,5 +276,56 @@
 		background: transparent;
 		display: none;
 		transition: 0.3s ease;
+	}
+</style> -->
+
+<style>
+	.sidenav {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 99;
+		min-width: 55px !important;
+	}
+
+	.sidenavContent {
+		height: calc(100dvh - 50px);
+		background-color: white;
+		background: rgb(98, 126, 90);
+		background: linear-gradient(45deg, rgba(98, 126, 90, 1) 0%, rgba(161, 195, 152, 1) 100%);
+		background:
+			linear-gradient(45deg, rgb(98 126 90 / 90%) 0%, rgb(161 195 152 / 90%) 100%),
+			url(https://tekoplast.az/img/docktrbg.png) center center;
+	}
+	.sidenav a {
+		text-decoration: none;
+		color: green;
+		padding: 8px 8px 8px 16px;
+		text-decoration: none;
+		/* font-size: 20px; */
+		color: #0f3c22;
+		display: block;
+		transition: 0.3s;
+	}
+
+	.sidenav a:hover {
+		color: #f1f1f1;
+	}
+
+	.collapse:not(.show) {
+		display: block;
+	}
+
+	.collapse:not(.show) .navtext {
+		display: none;
+	}
+	:global(.show) {
+		width: 150px !important;
+	}
+
+	@media screen and (max-width: 992px) {
+		.content {
+			padding-left: 3.5rem;
+		}
 	}
 </style>

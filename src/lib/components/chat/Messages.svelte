@@ -110,13 +110,6 @@
 	}
 </script>
 
-{#if curPage != '/messages'}
-	<div class="d-flex gap-3 mb-3">
-		<h3>Mesajlar</h3>
-		<span>{$session.user?.uid}</span>
-	</div>
-{/if}
-
 <div class="d-flex" style="position: relative">
 	<span
 		class="pcOnly"

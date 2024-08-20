@@ -116,10 +116,10 @@
 >
 	<div
 		class="chatBox pt-3 pb-2 px-2 d-flex flex-column h-100"
+		class:d-none-mobile={inputFocused}
 		id="messages-container"
 		style="min-height: 300px; border: 1px solid #ececec; 
 				background: white; border-radius: 8px; position: relative"
-		class:minimizedHeight={inputFocused}
 	>
 		{#if $messages.length}
 			{#each $messages as msg}
@@ -165,9 +165,8 @@
 		{/if}
 	</div>
 	<div class="input-group mt-3">
-		<input
+		<textarea
 			bind:value={newMessage}
-			type="text"
 			class="form-control msgInput"
 			placeholder={$_('gpt.ask_anything')}
 			on:focus={() => {
@@ -176,6 +175,7 @@
 			on:blur={() => {
 				inputFocused = false;
 			}}
+			rows={inputFocused ? 3 : 1}
 		/>
 
 		<button
@@ -241,13 +241,16 @@
 			padding: 10px;
 			transition-duration: 0.2s;
 		}
-		.minimizedHeight {
+		/* .minimizedHeight {
 			max-height: 300px !important;
 			height: unset !important;
 			transition-duration: 0.2s;
-		}
+		} */
 		.msgInput {
 			padding: 10px;
+		}
+		.d-none-mobile {
+			display: none !important;
 		}
 	}
 </style>

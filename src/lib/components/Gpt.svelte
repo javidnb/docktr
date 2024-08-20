@@ -174,7 +174,9 @@
 				inputFocused = true;
 			}}
 			on:blur={() => {
-				inputFocused = false;
+				setTimeout(() => {
+					inputFocused = false;
+				}, 50);
 			}}
 			rows={inputFocused && $mobile ? 2 : 1}
 		/>

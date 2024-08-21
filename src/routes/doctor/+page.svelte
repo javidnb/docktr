@@ -7,13 +7,17 @@
 	import { writable } from 'svelte/store';
 	import Appointments from '../appointment/Appointments.svelte';
 	import { _ } from 'svelte-i18n';
-	import { appointmentsLoading, selectedUser } from '$lib/store/dataStore';
+	import { appointmentsLoading, selectedUser, joinVideoCall, mobile } from '$lib/store/dataStore';
 	import { goto } from '$app/navigation';
-	import Messages from '$lib/components/chat/Messages.svelte';
+	import History from '$lib/components/profile/History.svelte';
 	import Chat from '$lib/components/chat/Chat.svelte';
+	import Documents from '$lib/components/profile/Documents.svelte';
+	import ContactForm from '../contact/ContactForm.svelte';
 
+	let component = Appointments;
 	let isCollapsed = false;
 	export let data;
+	let pageTitle: string = $_('nav.appointments');
 	let dataLoading = writable(true);
 	let usr: any;
 
@@ -30,7 +34,10 @@
 		}
 	}
 
-	// $: if ($appointmentsLoading == false) dataLoading.set(false);
+	$: if (!$joinVideoCall && (component == Appointments || component == Chat)) {
+		if ($selectedUser) component = Chat;
+		else component = Appointments;
+	}
 
 	function toggleCollapse() {
 		isCollapsed = !isCollapsed;
@@ -47,7 +54,14 @@
 				data-bs-target="#sideCollapse"
 				aria-expanded="false"
 				aria-controls="sideCollapse"
-				style="z-index: 999; position: absolute; left: 3px"
+				style="z-index: 999;
+					position: absolute;
+					right: 1rem;
+					top: 10px;
+					color: rgb(213, 228, 209);
+					border: 1px solid rgba(255, 255, 255, 0.21) !important;
+					height: 38px;
+					box-shadow: 0px 0px 5px 0px #a1c398a1"
 			>
 				<span class="material-symbols-outlined"> menu </span>
 			</button>
@@ -68,33 +82,94 @@
 							>Səhiyyə<span style="font-size: smaller; color: rgb(0 0 0 / 70%)">.online</span></span
 						>
 					</div>
-					<a class="mt-3 d-flex align-items-center gap-2" href="#">
+					<button
+						class="btn d-flex flex-row align-items-center gap-2"
+						on:click={() => {
+							component = Appointments;
+							pageTitle = $_('nav.appointments');
+							selectedUser.set(null);
+						}}
+						class:active={component == Appointments}
+						data-bs-toggle={$mobile ? 'collapse' : ''}
+						data-bs-target={$mobile ? '#sideCollapse' : ''}
+					>
 						<span class="material-symbols-outlined"> home </span>
 						<span class="navtext">Görüşlər</span>
-					</a>
-					<a href="#" class="d-flex align-items-center gap-2">
+					</button>
+					<button
+						class="btn d-flex flex-row align-items-center gap-2"
+						on:click={() => {
+							component = Documents;
+							pageTitle = $_('doctor.documents');
+						}}
+						class:active={component == Documents}
+						data-bs-toggle={$mobile ? 'collapse' : ''}
+						data-bs-target={$mobile ? '#sideCollapse' : ''}
+					>
+						<span class="material-symbols-outlined"> draft </span>
+						<span class="navtext">{$_('doctor.documents')}</span>
+					</button>
+					<button
+						class="btn d-flex flex-row align-items-center gap-2"
+						on:click={() => {
+							component = History;
+							pageTitle = $_('doctor.history');
+						}}
+						class:active={component == History}
+						data-bs-toggle={$mobile ? 'collapse' : ''}
+						data-bs-target={$mobile ? '#sideCollapse' : ''}
+					>
+						<span class="material-symbols-outlined"> history </span>
+						<span class="navtext">{$_('doctor.history')}</span>
+					</button>
+					<button
+						class="btn d-flex flex-row align-items-center gap-2"
+						on:click={() => {
+							component = ContactForm;
+							pageTitle = $_('nav.contact');
+						}}
+						class:active={component == ContactForm}
+						data-bs-toggle={$mobile ? 'collapse' : ''}
+						data-bs-target={$mobile ? '#sideCollapse' : ''}
+					>
 						<span class="material-symbols-outlined"> mail </span>
-						<span class="navtext">Mesajlar</span>
-					</a>
-					<a href="#" class="d-flex align-items-center gap-2">
+						<span class="navtext">{$_('nav.contact')}</span>
+					</button>
+					<button
+						class="btn d-flex flex-row align-items-center gap-2"
+						data-bs-toggle={$mobile ? 'collapse' : ''}
+						data-bs-target={$mobile ? '#sideCollapse' : ''}
+					>
 						<span class="material-symbols-outlined"> settings </span>
 						<span class="navtext">Ayarlar</span>
-					</a>
-					<!-- svelte-ignore a11y-click-events-have-key-events -->
-					<!-- svelte-ignore a11y-no-static-element-interactions -->
-					<a on:click={logout} class="mt-auto mb-2 d-flex align-items-center gap-2 cursor-pointer">
+					</button>
+					<button
+						on:click={logout}
+						class="btn mt-auto mb-2 d-flex flex-row align-items-center gap-2 cursor-pointer"
+					>
 						<span class="material-symbols-outlined"> logout </span>
 						<span class="navtext">Çıxış</span>
-					</a>
+					</button>
 				</div>
 			</div>
-			<div class="content" style="background-color: #f0f0f0; min-height: 100dvh">
+			<div class="content" style="background-color: #f8f8f8; min-height: 100dvh">
+				{#if $selectedUser}
+					<button
+						class="btn btn-outline-primary mb-3 px-3 d-flex btnClose pcOnly"
+						style="width: fit-content; position: absolute; top: 5px;"
+						on:click={() => {
+							selectedUser.set(null);
+						}}
+						><span class="material-symbols-outlined">arrow_back_ios</span>
+						<span class="s-FdJNS9dGDztw">{$_('actions.back')}</span></button
+					>
+				{/if}
 				<h5 class="ps-5 title">
-					{$_('nav.appointments')}
+					{pageTitle}
 				</h5>
 				<div class="container">
-					<div class="row" style="max-height: 100vh; overflow-y: scroll; padding-top: 10px">
-						<Appointments />
+					<div class="row pt-2" style="max-height: 100vh; overflow-y: scroll;">
+						<svelte:component this={component} />
 					</div>
 				</div>
 			</div>
@@ -148,13 +223,19 @@
 	@import url('https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap');
 
 	.title {
-		background: white;
-		color: #749675;
+		background: #95af8e;
+		color: white;
 		padding-block: 0.7rem;
 		text-align: center;
 		box-shadow: 0px 4px 6px -2px rgba(0, 0, 0, 0.1);
 		font-family: 'Cabin', sans-serif;
 		font-weight: 400;
+		margin-bottom: 0;
+	}
+
+	.btnClose:not(:hover) {
+		background-color: #00000024;
+		color: white;
 	}
 	.sidenavContent {
 		height: 100dvh;
@@ -177,20 +258,37 @@
 		font-family: 'Cabin', sans-serif;
 	}
 
-	.sidenav a:hover {
+	.sidenav .btn {
+		border: 0 !important;
+		padding: 0.55rem;
+	}
+
+	.sidenav .btn:hover,
+	.sidenav .btn:focus,
+	.sidenav .btn:active,
+	.sidenav .active {
+		background-color: rgba(0, 0, 0, 0.25);
 		color: #f1f1f1;
+		border-radius: 0;
 	}
 
 	@media screen and (max-width: 992px) {
+		.title {
+			height: 58px;
+			align-items: center;
+			display: flex;
+			justify-content: center;
+			padding-left: 0 !important;
+		}
 		.sidenav {
 			position: absolute;
 			top: 15px;
 			left: 0;
 			z-index: 99;
-			padding-top: 2rem;
+			padding-top: 44px;
 		}
 		.sidenavContent {
-			height: calc(100vh - 47px);
+			height: calc(100vh - 59px);
 			width: 80vw;
 		}
 	}

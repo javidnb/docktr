@@ -288,19 +288,12 @@
 						</span>
 					</button> -->
 						<button
-							class="btn btn-outline-primary d-flex align-items-center gap-1 pcOnly"
+							class="btn btn-outline-primary d-flex align-items-center gap-1"
 							style="padding: 5px 15px"
 							on:click={() => (showDocs = !showDocs)}
 						>
 							<span class="material-symbols-outlined"> draft </span>
 							<span>Dökümanlar</span>
-						</button>
-						<button
-							class="btn btn-outline-primary d-flex align-items-center gap-1"
-							style="padding: 5px 15px"
-						>
-							<span class="material-symbols-outlined ml-auto"> video_call </span>
-							<span>Call</span>
 						</button>
 					</div>
 				</div>

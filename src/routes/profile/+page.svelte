@@ -9,7 +9,6 @@
 	import { dataLoading, loginModal, mobile } from '$lib/store/dataStore';
 	import Chat from '$lib/components/chat/Chat.svelte';
 	import Documents from '$lib/components/profile/Documents.svelte';
-	import Messages from '$lib/components/chat/Messages.svelte';
 
 	export let data;
 	let userEmail: any = '';

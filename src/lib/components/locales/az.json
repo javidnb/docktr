@@ -33,7 +33,9 @@
 		"diseases": "Müalicə etdiyi xəstəliklər",
 		"nationality": "Milli mənsubiyyət",
 		"order_by": "Sırala",
-		"order_by_point": "Xala görə"
+		"order_by_point": "Xala görə",
+		"documents": "Dokumentlər",
+		"history": "Keçmiş Görüşlər"
 	},
 	"appointment": {
 		"loginToSee": "Randevuları görmək üçün hesaba",

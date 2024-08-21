@@ -41,14 +41,18 @@
 		<div class="card p-3">
 			<div class="d-flex flex-wrap gap-3">
 				<div style="color: #52694b">
-					<div class="d-flex align-items-center gap-1">
-						<span class="material-symbols-outlined icon-fill"> person </span>
-						<span>{msg.name}</span>
-					</div>
-					<div class="d-flex align-items-center gap-1 mt-1">
-						<span class="material-symbols-outlined icon-fill"> call </span>
-						<span>{msg.contact}</span>
-					</div>
+					{#if msg.name}
+						<div class="d-flex align-items-center gap-1">
+							<span class="material-symbols-outlined icon-fill"> person </span>
+							<span>{msg.name}</span>
+						</div>
+					{/if}
+					{#if msg.contact}
+						<div class="d-flex align-items-center gap-1 mt-1">
+							<span class="material-symbols-outlined icon-fill"> call </span>
+							<span>{msg.contact}</span>
+						</div>
+					{/if}
 				</div>
 
 				<div class="d-flex align-items-center ms-auto">

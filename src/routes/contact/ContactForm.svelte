@@ -1,9 +1,18 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
-	import { dataLoading, postData } from '$lib/store/dataStore';
+	import { dataLoading, postData, doctors } from '$lib/store/dataStore';
 	import { jsDateToSQL } from '$lib/helpers/dateFormatter';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { writable } from 'svelte/store';
+	import { session } from '$lib/session';
+
+	let docData: any = null;
+
+	$: if ($session.user && $doctors.length) {
+		if ($doctors.find((d) => d.id == $session.user?.doctor)) {
+			docData = $doctors.find((d) => d.id == $session.user?.doctor);
+		}
+	}
 
 	let btnDisabled = writable(false);
 	let btnText = $_('actions.send');
@@ -16,6 +25,10 @@
 			data[key] = value;
 		}
 		data.date = jsDateToSQL(new Date());
+		if (docData) {
+			data.name = docData.name;
+			data.contact = 'dr: ' + docData.id;
+		}
 
 		dataLoading.set(true);
 		let res = await postData('contact', { ...data });
@@ -41,19 +54,21 @@
 </script>
 
 <form class="d-flex flex-column gap-1" on:submit|preventDefault={formSubmit}>
-	<label class="form-label" for="name">{$_('login.name_surname')}</label>
-	<input name="name" id="name" type="text" class="form-control" required autocomplete="off" />
+	{#if !docData}
+		<label class="form-label" for="name">{$_('login.name_surname')}</label>
+		<input name="name" id="name" type="text" class="form-control" required autocomplete="off" />
 
-	<label class="form-label" for="contact">{$_('login.contact')}</label>
-	<input
-		name="contact"
-		id="contact"
-		type="text"
-		class="form-control"
-		placeholder="Mobil / email"
-		required
-		autocomplete="off"
-	/>
+		<label class="form-label" for="contact">{$_('login.contact')}</label>
+		<input
+			name="contact"
+			id="contact"
+			type="text"
+			class="form-control"
+			placeholder="Mobil / email"
+			required
+			autocomplete="off"
+		/>
+	{/if}
 
 	<label class="form-label" for="message">{$_('login.message')}</label>
 	<textarea id="message" name="message" class="form-control" rows="3" required></textarea>

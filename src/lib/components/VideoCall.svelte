@@ -400,7 +400,7 @@
 <!-- <div class="video-container" bind:this={videoContainer}></div> -->
 
 <div
-	style="position: absolute; top: 0px; left: 0; width: 100%; z-index: 9999"
+	style="position: absolute; top: 0px; left: 0; width: 100%; z-index: 9999; padding: 0"
 	class:d-none={!localVideoRef?.srcObject}
 	bind:this={conferenceContainer}
 >

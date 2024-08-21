@@ -136,7 +136,7 @@
 						<span class="navtext">{$_('nav.contact')}</span>
 					</button>
 					<button
-						class="btn d-flex flex-row align-items-center gap-2"
+						class="btn d-flex flex-row align-items-center gap-2 mt-auto"
 						data-bs-toggle={$mobile ? 'collapse' : ''}
 						data-bs-target={$mobile ? '#sideCollapse' : ''}
 					>
@@ -145,7 +145,7 @@
 					</button>
 					<button
 						on:click={logout}
-						class="btn mt-auto mb-2 d-flex flex-row align-items-center gap-2 cursor-pointer"
+						class="btn mb-2 d-flex flex-row align-items-center gap-2 cursor-pointer"
 					>
 						<span class="material-symbols-outlined"> logout </span>
 						<span class="navtext">Çıxış</span>
@@ -153,7 +153,7 @@
 				</div>
 			</div>
 			<div class="content" style="background-color: #f8f8f8; min-height: 100dvh">
-				{#if $selectedUser}
+				{#if $selectedUser && component == Chat}
 					<button
 						class="btn btn-outline-primary mb-3 px-3 d-flex btnClose pcOnly"
 						style="width: fit-content; position: absolute; top: 5px;"

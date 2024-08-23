@@ -2,7 +2,7 @@
 	import Messages from '$lib/components/chat/Messages.svelte';
 	import Chat from '$lib/components/chat/Chat.svelte';
 	import { _ } from 'svelte-i18n';
-	import { selectedUser, hideNav, mobile } from '$lib/store/dataStore';
+	import { selectedUser, hideNav, mobile, dataLoading } from '$lib/store/dataStore';
 	import { onMount } from 'svelte';
 	import { session } from '$lib/session';
 
@@ -52,14 +52,25 @@
 			{#if $session.user}
 				<div class="col-md-4 col-lg-3 {$selectedUser ? 'pcOnly' : ''}">
 					<div style="height: 100%; border-right: 1px solid #ececec; padding-right: .5rem">
-						<Messages
-							on:changeValue={() => {
-								// animate = false;
-								// setTimeout(() => {
-								// 	animate = true;
-								// }, 5);
-							}}
-						/>
+						<div class="d-flex" style="position: relative">
+							<span
+								class="pcOnly"
+								style="font-size: larger;
+								 border-bottom: 1px solid #ececec; 
+								 padding: 10px; 
+								 margin-bottom: 1rem;
+								 width: 100%;"
+							>
+								{$_('nav.messages')}
+							</span>
+							{#if $dataLoading}
+								<div
+									class="loader"
+									style="background-color: var(--primaryColor); top: 10px; right: 10px"
+								></div>
+							{/if}
+						</div>
+						<Messages />
 					</div>
 				</div>
 				<div class="col-md-8 col-lg-9">

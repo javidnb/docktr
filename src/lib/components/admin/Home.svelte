@@ -14,8 +14,8 @@
 	});
 </script>
 
-<div class="container">
-	<div class="row">
+<div>
+	<div class="row row-gap-3">
 		<div class="col-12 col-md-4 h-100">
 			<div class="card p-3">
 				<h6 class="cardTitle">Gələn Mesajlar</h6>
@@ -28,8 +28,9 @@
 				<AwaitingComments />
 			</div>
 		</div>
-		<div class="col-12 col-md-4 h-100 d-flex flex-column gap-3">
+		<div class="col-12 col-md-4 h-100 d-flex flex-column row-gap-3">
 			<div class="card p-3">
+                <h6 class="cardTitle">Mesajlar</h6>
 				<Messages />
 			</div>
 			<div class="card p-3">

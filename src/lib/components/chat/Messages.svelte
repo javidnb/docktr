@@ -9,6 +9,7 @@
 	import { browser } from '$app/environment';
 	import { writable } from 'svelte/store';
 	import { _ } from 'svelte-i18n';
+	import { goto } from '$app/navigation';
 
 	let messagesCollection: CollectionReference;
 	let messagesGroupedByUser: any = [];
@@ -110,22 +111,6 @@
 	}
 </script>
 
-<div class="d-flex" style="position: relative">
-	<span
-		class="pcOnly"
-		style="font-size: larger;
-		 border-bottom: 1px solid #ececec; 
-		 padding: 10px; 
-		 margin-bottom: 1rem;
-		 width: 100%;"
-	>
-		{$_('nav.messages')}
-	</span>
-	{#if $dataLoading}
-		<div class="loader" style="background-color: var(--primaryColor); top: 10px; right: 10px"></div>
-	{/if}
-</div>
-
 <div class="d-flex gap-2 flex-column">
 	{#each messagesGroupedByUser as { user, uid }}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -136,6 +121,9 @@
 			on:click={() => {
 				selectedUser.set(uid);
 				dispatch('changeValue', uid);
+				if (curPage == '/admin') {
+					goto('/messages');
+				}
 			}}
 		>
 			<div class="d-flex align-items-center" style="overflow: hidden;">
@@ -166,13 +154,6 @@
 				</div>
 			</div>
 		</button>
-		<!-- <ul style="list-style-type: none;">
-				{#each messages as message}
-					<li>
-						<p>{message.message}</p>
-					</li>
-				{/each}
-			</ul> -->
 	{/each}
 </div>
 
@@ -183,7 +164,7 @@
 	}
 	.users {
 		background-color: white;
-		border-radius: 8px!important;
+		border-radius: 8px !important;
 		box-shadow: 0px 0px 5px #00000012;
 		border: none;
 	}

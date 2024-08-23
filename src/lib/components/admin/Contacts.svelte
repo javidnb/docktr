@@ -8,6 +8,7 @@
 
 	let contactMessages: any = writable([]);
 
+
 	onMount(() => {
 		if (browser) {
 			const receivedContactMsgs = localStorage.getItem('receivedContactMsgs');
@@ -57,7 +58,7 @@
 					{/if}
 				</div>
 
-				<div class="d-flex flex-column row-gap-2 align-items-center ms-auto">
+				<div class="d-flex flex-column row-gap-2 align-items-center justify-content-end ms-auto">
 					{#if msg.uid}
 						<button
 							on:click={() => {

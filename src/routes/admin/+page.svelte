@@ -8,10 +8,11 @@
 	import AiChat from '$lib/components/admin/AiChat.svelte';
 	import { hideNav, mobile } from '$lib/store/dataStore';
 	import Reviews from '$lib/components/admin/Reviews.svelte';
+	import Home from '$lib/components/admin/Home.svelte';
 
 	// export let data;
-	let pageTitle: string = 'Admin Panel';
-	let component = DoctorList;
+	let pageTitle: string = 'Ana Səhifə';
+	let component = Home;
 	let isCollapsed = false;
 
 	onMount(async () => {
@@ -74,6 +75,19 @@
 						>Səhiyyə<span style="font-size: smaller; color: rgb(0 0 0 / 70%)">.online</span></span
 					>
 				</div>
+				<button
+					class="btn d-flex flex-row align-items-center gap-2"
+					on:click={() => {
+						component = Home;
+						pageTitle = 'Ana Səhifə';
+					}}
+					class:active={component == Home}
+					data-bs-toggle={$mobile ? 'collapse' : ''}
+					data-bs-target={$mobile ? '#sideCollapse' : ''}
+				>
+					<span class="material-symbols-outlined"> home </span>
+					<span class="navtext">Ana Səhifə</span>
+				</button>
 				<button
 					class="btn d-flex flex-row align-items-center gap-2"
 					on:click={() => {
@@ -153,7 +167,7 @@
 				</button> -->
 			</div>
 		</div>
-		<div class="content" style="background-color: #f8f8f8; min-height: 100dvh">
+		<div class="content" style="background-color: #f8f8f8; min-height: calc(100dvh - 30px)">
 			<!-- {#if $selectedUser && component == Chat}
 				<button
 					class="btn btn-outline-primary mb-3 px-3 d-flex btnClose pcOnly"
@@ -237,10 +251,11 @@
 			display: flex;
 			justify-content: center;
 			padding-left: 0 !important;
+			margin-bottom: 10px;
 		}
 		.sidenav {
 			position: absolute;
-			top: 15px;
+			top: 14px;
 			left: 0;
 			z-index: 99;
 			padding-top: 44px;

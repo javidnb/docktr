@@ -278,7 +278,7 @@
 	}
 </script>
 
-<div class="d-flex flex-wrap align-items-center w-100 ps-3 col-gap-5 row-gap-2">
+<div class="d-flex flex-wrap align-items-center w-100 col-gap-5 row-gap-2">
 	{#if !$selectedDoc}
 		<button
 			class="btn btn-outline-primary d-flex align-items-center wm-100"
@@ -304,311 +304,314 @@
 	{/if}
 </div>
 
-<ul class="list-group list-group-flush mt-3">
-	{#if !$selectedDoc}
-		{#each $doctors as doc}
-			<button
-				class="list-group-item"
-				style="text-align: left"
-				on:click={() => selectedDoc.set(doc.id)}>{doc.name}</button
-			>
-		{/each}
-	{:else}
-		<div class="pb-3">
-			<!-- DOC PHOTO -->
-			<div
-				style="position: relative;
-				justify-content: center;
-				display: flex;"
-			>
-				{#if $doctor?.img || avatar}
-					<div style="position: relative;">
-						<img
-							src={avatar ? avatar : $doctor?.img}
-							alt="Profile Pic"
-							style="max-width: 100px; border-radius: 100%; 
-							aspect-ratio: 1/1; object-fit: cover; cursor: pointer"
-							data-bs-toggle="dropdown"
-						/>
-						<div class="dropdown">
-							<button
-								class="btn btn-secondary"
-								type="button"
+<div class="container">
+	<ul class="list-group list-group-flush mt-3">
+		{#if !$selectedDoc}
+			{#each $doctors as doc}
+				<button
+					class="list-group-item"
+					style="text-align: left"
+					on:click={() => selectedDoc.set(doc.id)}>{doc.name}</button
+				>
+			{/each}
+		{:else}
+			<div class="pb-3">
+				<!-- DOC PHOTO -->
+				<div
+					style="position: relative;
+					justify-content: center;
+					display: flex;"
+				>
+					{#if $doctor?.img || avatar}
+						<div style="position: relative;">
+							<img
+								src={avatar ? avatar : $doctor?.img}
+								alt="Profile Pic"
+								style="max-width: 100px; border-radius: 100%; 
+								aspect-ratio: 1/1; object-fit: cover; cursor: pointer"
 								data-bs-toggle="dropdown"
-								aria-expanded="false"
+							/>
+							<div class="dropdown">
+								<button
+									class="btn btn-secondary"
+									type="button"
+									data-bs-toggle="dropdown"
+									aria-expanded="false"
+									style="position: absolute; right: -5px; bottom: -5px;
+									background: white; border: 1px solid #ececec;
+									border-radius: 8px; padding: 5px; color: black;
+									display: flex; justify-content: center;"
+								>
+									<span class="material-symbols-outlined icon-fill"> add </span>
+								</button>
+								<ul class="dropdown-menu">
+									<li>
+										<!-- svelte-ignore a11y-click-events-have-key-events -->
+										<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+										<label
+											for="fileInput"
+											class="dropdown-item d-flex align-items-center gap-1"
+											style="cursor: pointer;"
+											><span class="material-symbols-outlined"> add </span>{$_(
+												'actions.add_pp'
+											)}</label
+										>
+									</li>
+									<li>
+										<a
+											class="dropdown-item d-flex align-items-center gap-1"
+											href={$doctor?.img}
+											target="_blank"
+											><span class="material-symbols-outlined"> fullscreen </span>{$_(
+												'actions.view_pp'
+											)}</a
+										>
+									</li>
+								</ul>
+							</div>
+						</div>
+					{:else}
+						<div
+							style="width: 100px; 
+						height: 100px;
+						color: var(--primaryColor);
+						border-radius: 100%;
+						border: 3px solid var(--primaryColor);
+						display: flex; align-items: center; justify-content: center; position: relative"
+						>
+							<span class="material-symbols-outlined icon-fill" style="font-size: 4rem">
+								person
+							</span>
+							<span
+								class="material-symbols-outlined icon-fill"
 								style="position: absolute; right: -5px; bottom: -5px;
-								background: white; border: 1px solid #ececec;
-								border-radius: 8px; padding: 5px; color: black;
-								display: flex; justify-content: center;"
+							background: white; border: 1px solid #ececec; border-radius: 8px; padding: 5px"
 							>
-								<span class="material-symbols-outlined icon-fill"> add </span>
-							</button>
-							<ul class="dropdown-menu">
-								<li>
-									<!-- svelte-ignore a11y-click-events-have-key-events -->
-									<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-									<label
-										for="fileInput"
-										class="dropdown-item d-flex align-items-center gap-1"
-										style="cursor: pointer;"
-										><span class="material-symbols-outlined"> add </span>{$_(
-											'actions.add_pp'
-										)}</label
-									>
-								</li>
-								<li>
-									<a
-										class="dropdown-item d-flex align-items-center gap-1"
-										href={$doctor?.img}
-										target="_blank"
-										><span class="material-symbols-outlined"> fullscreen </span>{$_(
-											'actions.view_pp'
-										)}</a
-									>
-								</li>
-							</ul>
+								add
+							</span>
 						</div>
-					</div>
-				{:else}
-					<div
-						style="width: 100px; 
-					height: 100px;
-					color: var(--primaryColor);
-					border-radius: 100%;
-					border: 3px solid var(--primaryColor);
-					display: flex; align-items: center; justify-content: center; position: relative"
+					{/if}
+					<label
+						for="fileInput"
+						style="
+						position: absolute;
+						top: -7px;
+						right: -7px;
+						color: var(--primaryColor);
+						width: {$doctor?.img ? '10%' : '100%'};
+						height: 100%;
+						display: flex;
+						justify-content: end;
+						cursor: pointer"
 					>
-						<span class="material-symbols-outlined icon-fill" style="font-size: 4rem">
-							person
-						</span>
-						<span
-							class="material-symbols-outlined icon-fill"
-							style="position: absolute; right: -5px; bottom: -5px;
-						background: white; border: 1px solid #ececec; border-radius: 8px; padding: 5px"
-						>
-							add
-						</span>
-					</div>
-				{/if}
-				<label
-					for="fileInput"
-					style="
-					position: absolute;
-					top: -7px;
-					right: -7px;
-					color: var(--primaryColor);
-					width: {$doctor?.img ? '10%' : '100%'};
-					height: 100%;
-					display: flex;
-					justify-content: end;
-					cursor: pointer"
-				>
-				</label>
+					</label>
 
-				<input
-					class="form-control d-none"
-					id="fileInput"
-					type="file"
-					accept=".jpg, .jpeg, .png"
-					on:change={(e) => onFileSelected(e)}
-					bind:this={fileInput}
-				/>
+					<input
+						class="form-control d-none"
+						id="fileInput"
+						type="file"
+						accept=".jpg, .jpeg, .png"
+						on:change={(e) => onFileSelected(e)}
+						bind:this={fileInput}
+					/>
+				</div>
+
+				<form on:submit|preventDefault={handleSubmit}>
+					<div class="form-group">
+						<label for="name" class="form-label"
+							>Ad Soyad <span style="font-weight: 600; color: red">*</span></label
+						>
+						<input
+							name="name"
+							type="text"
+							class="form-control"
+							id="name"
+							placeholder="Ad Soyad"
+							value={docName}
+							required
+						/>
+					</div>
+					<div class="form-group mt-3">
+						<label for="details" class="form-label">Məlumat</label>
+						<Editor
+							licenseKey="93fkaai35581b9yg7s333g4s65y6ckgbhvlc1abz90od47x9"
+							scriptSrc="tinymce/tinymce.min.js"
+							id="details"
+							bind:value={details}
+							{conf}
+							required
+						/>
+					</div>
+					<!-- BRANSLAR -->
+					<div class="form-group mt-3">
+						<label for="branchSelector" class="form-label"
+							>Branşlar <span style="font-weight: 600; color: red">*</span></label
+						>
+						<Select
+							class="form-control"
+							items={branches}
+							bind:value={selectedBranches}
+							placeholder="Branşlar"
+							multiple
+							id="branchSelector"
+							name="branches"
+							--border-radius="8px"
+							--border-focused="1px solid var(--primaryColor)"
+							required
+						>
+							<div slot="prepend" class="d-flex align-items-center" style="padding-right: 10px">
+								<span class="material-symbols-outlined"> category </span>
+							</div>
+						</Select>
+					</div>
+					<!-- ILGI ALANLARI -->
+					<div class="form-group mt-3">
+						<label for="branchSelector" class="form-label">Müalicə etdiyi xəstəliklər</label>
+						<Select
+							class="form-control"
+							items={hastalik}
+							bind:value={selectedDiseases}
+							placeholder="Hastalıklar"
+							multiple
+							id="disSelector"
+							name="diseases"
+							--border-radius="8px"
+							--border-focused="1px solid var(--primaryColor)"
+						>
+							<div slot="prepend" class="d-flex align-items-center" style="padding-right: 10px">
+								<span class="material-symbols-outlined"> microbiology </span>
+							</div>
+						</Select>
+					</div>
+					<!-- NATIONALITY -->
+					<div class="form-group mt-3">
+						<label for="branchSelector" class="form-label">Milliyət</label>
+						<Select
+							class="form-control"
+							items={nationality}
+							placeholder="Milliyət"
+							id="nationality"
+							name="nationality"
+							bind:value={selectedNationality}
+							--border-radius="8px"
+							--border-focused="1px solid var(--primaryColor)"
+							--item-is-active-bg="var(--primaryColor)"
+							--item-hover-bg="#d9e1d7"
+						>
+							<div slot="prepend" class="d-flex align-items-center" style="padding-right: 10px">
+								<span class="material-symbols-outlined"> flag </span>
+							</div>
+						</Select>
+					</div>
+					<!-- KONUSTUGU DILLER -->
+					<div class="form-group mt-3">
+						<label for="branchSelector" class="form-label">Danışdığı dillər</label>
+						<Select
+							class="form-control"
+							items={langs}
+							bind:value={selectedLangs}
+							multiple
+							placeholder="Danışdığı dillər"
+							id="langs"
+							name="langs"
+							--border-radius="8px"
+							--border-focused="1px solid var(--primaryColor)"
+						>
+							<div slot="prepend" class="d-flex align-items-center" style="padding-right: 10px">
+								<span class="material-symbols-outlined"> language </span>
+							</div>
+						</Select>
+					</div>
+
+					<!-- ÇALIŞTIĞI HASTANELER -->
+					<div class="form-group mt-3">
+						<!-- svelte-ignore a11y-label-has-associated-control -->
+						<div class="d-flex gap-3 align-items-center">
+							<label class="form-label">Çalıştığı hastaneler</label>
+							<button
+								on:click|preventDefault={() => {
+									hospitals = [...hospitals, ''];
+								}}
+								class="btn btn-outline-primary">+ Add Hospital</button
+							>
+						</div>
+						<ul class="list-group list-group-flush d-flex gap-3 mt-2">
+							{#each hospitals as hospital, index}
+								<div class="input-group">
+									<input class="form-control" bind:value={hospital} placeholder="Xəstəxana Adı" />
+									<button
+										class="btn"
+										on:click={() => {
+											hospitals = [...hospitals.slice(0, index), ...hospitals.slice(index + 1)];
+											if (!hospitals.length) {
+												hospitals = [''];
+											}
+										}}>x</button
+									>
+								</div>
+							{/each}
+						</ul>
+					</div>
+
+					<!-- SERTIFIKALAR -->
+					<div class="form-group mt-3">
+						<!-- svelte-ignore a11y-label-has-associated-control -->
+						<div class="d-flex gap-3 align-items-center">
+							<label class="form-label">Sertifikalar</label>
+							<button
+								on:click|preventDefault={() => {
+									certificates = [...certificates, ''];
+								}}
+								class="btn btn-outline-primary">+ Add Certificate</button
+							>
+						</div>
+						<ul class="list-group list-group-flush d-flex gap-3 mt-2">
+							{#each certificates as cert, index}
+								<div class="input-group">
+									<input class="form-control" bind:value={cert} placeholder="Sertifikat Adı" />
+									<button
+										class="btn"
+										on:click={() => {
+											certificates = [
+												...certificates.slice(0, index),
+												...certificates.slice(index + 1)
+											];
+											if (!certificates.length) {
+												certificates = [''];
+											}
+										}}>x</button
+									>
+								</div>
+							{/each}
+						</ul>
+					</div>
+
+					<!-- CONTACT -->
+					<div class="form-group mt-3">
+						<label for="contact" class="form-label">İletişim (gizlidir)</label>
+						<input
+							name="contact"
+							type="text"
+							class="form-control"
+							id="contact"
+							placeholder="Mobile"
+							value={contact}
+						/>
+					</div>
+
+					<button type="submit" class="btn btn-primary mt-3 w-100" disabled={$dataLoading}
+						>{$doctor && $doctor.id ? 'Yenilə' : 'Əlavə et'}</button
+					>
+				</form>
 			</div>
-
-			<form on:submit|preventDefault={handleSubmit}>
-				<div class="form-group">
-					<label for="name" class="form-label"
-						>Ad Soyad <span style="font-weight: 600; color: red">*</span></label
-					>
-					<input
-						name="name"
-						type="text"
-						class="form-control"
-						id="name"
-						placeholder="Ad Soyad"
-						value={docName}
-						required
-					/>
-				</div>
-				<div class="form-group mt-3">
-					<label for="details" class="form-label">Məlumat</label>
-					<Editor
-						licenseKey="93fkaai35581b9yg7s333g4s65y6ckgbhvlc1abz90od47x9"
-						scriptSrc="tinymce/tinymce.min.js"
-						id="details"
-						bind:value={details}
-						{conf}
-						required
-					/>
-				</div>
-				<!-- BRANSLAR -->
-				<div class="form-group mt-3">
-					<label for="branchSelector" class="form-label"
-						>Branşlar <span style="font-weight: 600; color: red">*</span></label
-					>
-					<Select
-						class="form-control"
-						items={branches}
-						bind:value={selectedBranches}
-						placeholder="Branşlar"
-						multiple
-						id="branchSelector"
-						name="branches"
-						--border-radius="8px"
-						--border-focused="1px solid var(--primaryColor)"
-						required
-					>
-						<div slot="prepend" class="d-flex align-items-center" style="padding-right: 10px">
-							<span class="material-symbols-outlined"> category </span>
-						</div>
-					</Select>
-				</div>
-				<!-- ILGI ALANLARI -->
-				<div class="form-group mt-3">
-					<label for="branchSelector" class="form-label">Müalicə etdiyi xəstəliklər</label>
-					<Select
-						class="form-control"
-						items={hastalik}
-						bind:value={selectedDiseases}
-						placeholder="Hastalıklar"
-						multiple
-						id="disSelector"
-						name="diseases"
-						--border-radius="8px"
-						--border-focused="1px solid var(--primaryColor)"
-					>
-						<div slot="prepend" class="d-flex align-items-center" style="padding-right: 10px">
-							<span class="material-symbols-outlined"> microbiology </span>
-						</div>
-					</Select>
-				</div>
-				<!-- NATIONALITY -->
-				<div class="form-group mt-3">
-					<label for="branchSelector" class="form-label">Milliyət</label>
-					<Select
-						class="form-control"
-						items={nationality}
-						placeholder="Milliyət"
-						id="nationality"
-						name="nationality"
-						bind:value={selectedNationality}
-						--border-radius="8px"
-						--border-focused="1px solid var(--primaryColor)"
-						--item-is-active-bg="var(--primaryColor)"
-						--item-hover-bg="#d9e1d7"
-					>
-						<div slot="prepend" class="d-flex align-items-center" style="padding-right: 10px">
-							<span class="material-symbols-outlined"> flag </span>
-						</div>
-					</Select>
-				</div>
-				<!-- KONUSTUGU DILLER -->
-				<div class="form-group mt-3">
-					<label for="branchSelector" class="form-label">Danışdığı dillər</label>
-					<Select
-						class="form-control"
-						items={langs}
-						bind:value={selectedLangs}
-						multiple
-						placeholder="Danışdığı dillər"
-						id="langs"
-						name="langs"
-						--border-radius="8px"
-						--border-focused="1px solid var(--primaryColor)"
-					>
-						<div slot="prepend" class="d-flex align-items-center" style="padding-right: 10px">
-							<span class="material-symbols-outlined"> language </span>
-						</div>
-					</Select>
-				</div>
-
-				<!-- ÇALIŞTIĞI HASTANELER -->
-				<div class="form-group mt-3">
-					<!-- svelte-ignore a11y-label-has-associated-control -->
-					<div class="d-flex gap-3 align-items-center">
-						<label class="form-label">Çalıştığı hastaneler</label>
-						<button
-							on:click|preventDefault={() => {
-								hospitals = [...hospitals, ''];
-							}}
-							class="btn btn-outline-primary">+ Add Hospital</button
-						>
-					</div>
-					<ul class="list-group list-group-flush d-flex gap-3 mt-2">
-						{#each hospitals as hospital, index}
-							<div class="input-group">
-								<input class="form-control" bind:value={hospital} placeholder="Xəstəxana Adı" />
-								<button
-									class="btn"
-									on:click={() => {
-										hospitals = [...hospitals.slice(0, index), ...hospitals.slice(index + 1)];
-										if (!hospitals.length) {
-											hospitals = [''];
-										}
-									}}>x</button
-								>
-							</div>
-						{/each}
-					</ul>
-				</div>
-
-				<!-- SERTIFIKALAR -->
-				<div class="form-group mt-3">
-					<!-- svelte-ignore a11y-label-has-associated-control -->
-					<div class="d-flex gap-3 align-items-center">
-						<label class="form-label">Sertifikalar</label>
-						<button
-							on:click|preventDefault={() => {
-								certificates = [...certificates, ''];
-							}}
-							class="btn btn-outline-primary">+ Add Certificate</button
-						>
-					</div>
-					<ul class="list-group list-group-flush d-flex gap-3 mt-2">
-						{#each certificates as cert, index}
-							<div class="input-group">
-								<input class="form-control" bind:value={cert} placeholder="Sertifikat Adı" />
-								<button
-									class="btn"
-									on:click={() => {
-										certificates = [
-											...certificates.slice(0, index),
-											...certificates.slice(index + 1)
-										];
-										if (!certificates.length) {
-											certificates = [''];
-										}
-									}}>x</button
-								>
-							</div>
-						{/each}
-					</ul>
-				</div>
-
-				<!-- CONTACT -->
-				<div class="form-group mt-3">
-					<label for="contact" class="form-label">İletişim (gizlidir)</label>
-					<input
-						name="contact"
-						type="text"
-						class="form-control"
-						id="contact"
-						placeholder="Mobile"
-						value={contact}
-					/>
-				</div>
-
-				<button type="submit" class="btn btn-primary mt-3 w-100" disabled={$dataLoading}
-					>{$doctor && $doctor.id ? 'Yenilə' : 'Əlavə et'}</button
-				>
-			</form>
-		</div>
-	{/if}
-</ul>
+		{/if}
+	</ul>
+</div>
 
 <style>
-	.btn:not(:hover) {
+	.btn-outline-primary:not(:hover) {
 		background-color: white;
+		color: #95af8e;
 	}
 	.list-group {
 		border-radius: 6px;

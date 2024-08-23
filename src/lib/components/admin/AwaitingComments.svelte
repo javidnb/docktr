@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { dataLoading, doctors } from '$lib/store/dataStore';
+	import { dataLoading, doctors, limitDashboardData } from '$lib/store/dataStore';
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { formatDate } from '$lib/helpers/dateFormatter';
@@ -22,11 +22,8 @@
 			let response = await fetch(`https://tekoplast.az/docktr/api/?awaitingComments`);
 
 			const result = await response.json();
-
-			console.log(result);
-
 			if (result) {
-				contactMessages.set(result);
+				contactMessages.set($limitDashboardData ? result.slice(0, 2) : result);
 				localStorage.setItem('awaitingComments', JSON.stringify(result));
 				dataLoading.set(false);
 				return null;

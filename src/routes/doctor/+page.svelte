@@ -282,7 +282,7 @@
 		}
 		.sidenav {
 			position: absolute;
-			top: 15px;
+			top: 14px;
 			left: 0;
 			z-index: 99;
 			padding-top: 44px;

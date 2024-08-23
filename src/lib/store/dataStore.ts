@@ -23,6 +23,7 @@ export const hideNav = writable(false);
 export const appointmentsLoading = writable(true);
 export const searchQuery = writable('');
 export const showGPT = writable(false);
+export const limitDashboardData = writable(true); // this is for admin page, to get only limited data in homepage
 
 export const langs: any = [
 	{ value: 'aze', label: 'Azərbaycanca' },

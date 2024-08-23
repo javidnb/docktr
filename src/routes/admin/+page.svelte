@@ -9,6 +9,7 @@
 	import { hideNav, mobile } from '$lib/store/dataStore';
 	import Reviews from '$lib/components/admin/Reviews.svelte';
 	import Home from '$lib/components/admin/Home.svelte';
+	import UpcomingAppointments from '$lib/components/admin/UpcomingAppointments.svelte';
 
 	// export let data;
 	let pageTitle: string = 'Ana Səhifə';
@@ -101,6 +102,20 @@
 					<span class="material-symbols-outlined"> physical_therapy </span>
 					<span class="navtext">Həkimlər</span>
 				</button>
+				<button
+					class="btn d-flex flex-row align-items-center gap-2"
+					on:click={() => {
+						component = UpcomingAppointments;
+						pageTitle = 'Randevular';
+					}}
+					class:active={component == UpcomingAppointments}
+					data-bs-toggle={$mobile ? 'collapse' : ''}
+					data-bs-target={$mobile ? '#sideCollapse' : ''}
+				>
+					<span class="material-symbols-outlined"> local_library </span>
+					<span class="navtext">Randevular</span>
+				</button>
+
 				<button
 					class="btn d-flex flex-row align-items-center gap-2"
 					on:click={() => {

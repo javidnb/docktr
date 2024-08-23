@@ -5,6 +5,7 @@
 	import AwaitingComments from './AwaitingComments.svelte';
 	import Reviews from './Reviews.svelte';
 	import Messages from '../chat/Messages.svelte';
+	import UpcomingAppointments from './UpcomingAppointments.svelte';
 
 	onMount(() => {
 		limitDashboardData.set(true);
@@ -15,10 +16,15 @@
 </script>
 
 <div>
-	<div class="row row-gap-3">
+	<div class="row">
+		<div class="col-12">
+			<UpcomingAppointments />
+		</div>
+	</div>
+	<div class="row row-gap-3 mt-3">
 		<div class="col-12 col-md-4 h-100">
 			<div class="card p-3">
-				<h6 class="cardTitle">Gələn Mesajlar</h6>
+				<h6 class="cardTitle">Əlaqə</h6>
 				<Contacts />
 			</div>
 		</div>

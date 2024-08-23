@@ -49,7 +49,6 @@
 				.sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
 
 	onMount(() => {
-		console.log(upcomingAppointments);
 		const updateRemainingTime = () => {
 			appointments.set(
 				$appointments.map((appointment) => {

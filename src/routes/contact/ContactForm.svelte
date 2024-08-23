@@ -7,10 +7,17 @@
 	import { session } from '$lib/session';
 
 	let docData: any = null;
+	let displayName: string = '';
+	let phoneNumber: string = '';
+	let message: string = '';
 
-	$: if ($session.user && $doctors.length) {
-		if ($doctors.find((d) => d.id == $session.user?.doctor)) {
-			docData = $doctors.find((d) => d.id == $session.user?.doctor);
+	$: if ($session.user) {
+		displayName = $session.user?.displayName || '';
+		phoneNumber = $session.user?.phoneNumber || $session.user?.email || '';
+		if ($doctors.length) {
+			if ($doctors.find((d) => d.id == $session.user?.doctor)) {
+				docData = $doctors.find((d) => d.id == $session.user?.doctor);
+			}
 		}
 	}
 
@@ -25,9 +32,9 @@
 			data[key] = value;
 		}
 		data.date = jsDateToSQL(new Date());
-		if (docData) {
-			data.name = docData.name;
-			data.contact = 'dr: ' + docData.id;
+
+		if ($session.user?.uid) {
+			data.uid = $session.user?.uid;
 		}
 
 		dataLoading.set(true);
@@ -54,26 +61,43 @@
 </script>
 
 <form class="d-flex flex-column gap-1" on:submit|preventDefault={formSubmit}>
-	{#if !docData}
-		<label class="form-label" for="name">{$_('login.name_surname')}</label>
-		<input name="name" id="name" type="text" class="form-control" required autocomplete="off" />
+	<label class="form-label" for="name" class:d-none={docData}>{$_('login.name_surname')}</label>
+	<input
+		name="name"
+		id="name"
+		type="text"
+		class="form-control"
+		bind:value={displayName}
+		required
+		autocomplete="off"
+		class:d-none={docData}
+	/>
 
-		<label class="form-label" for="contact">{$_('login.contact')}</label>
-		<input
-			name="contact"
-			id="contact"
-			type="text"
-			class="form-control"
-			placeholder="Mobil / email"
-			required
-			autocomplete="off"
-		/>
-	{/if}
+	<label class="form-label" for="contact" class:d-none={docData}>{$_('login.contact')}</label>
+	<input
+		name="contact"
+		id="contact"
+		type="text"
+		class="form-control"
+		placeholder="Mobil / email"
+		required
+		autocomplete="off"
+		bind:value={phoneNumber}
+		class:d-none={docData}
+	/>
 
 	<label class="form-label" for="message">{$_('login.message')}</label>
-	<textarea id="message" name="message" class="form-control" rows="3" required></textarea>
+	<textarea id="message" name="message" class="form-control" rows="3" bind:value={message} required
+	></textarea>
 
-	<button class="btn btn-primary mt-3 btnLoader" disabled={$dataLoading || $btnDisabled}>
+	<button
+		class="btn btn-primary mt-3 btnLoader"
+		disabled={$dataLoading ||
+			$btnDisabled ||
+			!message.length ||
+			!displayName.length ||
+			!phoneNumber.length}
+	>
 		<span>{btnText}</span>
 		{#if $dataLoading}
 			<div class="loader"></div>

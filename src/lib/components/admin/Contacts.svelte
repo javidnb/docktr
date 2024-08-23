@@ -1,12 +1,18 @@
 <script lang="ts">
-	import { dataLoading } from '$lib/store/dataStore';
+	import { dataLoading, selectedUser } from '$lib/store/dataStore';
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { formatDate } from '$lib/helpers/dateFormatter';
+	import { goto } from '$app/navigation';
+	import { browser } from '$app/environment';
 
 	let contactMessages: any = writable([]);
 
 	onMount(() => {
+		if (browser) {
+			const receivedContactMsgs = localStorage.getItem('receivedContactMsgs');
+			contactMessages.set(receivedContactMsgs ? JSON.parse(receivedContactMsgs) : []);
+		}
 		getData();
 	});
 
@@ -18,6 +24,7 @@
 			const result = await response.json();
 			if (result) {
 				contactMessages.set(result);
+				localStorage.setItem('receivedContactMsgs', JSON.stringify(result));
 				dataLoading.set(false);
 				return null;
 			}
@@ -29,12 +36,6 @@
 		}
 	}
 </script>
-
-<div class="d-flex align-items-center w-100 ps-3" style="height: 36px;">
-	<h5 style="margin-bottom: 0; min-width: 150px; color: #52694b">Gələn Mesajlar</h5>
-</div>
-
-<hr class="w-100" />
 
 <div class="d-flex gap-3 flex-column">
 	{#each $contactMessages as msg}
@@ -50,12 +51,22 @@
 					{#if msg.contact}
 						<div class="d-flex align-items-center gap-1 mt-1">
 							<span class="material-symbols-outlined icon-fill"> call </span>
+
 							<span>{msg.contact}</span>
 						</div>
 					{/if}
 				</div>
 
-				<div class="d-flex align-items-center ms-auto">
+				<div class="d-flex flex-column row-gap-2 align-items-center ms-auto">
+					{#if msg.uid}
+						<button
+							on:click={() => {
+								selectedUser.set(msg.uid);
+								goto('/messages');
+							}}
+							class="btn btn-outline-primary w-100">Mesaj yaz</button
+						>
+					{/if}
 					<span style="font-size: small; text-align: right">{formatDate(new Date(msg.date))}</span>
 				</div>
 			</div>

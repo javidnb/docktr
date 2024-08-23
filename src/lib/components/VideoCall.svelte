@@ -56,6 +56,10 @@
 			reviewModal.set(true);
 		}
 		// ongoingAppointment.set(null);
+		if (stream) {
+			const tracks = stream.getTracks();
+			tracks.forEach((track: any) => track.stop());
+		}
 		dataLoading.set(false);
 	});
 
@@ -158,22 +162,23 @@
 				joinVideoCall.set(false);
 				let session = callObject?.meetingSessionSummary();
 
-				const headers = new Headers({
-					Authorization: `Bearer ${API_KEY}`,
-					'Content-Type': 'application/json'
-				});
-
-				fetch(`${DAILY_API_URL}/meetings/${session?.id}`, {
-					method: 'GET',
-					headers: headers
-				})
-					.then((response) => response.json())
-					.then((data) => {
-						console.log('Session Details:', data);
-					})
-					.catch((error) => {
-						console.error('Error fetching session details:', error);
+				if (session?.id) {
+					const headers = new Headers({
+						Authorization: `Bearer ${API_KEY}`,
+						'Content-Type': 'application/json'
 					});
+					fetch(`${DAILY_API_URL}/meetings/${session?.id}`, {
+						method: 'GET',
+						headers: headers
+					})
+						.then((response) => response.json())
+						.then((data) => {
+							console.log('Session Details:', data);
+						})
+						.catch((error) => {
+							console.error('Error fetching session details:', error);
+						});
+				}
 			});
 
 			// callObject
@@ -250,6 +255,11 @@
 	}
 
 	async function leaveCall() {
+		// Leave the Daily call and destroy the call object
+		if (callObject) {
+			await callObject.leave();
+			await callObject.destroy();
+		}
 		// Stop all video and audio tracks
 		if (stream) {
 			const tracks = stream.getTracks();
@@ -262,12 +272,6 @@
 		appointments.update((arr) =>
 			arr.map((item) => (item.id === $ongoingAppointment.id ? { ...item, ended: true } : item))
 		);
-
-		// Leave the Daily call and destroy the call object
-		if (callObject) {
-			await callObject.leave();
-			await callObject.destroy();
-		}
 
 		// Reset relevant states
 		hideNav.set(false);

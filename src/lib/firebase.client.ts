@@ -41,21 +41,23 @@ export const initializeFirebase = (): Promise<void> => {
 	});
 };
 
+function clearUserData() {
+	setTimeout(() => {
+		session.set({ user: null, loggedIn: false });
+		appointments.set([]);
+		localStorage.removeItem('user');
+		dataLoading.set(false);
+	}, 100);
+}
+
 export function logout() {
+	clearUserData();
 	auth
 		.signOut()
 		.then(() => {
-			setTimeout(() => {
-				session.set({ user: null, loggedIn: false });
-				appointments.set([]);
-				localStorage.removeItem('user');
-				dataLoading.set(false);
-			}, 100);
+			clearUserData();
 		})
 		.catch(() => {
-			dataLoading.set(false);
-			session.set({ user: null, loggedIn: false });
-			appointments.set([]);
-			localStorage.removeItem('user');
+			clearUserData();
 		});
 }

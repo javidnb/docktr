@@ -9,7 +9,7 @@
 
 	onMount(() => {
 		if (browser) {
-			const receivedContactMsgs = localStorage.getItem('gptChat');
+			const receivedContactMsgs = localStorage.getItem('videoCallReviews');
 			contactMessages.set(receivedContactMsgs ? JSON.parse(receivedContactMsgs) : []);
 		}
 		getData();
@@ -18,12 +18,12 @@
 	async function getData() {
 		dataLoading.set(true);
 		try {
-			let response = await fetch(`https://tekoplast.az/docktr/api/?gptChatMessages`);
+			let response = await fetch(`https://tekoplast.az/docktr/api/?callReviews`);
 
 			const result = await response.json();
 			if (result) {
 				contactMessages.set(result);
-				localStorage.setItem('gptChat', JSON.stringify(result));
+				localStorage.setItem('videoCallReviews', JSON.stringify(result));
 				dataLoading.set(false);
 				return null;
 			}
@@ -39,10 +39,12 @@
 <div class="d-flex gap-3 flex-column">
 	{#each $contactMessages as msg}
 		<div class="card p-3">
-			<span style="font-weight: 500;">{msg.user}</span>
-			<span>{msg.assistant}</span>
+			<span style="font-weight: 500;">appointment: {msg.appointmentId}</span>
+			<span>point: {msg.callQuality}</span>
+			<span>{msg.message}</span>
+			<span style="font-size: small; margin-top: 1rem">{formatDate(new Date(msg.date))}</span>
 			{#if msg.userId}
-				<span style="font-size: small; color: gray; margin-top: 1rem">{msg.userId}</span>
+				<span style="font-size: small; color: gray;">{msg.userId}</span>
 			{/if}
 		</div>
 	{/each}

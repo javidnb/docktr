@@ -279,9 +279,6 @@
 </script>
 
 <div class="d-flex flex-wrap align-items-center w-100 ps-3 col-gap-5 row-gap-2">
-	<h5 style="margin-bottom: 0; min-width: 170px; color: #52694b;">
-		{$selectedDoc == 0 ? 'Yeni Həkim' : $selectedDoc ? 'Həkim haqqında' : 'Həkimlər'}
-	</h5>
 	{#if !$selectedDoc}
 		<button
 			class="btn btn-outline-primary d-flex align-items-center wm-100"
@@ -307,9 +304,7 @@
 	{/if}
 </div>
 
-<hr class="w-100" />
-
-<ul class="list-group list-group-flush">
+<ul class="list-group list-group-flush mt-3">
 	{#if !$selectedDoc}
 		{#each $doctors as doc}
 			<button
@@ -612,6 +607,9 @@
 </ul>
 
 <style>
+	.btn:not(:hover) {
+		background-color: white;
+	}
 	.list-group {
 		border-radius: 6px;
 	}

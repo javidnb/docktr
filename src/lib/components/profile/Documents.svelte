@@ -145,7 +145,7 @@
 	</div>
 {:else}
 	<button
-		class="btn btn-outline-primary d-flex align-items-center gap-1 pcOnly"
+		class="btn btnClose btn-outline-primary d-flex align-items-center gap-1 ms-3"
 		style="width: fit-content;"
 		on:click={() => {
 			selectedUser.set(null);

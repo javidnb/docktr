@@ -376,7 +376,7 @@
 							$session.loggedIn ? goto('/profile') : loginModal.set(true);
 						}}
 						><span class="material-symbols-outlined" class:icon-fill={curPage == '/profile'}>
-							account_circle
+							menu
 						</span>
 						<span class="navLinkText"
 							>{$session.user?.displayName

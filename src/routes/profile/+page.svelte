@@ -129,8 +129,31 @@
 									changeComponent(ProfDetails, true);
 								}}
 							>
-								<span class="material-symbols-outlined"> for_you </span>Hesap Bilgileri
+								<div class="d-flex gap-3 align-items-center">
+									<!-- svelte-ignore a11y-img-redundant-alt -->
+									{#if $session.user?.photoURL}
+										<img
+											src={$session.user?.photoURL}
+											alt="Profile Photo"
+											style="max-height: 60px; border: 1px solid #ececec; padding: 5px; border-radius: 100%"
+										/>
+									{:else}
+										<span
+											style="font-size: 60px!important; color: #628a57"
+											class="material-symbols-outlined icon-fill">account_circle</span
+										>
+									{/if}
+									<div class="d-flex flex-column align-items-start">
+										<span style="font-size: small; color: gray">Profil</span>
+										<span style="margin-top: -5px">{$session.user?.displayName}</span>
+									</div>
+								</div>
 							</button>
+							<hr
+								style="padding: 0;
+								color: #a7a7a7;
+								margin: 5px;"
+							/>
 							<a class="card btn btn-outline-primary d-flex flex-row w-100" href="/messages">
 								<span class="material-symbols-outlined"> mail </span>Mesajlar
 							</a>

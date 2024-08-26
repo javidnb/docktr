@@ -83,6 +83,7 @@ body {
 		background-blend-mode: overlay;
 		color: #075e07;
 		font-family: 'Nunito', sans-serif;
+		display: none!important;
 	}
 }
 @media screen and (max-width: 768px) {

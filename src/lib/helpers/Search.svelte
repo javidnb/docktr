@@ -122,7 +122,7 @@
 					color: gray;
 					background: transparent;
 					text-wrap: nowrap;
-					font-size: 16px;
+					font-size: clamp(12px, 4vw, 14px);
 					width: 100%;"
 			>{$_('nav.docs')}, {$_('nav.branches')}, {$_('nav.diseases')}, {$_('home.symptoms')}</span
 		>

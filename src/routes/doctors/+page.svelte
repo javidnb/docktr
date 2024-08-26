@@ -63,7 +63,7 @@
 </script>
 
 <section>
-	<div class="jumbotron" style="padding-block: 1rem; background-color: #e2e9ef">
+	<div class="jumbotron jumboHeader" style="padding-block: 1rem; background-color: #e2e9ef">
 		<h1 class="display-4">{$_('nav.docs')}</h1>
 	</div>
 </section>
@@ -72,7 +72,7 @@
 	<div class="container pb-5">
 		<div class="row mb-3">
 			<div class="col">
-				<button
+				<!-- <button
 					class="btn btn-outline-primary btnFilter d-flex w-100"
 					type="button"
 					data-bs-toggle="collapse"
@@ -101,9 +101,9 @@
 							>
 						{/if}
 					</div>
-				</button>
-				<div class="collapse filterCollapse" id="collapseExample">
-					<div class="row mt-mobile row-gap-2">
+				</button> -->
+				<div class="collapse filterCollapse show" id="collapseExample">
+					<div class="row row-gap-2">
 						<div class="col-md-4">
 							<div class="input-group input-group-lg">
 								<Select
@@ -126,12 +126,12 @@
 									searchable={$mobile ? false : true}
 								>
 									<div slot="prepend" class="d-flex align-items-center" style="padding-right: 10px">
-										<span class="material-symbols-outlined"> category </span>
+										<span class="material-symbols-outlined"> arrow_drop_down </span>
 									</div>
 								</Select>
 							</div>
 						</div>
-						<div class="col-md-4">
+						<!-- <div class="col-md-4">
 							<Select
 								class="form-control"
 								items={langs}
@@ -154,7 +154,7 @@
 									<span class="material-symbols-outlined"> language </span>
 								</div>
 							</Select>
-						</div>
+						</div> -->
 						<div class="col-md-4">
 							<Select
 								class="form-control"

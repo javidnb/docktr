@@ -153,7 +153,7 @@
 </button>
 
 <section>
-	<div class="jumbotron" style="padding-block: 1rem; background-color: #e2e9ef">
+	<div class="jumbotron jumboHeader" style="padding-block: 1rem; background-color: #e2e9ef">
 		<h1 class="display-4">{doctor?.name || ''}</h1>
 		<!-- <p>
 			It uses utility classes for typography and spacing to space content out within the larger

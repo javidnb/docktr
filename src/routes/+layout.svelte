@@ -25,7 +25,7 @@
 		if (!usr) appointmentsLoading.set(false);
 	});
 
-	$: if ($session.user?.lang) locale.set($session.user?.lang);
+	$: if ($session?.user?.lang) locale.set($session.user?.lang);
 	// $: if ($session.user?.doctor) goto('./doctor');
 	$: curPage = $page.route.id;
 </script>
@@ -34,18 +34,12 @@
 	{#if curPage !== '/doctor' && curPage !== '/search' && curPage !== '/admin'}
 		<Nav />
 
-		<section style="position: absolute; width: 100%; z-index: -1">
+		<!-- <section style="position: absolute; width: 100%; z-index: -1">
 			<div class="jumbotron" style="padding-top: 2rem; background-color: #e2e9ef">
 				<h1 class="display-4">&#8203;</h1>
-				<!-- <p class="lead">We connect you to doctors around the world!</p> -->
 				<hr />
-				<!-- <p>
-				It uses utility classes for typography and spacing to space content out within the larger
-				container.
-			</p> -->
-				<!-- <a class="btn btn-primary btn-lg" href="#" role="button">Doktorlar</a> -->
 			</div>
-		</section>
+		</section> -->
 	{/if}
 
 	{#key data.url}

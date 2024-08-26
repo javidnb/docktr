@@ -8,10 +8,10 @@
 		appointments,
 		showBtnEndCall,
 		putData,
-		selectedUser,
 		mobile,
 		hideNav,
-		showGPT
+		showGPT,
+		mobileComponent
 	} from '$lib/store/dataStore';
 	import Modal from '$lib/helpers/Modal.svelte';
 	import Login from './login/Login.svelte';
@@ -21,7 +21,9 @@
 
 	let currentDate = new Date();
 	let showModal: boolean = false;
-	$: upcomingAppointments = $appointments.filter((ap) => new Date(ap.startTime) > new Date());
+	$: upcomingAppointments = $appointments.length
+		? $appointments.filter((ap) => new Date(ap.startTime) > new Date())
+		: [];
 
 	onMount(async () => {
 		setInterval(() => {
@@ -52,7 +54,7 @@
 {/if}
 
 {#if !$showBtnEndCall}
-	<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primaryColor);">
+	<nav class="navbar navbar-expand-lg navbar-dark pcOnly" style="background-color: var(--primaryColor);">
 		<div
 			class="container-fluid"
 			style="display: flex;
@@ -91,9 +93,7 @@
 					showGPT.set(false);
 				}}
 			>
-				Səhiyyə<span style="font-size: x-large; color: rgb(0 0 0 / 70%)"
-					>.{websiteName.endsWith('.net') ? 'net' : 'online'}</span
-				></a
+				Səhiyyə<span style="font-size: x-large; color: rgb(0 0 0 / 70%)">.net</span></a
 			>
 			<button
 				class="navbar-toggler"
@@ -371,7 +371,10 @@
 					<button
 						class="nav-link"
 						class:active={curPage == '/profile'}
-						on:click={() => ($session.loggedIn ? goto('/profile') : loginModal.set(true))}
+						on:click={() => {
+							mobileComponent.set(null);
+							$session.loggedIn ? goto('/profile') : loginModal.set(true);
+						}}
 						><span class="material-symbols-outlined" class:icon-fill={curPage == '/profile'}>
 							account_circle
 						</span>

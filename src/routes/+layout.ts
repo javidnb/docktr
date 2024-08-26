@@ -22,6 +22,7 @@ export async function load({ url }) {
 		return new Promise((resolve) => {
 			onAuthStateChanged(auth, (user) => {
 				if (user) {
+					console.log('getting users');
 					getUser(user);
 				}
 				resolve(user ? user : false);

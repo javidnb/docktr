@@ -129,6 +129,7 @@
                 height: 42px;
                 color: #404040"
 			on:click={() => {
+				searchQuery.set('');
 				history.back();
 			}}>Ləğv et</button
 		>
@@ -234,7 +235,12 @@
 				{/if}
 			</div>
 		{:else if !$searchQuery}
-			<div class="d-flex flex-wrap gap-2 px-3 mt-4 justify-content-center">
+			<div class="d-flex justify-content-center align-items-center w-100 mt-5">
+				<span
+					>{$_('nav.docs')}, {$_('nav.branches')}, {$_('nav.diseases')}, {$_('home.symptoms')}</span
+				>
+			</div>
+			<!-- <div class="d-flex flex-wrap gap-2 px-3 mt-4 justify-content-center">
 				<button
 					class="card py-2 align-items-center"
 					style="color: gray;"
@@ -269,7 +275,7 @@
 					class:active={selection.symptoms}
 					style="color: gray;">{$_('home.symptoms')}</button
 				>
-			</div>
+			</div> -->
 		{/if}
 	</div>
 </div>
@@ -290,6 +296,7 @@
 		background-color: white;
 		align-items: normal;
 		overflow-x: hidden;
+		min-width: fit-content;
 	}
 	.searchBox {
 		background: #00000017;

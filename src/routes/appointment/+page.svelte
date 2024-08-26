@@ -4,7 +4,7 @@
 </script>
 
 <section>
-	<div class="jumbotron" style="padding-block: 1rem; background-color: #e2e9ef">
+	<div class="jumbotron jumboHeader" style="padding-block: 1rem; background-color: #e2e9ef">
 		<h1 class="display-4">{$_('nav.appointments')}</h1>
 		<!-- <p class="lead">We connect you to doctors around the world!</p> -->
 		<!-- <p>

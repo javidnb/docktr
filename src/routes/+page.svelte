@@ -26,7 +26,12 @@
 						class="s-kraNrqFQQjoV mt-auto"
 						style="width: 150px; margin-top: -1rem!important"
 					/>
-					<h1 class="display-4" style="font-size: 19px; color: #008037">{$_('home.hero')}</h1>
+					<h1
+						class="display-4"
+						style="font-size: 19px; color: #008037; font-family: 'Nunito', sans-serif"
+					>
+						{$_('home.hero')}
+					</h1>
 					<!-- <p class="lead">{$_('home.lead')}</p> -->
 					<div class="col-12 col-md-10">
 						<div class="w-100">

@@ -44,7 +44,7 @@
 					}
 					return ap;
 				})
-		: $session.user
+		: $session?.user
 			? $appointments
 					.filter((ap) => new Date(ap.endTime) > new Date())
 					.sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime())
@@ -427,21 +427,23 @@
 				<div class="card mt-3 p-3">{$_('appointment.no_appointment')}</div>
 			</div>
 		{:else}
-			<div
-				class="card mt-3 p-3"
-				style="display: flex;
-						flex-direction: row;
-						align-items: baseline;
-						gap: .5rem;"
-			>
-				{$_('appointment.loginToSee')}
-				<button
-					on:click={() => loginModal.set(true)}
-					class="btn btn-outline-primary"
-					style="height: 40px"
+			<div class="px-3">
+				<div
+					class="card mt-3 p-3"
+					style="display: flex;
+					flex-direction: row;
+					align-items: baseline;
+					gap: .5rem;"
 				>
-					{$_('appointment.login')}
-				</button>
+					{$_('appointment.loginToSee')}
+					<button
+						on:click={() => loginModal.set(true)}
+						class="btn btn-outline-primary"
+						style="height: 40px"
+					>
+						{$_('appointment.login')}
+					</button>
+				</div>
 			</div>
 		{/if}
 	</div>

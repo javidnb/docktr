@@ -1,4 +1,3 @@
-import { browser } from '$app/environment';
 import { writable, type Writable } from 'svelte/store';
 
 export type User = {
@@ -20,13 +19,4 @@ export type SessionState = {
 	loggedIn?: boolean;
 };
 
-let user = null;
-if (browser) {
-	user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') ?? '') : null;
-}
-
 export const session = writable<SessionState>({ user: null });
-
-if (user) {
-	session.set({ ...user, loggedIn: true });
-}

@@ -6,30 +6,27 @@
 
 	import ProfDetails from '$lib/components/profile/ProfDetails.svelte';
 	import History from '$lib/components/profile/History.svelte';
-	import { dataLoading, loginModal, mobile } from '$lib/store/dataStore';
+	import { dataLoading, loginModal, mobile, mobileComponent } from '$lib/store/dataStore';
 	import Chat from '$lib/components/chat/Chat.svelte';
 	import Documents from '$lib/components/profile/Documents.svelte';
 
-	export let data;
 	let userEmail: any = '';
 	let component: any = ProfDetails;
 
-	$: dataLoading.set($session.user ? false : true);
+	// $: dataLoading.set($session.user ? false : true);
 
 	onMount(async () => {
-		const user: any = await data.getAuthUser();
-		if (!user) {
+		if (!$session.user) {
 			loginModal.set(true);
 			dataLoading.set(false);
+		} else {
+			userEmail = $session.user.email;
 		}
-		userEmail = user.email;
 	});
-
-	let mobileComponent: any = null;
 
 	function changeComponent(comp: any, mobile?: boolean) {
 		if (mobile) {
-			mobileComponent = comp;
+			mobileComponent.set(comp);
 		} else {
 			component = comp;
 		}
@@ -42,8 +39,8 @@
 </script>
 
 <section>
-	<div class="jumbotron" style="padding-block: 1rem; background-color: #e2e9ef">
-		{#if mobileComponent}
+	<div class="jumbotron jumboHeader" style="padding-block: 1rem; background-color: #e2e9ef">
+		{#if $mobileComponent}
 			<button
 				class="btn mobileOnly"
 				style="position: absolute;
@@ -55,7 +52,7 @@
 				width: 56px;
 				padding-left: 20px;
 				display: flex; height: 40px"
-				class:d-none={!mobileComponent}
+				class:d-none={!$mobileComponent}
 				on:click={() => {
 					changeComponent(null, true);
 				}}><span class="material-symbols-outlined"> arrow_back_ios </span></button
@@ -80,7 +77,7 @@
 		<div class="container mobileCont">
 			<div class="row mt-3 pb-5">
 				<div class="col-12 col-md-4 col-lg-3">
-					{#if !mobileComponent}
+					{#if !$mobileComponent}
 						<ul
 							class="list-group pcOnly w-100 bg-white d-flex"
 							style="height: 400px; border-radius: 8px; overflow: hidden"
@@ -172,13 +169,13 @@
 					{/if}
 				</div>
 
-				{#if mobileComponent}
+				{#if $mobileComponent}
 					<div class="col-md-9 col-lg-9 kont px-0 mobileOnly">
 						<div class="container">
 							<div class="row">
 								<div class="col-12 mobileOnly" style="background-color: unset">
 									<div class="container">
-										<svelte:component this={mobileComponent} on:changeValue={handleChangeValue} />
+										<svelte:component this={$mobileComponent} on:changeValue={handleChangeValue} />
 									</div>
 								</div>
 							</div>

@@ -73,9 +73,11 @@
 				loggedIn: true,
 				loading: false
 			});
+			dataLoading.set(false);
 			registerCM();
 		} else {
 			console.error('Failed to post data');
+			dataLoading.set(false);
 		}
 	}
 
@@ -108,9 +110,11 @@
 				loggedIn: true,
 				loading: false
 			});
+			dataLoading.set(false);
 			return response;
 		} catch (error) {
 			console.error(error);
+			dataLoading.set(false);
 		}
 	}
 
@@ -130,7 +134,6 @@
 				.then(async (userCredential: UserCredential) => {
 					// Signed up
 					const user = userCredential;
-					console.log(user);
 					updateProfile(user.user, { displayName });
 					await getUser(user);
 					toast.push(`Xoş gəldiniz ${user.user.displayName ?? ''}!`, {
@@ -144,6 +147,7 @@
 					closeModal();
 				})
 				.catch((error) => {
+					dataLoading.set(false);
 					const errorCode = error.code;
 					const errorMessage = error.message;
 					// ..

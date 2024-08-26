@@ -25,21 +25,6 @@ body {
 .navbar {
 	min-height: 58px;
 }
-.branches {
-	display: flex;
-	gap: 1rem;
-	overflow-x: scroll;
-	padding-block: 1rem;
-	padding-left: 3px;
-}
-.card {
-	flex: 1;
-	min-width: 10rem;
-	border: 0px !important;
-	box-shadow: 0px 0px 5px #00000012;
-	border-radius: 20px;
-	cursor: pointer;
-}
 
 .prevent-pull-to-refresh {
 	overscroll-behavior-y: contain;
@@ -278,11 +263,34 @@ body {
 	gap: 1rem;
 	overflow-x: scroll;
 	padding-block: 1rem;
-	padding-left: 3px;
+	padding-inline: 3px;
 	flex-wrap: wrap;
 	flex-direction: column;
 	max-height: 500px;
+	
 }
+
+.branches .card {
+	flex: 1;
+	min-width: unset;
+	border: 0px !important;
+	box-shadow: 0px 0px 5px #00000012;
+	border-radius: 20px;
+	cursor: pointer;
+	width: 125px;
+	min-height: 200px;
+}
+
+.card:hover {
+	box-shadow: 0px 0px 5px #00000032 !important;
+}
+
+@media screen and (min-width: 992px) {
+	.branches {
+		flex-direction: row;
+	}
+}
+
 .btnBranch {
 	background-color: white;
 	border: 1px solid var(--primaryColor);
@@ -292,18 +300,6 @@ body {
 .btnBranch:hover {
 	background-color: var(--primaryColor) !important;
 	color: white !important;
-}
-.card {
-	flex: 1;
-	min-width: 10rem;
-	min-height: 10rem;
-	border: 0px;
-	box-shadow: 0px 0px 5px #00000012;
-	border-radius: 20px;
-}
-
-.card:hover {
-	box-shadow: 0px 0px 5px #00000032 !important;
 }
 
 /* SCROLLBAR */
@@ -322,10 +318,6 @@ body {
 	::-webkit-scrollbar:hover {
 		width: 3px;
 	}
-
-	/* .branches ::-webkit-scrollbar {
-		display: block;
-	} */
 
 	::-webkit-scrollbar-thumb {
 		background-color: #71896b;

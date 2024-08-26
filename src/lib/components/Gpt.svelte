@@ -5,6 +5,7 @@
 	import { _ } from 'svelte-i18n';
 	import { hideNav, mobile, postData, showGPT } from '$lib/store/dataStore';
 	import { session } from '$lib/session';
+	import { goto } from '$app/navigation';
 
 	let newMessage: string = '';
 	const MODEL = 'ft:gpt-4o-mini-2024-07-18:personal:sehiyye:9yEr2roV';
@@ -165,6 +166,7 @@
 						class:mt-auto={!inputFocused}
 						class:mt-3={inputFocused}
 						on:click={() => {
+							if ($mobile) goto('/');
 							showGPT.set(false);
 						}}>{$_('actions.close')}</button
 					>

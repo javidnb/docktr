@@ -62,6 +62,17 @@
 			>
 		{/if}
 		<h1 class="display-4">{$_('nav.account')}</h1>
+		{#if $session.user?.displayName && $mobile}
+			<div
+				class="d-flex gap-1 align-items-center justify-content-center"
+				style="color: #474747;
+				margin-top: -10px;
+				font-size: small;"
+			>
+				<span>{$_('other.welcome')},</span>
+				<span style="font-weight: 500;">{$session.user.displayName}</span>
+			</div>
+		{/if}
 	</div>
 </section>
 {#if $session.loggedIn}
@@ -123,10 +134,7 @@
 							>
 								<span class="material-symbols-outlined"> for_you </span>Hesap Bilgileri
 							</button>
-							<a
-								class="card btn btn-outline-primary d-flex flex-row w-100"
-								href="/messages"
-							>
+							<a class="card btn btn-outline-primary d-flex flex-row w-100" href="/messages">
 								<span class="material-symbols-outlined"> mail </span>Mesajlar
 							</a>
 							<button

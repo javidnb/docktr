@@ -27,15 +27,6 @@
 					goto(`./doctors`);
 				}}
 				class="card align-items-center"
-				style="flex: 1;
-					min-width: 250px;
-					min-height: 10rem;
-					border: 0px;
-					box-shadow: 0px 0px 5px #00000012;
-					border-radius: 20px;
-					cursor: auto;
-					text-decoration:none;
-					cursor: pointer; align-items-center"
 			>
 				<div class="card-body d-flex flex-column align-items-center">
 					<span

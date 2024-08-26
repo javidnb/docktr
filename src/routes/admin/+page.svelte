@@ -120,14 +120,14 @@
 					class="btn d-flex flex-row align-items-center gap-2"
 					on:click={() => {
 						component = Contacts;
-						pageTitle = 'Gələn Mesajlar';
+						pageTitle = 'Bizimlə Əlaqə';
 					}}
 					class:active={component == Contacts}
 					data-bs-toggle={$mobile ? 'collapse' : ''}
 					data-bs-target={$mobile ? '#sideCollapse' : ''}
 				>
 					<span class="material-symbols-outlined"> dialpad </span>
-					<span class="navtext">Əlaqə</span>
+					<span class="navtext">Bizimlə Əlaqə</span>
 				</button>
 				<button
 					class="btn d-flex flex-row align-items-center gap-2"

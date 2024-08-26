@@ -24,7 +24,7 @@
 	<div class="row row-gap-3 mt-3">
 		<div class="col-12 col-md-4 h-100">
 			<div class="card p-3">
-				<h6 class="cardTitle">Əlaqə</h6>
+				<h6 class="cardTitle">Bizimlə Əlaqə</h6>
 				<Contacts />
 			</div>
 		</div>

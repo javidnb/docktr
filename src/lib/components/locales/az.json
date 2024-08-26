@@ -46,7 +46,8 @@
 	},
 	"other": {
 		"notFound": "Nəticə Tapılmadı",
-		"search_symptoms": "Simptomlarınızı yazın"
+		"search_symptoms": "Simptomlarınızı yazın",
+		"welcome": "Xoş Gəldiniz"
 	},
 	"faq": {
 		"q1": "Həkim qəbulunu necə sifariş edə bilərəm?",

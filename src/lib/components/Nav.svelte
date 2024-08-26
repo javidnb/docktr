@@ -242,7 +242,11 @@
 									data-bs-target={$mobile ? '#navbarSupportedContent' : ''}
 								>
 									<span class="material-symbols-outlined icon-fill"> account_circle </span>
-									<span>{$_('nav.account')}</span>
+									<span
+										>{$session.user?.displayName
+											? $session.user.displayName
+											: $_('nav.account')}</span
+									>
 								</button>
 							</li>
 							<li class="nav-item mobileOnly">
@@ -371,7 +375,11 @@
 						><span class="material-symbols-outlined" class:icon-fill={curPage == '/profile'}>
 							account_circle
 						</span>
-						<span class="navLinkText">{$_('nav.account')}</span></button
+						<span class="navLinkText"
+							>{$session.user?.displayName
+								? $session.user.displayName.split(' ')[0]
+								: $_('nav.account')}</span
+						></button
 					>
 				</li>
 

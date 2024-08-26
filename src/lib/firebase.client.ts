@@ -52,12 +52,11 @@ function clearUserData() {
 
 export function logout() {
 	clearUserData();
-	auth
-		.signOut()
-		.then(() => {
-			clearUserData();
-		})
-		.catch(() => {
-			clearUserData();
-		});
+	auth.signOut();
+		// .then(() => {
+		// 	clearUserData();
+		// })
+		// .catch(() => {
+		// 	clearUserData();
+		// });
 }

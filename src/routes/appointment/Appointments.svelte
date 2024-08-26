@@ -44,9 +44,11 @@
 					}
 					return ap;
 				})
-		: $appointments
-				.filter((ap) => new Date(ap.endTime) > new Date())
-				.sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
+		: $session.user
+			? $appointments
+					.filter((ap) => new Date(ap.endTime) > new Date())
+					.sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime())
+			: [];
 
 	onMount(() => {
 		const updateRemainingTime = () => {

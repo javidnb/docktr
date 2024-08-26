@@ -20,8 +20,14 @@
 		<div class="container">
 			<div class="row justify-content-center">
 				<div class="col col-md-8 d-flex align-items-center flex-column text-center">
-					<h1 class="display-4">{$_('home.hero')}</h1>
-					<p class="lead">{$_('home.lead')}</p>
+					<img
+						src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/logo.png"
+						alt="Sehiyye logo"
+						class="s-kraNrqFQQjoV mt-auto"
+						style="width: 150px; margin-top: -1rem!important"
+					/>
+					<h1 class="display-4" style="font-size: 19px; color: #008037">{$_('home.hero')}</h1>
+					<!-- <p class="lead">{$_('home.lead')}</p> -->
 					<div class="col-12 col-md-10">
 						<div class="w-100">
 							<Search />

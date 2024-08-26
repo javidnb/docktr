@@ -67,7 +67,7 @@
 		id="name"
 		type="text"
 		class="form-control"
-		bind:value={displayName}
+		value={displayName}
 		required
 		autocomplete="off"
 		class:d-none={docData}
@@ -82,7 +82,7 @@
 		placeholder="Mobil / email"
 		required
 		autocomplete="off"
-		bind:value={phoneNumber}
+		value={phoneNumber}
 		class:d-none={docData}
 	/>
 

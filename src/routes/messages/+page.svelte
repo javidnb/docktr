@@ -39,7 +39,7 @@
 
 <section>
 	<div
-		class="jumbotron {$hideNav ? 'd-none' : ''}"
+		class="jumbotron jumboHeader {$hideNav ? 'd-none' : ''}"
 		style="padding-block: 1rem; background-color: #e2e9ef"
 	>
 		<h1 class="display-4 mb-0">{$_('nav.messages')}</h1>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap'); */
 
 :root {
 	--primaryColor: #a1c398;
@@ -27,6 +27,16 @@ body {
 .navbar {
 	min-height: 58px;
 }
+
+.nav-hidden {
+    position: fixed;
+    top: -100px; /* Start hidden above the screen */
+    left: 0;
+    right: 0;
+    background: #333;
+    color: white;
+    transition: top 0.3s ease-in-out;
+  }
 
 .prevent-pull-to-refresh {
 	overscroll-behavior-y: contain;
@@ -78,12 +88,15 @@ body {
 	}
 	.jumboHeader {
 		background-image: url(https://tekoplast.az/img/docktrbg.png);
-		background-size: cover;
-		background-position: top;
-		background-blend-mode: overlay;
-		color: #075e07;
-		font-family: 'Nunito', sans-serif;
-		display: none!important;
+        background-size: cover;
+        background-position: top;
+        background-blend-mode: overlay;
+        color: #294729;
+        padding: 3px 1rem !important;
+	}
+
+	.jumboHeader h1 {
+		font-size: 1.8rem!important;
 	}
 }
 @media screen and (max-width: 768px) {

@@ -6,7 +6,7 @@
 
 	import ProfDetails from '$lib/components/profile/ProfDetails.svelte';
 	import History from '$lib/components/profile/History.svelte';
-	import { dataLoading, loginModal, mobile, mobileComponent } from '$lib/store/dataStore';
+	import { loginModal, mobile, mobileComponent } from '$lib/store/dataStore';
 	import Chat from '$lib/components/chat/Chat.svelte';
 	import Documents from '$lib/components/profile/Documents.svelte';
 
@@ -16,13 +16,14 @@
 	// $: dataLoading.set($session.user ? false : true);
 
 	onMount(async () => {
-		if (!$session.user) {
-			loginModal.set(true);
-			dataLoading.set(false);
-		} else {
+		if ($session?.user) {
 			userEmail = $session.user.email;
 		}
 	});
+
+	$: if (!$session.user) {
+		loginModal.set(true);
+	} else loginModal.set(false);
 
 	function changeComponent(comp: any, mobile?: boolean) {
 		if (mobile) {

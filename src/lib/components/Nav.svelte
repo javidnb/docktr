@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { session } from '$lib/session';
 	import {
@@ -54,7 +54,10 @@
 {/if}
 
 {#if !$showBtnEndCall}
-	<nav class="navbar navbar-expand-lg navbar-dark pcOnly" style="background-color: var(--primaryColor);">
+	<nav
+		class="navbar navbar-expand-lg navbar-dark pcOnly"
+		style="background-color: var(--primaryColor);"
+	>
 		<div
 			class="container-fluid"
 			style="display: flex;

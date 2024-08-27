@@ -228,24 +228,28 @@
 	}
 </script>
 
-<button
-	class="btn btn-outline-primary mobileOnly"
-	style="position: absolute;
+{#if !showDocs}
+	<button
+		class="btn btn-outline-primary mobileOnly"
+		style="position: absolute;
     top: 10px;
-    left: 1rem;
-    color: rgb(213, 228, 209);
-    border: 1px solid #ffffff36 !important;
+    left: 5px;
+    color: rgb(41, 71, 41);
+    border: none !important;
     text-align: center;
     width: 56px;
-	height: 40px;
-    padding-left: 20px;"
-	on:click={() => selectedUser.set(null)}
->
-	<span class="material-symbols-outlined">arrow_back_ios</span>
-</button>
+    padding-left: 20px;
+    height: 40px;
+    box-shadow: unset;
+    z-index: 99;"
+		on:click={() => selectedUser.set(null)}
+	>
+		<span class="material-symbols-outlined">arrow_back_ios</span>
+	</button>
+{/if}
 
 {#if !showDocs && user}
-	<main class="d-flex flex-column h-100" style="min-height: calc(100dvh - 85px)!important">
+	<main class="d-flex flex-column h-100" style="min-height: calc(100dvh - 35px)!important">
 		<div
 			class="chat mb-3 d-flex flex-column gap-1"
 			id="messages-container"
@@ -258,7 +262,7 @@
 				background: #f8f8f8;
 				border-bottom: 1px solid #ececec;"
 			>
-				<div class="d-flex align-items-center w-100 pt-1 py-2">
+				<div class="d-flex align-items-center w-100 pt-1 py-2 mobile-left-padding">
 					{#if $user?.photoURL}
 						<img
 							src={$user?.photoURL}
@@ -272,7 +276,11 @@
 							object-position: center;"
 						/>
 					{/if}
-					<h5 class="flex-1 mb-0">
+					<h5
+						class="flex-1 mb-0 msgRecipientTitle"
+						style="max-width: 100%;
+    					overflow-x: auto; overflow-y: hidden"
+					>
 						{$user?.displayName || $user?.email || $user?.phoneNumber || ''}
 					</h5>
 					<div class="d-flex gap-2 ml-auto" style="width: fit-content;">
@@ -293,7 +301,7 @@
 							on:click={() => (showDocs = !showDocs)}
 						>
 							<span class="material-symbols-outlined"> draft </span>
-							<span>Dökümanlar</span>
+							<span class="pcOnly">Dökümanlar</span>
 						</button>
 					</div>
 				</div>
@@ -540,6 +548,9 @@
 	.fileCard:hover {
 		background: #e6e6e6;
 	}
+	.msgRecipientTitle::-webkit-scrollbar {
+		display: none;
+	}
 	@media screen and (min-width: 992px) {
 		.msgBox {
 			width: 60% !important;
@@ -547,10 +558,13 @@
 	}
 	@media screen and (max-width: 992px) {
 		.chat {
-			max-height: calc(100dvh - 140px) !important;
+			max-height: calc(100dvh - 80px) !important;
 		}
 		.msgBox {
 			width: 100% !important;
+		}
+		.mobile-left-padding {
+			padding-left: 2rem !important;
 		}
 		/* #msgContainer {
 			position: fixed;

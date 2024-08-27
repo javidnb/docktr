@@ -137,23 +137,23 @@
 	class="btnBack mobileOnly btn"
 	type="button"
 	style="position: absolute;
-    top: 10px;
-    left: 12px;
-    color: rgb(213, 228, 209);
-    border: 1px solid rgba(255, 255, 255, 0.21) !important;
-    text-align: center;
-    width: 56px;
-    height: 40px;
-    align-items: center;
-    justify-content: center;
-    padding-left: 19px;
-	border-radius: 6px!important"
+		top: 10px;
+		left: 5px;
+		color: rgb(41 71 41);
+		border: none;
+		text-align: center;
+		width: 56px;
+		padding-left: 20px;
+		height: 40px;"
 >
 	<span class="material-symbols-outlined"> arrow_back_ios </span>
 </button>
 
 <section>
-	<div class="jumbotron jumboHeader" style="padding-block: 1rem; background-color: #e2e9ef">
+	<div
+		class="jumbotron jumboHeader mobile-left-padding"
+		style="padding-block: 1rem; background-color: #e2e9ef"
+	>
 		<h1 class="display-4">{doctor?.name || ''}</h1>
 		<!-- <p>
 			It uses utility classes for typography and spacing to space content out within the larger

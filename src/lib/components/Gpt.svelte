@@ -276,7 +276,7 @@
 	}
 	@media screen and (max-width: 992px) {
 		.chatBoxContainer {
-			height: calc(100dvh - 120px);
+			height: calc(100dvh - 60px);
 			padding: 10px;
 			transition-duration: 0.2s;
 		}

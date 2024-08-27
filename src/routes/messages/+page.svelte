@@ -2,7 +2,14 @@
 	import Messages from '$lib/components/chat/Messages.svelte';
 	import Chat from '$lib/components/chat/Chat.svelte';
 	import { _ } from 'svelte-i18n';
-	import { selectedUser, hideNav, mobile, dataLoading, loginModal } from '$lib/store/dataStore';
+	import {
+		selectedUser,
+		hideNav,
+		mobile,
+		dataLoading,
+		loginModal,
+		appointmentsLoading
+	} from '$lib/store/dataStore';
 	import { onMount } from 'svelte';
 	import { session } from '$lib/session';
 
@@ -20,7 +27,7 @@
 		hideNav.set(false);
 	}
 
-	$: if (!$session.user) {
+	$: if (!$appointmentsLoading && !$session.user) {
 		loginModal.set(true);
 	} else loginModal.set(false);
 
@@ -50,7 +57,7 @@
 	</div>
 </section>
 
-<section class="py-3" style="background-color: #f8f8f8;">
+<section class="pb-3 pt-2" style="background-color: #f8f8f8;">
 	<div class="container">
 		<div class="row msgRow justify-content-center">
 			{#if $session.user}

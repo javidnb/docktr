@@ -74,12 +74,12 @@
 							>
 								{$_('nav.messages')}
 							</span>
-							{#if $dataLoading}
+							<!-- {#if $dataLoading}
 								<div
 									class="loader"
 									style="background-color: var(--primaryColor); top: 10px; right: 10px"
 								></div>
-							{/if}
+							{/if} -->
 						</div>
 						<Messages />
 					</div>
@@ -98,6 +98,15 @@
 							/>
 						</div>
 					{/if}
+				</div>
+			{:else if $dataLoading}
+				<div class="d-flex justify-content-center">
+					<div class="lds-ellipsis mt-5">
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
 				</div>
 			{:else}
 				<div class="container">

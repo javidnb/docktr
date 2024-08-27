@@ -49,7 +49,8 @@
 	"other": {
 		"notFound": "Nəticə Tapılmadı",
 		"search_symptoms": "Simptomlarınızı yazın",
-		"welcome": "Xoş Gəldiniz"
+		"welcome": "Xoş Gəldiniz",
+		"no_msg":"Yeni Mesaj Yoxdur"
 	},
 	"faq": {
 		"q1": "Həkim qəbulunu necə sifariş edə bilərəm?",

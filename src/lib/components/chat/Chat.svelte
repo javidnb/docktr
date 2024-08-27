@@ -3,7 +3,7 @@
 	import { collection, addDoc, query, where, onSnapshot, orderBy } from 'firebase/firestore';
 	import { db, initializeFirebase } from '$lib/firebase.client';
 	import { session } from '$lib/session';
-	import { selectedUser, users, mobile } from '$lib/store/dataStore';
+	import { selectedUser, users, mobile, doctors } from '$lib/store/dataStore';
 	import { timestamp } from '$lib/helpers/dateFormatter';
 	import { tooltip } from 'svooltip';
 	import 'svooltip/styles.css';
@@ -23,8 +23,14 @@
 
 	$: if ($selectedUser) {
 		userId = $selectedUser;
-		user.set($users.find((u: any) => u.uid == userId));
-		console.log($user);
+		let doc = $doctors.find((u: any) => u.uid == $selectedUser);
+		let usr: any = $users.find((u: any) => u.uid == userId);
+
+		if (doc && usr) {
+			usr.photoURL = doc.img;
+			usr.displayName = doc.name;
+		}
+		user.set(usr);
 		getMessages();
 	}
 

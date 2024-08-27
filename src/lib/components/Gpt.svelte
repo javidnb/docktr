@@ -166,8 +166,8 @@
 						class:mt-auto={!inputFocused}
 						class:mt-3={inputFocused}
 						on:click={() => {
-							if ($mobile) goto('/');
 							showGPT.set(false);
+							goto('/');
 						}}>{$_('actions.close')}</button
 					>
 				{/if}

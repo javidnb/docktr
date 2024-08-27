@@ -4,7 +4,7 @@ import { initializeFirebase, auth } from '$lib/firebase.client';
 import { browser } from '$app/environment';
 import { onAuthStateChanged } from 'firebase/auth';
 import { session } from '$lib/session.js';
-import { appointments, appointmentsLoading } from '$lib/store/dataStore.js';
+import { appointments, appointmentsLoading, dataLoading } from '$lib/store/dataStore.js';
 import { goto } from '$app/navigation';
 
 let doctorsData: any = null;
@@ -23,6 +23,9 @@ export async function load({ url }) {
 			onAuthStateChanged(auth, (user) => {
 				if (user) {
 					getUser(user);
+				} else {
+					dataLoading.set(false);
+					appointmentsLoading.set(false);
 				}
 				resolve(user ? user : false);
 			});
@@ -70,11 +73,13 @@ export async function load({ url }) {
 			if (result) {
 				appointments.set(result);
 				appointmentsLoading.set(false);
+				dataLoading.set(false);
 				return null;
 			}
 			return response;
 		} catch (error) {
 			appointmentsLoading.set(false);
+			dataLoading.set(false);
 			return null;
 		}
 	}

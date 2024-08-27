@@ -4,7 +4,7 @@
 	import { initializeFirebase, db } from '$lib/firebase.client';
 	import { session } from '$lib/session';
 	import { createEventDispatcher } from 'svelte';
-	import { selectedUser, users } from '$lib/store/dataStore';
+	import { doctors, selectedUser, users } from '$lib/store/dataStore';
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
 	import { writable } from 'svelte/store';
@@ -74,7 +74,6 @@
 
 				if (response.ok) {
 					const data = await response.json();
-					console.log('users data: ', data);
 					localStorage.setItem('users', JSON.stringify(data));
 					users.set(data);
 				} else {
@@ -100,11 +99,18 @@
 
 			let result: {}[] = [];
 			messagesGroupedByUser.forEach((msg: any) => {
-				let user = $users.find((u: any) => u.uid == msg.uid);
-				result.push({ ...msg, user });
+				let user: any = $users.find((u: any) => u.uid == msg.uid);
+				let doc = $doctors.find((u: any) => u.uid == msg.uid);
+				if (doc && user) {
+					user.photoURL = doc.img;
+					user.displayName = doc.name;
+				}
+				if (msg.uid != $session.user?.uid) {
+					result.push({ ...msg, user });
+				}
 			});
 			messagesGroupedByUser = result;
-			console.log(result);
+			// messagesGroupedByUser = [];
 			localStorage.setItem('msgs', JSON.stringify(messagesGroupedByUser));
 			dataLoading.set(false);
 		}
@@ -112,49 +118,62 @@
 </script>
 
 <div class="d-flex gap-2 flex-column">
-	{#each messagesGroupedByUser as { user, uid }}
-		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<!-- svelte-ignore a11y-no-static-element-interactions -->
-		<button
-			class={$selectedUser == uid ? 'active' : 'users'}
-			style="min-height: 60px; border-radius: 8px; border: none"
-			on:click={() => {
-				selectedUser.set(uid);
-				dispatch('changeValue', uid);
-				if (curPage == '/admin') {
-					goto('/messages');
-				}
-			}}
-		>
-			<div class="d-flex align-items-center" style="overflow: hidden;">
-				{#if user?.photoURL}
-					<img
-						src={user.photoURL}
-						alt="PP"
-						style="width: 35px;
+	{#if messagesGroupedByUser.length}
+		{#each messagesGroupedByUser as { user, uid }}
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<!-- svelte-ignore a11y-no-static-element-interactions -->
+			<button
+				class={$selectedUser == uid ? 'active' : 'users'}
+				style="min-height: 60px; border-radius: 8px; border: none"
+				on:click={() => {
+					selectedUser.set(uid);
+					dispatch('changeValue', uid);
+					if (curPage == '/admin') {
+						goto('/messages');
+					}
+				}}
+			>
+				<div class="d-flex align-items-center" style="overflow: hidden;">
+					{#if user?.photoURL}
+						<img
+							src={user.photoURL}
+							alt="PP"
+							style="width: 35px;
 							height: 35px;
 							border-radius: 100%;
 							margin-left: 10px;
 							margin-right: 5px;
 							object-fit: cover;
     						object-position: center;"
-					/>
-				{:else}
-					<span
-						style="font-size: 38px; padding-left: .5rem"
-						class="material-symbols-outlined icon-fill s-KnlqTvvrWAx4">account_circle</span
+						/>
+					{:else}
+						<span
+							style="font-size: 38px; padding-left: .5rem"
+							class="material-symbols-outlined icon-fill s-KnlqTvvrWAx4">account_circle</span
+						>
+					{/if}
+					<div
+						class="d-flex flex-column align-items-start justify-content-center ps-2"
+						style="height: 40px;"
 					>
-				{/if}
-				<div
-					class="d-flex flex-column align-items-start justify-content-center ps-2"
-					style="height: 40px;"
-				>
-					{user ? user.displayName || user.email || user.phoneNumber || 'User' : 'loading'}
-					<!-- <span style="font-size: smaller; color: gray">{timestamp(lastMsgTime)}</span> -->
+						{user ? user.displayName || user.email || user.phoneNumber || 'User' : 'loading'}
+						<!-- <span style="font-size: smaller; color: gray">{timestamp(lastMsgTime)}</span> -->
+					</div>
 				</div>
+			</button>
+		{/each}
+	{:else if $dataLoading}
+		<div class="d-flex justify-content-center">
+			<div class="lds-ellipsis mt-5">
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
 			</div>
-		</button>
-	{/each}
+		</div>
+	{:else}
+		<span class="card p-3">{$_('other.no_msg')}</span>
+	{/if}
 </div>
 
 <style>

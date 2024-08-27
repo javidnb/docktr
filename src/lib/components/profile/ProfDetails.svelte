@@ -348,12 +348,12 @@
 		{/if}
 	</form>
 {:else}
-	<button
-		class="btn btn-outline-primary w-100"
+	<!-- <button
+		class="btn btn-outline-primary w-100 p-3 mt-5"
 		on:click={() => {
 			loginModal.set(true);
 		}}>{$_('login.login_header')}</button
-	>
+	> -->
 	<div
 		class="d-flex w-100 h-100 align-items-center justify-content-center s-i1Tk5jFGYwcs"
 		style="min-height: calc(-300px + 100dvh);"

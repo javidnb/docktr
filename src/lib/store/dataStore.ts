@@ -5,7 +5,7 @@ import { browser } from '$app/environment';
 
 export const doctors = writable<Doctor[]>([]);
 export const appointments = writable<any[]>([]);
-export const dataLoading = writable<boolean>(false);
+export const dataLoading = writable<boolean>(true);
 export const showModalSig = writable(false);
 export const loginModal = writable(false);
 export const appointmentModal = writable(false);

@@ -31,14 +31,14 @@
 			);
 			const querySnapshot = await getDocs(q);
 
-			console.log(querySnapshot);
+			// console.log(querySnapshot);
 
 			const groupedMessages: any = {};
 			let uids: string[] = [];
 
 			querySnapshot.forEach((doc) => {
 				const data = doc.data();
-				console.log(data);
+				// console.log(data);
 				if (data.file) {
 					const fromUser = data.fromUser == $session.user?.uid ? data.toUser : data.fromUser;
 

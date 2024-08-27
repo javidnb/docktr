@@ -39,27 +39,30 @@
 						</div>
 						<div class="w-100 mobileOnly">
 							<button
-								class="btn btn-outline-primary bg-white w-100 py-4 mt-3"
-								style="position: relative; border-radius: 20px; 
-								padding-left: 2rem; background-color: #fffffff0 !important"
+								class="btn btn-outline-primary bg-white w-100 mt-3"
+								style="position: relative;
+									border-radius: 20px;
+									padding-left: 1rem;
+									background-color: #639057 !important;
+									color: white;
+									padding-block: 15px !important;
+									font-family: 'Alumni Sans';
+									display: flex;"
 								on:click={() => {
 									goto('/search');
 								}}
 							>
-								<div class="d-flex flex-column">
-									<div class="d-flex gap-2 align-items-center" style="font-size: 20px;">
+								<div class="d-flex flex-column" style="width: calc(100% - 50px)">
+									<div class="d-flex gap-2 align-items-center w-100" style="font-size: 24px;">
 										<span class="material-symbols-outlined"> library_add </span>
-										Görüş Al
+										<span class="mx-auto">Görüş Al</span>
 									</div>
-									<span style="font-size: small; color: gray; text-align: left"
-										>Həkimlərdən yeni görüş</span
-									>
 									<img
 										src="https://ik.imagekit.io/d2nwsj0ktvh/pngwing.com_tMbKE8rfj.png"
 										alt="Get Appointment"
 										style="width: 85px;
 											position: absolute;
-											right: 2rem;
+											right: 1rem;
 											top: 50%;
 											transform: translateY(-50%);"
 									/>

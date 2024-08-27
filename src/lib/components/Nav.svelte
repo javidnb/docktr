@@ -11,7 +11,8 @@
 		mobile,
 		hideNav,
 		showGPT,
-		mobileComponent
+		mobileComponent,
+		mobileHeader
 	} from '$lib/store/dataStore';
 	import Modal from '$lib/helpers/Modal.svelte';
 	import Login from './login/Login.svelte';
@@ -376,6 +377,7 @@
 						class:active={curPage == '/profile'}
 						on:click={() => {
 							mobileComponent.set(null);
+							mobileHeader.set($_('nav.menu'));
 							goto('/profile');
 						}}
 						><span class="material-symbols-outlined" class:icon-fill={curPage == '/profile'}>

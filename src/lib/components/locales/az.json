@@ -43,7 +43,8 @@
 		"login": "giriş et",
 		"get": "Görüş Al",
 		"no_appointment": "Planlaşdırılmış görüş yoxdur ..",
-		"planned": "Planlaşdırılan görüş"
+		"planned": "Planlaşdırılan görüş",
+		"list": "Görüşlərim"
 	},
 	"other": {
 		"notFound": "Nəticə Tapılmadı",
@@ -90,7 +91,14 @@
 		"message_sent": "Mesaj göndərildi!",
 		"thank_for_contact": "Əlaqə saxladığınız üçün təşəkkürlər",
 		"back": "Geri",
-		"thank_for_review": "Dəyərləndirməniz üçün təşəkkürlər"
+		"thank_for_review": "Dəyərləndirməniz üçün təşəkkürlər",
+		"contact_us": "Bizimlə Əlaqə",
+		"lang_selection": "Dil Seçimi"
+	},
+	"profile": {
+		"docs": "Analizlərim və Reseptlərim",
+		"doctors": "Həkimlərim",
+		"logout": "Hesabdan Çıxış"
 	},
 	"call": {
 		"mic_off": "Mikrofonu söndür",

@@ -6,7 +6,7 @@
 
 	import ProfDetails from '$lib/components/profile/ProfDetails.svelte';
 	import History from '$lib/components/profile/History.svelte';
-	import { loginModal, mobile, mobileComponent, putData } from '$lib/store/dataStore';
+	import { loginModal, mobile, mobileComponent, putData, mobileHeader } from '$lib/store/dataStore';
 	import Chat from '$lib/components/chat/Chat.svelte';
 	import Documents from '$lib/components/profile/Documents.svelte';
 
@@ -19,11 +19,13 @@
 		if ($session?.user) {
 			userEmail = $session.user.email;
 		}
+		mobileHeader.set($_('nav.menu'));
 	});
 
 	function changeComponent(comp: any, mobile?: boolean) {
 		if (mobile) {
 			mobileComponent.set(comp);
+			mobileHeader.set($_('nav.menu'));
 		} else {
 			component = comp;
 		}
@@ -49,14 +51,14 @@
 			<button
 				class="btn mobileOnly"
 				style="position: absolute;
-				top: 10px;
-				left: 1rem;
-				color: rgb(213, 228, 209);
-				border: 1px solid #ffffff36 !important;
-				text-align: center;
-				width: 56px;
-				padding-left: 20px;
-				display: flex; height: 40px"
+					top: 10px;
+					left: 5px;
+					color: rgb(41 71 41);
+					border: none;
+					text-align: center;
+					width: 56px;
+					padding-left: 20px;
+					height: 40px;"
 				class:d-none={!$mobileComponent}
 				on:click={() => {
 					changeComponent(null, true);
@@ -64,7 +66,7 @@
 			>
 		{/if}
 		<h1 class="display-4 pcOnly">{$_('nav.account')}</h1>
-		<h1 class="display-4 mobileOnly">{$_('nav.menu')}</h1>
+		<h1 class="display-4 mobileOnly" class:ps-5={$mobileComponent}>{$mobileHeader}</h1>
 		<!-- WELCOME TEXT -->
 		<!-- {#if $session.user?.displayName && $mobile}
 			<div
@@ -96,7 +98,7 @@
 							}}
 							class:active={component == ProfDetails}
 						>
-							<span class="material-symbols-outlined"> for_you </span>Hesap Bilgileri
+							<span class="material-symbols-outlined"> for_you </span>{$_('nav.account')}
 						</button>
 						<button
 							class="list-group-item w-100"
@@ -105,7 +107,7 @@
 							}}
 							class:active={component == History}
 						>
-							<span class="material-symbols-outlined"> history </span>Görüşlərim
+							<span class="material-symbols-outlined"> history </span>{$_('appointment.list')}
 						</button>
 						<button
 							class="list-group-item w-100"
@@ -114,10 +116,10 @@
 							}}
 							class:active={component == Documents}
 						>
-							<span class="material-symbols-outlined"> draft </span>Analizlərim və Reseptlərim
+							<span class="material-symbols-outlined"> draft </span>{$_('profile.docs')}
 						</button>
 						<li class="list-group-item">
-							<span class="material-symbols-outlined"> clinical_notes </span>Həkimlərim
+							<span class="material-symbols-outlined"> clinical_notes </span>{$_('profile.doctors')}
 						</li>
 						{#if $session.user}
 							<a
@@ -127,7 +129,7 @@
 								style="margin: 1rem; border-radius: 10px!important"
 							>
 								<span class="material-symbols-outlined"> logout </span>
-								<span class="mx-auto" style="padding-right: 1rem;">Hesabdan Çıxış</span>
+								<span class="mx-auto" style="padding-right: 1rem;">{$_('profile.logout')}</span>
 							</a>
 						{/if}
 					</ul>
@@ -136,6 +138,7 @@
 							class="card btn btn-outline-primary d-flex flex-row w-100"
 							on:click={() => {
 								$session.user ? changeComponent(ProfDetails, true) : loginModal.set(true);
+								if ($session.user) mobileHeader.set($_('nav.account'));
 							}}
 						>
 							<div class="d-flex gap-3 align-items-center">
@@ -166,34 +169,38 @@
 						</button>
 						{#if $session.user}
 							<a class="card btn btn-outline-primary d-flex flex-row w-100" href="/messages">
-								<span class="material-symbols-outlined"> mail </span>Mesajlar
+								<span class="material-symbols-outlined"> mail </span>{$_('nav.messages')}
 							</a>
 							<button
 								class="card btn btn-outline-primary d-flex flex-row w-100"
 								on:click={() => {
 									changeComponent(History, true);
+									if ($session.user) mobileHeader.set($_('appointment.list'));
 								}}
 							>
-								<span class="material-symbols-outlined"> history </span>Görüşlərim
+								<span class="material-symbols-outlined"> history </span>{$_('appointment.list')}
 							</button>
 
 							<button
 								class="card btn btn-outline-primary d-flex flex-row w-100"
 								on:click={() => {
 									changeComponent(Documents, true);
+									if ($session.user) mobileHeader.set($_('profile.docs'));
 								}}
 							>
-								<span class="material-symbols-outlined"> draft </span>Analizlərim və Reseptlərim
+								<span class="material-symbols-outlined"> draft </span>{$_('profile.docs')}
 							</button>
 							<li class="card btn btn-outline-primary d-flex flex-row w-100">
-								<span class="material-symbols-outlined"> clinical_notes </span>Həkimlərim
+								<span class="material-symbols-outlined"> clinical_notes </span>{$_(
+									'profile.doctors'
+								)}
 							</li>
 							<button
 								class="card btn btn-outline-primary d-flex flex-row w-100"
 								style="border-radius: 20px!important;"
 								on:click={logout}
 							>
-								<span class="material-symbols-outlined"> logout </span>Hesabdan Çıxış
+								<span class="material-symbols-outlined"> logout </span>{$_('profile.logout')}
 							</button>
 						{/if}
 						<hr
@@ -211,7 +218,7 @@
 							style="#d5e4d1"
 						>
 							<span class="material-symbols-outlined"> globe </span>
-							<span>Dil Seçimi</span>
+							<span>{$_('actions.lang_selection')}</span>
 						</button>
 						<ul
 							class="collapse w-100 list-group list-group-flush"
@@ -275,7 +282,7 @@
 							</li>
 						</ul>
 						<a href="/contact" class="card btn btn-outline-primary d-flex flex-row w-100">
-							<span class="material-symbols-outlined"> dialpad </span>Bizimlə Əlaqə
+							<span class="material-symbols-outlined"> dialpad </span>{$_('actions.contact_us')}
 						</a>
 						{#if $session.user && $session.user.admin}
 							<a class="card btn btn-outline-primary d-flex flex-row w-100" href="./admin">
@@ -344,6 +351,9 @@
 	}
 	.btnLocale::after {
 		display: none;
+	}
+	.display-4 {
+		transition-duration: 0.2s;
 	}
 	@media screen and (max-width: 768px) {
 		.list-group {

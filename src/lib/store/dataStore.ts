@@ -23,7 +23,8 @@ export const hideNav = writable(false);
 export const appointmentsLoading = writable(true);
 export const searchQuery = writable('');
 export const showGPT = writable(false);
-export const mobileComponent:any = writable(null);
+export const mobileComponent: any = writable(null);
+export const mobileHeader: any = writable('Menyu');
 export const limitDashboardData = writable(true); // this is for admin page, to get only limited data in homepage
 
 export const langs: any = [

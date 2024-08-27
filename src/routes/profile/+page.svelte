@@ -56,7 +56,8 @@
 			>
 		{/if}
 		<h1 class="display-4">{$_('nav.account')}</h1>
-		{#if $session.user?.displayName && $mobile}
+		<!-- WELCOME TEXT -->
+		<!-- {#if $session.user?.displayName && $mobile}
 			<div
 				class="d-flex gap-1 align-items-center justify-content-center"
 				style="color: #474747;
@@ -66,7 +67,7 @@
 				<span>{$_('other.welcome')},</span>
 				<span style="font-weight: 500;">{$session.user.displayName}</span>
 			</div>
-		{/if}
+		{/if} -->
 	</div>
 </section>
 

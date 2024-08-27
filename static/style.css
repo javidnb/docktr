@@ -87,16 +87,20 @@ body {
 		margin-bottom: 50px;
 	}
 	.jumboHeader {
-		background-image: url(https://tekoplast.az/img/docktrbg.png);
+		/* background-image: url(https://tekoplast.az/img/docktrbg.png);
         background-size: cover;
         background-position: top;
-        background-blend-mode: overlay;
+        background-blend-mode: overlay; */
+		align-items: baseline!important;
+		background-color: #00000005!important;
         color: #294729;
         padding: 3px 1rem !important;
 	}
 
 	.jumboHeader h1 {
 		font-size: 1.8rem!important;
+		margin-bottom: 0!important;
+		padding-block: .5rem;
 	}
 }
 @media screen and (max-width: 768px) {

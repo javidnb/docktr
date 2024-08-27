@@ -2,11 +2,11 @@
 	import { logout } from '$lib/firebase.client.js';
 	import { onMount } from 'svelte';
 	import { session } from '$lib/session';
-	import { _ } from 'svelte-i18n';
+	import { _, locale } from 'svelte-i18n';
 
 	import ProfDetails from '$lib/components/profile/ProfDetails.svelte';
 	import History from '$lib/components/profile/History.svelte';
-	import { loginModal, mobile, mobileComponent } from '$lib/store/dataStore';
+	import { loginModal, mobile, mobileComponent, putData } from '$lib/store/dataStore';
 	import Chat from '$lib/components/chat/Chat.svelte';
 	import Documents from '$lib/components/profile/Documents.svelte';
 
@@ -33,6 +33,14 @@
 		console.log(event);
 		changeComponent(Chat);
 	}
+
+	const changeLocale = async (newLocale: string) => {
+		let local = $locale;
+		locale.set(newLocale);
+		if ($session.user?.uid && local != newLocale) {
+			await putData('users', 'uid', $session.user?.uid, { lang: newLocale }, true);
+		}
+	};
 </script>
 
 <section>
@@ -55,7 +63,8 @@
 				}}><span class="material-symbols-outlined"> arrow_back_ios </span></button
 			>
 		{/if}
-		<h1 class="display-4">{$_('nav.account')}</h1>
+		<h1 class="display-4 pcOnly">{$_('nav.account')}</h1>
+		<h1 class="display-4 mobileOnly">{$_('nav.menu')}</h1>
 		<!-- WELCOME TEXT -->
 		<!-- {#if $session.user?.displayName && $mobile}
 			<div
@@ -144,55 +153,133 @@
 									>
 								{/if}
 								<div class="d-flex flex-column align-items-start">
-									<span style="font-size: small; color: gray">Profil</span>
-									{#if $session.user?.displayName}
-										<span style="margin-top: -5px">{$session.user?.displayName}</span>
+									{#if $session.user}
+										<span style="font-size: small; color: gray">Profil</span>
+										{#if $session.user?.displayName}
+											<span style="margin-top: -5px">{$session.user?.displayName}</span>
+										{/if}
+									{:else}
+										<span>{$_('login.login_header')}</span>
 									{/if}
 								</div>
 							</div>
 						</button>
+						{#if $session.user}
+							<a class="card btn btn-outline-primary d-flex flex-row w-100" href="/messages">
+								<span class="material-symbols-outlined"> mail </span>Mesajlar
+							</a>
+							<button
+								class="card btn btn-outline-primary d-flex flex-row w-100"
+								on:click={() => {
+									changeComponent(History, true);
+								}}
+							>
+								<span class="material-symbols-outlined"> history </span>Görüşlərim
+							</button>
+
+							<button
+								class="card btn btn-outline-primary d-flex flex-row w-100"
+								on:click={() => {
+									changeComponent(Documents, true);
+								}}
+							>
+								<span class="material-symbols-outlined"> draft </span>Analizlərim və Reseptlərim
+							</button>
+							<li class="card btn btn-outline-primary d-flex flex-row w-100">
+								<span class="material-symbols-outlined"> clinical_notes </span>Həkimlərim
+							</li>
+							<button
+								class="card btn btn-outline-primary d-flex flex-row w-100"
+								style="border-radius: 20px!important;"
+								on:click={logout}
+							>
+								<span class="material-symbols-outlined"> logout </span>Hesabdan Çıxış
+							</button>
+						{/if}
 						<hr
 							style="padding: 0;
 								color: #a7a7a7;
 								margin: 5px;"
 						/>
-						<a class="card btn btn-outline-primary d-flex flex-row w-100" href="/messages">
-							<span class="material-symbols-outlined"> mail </span>Mesajlar
+
+						<button
+							class="card btn btn-outline-primary dropdown-toggle d-flex flex-row align-items-center gap-1 btnLocale"
+							type="button"
+							data-bs-toggle="collapse"
+							data-bs-target="#localeSelector"
+							aria-expanded="false"
+							style="#d5e4d1"
+						>
+							<span class="material-symbols-outlined"> globe </span>
+							<span>Dil Seçimi</span>
+						</button>
+						<ul
+							class="collapse w-100 list-group list-group-flush"
+							id="localeSelector"
+							style="border-radius: 16px"
+						>
+							<li class="list-group-item">
+								<button
+									class="dropdown-item"
+									on:click={() => changeLocale('az')}
+									data-bs-toggle={$mobile ? 'collapse' : ''}
+									data-bs-target={$mobile ? '#localeSelector' : ''}
+									><img
+										style="width:20px;height:20px;margin-right:.5rem"
+										src="https://ik.imagekit.io/d2nwsj0ktvh/img/az.png"
+										alt="Azerbaijan Flag"
+									/>Azərbaycan dili</button
+								>
+							</li>
+							<li class="list-group-item">
+								<button
+									class="dropdown-item"
+									on:click={() => changeLocale('tr')}
+									data-bs-toggle={$mobile ? 'collapse' : ''}
+									data-bs-target={$mobile ? '#localeSelector' : ''}
+								>
+									<img
+										style="width:20px;height:20px;margin-right:.5rem"
+										src="https://ik.imagekit.io/d2nwsj0ktvh/turkey_dBbuCptvk.png?updatedAt=1719140350211"
+										alt="Turkish Flag"
+									/>Türkçe</button
+								>
+							</li>
+							<li class="list-group-item">
+								<button
+									class="dropdown-item"
+									on:click={() => changeLocale('ru')}
+									data-bs-toggle={$mobile ? 'collapse' : ''}
+									data-bs-target={$mobile ? '#localeSelector' : ''}
+								>
+									<img
+										style="width:20px;height:20px;margin-right:.5rem"
+										src="https://ik.imagekit.io/d2nwsj0ktvh/img/ru.png"
+										alt="Russian Flag"
+									/>Русский</button
+								>
+							</li>
+							<li class="list-group-item">
+								<button
+									class="dropdown-item"
+									on:click={() => changeLocale('en')}
+									data-bs-toggle={$mobile ? 'collapse' : ''}
+									data-bs-target={$mobile ? '#localeSelector' : ''}
+								>
+									<img
+										style="width:20px;height:20px;margin-right:.5rem"
+										src="https://ik.imagekit.io/d2nwsj0ktvh/img/en.png"
+										alt="English Flag"
+									/>English</button
+								>
+							</li>
+						</ul>
+						<a href="/contact" class="card btn btn-outline-primary d-flex flex-row w-100">
+							<span class="material-symbols-outlined"> dialpad </span>Bizimlə Əlaqə
 						</a>
-						<button
-							class="card btn btn-outline-primary d-flex flex-row w-100"
-							on:click={() => {
-								changeComponent(History, true);
-							}}
-						>
-							<span class="material-symbols-outlined"> history </span>Görüşlərim
-						</button>
-
-						<button
-							class="card btn btn-outline-primary d-flex flex-row w-100"
-							on:click={() => {
-								changeComponent(Documents, true);
-							}}
-						>
-							<span class="material-symbols-outlined"> draft </span>Analizlərim və Reseptlərim
-						</button>
-						<li class="card btn btn-outline-primary d-flex flex-row w-100">
-							<span class="material-symbols-outlined"> clinical_notes </span>Həkimlərim
-						</li>
-						{#if $session.user}
-							{#if $session.user.admin}
-								<a class="card btn btn-outline-primary d-flex flex-row w-100" href="./admin">
-									<span class="material-symbols-outlined"> admin_panel_settings </span>Admin
-								</a>
-							{/if}
-
-							<a
-								class="card btn btn-outline-primary d-flex flex-row w-100"
-								style="border-radius: 20px!important;"
-								on:click={logout}
-								href="../"
-							>
-								<span class="material-symbols-outlined"> logout </span>Hesabdan Çıxış
+						{#if $session.user && $session.user.admin}
+							<a class="card btn btn-outline-primary d-flex flex-row w-100" href="./admin">
+								<span class="material-symbols-outlined"> admin_panel_settings </span>Admin
 							</a>
 						{/if}
 					</div>
@@ -254,6 +341,9 @@
 		border: 0px;
 		font-weight: 450;
 		width: 100%;
+	}
+	.btnLocale::after {
+		display: none;
 	}
 	@media screen and (max-width: 768px) {
 		.list-group {

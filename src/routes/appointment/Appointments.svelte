@@ -436,11 +436,7 @@
 					gap: .5rem;"
 				>
 					{$_('appointment.loginToSee')}
-					<button
-						on:click={() => loginModal.set(true)}
-						class="btn btn-outline-primary"
-						style="height: 40px"
-					>
+					<button on:click={() => loginModal.set(true)} class="btn btn-outline-primary h-100">
 						{$_('appointment.login')}
 					</button>
 				</div>

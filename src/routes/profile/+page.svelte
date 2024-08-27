@@ -66,7 +66,15 @@
 			>
 		{/if}
 		<h1 class="display-4 pcOnly">{$_('nav.account')}</h1>
-		<h1 class="display-4 mobileOnly" class:ps-5={$mobileComponent}>{$mobileHeader}</h1>
+		<h1
+			class="display-4 mobileOnly"
+			class:ps-5={$mobileComponent}
+			style="white-space: nowrap;
+					overflow-x: clip;
+					max-width: 100%;"
+		>
+			{$mobileHeader}
+		</h1>
 		<!-- WELCOME TEXT -->
 		<!-- {#if $session.user?.displayName && $mobile}
 			<div

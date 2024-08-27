@@ -3,11 +3,12 @@
 	import Nav from '$lib/components/Nav.svelte';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import type { LayoutData } from './$types';
-	import { appointmentsLoading, doctors, hideNav } from '$lib/store/dataStore';
+	import { appointmentsLoading, doctors, hideNav, postData } from '$lib/store/dataStore';
 	import '../lib/i18n';
 	import { locale, _ } from 'svelte-i18n';
 	import { session } from '$lib/session';
 	import { page } from '$app/stores';
+	import { browser } from '$app/environment';
 	export let data: LayoutData;
 
 	if (data?.doctors?.length) {
@@ -18,6 +19,12 @@
 			}))
 			.sort((a: any, b: any) => b.star - a.star);
 		doctors.set(dooc);
+	}
+
+	if (browser) {
+		window.onerror = function (message, source, lineno, colno, error) {
+			postData('errors', { error: JSON.stringify({ message, source, lineno, colno, error }) });
+		};
 	}
 
 	onMount(async () => {

@@ -11,7 +11,7 @@
 	import Documents from '$lib/components/profile/Documents.svelte';
 
 	let userEmail: any = '';
-	let component: any = ProfDetails;
+	let component: any = $mobile ? null : ProfDetails;
 
 	// $: dataLoading.set($session.user ? false : true);
 
@@ -20,10 +20,6 @@
 			userEmail = $session.user.email;
 		}
 	});
-
-	$: if (!$session.user) {
-		loginModal.set(true);
-	} else loginModal.set(false);
 
 	function changeComponent(comp: any, mobile?: boolean) {
 		if (mobile) {
@@ -73,46 +69,47 @@
 		{/if}
 	</div>
 </section>
-{#if $session.loggedIn}
-	<section>
-		<div class="container mobileCont">
-			<div class="row mt-3 pb-5">
-				<div class="col-12 col-md-4 col-lg-3">
-					{#if !$mobileComponent}
-						<ul
-							class="list-group pcOnly w-100 bg-white d-flex"
-							style="height: 400px; border-radius: 8px; overflow: hidden"
+
+<section>
+	<div class="container mobileCont">
+		<div class="row mt-3 pb-5">
+			<div class="col-12 col-md-4 col-lg-3">
+				{#if !$mobileComponent}
+					<ul
+						class="list-group pcOnly w-100 bg-white d-flex"
+						style="height: 400px; border-radius: 8px; overflow: hidden"
+					>
+						<button
+							class="list-group-item w-100"
+							on:click={() => {
+								changeComponent(ProfDetails);
+							}}
+							class:active={component == ProfDetails}
 						>
-							<button
-								class="list-group-item w-100"
-								on:click={() => {
-									changeComponent(ProfDetails);
-								}}
-								class:active={component == ProfDetails}
-							>
-								<span class="material-symbols-outlined"> for_you </span>Hesap Bilgileri
-							</button>
-							<button
-								class="list-group-item w-100"
-								on:click={() => {
-									changeComponent(History);
-								}}
-								class:active={component == History}
-							>
-								<span class="material-symbols-outlined"> history </span>Görüşlərim
-							</button>
-							<button
-								class="list-group-item w-100"
-								on:click={() => {
-									changeComponent(Documents);
-								}}
-								class:active={component == Documents}
-							>
-								<span class="material-symbols-outlined"> draft </span>Analizlərim və Reseptlərim
-							</button>
-							<li class="list-group-item">
-								<span class="material-symbols-outlined"> clinical_notes </span>Həkimlərim
-							</li>
+							<span class="material-symbols-outlined"> for_you </span>Hesap Bilgileri
+						</button>
+						<button
+							class="list-group-item w-100"
+							on:click={() => {
+								changeComponent(History);
+							}}
+							class:active={component == History}
+						>
+							<span class="material-symbols-outlined"> history </span>Görüşlərim
+						</button>
+						<button
+							class="list-group-item w-100"
+							on:click={() => {
+								changeComponent(Documents);
+							}}
+							class:active={component == Documents}
+						>
+							<span class="material-symbols-outlined"> draft </span>Analizlərim və Reseptlərim
+						</button>
+						<li class="list-group-item">
+							<span class="material-symbols-outlined"> clinical_notes </span>Həkimlərim
+						</li>
+						{#if $session.user}
 							<a
 								class="list-group-item mt-auto bg-secondary text-white"
 								on:click={logout}
@@ -122,65 +119,72 @@
 								<span class="material-symbols-outlined"> logout </span>
 								<span class="mx-auto" style="padding-right: 1rem;">Hesabdan Çıxış</span>
 							</a>
-						</ul>
-						<div class="d-flex flex-column mobileList mobileOnly w-100">
-							<button
-								class="card btn btn-outline-primary d-flex flex-row w-100"
-								on:click={() => {
-									changeComponent(ProfDetails, true);
-								}}
-							>
-								<div class="d-flex gap-3 align-items-center">
-									<!-- svelte-ignore a11y-img-redundant-alt -->
-									{#if $session.user?.photoURL}
-										<img
-											src={$session.user?.photoURL}
-											alt="Profile Photo"
-											style="max-height: 60px; border: 1px solid #ececec; padding: 5px; border-radius: 100%"
-										/>
-									{:else}
-										<span
-											style="font-size: 60px!important; color: #628a57"
-											class="material-symbols-outlined icon-fill">account_circle</span
-										>
-									{/if}
-									<div class="d-flex flex-column align-items-start">
-										<span style="font-size: small; color: gray">Profil</span>
+						{/if}
+					</ul>
+					<div class="d-flex flex-column mobileList mobileOnly w-100">
+						<button
+							class="card btn btn-outline-primary d-flex flex-row w-100"
+							on:click={() => {
+								$session.user ? changeComponent(ProfDetails, true) : loginModal.set(true);
+							}}
+						>
+							<div class="d-flex gap-3 align-items-center">
+								<!-- svelte-ignore a11y-img-redundant-alt -->
+								{#if $session.user?.photoURL}
+									<img
+										src={$session.user?.photoURL}
+										alt="Profile Photo"
+										style="max-height: 60px; border: 1px solid #ececec; padding: 5px; border-radius: 100%"
+									/>
+								{:else}
+									<span
+										style="font-size: 60px!important; color: #628a57"
+										class="material-symbols-outlined icon-fill">account_circle</span
+									>
+								{/if}
+								<div class="d-flex flex-column align-items-start">
+									<span style="font-size: small; color: gray">Profil</span>
+									{#if $session.user?.displayName}
 										<span style="margin-top: -5px">{$session.user?.displayName}</span>
-									</div>
+									{/if}
 								</div>
-							</button>
-							<hr
-								style="padding: 0;
+							</div>
+						</button>
+						<hr
+							style="padding: 0;
 								color: #a7a7a7;
 								margin: 5px;"
-							/>
-							<a class="card btn btn-outline-primary d-flex flex-row w-100" href="/messages">
-								<span class="material-symbols-outlined"> mail </span>Mesajlar
-							</a>
-							<button
-								class="card btn btn-outline-primary d-flex flex-row w-100"
-								on:click={() => {
-									changeComponent(History, true);
-								}}
-							>
-								<span class="material-symbols-outlined"> history </span>Görüşlərim
-							</button>
+						/>
+						<a class="card btn btn-outline-primary d-flex flex-row w-100" href="/messages">
+							<span class="material-symbols-outlined"> mail </span>Mesajlar
+						</a>
+						<button
+							class="card btn btn-outline-primary d-flex flex-row w-100"
+							on:click={() => {
+								changeComponent(History, true);
+							}}
+						>
+							<span class="material-symbols-outlined"> history </span>Görüşlərim
+						</button>
 
-							<button
-								class="card btn btn-outline-primary d-flex flex-row w-100"
-								on:click={() => {
-									changeComponent(Documents, true);
-								}}
-							>
-								<span class="material-symbols-outlined"> draft </span>Analizlərim və Reseptlərim
-							</button>
-							<li class="card btn btn-outline-primary d-flex flex-row w-100">
-								<span class="material-symbols-outlined"> clinical_notes </span>Həkimlərim
-							</li>
-							<a class="card btn btn-outline-primary d-flex flex-row w-100" href="./admin">
-								<span class="material-symbols-outlined"> admin_panel_settings </span>Admin
-							</a>
+						<button
+							class="card btn btn-outline-primary d-flex flex-row w-100"
+							on:click={() => {
+								changeComponent(Documents, true);
+							}}
+						>
+							<span class="material-symbols-outlined"> draft </span>Analizlərim və Reseptlərim
+						</button>
+						<li class="card btn btn-outline-primary d-flex flex-row w-100">
+							<span class="material-symbols-outlined"> clinical_notes </span>Həkimlərim
+						</li>
+						{#if $session.user}
+							{#if $session.user.admin}
+								<a class="card btn btn-outline-primary d-flex flex-row w-100" href="./admin">
+									<span class="material-symbols-outlined"> admin_panel_settings </span>Admin
+								</a>
+							{/if}
+
 							<a
 								class="card btn btn-outline-primary d-flex flex-row w-100"
 								style="border-radius: 20px!important;"
@@ -189,44 +193,37 @@
 							>
 								<span class="material-symbols-outlined"> logout </span>Hesabdan Çıxış
 							</a>
-						</div>
-					{/if}
-				</div>
-
-				{#if $mobileComponent}
-					<div class="col-md-9 col-lg-9 kont px-0 mobileOnly">
-						<div class="container">
-							<div class="row">
-								<div class="col-12 mobileOnly" style="background-color: unset">
-									<div class="container">
-										<svelte:component this={$mobileComponent} on:changeValue={handleChangeValue} />
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				{:else}
-					<div class="col-md-8 col-lg-9 kont pcOnly">
-						<div class="container h-100">
-							<div class="row h-100">
-								<div class="col pcOnly">
-									<svelte:component this={component} on:changeValue={handleChangeValue} />
-								</div>
-							</div>
-						</div>
+						{/if}
 					</div>
 				{/if}
 			</div>
+
+			{#if $mobileComponent}
+				<div class="col-md-9 col-lg-9 kont px-0 mobileOnly">
+					<div class="container">
+						<div class="row">
+							<div class="col-12 mobileOnly" style="background-color: unset">
+								<div class="container">
+									<svelte:component this={$mobileComponent} on:changeValue={handleChangeValue} />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			{:else}
+				<div class="col-md-8 col-lg-9 kont pcOnly">
+					<div class="container h-100">
+						<div class="row h-100">
+							<div class="col pcOnly">
+								<svelte:component this={component} on:changeValue={handleChangeValue} />
+							</div>
+						</div>
+					</div>
+				</div>
+			{/if}
 		</div>
-	</section>
-{:else}
-	<div
-		class="d-flex w-100 h-100 align-items-center justify-content-center"
-		style="min-height: calc(100dvh - 300px);"
-	>
-		<h6 style="color: gray;">Sehiyye.online</h6>
 	</div>
-{/if}
+</section>
 
 <style>
 	.kont {

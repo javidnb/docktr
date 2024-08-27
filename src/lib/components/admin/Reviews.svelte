@@ -36,9 +36,9 @@
 	}
 </script>
 
-<div class="d-flex gap-3 flex-column">
+<div class="d-flex gap-3 flex-wrap">
 	{#each $contactMessages as msg}
-		<div class="card p-3">
+		<div class="card p-3" style="width: fit-content;">
 			<span style="font-weight: 500;">appointment: {msg.appointmentId}</span>
 			<span>point: {msg.callQuality}</span>
 			<span>{msg.message}</span>

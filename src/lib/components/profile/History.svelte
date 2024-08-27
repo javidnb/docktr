@@ -3,7 +3,7 @@
 	import { getMessaging, getToken } from 'firebase/messaging';
 	import { app } from '$lib/firebase.client';
 	import { session } from '$lib/session';
-	import { appointments, dataLoading, putData, doctors } from '$lib/store/dataStore';
+	import { appointments, dataLoading, putData, doctors, loginModal } from '$lib/store/dataStore';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { formatDate } from '$lib/helpers/dateFormatter';
 
@@ -14,6 +14,10 @@
 	$: apps = $appointments.sort(
 		(a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime()
 	);
+
+	$: if (!$session.user) {
+		loginModal.set(true);
+	} else loginModal.set(false);
 
 	onMount(async () => {
 		console.log($appointments);
@@ -146,7 +150,10 @@
 <section>
 	<div class="d-flex flex-column gap-3">
 		{#each apps as appointment}
-			<div class="card py-2 px-3 d-flex flex-row gap-3" style="background-color: white; box-shadow: 0px 0px 5px #00000012">
+			<div
+				class="card py-2 px-3 d-flex flex-row gap-3"
+				style="background-color: white; box-shadow: 0px 0px 5px #00000012"
+			>
 				<div>
 					<img
 						src={$doctors.find((d) => d.id == appointment.doctorId)?.img}

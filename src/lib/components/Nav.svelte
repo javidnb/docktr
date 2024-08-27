@@ -202,7 +202,7 @@
 								</button>
 							</li>
 						{:else}
-							{#if $session.user?.admin}
+							{#if $session.user && $session.user.admin}
 								<li class="nav-item">
 									<button
 										class="nav-link topnavlink"
@@ -376,16 +376,12 @@
 						class:active={curPage == '/profile'}
 						on:click={() => {
 							mobileComponent.set(null);
-							$session.loggedIn ? goto('/profile') : loginModal.set(true);
+							goto('/profile');
 						}}
 						><span class="material-symbols-outlined" class:icon-fill={curPage == '/profile'}>
 							menu
 						</span>
-						<span class="navLinkText"
-							>{$session.user?.displayName
-								? $session.user.displayName.split(' ')[0]
-								: $_('nav.account')}</span
-						></button
+						<span class="navLinkText">{$_('nav.menu')}</span></button
 					>
 				</li>
 

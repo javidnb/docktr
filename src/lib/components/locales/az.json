@@ -19,7 +19,8 @@
 		"login": "Giriş",
 		"logout": "Çıxış",
 		"messages": "Mesajlar",
-		"about": "Haqqımızda"
+		"about": "Haqqımızda",
+		"menu": "Menyu"
 	},
 	"doctor": {
 		"about": "Həkim Haqqında",

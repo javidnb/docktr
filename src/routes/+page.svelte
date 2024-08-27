@@ -32,10 +32,18 @@
 					>
 						{$_('home.hero')}
 					</h1> -->
-					<p class="lead">{$_('home.lead')}</p>
+					<p class="lead mb-0">{$_('home.lead')}</p>
 					<div class="col-12 col-md-10">
-						<div class="w-100">
+						<div class="pcOnly w-100">
 							<Search />
+						</div>
+						<div class="w-100 mobileOnly">
+							<button
+								class="btn btn-outline-primary bg-white w-100 py-4 mt-3"
+								on:click={() => {
+									goto('/search');
+								}}>Görüş Al</button
+							>
 						</div>
 					</div>
 				</div>

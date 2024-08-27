@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { session } from '$lib/session';
-	import { onMount } from 'svelte';
-	import { dataLoading, postData } from '$lib/store/dataStore';
+	import { dataLoading, loginModal, mobile } from '$lib/store/dataStore';
 	import { putData } from '$lib/store/dataStore';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { _ } from 'svelte-i18n';
@@ -30,7 +29,9 @@
 		}
 	}
 
-	onMount(() => {});
+	$: if (!$session.user) {
+		loginModal.set(true);
+	} else loginModal.set(false);
 
 	let fileInput, avatar: any;
 
@@ -178,102 +179,103 @@
 	}
 </script>
 
-<form class="d-flex flex-column gap-1" on:submit|preventDefault={formSubmit}>
-	<!-- USER PHOTO-->
-	<div
-		style="position: relative;
+{#if $session.user}
+	<form class="d-flex flex-column gap-1" on:submit|preventDefault={formSubmit}>
+		<!-- USER PHOTO-->
+		<div
+			style="position: relative;
 			justify-content: center;
 			display: flex;"
-	>
-		{#if userData?.user?.photoURL || avatar}
-			<div style="position: relative;">
-				<img
-					src={avatar ? avatar : userData?.user?.photoURL}
-					alt="Profile Pic"
-					style="max-width: 100px; border-radius: 100%; 
+		>
+			{#if userData?.user?.photoURL || avatar}
+				<div style="position: relative;">
+					<img
+						src={avatar ? avatar : userData?.user?.photoURL}
+						alt="Profile Pic"
+						style="max-width: 100px; border-radius: 100%; 
 						aspect-ratio: 1/1; object-fit: cover; cursor: pointer"
-					data-bs-toggle="dropdown"
-				/>
-				<div class="dropdown">
-					<button
-						class="btn btn-secondary"
-						type="button"
 						data-bs-toggle="dropdown"
-						aria-expanded="false"
-						style="position: absolute; right: -5px; bottom: -5px;
+					/>
+					<div class="dropdown">
+						<button
+							class="btn btn-secondary"
+							type="button"
+							data-bs-toggle="dropdown"
+							aria-expanded="false"
+							style="position: absolute; right: -5px; bottom: -5px;
 							background: white; border: 1px solid #ececec;
 							border-radius: 8px; padding: 5px; color: black;
 							display: flex; justify-content: center;"
-					>
-						<span class="material-symbols-outlined icon-fill"> add </span>
-					</button>
-					<ul class="dropdown-menu">
-						<li>
-							<!-- svelte-ignore a11y-click-events-have-key-events -->
-							<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-							<label
-								for="fileInput"
-								on:click={() => {
-									uploadAfterSelect = true;
-								}}
-								class="dropdown-item d-flex align-items-center gap-1"
-								style="cursor: pointer;"
-								><span class="material-symbols-outlined"> add </span>{$_('actions.add_pp')}</label
-							>
-						</li>
-						<li>
-							<a
-								class="dropdown-item d-flex align-items-center gap-1"
-								href={avatar ? avatar : userData?.user?.photoURL}
-								target="_blank"
-								><span class="material-symbols-outlined"> fullscreen </span>{$_(
-									'actions.view_pp'
-								)}</a
-							>
-						</li>
-						<li>
-							<button
-								class="dropdown-item d-flex align-items-center gap-1"
-								on:click|preventDefault={() => {
-									showModal = true;
-								}}
-								><span class="material-symbols-outlined"> delete </span>{$_(
-									'actions.remove_pp'
-								)}</button
-							>
-						</li>
-					</ul>
+						>
+							<span class="material-symbols-outlined icon-fill"> add </span>
+						</button>
+						<ul class="dropdown-menu">
+							<li>
+								<!-- svelte-ignore a11y-click-events-have-key-events -->
+								<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+								<label
+									for="fileInput"
+									on:click={() => {
+										uploadAfterSelect = true;
+									}}
+									class="dropdown-item d-flex align-items-center gap-1"
+									style="cursor: pointer;"
+									><span class="material-symbols-outlined"> add </span>{$_('actions.add_pp')}</label
+								>
+							</li>
+							<li>
+								<a
+									class="dropdown-item d-flex align-items-center gap-1"
+									href={avatar ? avatar : userData?.user?.photoURL}
+									target="_blank"
+									><span class="material-symbols-outlined"> fullscreen </span>{$_(
+										'actions.view_pp'
+									)}</a
+								>
+							</li>
+							<li>
+								<button
+									class="dropdown-item d-flex align-items-center gap-1"
+									on:click|preventDefault={() => {
+										showModal = true;
+									}}
+									><span class="material-symbols-outlined"> delete </span>{$_(
+										'actions.remove_pp'
+									)}</button
+								>
+							</li>
+						</ul>
+					</div>
 				</div>
-			</div>
-		{:else}
-			<div
-				style="width: 100px; 
+			{:else}
+				<div
+					style="width: 100px; 
 				height: 100px;
 				color: var(--primaryColor);
 				border-radius: 100%;
 				border: 3px solid var(--primaryColor);
 				display: flex; align-items: center; justify-content: center; position: relative"
-			>
-				<span class="material-symbols-outlined icon-fill" style="font-size: 4rem"> person </span>
-				<span
-					class="material-symbols-outlined icon-fill"
-					style="position: absolute; right: -5px; bottom: -5px;
-					background: white; border: 1px solid #ececec; border-radius: 8px; padding: 5px"
 				>
-					add
-				</span>
-			</div>
-		{/if}
-		<!-- <input
+					<span class="material-symbols-outlined icon-fill" style="font-size: 4rem"> person </span>
+					<span
+						class="material-symbols-outlined icon-fill"
+						style="position: absolute; right: -5px; bottom: -5px;
+					background: white; border: 1px solid #ececec; border-radius: 8px; padding: 5px"
+					>
+						add
+					</span>
+				</div>
+			{/if}
+			<!-- <input
 		name="photoURL"
 		id="photoURL"
 		type="text"
 		class="form-control"
 		value={userData?.user?.photoURL ?? ''}
 	/> -->
-		<label
-			for="fileInput"
-			style="
+			<label
+				for="fileInput"
+				style="
 				position: absolute;
 				top: -7px;
 				right: -7px;
@@ -283,60 +285,82 @@
 				display: flex;
 				justify-content: end;
 				cursor: pointer"
-		>
-		</label>
+			>
+			</label>
 
-		<input
-			class="form-control d-none"
-			id="fileInput"
-			type="file"
-			accept=".jpg, .jpeg, .png"
-			on:change={(e) => onFileSelected(e)}
-			bind:this={fileInput}
-		/>
-	</div>
-	<!-- {#if file}
+			<input
+				class="form-control d-none"
+				id="fileInput"
+				type="file"
+				accept=".jpg, .jpeg, .png"
+				on:change={(e) => onFileSelected(e)}
+				bind:this={fileInput}
+			/>
+		</div>
+		<!-- {#if file}
 		<button class="btn btn-outline-primary" on:click={uploadFile}>Upload</button>
 	{/if} -->
 
-	<!-- END PHOTO-->
-	<label for="displayName">{$_('login.name_surname')}</label>
-	<input
-		name="displayName"
-		id="displayName"
-		type="text"
-		class="form-control"
-		value={userData?.user?.displayName ?? ''}
-	/>
-	<label for="email">{$_('login.email')}</label>
-	<input name="email" id="email" type="email" class="form-control" value={userData?.user?.email} />
-	<label for="phone">{$_('login.mobile')}</label>
-	<input
-		name="phoneNumber"
-		id="phone"
-		type="text"
-		class="form-control"
-		value={userData?.user?.phoneNumber ?? ''}
-	/>
-	<button class="btn btn-primary mt-3 btnLoader" {disabled}>
-		<span>{$_('actions.update')}</span>
-		{#if $dataLoading}
-			<div class="loader"></div>
+		<!-- END PHOTO-->
+		<label for="displayName">{$_('login.name_surname')}</label>
+		<input
+			name="displayName"
+			id="displayName"
+			type="text"
+			class="form-control"
+			value={userData?.user?.displayName ?? ''}
+		/>
+		<label for="email">{$_('login.email')}</label>
+		<input
+			name="email"
+			id="email"
+			type="email"
+			class="form-control"
+			value={userData?.user?.email}
+		/>
+		<label for="phone">{$_('login.mobile')}</label>
+		<input
+			name="phoneNumber"
+			id="phone"
+			type="text"
+			class="form-control"
+			value={userData?.user?.phoneNumber ?? ''}
+		/>
+		<button class="btn btn-primary mt-3 btnLoader" {disabled}>
+			<span>{$_('actions.update')}</span>
+			{#if $dataLoading}
+				<div class="loader"></div>
+			{/if}
+		</button>
+		{#if uploading}
+			<div
+				class="progress mt-3"
+				role="progressbar"
+				aria-label="Upload percentage"
+				aria-valuenow={uploadProgress}
+				aria-valuemin="0"
+				aria-valuemax="100"
+			>
+				<div class="progress-bar" style="width: {uploadProgress}%">
+					{uploadProgress.toFixed(2)}%
+				</div>
+			</div>
 		{/if}
-	</button>
-	{#if uploading}
-		<div
-			class="progress mt-3"
-			role="progressbar"
-			aria-label="Upload percentage"
-			aria-valuenow={uploadProgress}
-			aria-valuemin="0"
-			aria-valuemax="100"
-		>
-			<div class="progress-bar" style="width: {uploadProgress}%">{uploadProgress.toFixed(2)}%</div>
-		</div>
-	{/if}
-</form>
+	</form>
+{:else}
+	<button
+		class="btn btn-outline-primary w-100"
+		on:click={() => {
+			loginModal.set(true);
+		}}>{$_('login.login_header')}</button
+	>
+	<div
+		class="d-flex w-100 h-100 align-items-center justify-content-center s-i1Tk5jFGYwcs"
+		style="min-height: calc(-300px + 100dvh);"
+	>
+		<h6 class="s-i1Tk5jFGYwcs" style="color: gray;">Sehiyye.online</h6>
+	</div>
+{/if}
 
 {#if showModal}
 	<Confirm

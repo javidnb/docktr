@@ -2,7 +2,7 @@
 	import Messages from '$lib/components/chat/Messages.svelte';
 	import Chat from '$lib/components/chat/Chat.svelte';
 	import { _ } from 'svelte-i18n';
-	import { selectedUser, hideNav, mobile, dataLoading } from '$lib/store/dataStore';
+	import { selectedUser, hideNav, mobile, dataLoading, loginModal } from '$lib/store/dataStore';
 	import { onMount } from 'svelte';
 	import { session } from '$lib/session';
 
@@ -19,6 +19,10 @@
 	} else if ($mobile) {
 		hideNav.set(false);
 	}
+
+	$: if (!$session.user) {
+		loginModal.set(true);
+	} else loginModal.set(false);
 
 	let animate = true;
 	function scaleFade(node: HTMLElement, { duration = 70 }: { duration?: number } = {}) {
@@ -89,6 +93,15 @@
 					{/if}
 				</div>
 			{:else}
+				<div class="container">
+					<button
+						class="btn btn-outline-primary w-100"
+						on:click={() => {
+							loginModal.set(true);
+						}}>{$_('login.login_header')}</button
+					>
+				</div>
+
 				<div
 					class="d-flex w-100 h-100 align-items-center justify-content-center"
 					style="min-height: calc(100dvh - 300px);"

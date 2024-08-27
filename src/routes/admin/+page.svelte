@@ -10,6 +10,7 @@
 	import Reviews from '$lib/components/admin/Reviews.svelte';
 	import Home from '$lib/components/admin/Home.svelte';
 	import UpcomingAppointments from '$lib/components/admin/UpcomingAppointments.svelte';
+	import Errors from '$lib/components/admin/Errors.svelte';
 
 	// export let data;
 	let pageTitle: string = 'Ana Səhifə';
@@ -167,6 +168,19 @@
 				>
 					<span class="material-symbols-outlined"> automation </span>
 					<span class="navtext">GPT Chat</span>
+				</button>
+				<button
+					class="btn d-flex flex-row align-items-center gap-2"
+					on:click={() => {
+						component = Errors;
+						pageTitle = 'Developer';
+					}}
+					class:active={component == Errors}
+					data-bs-toggle={$mobile ? 'collapse' : ''}
+					data-bs-target={$mobile ? '#sideCollapse' : ''}
+				>
+					<span class="material-symbols-outlined"> api </span>
+					<span class="navtext">Developer</span>
 				</button>
 				<!-- <button
 					class="btn d-flex flex-row align-items-center gap-2 mt-auto"

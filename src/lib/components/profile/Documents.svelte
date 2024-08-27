@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { db, initializeFirebase } from '$lib/firebase.client';
 	import { session } from '$lib/session';
-	import { dataLoading, users, selectedUser } from '$lib/store/dataStore';
+	import { dataLoading, users, selectedUser, loginModal } from '$lib/store/dataStore';
 	import { collection, getDocs, query, where, type CollectionReference } from 'firebase/firestore';
 	import { onMount } from 'svelte';
 	import DocumentsByUser from '../DocumentsByUser.svelte';
@@ -17,6 +17,10 @@
 			if ($session.user) getMsgs();
 		}
 	});
+
+	$: if (!$session.user) {
+		loginModal.set(true);
+	} else loginModal.set(false);
 
 	async function getMsgs() {
 		dataLoading.set(true);

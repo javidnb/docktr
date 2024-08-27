@@ -37,9 +37,9 @@
 	}
 </script>
 
-<div class="d-flex gap-3 flex-column">
+<div class="d-flex gap-3 flex-wrap">
 	{#each $contactMessages as msg}
-		<div class="card p-3">
+		<div class="card p-3" style="min-width: fit-content;">
 			<div class="d-flex flex-wrap gap-3">
 				<div style="color: #52694b">
 					{#if msg.displayName}

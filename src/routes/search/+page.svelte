@@ -5,6 +5,7 @@
 	import { doctors, selectedSymptoms, selectedBranch, searchQuery } from '$lib/store/dataStore';
 	import { _ } from 'svelte-i18n';
 	import { onMount } from 'svelte';
+	import BranchSlider from '$lib/components/BranchSlider.svelte';
 
 	let inputElement: any;
 	const charMap: any = {
@@ -236,9 +237,10 @@
 			</div>
 		{:else if !$searchQuery}
 			<div class="d-flex justify-content-center align-items-center w-100 mt-5">
-				<span
+				<!-- <span
 					>{$_('nav.docs')}, {$_('nav.branches')}, {$_('nav.diseases')}, {$_('home.symptoms')}</span
-				>
+				> -->
+				<BranchSlider />
 			</div>
 			<!-- <div class="d-flex flex-wrap gap-2 px-3 mt-4 justify-content-center">
 				<button

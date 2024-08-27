@@ -54,11 +54,10 @@
 							>
 								<div class="d-flex flex-column" style="width: calc(100% - 50px)">
 									<div class="d-flex gap-2 align-items-center w-100" style="font-size: 24px;">
-										<span class="material-symbols-outlined"> library_add </span>
 										<span class="mx-auto">Görüş Al</span>
 									</div>
 									<img
-										src="https://ik.imagekit.io/d2nwsj0ktvh/pngwing.com_tMbKE8rfj.png"
+										src="https://ik.imagekit.io/d2nwsj0ktvh/online_VP_k7pe75.png"
 										alt="Get Appointment"
 										style="width: 85px;
 											position: absolute;

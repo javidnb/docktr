@@ -226,21 +226,19 @@
 		}
 	}
 
-	function scaleFade(node: HTMLElement, { duration = 70 }: { duration?: number } = {}) {
+	function scaleFade(node: HTMLElement, { duration = 100 }: { duration?: number } = {}) {
 		return {
 			duration,
 			css: (t: number) => {
-				const opacity = t; // from 0 to 1
-				return `				
-                    opacity: ${opacity};
-                `;
+				const x = !pastAppointmentsActive ? -100 + 100 * t : 100 - 100 * t;
+				return `transform: translateX(${x}px);`;
 			}
 		};
 	}
 </script>
 
 <div class="container" class:blur={$joinVideoCall}>
-	<div class="row mb-5 pb-5 row-gap-3">
+	<div class="row mb-5 pb-5 row-gap-3" style="overflow-x: hidden;">
 		<ul class="nav nav-tabs pc-mt">
 			<li class="nav-item">
 				<button

@@ -156,6 +156,9 @@
 						<div class="d-flex flex-column mobileList mobileOnly w-100">
 							<button
 								class="card btn btn-outline-primary d-flex flex-row w-100"
+								style="background: #acd3a1;
+									color: white;
+									padding-block: 1rem;"
 								on:click={() => {
 									$session.user ? changeComponent(ProfDetails, true) : loginModal.set(true);
 									if ($session.user) mobileHeader.set($_('nav.account'));
@@ -167,7 +170,7 @@
 										<img
 											src={$session.user?.photoURL}
 											alt="Profile Photo"
-											style="max-height: 60px; border: 1px solid #ececec; padding: 5px; border-radius: 100%"
+											style="max-height: 60px;  padding: 5px; border-radius: 100%"
 										/>
 									{:else}
 										<span
@@ -177,7 +180,7 @@
 									{/if}
 									<div class="d-flex flex-column align-items-start">
 										{#if $session.user}
-											<span style="font-size: small; color: gray">Profil</span>
+											<span style="font-size: small;">Profil</span>
 											{#if $session.user?.displayName}
 												<span style="margin-top: -5px">{$session.user?.displayName}</span>
 											{/if}

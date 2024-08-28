@@ -452,10 +452,10 @@
 						}}
 					>
 						<span
-							class="material-symbols-outlined icon-fill s-y_bCXRrkrYfP"
-							style="font-size: 30px;">ac_unit</span
+							class="material-symbols-outlined s-y_bCXRrkrYfP"
+							style="font-size: 30px;">contact_support</span
 						>
-						<span class="mx-auto"> Səhiyyə.net Asistan </span>
+						<span class="mx-auto"> Bizə Sual Ver </span>
 					</button>
 				</div>
 			</div>

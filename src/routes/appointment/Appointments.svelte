@@ -32,6 +32,8 @@
 	let filteredAppointments: any = [];
 	let appointmentId: any = null;
 	let pastAppointmentsActive: boolean = false; // for showing active in the nav
+	let startX = 0;
+	let endX = 0;
 
 	$: if (!$session.user) appointments.set([]);
 
@@ -226,6 +228,24 @@
 		}
 	}
 
+	function handleTouch(event: any) {
+		const swipeThreshold = 50; // Minimum distance for a swipe
+		if (event.type === 'touchstart') {
+			startX = event.touches[0].clientX;
+		} else if (event.type === 'touchend') {
+			endX = event.changedTouches[0].clientX;
+			if (startX - endX > swipeThreshold) {
+				// Swipe Left
+				pastAppointmentsActive = true;
+				filteredAppointments = pastAppointments;
+			} else if (endX - startX > swipeThreshold) {
+				// Swipe right
+				pastAppointmentsActive = false;
+				filteredAppointments = upcomingAppointments;
+			}
+		}
+	}
+
 	function scaleFade(node: HTMLElement, { duration = 100 }: { duration?: number } = {}) {
 		return {
 			duration,
@@ -237,7 +257,7 @@
 	}
 </script>
 
-<div class="container" class:blur={$joinVideoCall}>
+<div class="container" class:blur={$joinVideoCall} on:touchstart={handleTouch} on:touchend={handleTouch}>
 	<div class="row mb-5 pb-5 row-gap-3" style="overflow-x: hidden;">
 		<ul class="nav nav-tabs pc-mt">
 			<li class="nav-item">
@@ -276,7 +296,7 @@
 		{:else if filteredAppointments?.length && filteredAppointments}
 			{#key pastAppointmentsActive}
 				<div in:scaleFade>
-					{#each filteredAppointments as appointment, index}
+					{#each filteredAppointments as appointment}
 						<div class="col-md-6 col-lg-4">
 							<div class="card mt-3 p-3 h-100">
 								<!-- Section 1: Image and Name -->
@@ -550,31 +570,5 @@
 		border-bottom: 3px solid !important;
 		background-color: unset;
 		color: var(--primaryText) !important;
-	}
-
-	.transition-enter {
-		animation: enter 0.3s forwards;
-	}
-
-	.transition-exit {
-		animation: exit 0.3s forwards;
-	}
-
-	@keyframes enter {
-		from {
-			transform: translateX(var(--direction, 0));
-		}
-		to {
-			transform: translateX(0);
-		}
-	}
-
-	@keyframes exit {
-		from {
-			transform: translateX(0);
-		}
-		to {
-			transform: translateX(var(--direction, 0));
-		}
 	}
 </style>

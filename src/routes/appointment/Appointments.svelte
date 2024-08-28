@@ -12,7 +12,7 @@
 		selectedUser,
 		reviewModal
 	} from '$lib/store/dataStore';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { monthNames } from '$lib/helpers/dateFormatter';
 	import { session } from '$lib/session';
 	import ConfirmationModal from '$lib/helpers/AppointConfirmation.svelte';
@@ -225,6 +225,18 @@
 			}
 		}
 	}
+
+	function scaleFade(node: HTMLElement, { duration = 70 }: { duration?: number } = {}) {
+		return {
+			duration,
+			css: (t: number) => {
+				const opacity = t; // from 0 to 1
+				return `				
+                    opacity: ${opacity};
+                `;
+			}
+		};
+	}
 </script>
 
 <div class="container" class:blur={$joinVideoCall}>
@@ -264,212 +276,220 @@
 				<!-- <span style="color: gray; margin-top: -20px; margin-bottom: 2rem">Yüklənir ..</span> -->
 			</div>
 		{:else if filteredAppointments?.length && filteredAppointments}
-			{#each filteredAppointments as appointment}
-				<div class="col-md-6 col-lg-4">
-					<div class="card mt-3 p-3 h-100">
-						<!-- Section 1: Image and Name -->
-						<div
-							class="d-flex gap-3 align-items-center"
-							style="border-bottom: 1px solid rgb(236, 236, 236); padding-bottom: 1rem; min-height: 100px"
-						>
-							{#if $session?.user?.doctor}
-								<!-- svelte-ignore a11y-click-events-have-key-events -->
-								<!-- svelte-ignore a11y-no-static-element-interactions -->
+			{#key pastAppointmentsActive}
+				<div in:scaleFade>
+					{#each filteredAppointments as appointment, index}
+						<div class="col-md-6 col-lg-4">
+							<div class="card mt-3 p-3 h-100">
+								<!-- Section 1: Image and Name -->
 								<div
-									class="d-flex align-items-center gap-3 cursor-pointer w-100"
-									on:click={() => {
-										selectedUser.set(appointment.userId);
-									}}
+									class="d-flex gap-3 align-items-center"
+									style="border-bottom: 1px solid rgb(236, 236, 236); padding-bottom: 1rem; min-height: 100px"
 								>
-									<!-- Doctor View: Show Patient Info -->
-									{#if appointment.photoURL}
-										<img
-											src={appointment.photoURL}
-											style="max-height: 80px; aspect-ratio: 1.5/1; max-width: 120px; border-radius: 6px; object-fit: cover"
-											alt="user pic"
-										/>
-									{:else}
+									{#if $session?.user?.doctor}
+										<!-- svelte-ignore a11y-click-events-have-key-events -->
+										<!-- svelte-ignore a11y-no-static-element-interactions -->
 										<div
-											style="width: 60px; height: 60px; color: var(--primaryColor); border-radius: 100%; border: 3px solid var(--primaryColor); display: flex; align-items: center; justify-content: center;"
+											class="d-flex align-items-center gap-3 cursor-pointer w-100"
+											on:click={() => {
+												selectedUser.set(appointment.userId);
+											}}
 										>
-											<span class="material-symbols-outlined icon-fill" style="font-size: 3rem"
-												>person</span
+											<!-- Doctor View: Show Patient Info -->
+											{#if appointment.photoURL}
+												<img
+													src={appointment.photoURL}
+													style="max-height: 80px; aspect-ratio: 1.5/1; max-width: 120px; border-radius: 6px; object-fit: cover"
+													alt="user pic"
+												/>
+											{:else}
+												<div
+													style="width: 60px; height: 60px; color: var(--primaryColor); border-radius: 100%; border: 3px solid var(--primaryColor); display: flex; align-items: center; justify-content: center;"
+												>
+													<span class="material-symbols-outlined icon-fill" style="font-size: 3rem"
+														>person</span
+													>
+												</div>
+											{/if}
+											<div class="d-flex flex-column flex-1 gap-2" style="min-height: 80px;">
+												<div class="d-flex flex-column h-100">
+													<span>{appointment.displayName}</span>
+													<span>{appointment.email}</span>
+												</div>
+
+												<button class="btn btn-outline-primary w-100 mt-auto"
+													>{$_('nav.messages')}</button
+												>
+											</div>
+										</div>
+									{:else}
+										<!-- User View: Show Doctor Info -->
+										<img
+											src={$doctors.find((d) => d.id == appointment.doctorId)?.img}
+											style="max-height: 80px; aspect-ratio: 1.5/1; max-width: 120px; border-radius: 6px; object-fit: cover; object-position: top"
+											alt="doctor pic"
+										/>
+										<div class="d-flex align-items-center w-100 docDetails">
+											<a
+												href="/doctors/{$doctors.find((d) => d.id == appointment.doctorId)?.slug}"
+												style="font-size: 1.2rem; text-align: center; text-decoration: none; color: #37592e; font-weight: 500; margin-inline: auto;"
 											>
+												{$doctors.find((d) => d.id == appointment.doctorId)?.name}
+											</a>
+											{#if appointment.purchased}
+												<button
+													on:click={() => sendMsg(appointment, true)}
+													class="btn btn-outline-primary d-flex align-items-center"
+													style="width: fit-content; align-self: center; gap: 10px;"
+													use:tooltip={{ content: $_('actions.send_msg'), placement: 'right' }}
+												>
+													<span class="material-symbols-outlined">send</span>
+													<span class="mobileOnly mx-auto">{$_('actions.send_msg')}</span>
+												</button>
+											{/if}
 										</div>
 									{/if}
-									<div class="d-flex flex-column flex-1 gap-2" style="min-height: 80px;">
-										<div class="d-flex flex-column h-100">
-											<span>{appointment.displayName}</span>
-											<span>{appointment.email}</span>
-										</div>
+								</div>
 
-										<button class="btn btn-outline-primary w-100 mt-auto"
-											>{$_('nav.messages')}</button
+								<!-- Section 2: Appointment Date -->
+								<div class="d-flex align-items-center gap-2 mt-3">
+									<span class="material-symbols-outlined">schedule</span>
+									<div>
+										<span
+											>{new Date(appointment.startTime).getHours()}:{new Date(appointment.startTime)
+												.getMinutes()
+												.toString()
+												.padStart(2, '0')}</span
+										>
+										-
+										<span
+											>{new Date(appointment.endTime).getHours()}:{new Date(appointment.endTime)
+												.getMinutes()
+												.toString()
+												.padStart(2, '0')}</span
 										>
 									</div>
 								</div>
-							{:else}
-								<!-- User View: Show Doctor Info -->
-								<img
-									src={$doctors.find((d) => d.id == appointment.doctorId)?.img}
-									style="max-height: 80px; aspect-ratio: 1.5/1; max-width: 120px; border-radius: 6px; object-fit: cover; object-position: top"
-									alt="doctor pic"
-								/>
-								<div class="d-flex align-items-center w-100 docDetails">
-									<a
-										href="/doctors/{$doctors.find((d) => d.id == appointment.doctorId)?.slug}"
-										style="font-size: 1.2rem; text-align: center; text-decoration: none; color: #37592e; font-weight: 500; margin-inline: auto;"
+								<div
+									class="d-flex align-items-center gap-2 mt-2"
+									style="border-bottom: 1px solid rgb(236, 236, 236); padding-bottom: 1rem;"
+								>
+									<span class="material-symbols-outlined">calendar_month</span>
+									<span
+										>{new Date(appointment.endTime).getDate()}
+										{monthNames[new Date(appointment.endTime).getMonth()]}</span
 									>
-										{$doctors.find((d) => d.id == appointment.doctorId)?.name}
-									</a>
+								</div>
+
+								{#if !appointment.ended && new Date(appointment.endTime) > new Date()}
+									<!-- Section 3: Appointment Status -->
 									{#if appointment.purchased}
+										{#if appointment.status == 1}
+											<span class="d-flex my-auto py-2 gap-1" style="color: #93930a">
+												<span class="material-symbols-outlined">pending</span>
+												<span>Həkimin təsdiqi gözlənilir</span>
+											</span>
+										{:else if appointment.status == 2}
+											<span class="d-flex my-auto py-2 gap-1" style="color: green">
+												<span class="material-symbols-outlined"
+													>{appointment.changed ? 'change_circle' : 'check'}</span
+												>
+												<span
+													>{appointment.changed
+														? 'Randevu yeni saata keçirilib.'
+														: 'Randevu saatı təsdiq edilib.'}</span
+												>
+											</span>
+										{/if}
+									{/if}
+
+									<!-- Section 4: Action Buttons -->
+									{#if $session?.user?.doctor}
+										<!-- Doctor Actions -->
+										{#if appointment.status == 1}
+											<button
+												class="btn btn-outline-primary mt-1 d-flex align-items-center"
+												on:click={() => openAppConfirmModal(appointment, true)}
+											>
+												<span class="material-symbols-outlined">schedule_send</span>
+												<span class="mx-auto">Vaxtı dəyiş</span>
+											</button>
+											<button
+												class="btn btn-outline-primary mt-3 d-flex align-items-center"
+												on:click={() => openAppConfirmModal(appointment)}
+											>
+												<span class="material-symbols-outlined">check</span>
+												<span class="mx-auto">Təsdiq et</span>
+											</button>
+										{/if}
+									{:else}
+										<!-- User Actions -->
+										{#if !appointment.purchased}
+											<button
+												class="btn btn-outline-primary mt-auto mb-2 d-flex align-items-center"
+											>
+												<span class="material-symbols-outlined">shopping_cart</span>
+												<span class="mx-auto">Ödəniş et</span>
+											</button>
+										{/if}
+									{/if}
+
+									<!-- Section 5: Join Appointment Button -->
+									{#if appointment.status == 2 && new Date(appointment?.startTime) > new Date()}
 										<button
-											on:click={() => sendMsg(appointment, true)}
-											class="btn btn-outline-primary d-flex align-items-center"
-											style="width: fit-content; align-self: center; gap: 10px;"
-											use:tooltip={{ content: $_('actions.send_msg'), placement: 'right' }}
+											class="btn btn-outline-primary mt-auto mb-2 d-flex align-items-center"
+											on:click={() => joinCall(appointment)}
 										>
-											<span class="material-symbols-outlined">send</span>
-											<span class="mobileOnly mx-auto">{$_('actions.send_msg')}</span>
+											<span class="material-symbols-outlined">schedule</span>
+											{#if appointment.remainingTime}
+												<span class="mx-auto">
+													{appointment.remainingTime.days != 0
+														? appointment.remainingTime.days +
+															' gün ' +
+															appointment.remainingTime.hours +
+															':' +
+															appointment.remainingTime.minutes +
+															':' +
+															appointment.remainingTime.seconds
+														: appointment.remainingTime.hours +
+															':' +
+															appointment.remainingTime.minutes +
+															':' +
+															appointment.remainingTime.seconds}
+												</span>
+											{/if}
+										</button>
+									{:else if appointment.status == 2}
+										<button
+											on:click={() => joinCall(appointment)}
+											class="btn btn-outline-primary mt-3 mb-2 d-flex align-items-center"
+											style="background: var(--primaryColor); color: white;"
+										>
+											<span class="material-symbols-outlined">video_call</span>
+											<span class="mx-auto"
+												>{!$joinVideoCall ? 'Video görüşə qoşul' : 'Gözləyin'}</span
+											>
 										</button>
 									{/if}
-								</div>
-							{/if}
-						</div>
-
-						<!-- Section 2: Appointment Date -->
-						<div class="d-flex align-items-center gap-2 mt-3">
-							<span class="material-symbols-outlined">schedule</span>
-							<div>
-								<span
-									>{new Date(appointment.startTime).getHours()}:{new Date(appointment.startTime)
-										.getMinutes()
-										.toString()
-										.padStart(2, '0')}</span
-								>
-								-
-								<span
-									>{new Date(appointment.endTime).getHours()}:{new Date(appointment.endTime)
-										.getMinutes()
-										.toString()
-										.padStart(2, '0')}</span
-								>
-							</div>
-						</div>
-						<div
-							class="d-flex align-items-center gap-2 mt-2"
-							style="border-bottom: 1px solid rgb(236, 236, 236); padding-bottom: 1rem;"
-						>
-							<span class="material-symbols-outlined">calendar_month</span>
-							<span
-								>{new Date(appointment.endTime).getDate()}
-								{monthNames[new Date(appointment.endTime).getMonth()]}</span
-							>
-						</div>
-
-						{#if !appointment.ended && new Date(appointment.endTime) > new Date()}
-							<!-- Section 3: Appointment Status -->
-							{#if appointment.purchased}
-								{#if appointment.status == 1}
-									<span class="d-flex my-auto py-2 gap-1" style="color: #93930a">
-										<span class="material-symbols-outlined">pending</span>
-										<span>Həkimin təsdiqi gözlənilir</span>
-									</span>
-								{:else if appointment.status == 2}
-									<span class="d-flex my-auto py-2 gap-1" style="color: green">
-										<span class="material-symbols-outlined"
-											>{appointment.changed ? 'change_circle' : 'check'}</span
-										>
-										<span
-											>{appointment.changed
-												? 'Randevu yeni saata keçirilib.'
-												: 'Randevu saatı təsdiq edilib.'}</span
-										>
-									</span>
-								{/if}
-							{/if}
-
-							<!-- Section 4: Action Buttons -->
-							{#if $session?.user?.doctor}
-								<!-- Doctor Actions -->
-								{#if appointment.status == 1}
-									<button
-										class="btn btn-outline-primary mt-1 d-flex align-items-center"
-										on:click={() => openAppConfirmModal(appointment, true)}
-									>
-										<span class="material-symbols-outlined">schedule_send</span>
-										<span class="mx-auto">Vaxtı dəyiş</span>
-									</button>
-									<button
-										class="btn btn-outline-primary mt-3 d-flex align-items-center"
-										on:click={() => openAppConfirmModal(appointment)}
-									>
-										<span class="material-symbols-outlined">check</span>
-										<span class="mx-auto">Təsdiq et</span>
-									</button>
-								{/if}
-							{:else}
-								<!-- User Actions -->
-								{#if !appointment.purchased}
-									<button class="btn btn-outline-primary mt-auto mb-2 d-flex align-items-center">
-										<span class="material-symbols-outlined">shopping_cart</span>
-										<span class="mx-auto">Ödəniş et</span>
-									</button>
-								{/if}
-							{/if}
-
-							<!-- Section 5: Join Appointment Button -->
-							{#if appointment.status == 2 && new Date(appointment?.startTime) > new Date()}
-								<button
-									class="btn btn-outline-primary mt-auto mb-2 d-flex align-items-center"
-									on:click={() => joinCall(appointment)}
-								>
-									<span class="material-symbols-outlined">schedule</span>
-									{#if appointment.remainingTime}
-										<span class="mx-auto">
-											{appointment.remainingTime.days != 0
-												? appointment.remainingTime.days +
-													' gün ' +
-													appointment.remainingTime.hours +
-													':' +
-													appointment.remainingTime.minutes +
-													':' +
-													appointment.remainingTime.seconds
-												: appointment.remainingTime.hours +
-													':' +
-													appointment.remainingTime.minutes +
-													':' +
-													appointment.remainingTime.seconds}
-										</span>
-									{/if}
-								</button>
-							{:else if appointment.status == 2}
-								<button
-									on:click={() => joinCall(appointment)}
-									class="btn btn-outline-primary mt-3 mb-2 d-flex align-items-center"
-									style="background: var(--primaryColor); color: white;"
-								>
-									<span class="material-symbols-outlined">video_call</span>
-									<span class="mx-auto">{!$joinVideoCall ? 'Video görüşə qoşul' : 'Gözləyin'}</span>
-								</button>
-							{/if}
-						{:else}
-							<div
-								class="d-flex justify-content-center my-auto"
-								style="color: #375935;
+								{:else}
+									<div
+										class="d-flex justify-content-center my-auto mt-2"
+										style="color: #375935;
 									font-weight: 500;"
-							>
-								Görüş başa çatıb
+									>
+										Görüş başa çatıb
+									</div>
+								{/if}
 							</div>
-						{/if}
-					</div>
+						</div>
+					{/each}
 				</div>
-			{/each}
+			{/key}
 		{:else if $session.loggedIn && $appointmentsLoading}
 			<!-- APOINTMENTS LOADING -->
 			<div class="card mt-3 p-3">Loading</div>
 		{:else if $session.loggedIn}
-			<div class="container">
+			<div class="container px-3">
 				<span>{$_('appointment.no_appointment')}</span>
 			</div>
 		{:else}
@@ -515,7 +535,48 @@
 	.nav-link:not(.active) {
 		color: var(--primaryText);
 	}
-	.nav-tabs .nav-item, .nav-tabs .active, .nav-tabs .nav-item:hover .nav-link  {
+	.nav-tabs .nav-item,
+	.nav-tabs .active,
+	.nav-tabs .nav-item:hover .nav-link {
 		border-radius: 0;
+	}
+	.nav-tabs .nav-item .nav-link {
+		border: 0;
+		outline: 0;
+	}
+	.nav-tabs .nav-item .nav-link {
+		color: var(--primaryColor);
+	}
+	.nav-tabs .active {
+		border: 0;
+		border-bottom: 3px solid !important;
+		background-color: unset;
+		color: var(--primaryText) !important;
+	}
+
+	.transition-enter {
+		animation: enter 0.3s forwards;
+	}
+
+	.transition-exit {
+		animation: exit 0.3s forwards;
+	}
+
+	@keyframes enter {
+		from {
+			transform: translateX(var(--direction, 0));
+		}
+		to {
+			transform: translateX(0);
+		}
+	}
+
+	@keyframes exit {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			transform: translateX(var(--direction, 0));
+		}
 	}
 </style>

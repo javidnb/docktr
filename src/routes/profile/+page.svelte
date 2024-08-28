@@ -117,15 +117,7 @@
 								>
 									<span class="material-symbols-outlined"> for_you </span>{$_('nav.account')}
 								</button>
-								<button
-									class="list-group-item w-100"
-									on:click={() => {
-										changeComponent(History);
-									}}
-									class:active={component == History}
-								>
-									<span class="material-symbols-outlined"> history </span>{$_('appointment.list')}
-								</button>
+								
 								<button
 									class="list-group-item w-100"
 									on:click={() => {
@@ -198,15 +190,7 @@
 								<a class="card btn btn-outline-primary d-flex flex-row w-100" href="/messages">
 									<span class="material-symbols-outlined"> mail </span>{$_('nav.messages')}
 								</a>
-								<button
-									class="card btn btn-outline-primary d-flex flex-row w-100"
-									on:click={() => {
-										changeComponent(History, true);
-										if ($session.user) mobileHeader.set($_('appointment.list'));
-									}}
-								>
-									<span class="material-symbols-outlined"> history </span>{$_('appointment.list')}
-								</button>
+								
 
 								<button
 									class="card btn btn-outline-primary d-flex flex-row w-100"

@@ -32,7 +32,7 @@
 					>
 						{$_('home.hero')}
 					</h1> -->
-					<p class="lead mb-0">{$_('home.lead')}</p>
+					<p class="lead mb-0 py-2" style="color: green; font-size: 16px">{$_('home.lead')}</p>
 					<div class="col-12 col-md-10">
 						<div class="pcOnly w-100">
 							<Search />
@@ -54,7 +54,7 @@
 							>
 								<div class="d-flex flex-column" style="width: calc(100% - 50px)">
 									<div class="d-flex gap-2 align-items-center w-100" style="font-size: 24px;">
-										<span class="mx-auto">Görüş Al</span>
+										<span class="mx-auto">Yeni Görüş Al</span>
 									</div>
 									<img
 										src="https://ik.imagekit.io/d2nwsj0ktvh/online_VP_k7pe75.png"
@@ -78,7 +78,12 @@
 	<div class="container">
 		<div class="row">
 			<div class="col">
-				<!-- <h5>{$_('nav.branches')}</h5> -->
+				<h5
+					style="color: green; font-family: 'Montserrat', sans-serif; margin-top: -2rem; padding-left: 10px"
+				>
+					Həkimlər və {$_('nav.branches')}
+				</h5>
+				<hr style="color: green; margin-inline: .5rem;" />
 				<BranchSlider />
 			</div>
 		</div>
@@ -88,7 +93,12 @@
 	<div class="container">
 		<div class="row">
 			<div class="col">
-				<h5>{$_('home.faq')}</h5>
+				<h5
+					style="color: green; font-family: 'Montserrat', sans-serif;  padding-left: 10px"
+				>
+					{$_('home.faq')}
+				</h5>
+				<hr style="color: green; margin-inline: .5rem;" />
 				<div class="accordion mt-3" id="accordionExample">
 					<div class="accordion-item">
 						<h2 class="accordion-header">

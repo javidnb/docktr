@@ -1,7 +1,7 @@
 {
 	"home": {
 		"hero": "Online Səhiyyə Platformanız",
-		"lead": "Xarici Həkimlərlə Götüntülü Konsultasiya",
+		"lead": "XARİCİ HƏKİMLƏRLƏ VİDEO KONSULTASİYA",
 		"search": "Axtar",
 		"symptoms": "Simptomlar",
 		"faq": "Tez tez soruşulan suallar",
@@ -41,7 +41,7 @@
 	"appointment": {
 		"loginToSee": "Randevuları görmək üçün hesaba",
 		"login": "giriş et",
-		"get": "Görüş Al",
+		"get": "Həkimdən Görüş Al",
 		"no_appointment": "Planlaşdırılmış görüş yoxdur ..",
 		"planned": "Planlaşdırılan görüş",
 		"list": "Görüşlərim"
@@ -50,7 +50,7 @@
 		"notFound": "Nəticə Tapılmadı",
 		"search_symptoms": "Simptomlarınızı yazın",
 		"welcome": "Xoş Gəldiniz",
-		"no_msg":"Yeni Mesaj Yoxdur"
+		"no_msg": "Yeni Mesaj Yoxdur"
 	},
 	"faq": {
 		"q1": "Həkim qəbulunu necə sifariş edə bilərəm?",

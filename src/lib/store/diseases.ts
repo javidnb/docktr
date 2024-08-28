@@ -3,6 +3,7 @@ export const diseases = [
 		id: 1,
 		name: 'Dermatologiya',
 		slug: 'dermatologiya',
+		icon: 'https://ik.imagekit.io/d2nwsj0ktvh/dry-skin_lSJDoTO-3.png',
 		conditions: {
 			Ekzema: [
 				'Dəri qaşınması',
@@ -162,6 +163,7 @@ export const diseases = [
 		id: 3,
 		name: 'Qidalanma və diyet',
 		slug: 'qidalanma-ve-diyet',
+		icon: 'https://ik.imagekit.io/d2nwsj0ktvh/nutrition-plan_9zfogjUxc.png',
 		conditions: {
 			İştahsızlık: ['İştahsızlıq', 'Yeməkdən sonra doyma hissi', 'Çəki itkisi'],
 			'Həddindən Artıq Yemək': ['Həddindən artıq yemək', 'Çəki artımı', 'Yemək sonrası narahatlıq'],
@@ -482,8 +484,9 @@ export const diseases = [
 	},
 	{
 		id: 7,
-		name: 'Kadın hastalıkları ve doğum',
+		name: 'Ginekologiya və Doğuş',
 		slug: 'kadin-hastaliklari-ve-dogum',
+		icon: 'https://ik.imagekit.io/d2nwsj0ktvh/pregnant_4hGkfvOb7.png',
 		conditions: {
 			'Menstrual Problemler': [
 				'Ağır və ya nizamsız menstrual qanaxmalar',

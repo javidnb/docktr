@@ -25,19 +25,23 @@
 				class="card align-items-center"
 			>
 				<div class="card-body d-flex flex-column align-items-center">
-					<span
-						class="material-symbols-outlined"
-						style="
+					{#if item.icon}
+						<img style="width: 55px;" src={item.icon} alt="icon" />
+					{:else}
+						<span
+							class="material-symbols-outlined"
+							style="
 						font-size: 45px; color: var(--primaryColor); height: 3rem;
 						display: flex;
 						align-items: center;"
-					>
-						biotech
-					</span>
+						>
+							biotech
+						</span>
+					{/if}
 					<span
 						class="card-link"
 						style="text-decoration: none; text-align: center;
-                margin-block: auto; color: black; font-weight: 600">{item.name}</span
+                margin-block: auto; color: black; font-weight: 500; color: green; font-family: Montserrat, sans-serif; line-height: 1.2">{item.name}</span
 					>
 					<span
 						class="btn btn-primary btnBranch"

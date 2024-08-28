@@ -143,14 +143,14 @@
 						newMessage = '';
 					}}>{$_('gpt.clear')}</button
 				>
-				{#if $mobile}
+				<!-- {#if $mobile}
 					<button
 						class="btn btn-outline-primary btnClose"
 						on:click={() => {
 							showGPT.set(false);
 						}}>{$_('actions.close')}</button
 					>
-				{/if}
+				{/if} -->
 			</div>
 		{:else}
 			<div class="d-flex flex-column w-100 h-100 align-items-center justify-content-center my-auto">
@@ -160,7 +160,7 @@
 					style="width: 150px;"
 					class:mt-auto={!inputFocused}
 				/>
-				{#if $mobile}
+				<!-- {#if $mobile}
 					<button
 						class="btn btn-outline-primary btnClose"
 						class:mt-auto={!inputFocused}
@@ -170,7 +170,7 @@
 							goto('/');
 						}}>{$_('actions.close')}</button
 					>
-				{/if}
+				{/if} -->
 			</div>
 		{/if}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -276,7 +276,7 @@
 	}
 	@media screen and (max-width: 992px) {
 		.chatBoxContainer {
-			height: calc(100dvh - 60px);
+			height: calc(100dvh - 120px);
 			padding: 10px;
 			transition-duration: 0.2s;
 		}
@@ -293,7 +293,7 @@
 		} */
 		.d-none-mobile {
 			min-height: unset !important;
-			height: 200px !important;
+			height: 400px !important;
 		}
 	}
 </style>

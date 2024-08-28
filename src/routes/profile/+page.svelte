@@ -156,7 +156,7 @@
 						<div class="d-flex flex-column mobileList mobileOnly w-100">
 							<button
 								class="card btn btn-outline-primary d-flex flex-row w-100"
-								style="background: #acd3a1;
+								style="background: rgb(150 199 137);
 									color: white;
 									padding-block: 1rem;"
 								on:click={() => {

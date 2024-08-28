@@ -31,7 +31,7 @@
 						<span
 							class="material-symbols-outlined"
 							style="
-								color: var(--primaryColor); height: 3rem;
+								color: var(--primaryText); height: 3rem;
 								display: flex;
 								align-items: center;"
 						>
@@ -41,14 +41,14 @@
 					<span
 						class="card-link"
 						style="text-decoration: none; text-align: center;
-                margin-block: auto; color: black; font-weight: 500; color: green; font-family: Montserrat, sans-serif; line-height: 1.2">{item.name}</span
+                margin-block: auto; color: black; font-weight: 500; color: var(--primaryText); font-family: Montserrat, sans-serif; line-height: 1.2">{item.name}</span
 					>
 					<span
 						class="btn btn-primary btnBranch"
 						style="	background-color: white;
 						border: 0px;
 						box-shadow: 0px 0px 6px #a1c3986e;
-						color: var(--primaryColor);"
+						color: var(--primaryText);"
 					>
 						{item.doctorCount}
 						{$_('home.doctor')}

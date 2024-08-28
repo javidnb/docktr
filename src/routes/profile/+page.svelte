@@ -170,12 +170,16 @@
 										<img
 											src={$session.user?.photoURL}
 											alt="Profile Photo"
-											style="max-height: 60px;  padding: 5px; border-radius: 100%"
+											style="max-height: 60px;  padding: 5px; border-radius: 100%; background: #f6f6f6"
 										/>
 									{:else}
 										<span
-											style="font-size: 60px!important; color: #628a57"
-											class="material-symbols-outlined icon-fill">account_circle</span
+											style="font-size: 50px !important;
+													color: rgb(150 199 137);
+													background: rgb(246, 246, 246);
+													border-radius: 100%;
+													padding: 5px;"
+											class="material-symbols-outlined icon-fill">person</span
 										>
 									{/if}
 									<div class="d-flex flex-column align-items-start">

@@ -256,7 +256,7 @@
 				border: 3px solid var(--primaryColor);
 				display: flex; align-items: center; justify-content: center; position: relative"
 				>
-					<span class="material-symbols-outlined icon-fill" style="font-size: 4rem"> person </span>
+					<span class="material-symbols-outlined icon-fill" style="font-size: 4rem!important"> person </span>
 					<span
 						class="material-symbols-outlined icon-fill"
 						style="position: absolute; right: -5px; bottom: -5px;

@@ -3,6 +3,7 @@
 
 :root {
 	--primaryColor: #a1c398;
+	--primaryText: #639057;
 	--bs-nav-pills-link-active-bg: var(--primaryColor) !important;
 }
 /* html,
@@ -94,7 +95,7 @@ body {
         background-blend-mode: overlay; */
 		align-items: baseline !important;
 		background-color: #00000005 !important;
-		color: #294729;
+		color: var(--primaryText);
 		padding: 3px 1rem !important;
 		transition-duration: 0.2s;
 	}
@@ -661,7 +662,7 @@ body {
 	}
 	.homeNavContainer .active .material-symbols-outlined,
 	.active .navLinkText {
-		color: var(--primaryColor) !important;
+		color: var(--primaryText) !important;
 	}
 	.topNav {
 		margin-left: 0 !important;

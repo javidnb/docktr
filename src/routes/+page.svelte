@@ -32,7 +32,13 @@
 					>
 						{$_('home.hero')}
 					</h1> -->
-					<p class="lead mb-0 py-2" style="color: green; font-size: clamp(0.8rem, 3.8vw, 1.2rem)">
+					<p
+						class="lead mb-0 py-2"
+						style="color: var(--primaryText); 
+						font-size: clamp(0.8rem, 3.4vw, 1.2rem);
+						font-family: Montserrat, sans-serif;
+						white-space: nowrap"
+					>
 						{$_('home.lead')}
 					</p>
 					<div class="col-12 col-md-10">
@@ -82,7 +88,7 @@
 			<div class="col">
 				<h5
 					class="text-center"
-					style="color: green; font-family: 'Montserrat', sans-serif; margin-top: -2rem; padding-left: 10px"
+					style="color: var(--primaryText); font-family: 'Montserrat', sans-serif; margin-top: -2rem; padding-left: 10px"
 				>
 					Həkimlər və {$_('nav.branches')}
 				</h5>
@@ -97,7 +103,7 @@
 			<div class="col">
 				<h5
 					class="text-center"
-					style="color: green; font-family: 'Montserrat', sans-serif;  padding-left: 10px"
+					style="color: var(--primaryText); font-family: 'Montserrat', sans-serif;  padding-left: 10px"
 				>
 					{$_('home.faq')}
 				</h5>

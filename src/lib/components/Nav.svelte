@@ -453,7 +453,7 @@
 					>
 						<span
 							class="material-symbols-outlined icon-fill s-y_bCXRrkrYfP"
-							style="font-size: 30px;">sms</span
+							style="font-size: 30px;">ac_unit</span
 						>
 						<span class="mx-auto"> Səhiyyə.net Asistan </span>
 					</button>

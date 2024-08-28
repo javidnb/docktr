@@ -179,7 +179,7 @@
 
 {#if !$showGPT}
 	<button
-		class="btn btn-outline-primary btnContact"
+		class="btn btn-outline-primary btnContact pcOnly"
 		on:click={() => {
 			if ($mobile) {
 				goto('/gpt');

@@ -83,6 +83,9 @@ body {
 		border-radius: 40px;
 		overflow: hidden;
 	}
+	.pc-mt {
+		margin-top: 1rem
+	}
 }
 @media screen and (max-width: 992px) {
 	.footer {

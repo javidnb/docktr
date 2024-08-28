@@ -28,8 +28,10 @@
 
 	let confirmationData: any = {};
 	let showDatePicker: boolean = false;
-	let upcomingAppointments;
+	let upcomingAppointments: any, pastAppointments: any;
+	let filteredAppointments: any = [];
 	let appointmentId: any = null;
+	let pastAppointmentsActive: boolean = false; // for showing active in the nav
 
 	$: if (!$session.user) appointments.set([]);
 
@@ -50,22 +52,43 @@
 					.sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime())
 			: [];
 
+	$: filteredAppointments = upcomingAppointments;
+
+	$: pastAppointments = $session?.user?.doctor
+		? $appointments
+				.filter((ap) => new Date(ap.endTime) < new Date() && ap.purchased)
+				.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime())
+				.map((ap) => {
+					if (ap.email?.endsWith('@sehiyye')) {
+						ap.phoneNumber = ap.email.substring(0, ap.email.length - 15);
+						ap.email = '';
+					}
+					return ap;
+				})
+		: $session?.user
+			? $appointments
+					.filter((ap) => new Date(ap.endTime) < new Date())
+					.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime())
+			: [];
+
 	onMount(() => {
 		const updateRemainingTime = () => {
-			appointments.set(
-				$appointments.map((appointment) => {
+			if (filteredAppointments?.length) {
+				filteredAppointments = filteredAppointments.map((appointment: any) => {
 					return {
 						...appointment,
 						remainingTime: checkTime(appointment)
 					};
-				})
-			);
+				});
+			}
 		};
 
 		if ($appointments.length) {
 			updateRemainingTime();
 		}
 		const interval = setInterval(updateRemainingTime, 1000);
+
+		filteredAppointments = upcomingAppointments;
 
 		return () => clearInterval(interval);
 	});
@@ -206,6 +229,29 @@
 
 <div class="container" class:blur={$joinVideoCall}>
 	<div class="row mb-5 pb-5 row-gap-3">
+		<ul class="nav nav-tabs pc-mt">
+			<li class="nav-item">
+				<button
+					class="nav-link"
+					class:active={!pastAppointmentsActive}
+					aria-current="page"
+					on:click={() => {
+						pastAppointmentsActive = false;
+						filteredAppointments = upcomingAppointments;
+					}}>Planlanan Görüşlər</button
+				>
+			</li>
+			<li class="nav-item">
+				<button
+					class="nav-link"
+					class:active={pastAppointmentsActive}
+					on:click={() => {
+						pastAppointmentsActive = true;
+						filteredAppointments = pastAppointments;
+					}}>Keçmiş Görüşlər</button
+				>
+			</li>
+		</ul>
 		{#if $appointmentsLoading}
 			<!-- APOINTMENTS LOADING -->
 			<div class="d-flex flex-column justify-content-center align-items-center my-5">
@@ -217,8 +263,8 @@
 				</div>
 				<!-- <span style="color: gray; margin-top: -20px; margin-bottom: 2rem">Yüklənir ..</span> -->
 			</div>
-		{:else if upcomingAppointments.length && upcomingAppointments}
-			{#each upcomingAppointments as appointment}
+		{:else if filteredAppointments?.length && filteredAppointments}
+			{#each filteredAppointments as appointment}
 				<div class="col-md-6 col-lg-4">
 					<div class="card mt-3 p-3 h-100">
 						<!-- Section 1: Image and Name -->
@@ -321,7 +367,7 @@
 							>
 						</div>
 
-						{#if !appointment.ended}
+						{#if !appointment.ended && new Date(appointment.endTime) > new Date()}
 							<!-- Section 3: Appointment Status -->
 							{#if appointment.purchased}
 								{#if appointment.status == 1}
@@ -424,7 +470,7 @@
 			<div class="card mt-3 p-3">Loading</div>
 		{:else if $session.loggedIn}
 			<div class="container">
-				<div class="card mt-3 p-3">{$_('appointment.no_appointment')}</div>
+				<span>{$_('appointment.no_appointment')}</span>
 			</div>
 		{:else}
 			<div class="px-3">
@@ -465,5 +511,11 @@
 	}
 	.blur {
 		filter: blur(2px);
+	}
+	.nav-link:not(.active) {
+		color: var(--primaryText);
+	}
+	.nav-tabs .nav-item, .nav-tabs .active, .nav-tabs .nav-item:hover .nav-link  {
+		border-radius: 0;
 	}
 </style>

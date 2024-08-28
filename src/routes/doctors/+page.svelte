@@ -1,6 +1,6 @@
 <script async script lang="ts">
 	import { onDestroy } from 'svelte';
-	import { doctors, selectedBranch, langs, mobile } from '$lib/store/dataStore';
+	import { doctors, selectedBranch, mobile, slideIn } from '$lib/store/dataStore';
 	import DoctorCard from '$lib/components/DoctorCard.svelte';
 	import { diseases } from '$lib/store/diseases';
 	import { _ } from 'svelte-i18n';
@@ -68,7 +68,7 @@
 	</div>
 </section>
 
-<section class="pt-3 pb-5">
+<section class="pt-3 pb-5" style="overflow-x: hidden;">
 	<div class="container pb-5">
 		<div class="row mb-3">
 			<div class="col">
@@ -183,27 +183,27 @@
 				</div>
 			</div>
 		</div>
-		<div class="row row-gap-3">
-			{#if !$doctors.length}
-				{#each [1, 2, 3] as doctor}
-					<div class="col col-md-6 col-lg-4">
-						<div class="card skeleton">
-							<div
-								class="card-body d-flex flex-column align-items-center justify-content-center"
-								style="min-height: 15rem;"
-							></div>
+		<div class="row row-gap-3" in:slideIn>
+				{#if !$doctors.length}
+					{#each [1, 2, 3] as doctor}
+						<div class="col col-md-6 col-lg-4">
+							<div class="card skeleton">
+								<div
+									class="card-body d-flex flex-column align-items-center justify-content-center"
+									style="min-height: 15rem;"
+								></div>
+							</div>
 						</div>
-					</div>
-				{/each}
-			{:else if filteredDocs.length}
-				{#each filteredDocs as doctor}
-					<div class="col col-md-6 col-lg-4">
-						<DoctorCard props={doctor} />
-					</div>
-				{/each}
-			{:else}
-				<div class="col col-md-6 col-lg-4"><h4>{$_('other.notFound')}</h4></div>
-			{/if}
+					{/each}
+				{:else if filteredDocs.length}
+					{#each filteredDocs as doctor}
+						<div class="col col-md-6 col-lg-4">
+							<DoctorCard props={doctor} />
+						</div>
+					{/each}
+				{:else}
+					<div class="col col-md-6 col-lg-4"><h4>{$_('other.notFound')}</h4></div>
+				{/if}
 		</div>
 	</div>
 </section>

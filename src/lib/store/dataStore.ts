@@ -66,6 +66,31 @@ export function latinize(str: string) {
 		.replace(/\s+/g, '-');
 }
 
+export const pageId: any = writable(null);
+export const nextPageId: any = writable(null);
+
+export function slideIn(node: HTMLElement, { duration = 70 }: { duration?: number } = {}) {
+	return {
+		duration,
+		css: (t: number) => {
+			const easedT = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+			const x = 80 - 80 * easedT;
+			return `transform: translateX(${x}px);`;
+		}
+	};
+}
+
+export function slideOut(node: HTMLElement, { duration = 70 }: { duration?: number } = {}) {
+	return {
+		duration,
+		css: (t: number) => {
+			const easedT = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+			const x = -80 + 80 * easedT;
+			return `transform: translateX(${x}px);`;
+		}
+	};
+}
+
 export const mobile = writable();
 
 if (browser)

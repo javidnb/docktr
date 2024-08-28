@@ -10,7 +10,9 @@
 		joinVideoCall,
 		ongoingAppointment,
 		selectedUser,
-		reviewModal
+		reviewModal,
+		slideIn,
+		slideOut
 	} from '$lib/store/dataStore';
 	import { onMount, tick } from 'svelte';
 	import { monthNames } from '$lib/helpers/dateFormatter';
@@ -257,8 +259,14 @@
 	}
 </script>
 
-<div class="container" class:blur={$joinVideoCall} on:touchstart={handleTouch} on:touchend={handleTouch}>
-	<div class="row mb-5 pb-5 row-gap-3" style="overflow-x: hidden;">
+<div
+	class="container"
+	class:blur={$joinVideoCall}
+	on:touchstart={handleTouch}
+	on:touchend={handleTouch}
+	style="overflow-x: hidden;"
+>
+	<div class="row mb-5 pb-5 row-gap-3" in:slideIn>
 		<ul class="nav nav-tabs pc-mt">
 			<li class="nav-item">
 				<button

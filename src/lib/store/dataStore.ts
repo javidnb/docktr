@@ -86,9 +86,11 @@ export function zoomOut(node: HTMLElement, { duration = 50 }: { duration?: numbe
 	return {
 		duration,
 		css: (t: number) => {
-			const opacity = t; // from 0 to 1
+			const opacity = 0.3 + 0.7 * t;
+			const scale = 0.97 + 0.03 * t; // from 1.1 to 1
 			return `				
 				opacity: ${opacity};
+				transform: scale(${scale});	
 			`;
 		}
 	};

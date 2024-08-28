@@ -22,12 +22,15 @@
 				<div class="container">
 					<div class="row justify-content-center">
 						<div class="col col-md-8 d-flex align-items-center flex-column text-center">
-							<img
-								src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/logo.png"
-								alt="Sehiyye logo"
-								class="s-kraNrqFQQjoV mt-auto"
-								style="width: 200px; margin-top: -1rem!important"
-							/>
+							<div style="min-height: 180px;">
+								<img
+									src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/logo.png"
+									alt="Sehiyye logo"
+									class="s-kraNrqFQQjoV mt-auto"
+									style="width: 200px; margin-top: -1rem!important"
+								/>
+							</div>
+
 							<!-- <h1
 								class="display-4"
 								style="font-size: 19px; color: #008037; font-family: 'Nunito', sans-serif"

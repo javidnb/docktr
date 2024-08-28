@@ -118,7 +118,7 @@
 </script>
 
 <div
-	class="chatBoxContainer"
+	class="chatBoxContainer w-100"
 	style="background-color: #efefef;min-width: min(90dvw, 650px); max-width: 650px"
 >
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -158,7 +158,7 @@
 					src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/logo.png"
 					alt="Sehiyye logo"
 					style="width: 150px;"
-					class:mt-auto={!inputFocused}
+					class:my-auto={!inputFocused}
 				/>
 				<!-- {#if $mobile}
 					<button
@@ -293,7 +293,7 @@
 		} */
 		.d-none-mobile {
 			min-height: unset !important;
-			height: 400px !important;
+			height: 250px !important;
 		}
 	}
 </style>

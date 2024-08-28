@@ -32,7 +32,9 @@
 					>
 						{$_('home.hero')}
 					</h1> -->
-					<p class="lead mb-0 py-2" style="color: green; font-size: 16px">{$_('home.lead')}</p>
+					<p class="lead mb-0 py-2" style="color: green; font-size: clamp(0.8rem, 3.8vw, 1.2rem)">
+						{$_('home.lead')}
+					</p>
 					<div class="col-12 col-md-10">
 						<div class="pcOnly w-100">
 							<Search />

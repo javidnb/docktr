@@ -309,9 +309,12 @@
 					>
 				</li>
 				<li class="nav-item mobileOnly midButton">
-					<a
+					<button
 						class="nav-link h-100 d-flex justify-content-center"
-						href="/search"
+						data-bs-toggle="collapse"
+						data-bs-target="#moreBtns"
+						aria-expanded="false"
+						aria-controls="moreBtns"
 						class:active={curPage == '/messages'}
 					>
 						<img
@@ -319,7 +322,7 @@
 							alt="Sehiyye logo"
 							style="width: 25px;"
 						/>
-					</a>
+					</button>
 				</li>
 				<li class="nav-item">
 					<a
@@ -396,6 +399,66 @@
 				</li>
 			{/if} -->
 			</ul>
+
+			<div
+				class="collapse"
+				id="moreBtns"
+				style="position: absolute;
+				bottom: 4rem;
+				background: white;
+				border-radius: 14px;
+				box-shadow:  0px 0px 5px #00000012;
+				padding: 10px;
+				width: 75%;
+				left: 50%;
+				transform: translateX(-50%);
+				z-index: 99;"
+			>
+				<div class="d-flex flex-column gap-3 p-2 w-100 justify-content-around">
+					<button
+						class="btn btn-outline-primary bg-white w-100 mt-3"
+						style="position: relative;
+						border-radius: 20px;
+						background-color: #639057 !important;
+						color: white;
+						font-family: 'Alumni Sans';
+						display: flex;"
+						on:click={() => {
+							goto('/search');
+						}}
+					>
+						<div class="d-flex flex-column" style="width: calc(100% - 50px)">
+							<div class="d-flex gap-2 align-items-center w-100" style="font-size: 24px;">
+								<span class="mx-auto">Yeni Görüş Al</span>
+							</div>
+							<img
+								src="https://ik.imagekit.io/d2nwsj0ktvh/online_VP_k7pe75.png"
+								alt="Get Appointment"
+								style="width: 85px;
+								position: absolute;
+								right: 1rem;
+								top: 50%;
+								transform: translateY(-50%);"
+							/>
+						</div>
+					</button>
+					<button
+						class="btn btn-outline-primary d-flex mt-2"
+						disabled={$dataLoading}
+						data-bs-toggle="collapse"
+						data-bs-target="#moreBtns"
+						on:click={() => {
+							goto('/gpt');
+						}}
+					>
+						<span
+							class="material-symbols-outlined icon-fill s-y_bCXRrkrYfP"
+							style="font-size: 30px;">sms</span
+						>
+						<span class="mx-auto"> Səhiyyə.net Asistan </span>
+					</button>
+				</div>
+			</div>
 		</div>
 	</section>
 {/if}

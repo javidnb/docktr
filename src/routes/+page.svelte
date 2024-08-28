@@ -79,11 +79,11 @@
 		<div class="row">
 			<div class="col">
 				<h5
+					class="text-center"
 					style="color: green; font-family: 'Montserrat', sans-serif; margin-top: -2rem; padding-left: 10px"
 				>
 					Həkimlər və {$_('nav.branches')}
 				</h5>
-				<hr style="color: green; margin-inline: .5rem;" />
 				<BranchSlider />
 			</div>
 		</div>
@@ -94,11 +94,11 @@
 		<div class="row">
 			<div class="col">
 				<h5
+					class="text-center"
 					style="color: green; font-family: 'Montserrat', sans-serif;  padding-left: 10px"
 				>
 					{$_('home.faq')}
 				</h5>
-				<hr style="color: green; margin-inline: .5rem;" />
 				<div class="accordion mt-3" id="accordionExample">
 					<div class="accordion-item">
 						<h2 class="accordion-header">

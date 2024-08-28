@@ -26,14 +26,14 @@
 			>
 				<div class="card-body d-flex flex-column align-items-center">
 					{#if item.icon}
-						<img style="width: 55px;" src={item.icon} alt="icon" />
+						<img style="width: 55px;" src='{item.icon}?tr=w-100' alt="icon" />
 					{:else}
 						<span
 							class="material-symbols-outlined"
 							style="
-						font-size: 45px; color: var(--primaryColor); height: 3rem;
-						display: flex;
-						align-items: center;"
+								color: var(--primaryColor); height: 3rem;
+								display: flex;
+								align-items: center;"
 						>
 							biotech
 						</span>

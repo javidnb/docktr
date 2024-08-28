@@ -82,6 +82,7 @@ export const diseases = [
 		id: 2,
 		name: 'Psixiatriya',
 		slug: 'psixiatriya',
+		icon: 'https://ik.imagekit.io/d2nwsj0ktvh/psychiatry_GtaGAnQXg.png',
 		conditions: {
 			Depressiya: [
 				'Davamlı kədər halı',
@@ -220,6 +221,7 @@ export const diseases = [
 		id: 4,
 		name: 'Psixologiya',
 		slug: 'psixologiya',
+		icon: 'https://ik.imagekit.io/d2nwsj0ktvh/therapy_fd93-9l79.png',
 		conditions: {
 			Depressiya: [
 				'Davamlı kədər halı',
@@ -416,6 +418,7 @@ export const diseases = [
 		id: 6,
 		name: 'Daxili xəstəliklər',
 		slug: 'daxili-xestelikler',
+		icon: 'https://ik.imagekit.io/d2nwsj0ktvh/internal_Cp2IasxV1.png',
 		conditions: {
 			'Yüksək Hərarət': ['Yüksək hərarət', 'Qızdırma'],
 			Ağrı: ['Qarın ağrısı', 'Sinə ağrısı', 'Bel ağrısı', 'Baş ağrısı', 'Əzələ ağrısı'],
@@ -840,7 +843,7 @@ export const diseases = [
 	},
 	{
 		id: 12,
-		name: 'Genel cerrahi',
+		name: 'Ümumi cərrahiyə',
 		slug: 'genel-cerrahi',
 		conditions: {
 			'Qarın Problemləri': [

@@ -11,8 +11,7 @@
 		ongoingAppointment,
 		selectedUser,
 		reviewModal,
-		slideIn,
-		slideOut
+		slideIn
 	} from '$lib/store/dataStore';
 	import { onMount, tick } from 'svelte';
 	import { monthNames } from '$lib/helpers/dateFormatter';

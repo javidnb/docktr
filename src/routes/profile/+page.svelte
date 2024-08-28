@@ -5,14 +5,14 @@
 	import { _, locale } from 'svelte-i18n';
 
 	import ProfDetails from '$lib/components/profile/ProfDetails.svelte';
-	import History from '$lib/components/profile/History.svelte';
 	import {
 		loginModal,
 		mobile,
 		mobileComponent,
 		putData,
 		mobileHeader,
-		dataLoading
+		dataLoading,
+		slideIn
 	} from '$lib/store/dataStore';
 	import Chat from '$lib/components/chat/Chat.svelte';
 	import Documents from '$lib/components/profile/Documents.svelte';
@@ -98,8 +98,8 @@
 </section>
 
 {#if !$dataLoading}
-	<section>
-		<div class="container mobileCont">
+	<section style="overflow-x: hidden;">
+		<div class="container mobileCont" in:slideIn>
 			<div class="row mt-3 pb-5 justify-content-center">
 				<div class="col-12 col-md-4 col-lg-3">
 					{#if !$mobileComponent}
@@ -117,7 +117,7 @@
 								>
 									<span class="material-symbols-outlined"> for_you </span>{$_('nav.account')}
 								</button>
-								
+
 								<button
 									class="list-group-item w-100"
 									on:click={() => {
@@ -190,7 +190,6 @@
 								<a class="card btn btn-outline-primary d-flex flex-row w-100" href="/messages">
 									<span class="material-symbols-outlined"> mail </span>{$_('nav.messages')}
 								</a>
-								
 
 								<button
 									class="card btn btn-outline-primary d-flex flex-row w-100"

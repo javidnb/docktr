@@ -184,26 +184,26 @@
 			</div>
 		</div>
 		<div class="row row-gap-3" in:slideIn>
-				{#if !$doctors.length}
-					{#each [1, 2, 3] as doctor}
-						<div class="col col-md-6 col-lg-4">
-							<div class="card skeleton">
-								<div
-									class="card-body d-flex flex-column align-items-center justify-content-center"
-									style="min-height: 15rem;"
-								></div>
-							</div>
+			{#if !$doctors.length}
+				{#each [1, 2, 3] as doctor}
+					<div class="col col-md-6 col-lg-4">
+						<div class="card skeleton">
+							<div
+								class="card-body d-flex flex-column align-items-center justify-content-center"
+								style="min-height: 15rem;"
+							></div>
 						</div>
-					{/each}
-				{:else if filteredDocs.length}
-					{#each filteredDocs as doctor}
-						<div class="col col-md-6 col-lg-4">
-							<DoctorCard props={doctor} />
-						</div>
-					{/each}
-				{:else}
-					<div class="col col-md-6 col-lg-4"><h4>{$_('other.notFound')}</h4></div>
-				{/if}
+					</div>
+				{/each}
+			{:else if filteredDocs.length}
+				{#each filteredDocs as doctor}
+					<div class="col col-md-6 col-lg-4">
+						<DoctorCard props={doctor} />
+					</div>
+				{/each}
+			{:else}
+				<div class="col col-md-6 col-lg-4"><h4>{$_('other.notFound')}</h4></div>
+			{/if}
 		</div>
 	</div>
 </section>

@@ -69,24 +69,27 @@ export function latinize(str: string) {
 export const pageId: any = writable(null);
 export const nextPageId: any = writable(null);
 
-export function slideIn(node: HTMLElement, { duration = 70 }: { duration?: number } = {}) {
+export function slideIn(node: HTMLElement, { duration = 50 }: { duration?: number } = {}) {
 	return {
 		duration,
 		css: (t: number) => {
 			const easedT = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-			const x = 80 - 80 * easedT;
-			return `transform: translateX(${x}px);`;
+			const x = 50 - 50 * easedT;
+			const opacity = easedT; // from 0 to 1
+			return `transform: translateX(${x}px);
+			opacity: ${opacity};`;
 		}
 	};
 }
 
-export function slideOut(node: HTMLElement, { duration = 70 }: { duration?: number } = {}) {
+export function zoomOut(node: HTMLElement, { duration = 50 }: { duration?: number } = {}) {
 	return {
 		duration,
 		css: (t: number) => {
-			const easedT = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-			const x = -80 + 80 * easedT;
-			return `transform: translateX(${x}px);`;
+			const opacity = t; // from 0 to 1
+			return `				
+				opacity: ${opacity};
+			`;
 		}
 	};
 }

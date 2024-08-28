@@ -4,10 +4,6 @@
 	import { doctors, selectedBranch } from '$lib/store/dataStore';
 	import { _ } from 'svelte-i18n';
 
-	// function routeTo(id: any) {
-	// 	console.log('yo');
-	// }
-
 	let branches = diseases
 		.map((branch) => {
 			const doctorCount = $doctors.filter((doctor) => doctor.branches.includes(branch.id)).length;

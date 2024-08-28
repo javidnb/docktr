@@ -341,7 +341,7 @@
 	</section>
 {:else}
 	<div class="d-flex justify-content-center">
-		<div class="lds-ellipsis mt-5">
+		<div class="lds-ellipsis" style="position: fixed; top: 50%; transform: translateY(-50%)">
 			<div></div>
 			<div></div>
 			<div></div>

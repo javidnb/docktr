@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { session } from '$lib/session';
-	import { auth, db, messaging } from '$lib/firebase.client';
+	import { auth, messaging } from '$lib/firebase.client';
 	import {
 		signInWithEmailAndPassword,
 		type UserCredential,
@@ -10,12 +10,19 @@
 	} from 'firebase/auth';
 	import { getToken } from 'firebase/messaging';
 	import { onMount } from 'svelte';
-	import { dataLoading, loginModal, putData, appointments, getUser } from '$lib/store/dataStore';
+	import {
+		dataLoading,
+		loginModal,
+		putData,
+		appointments,
+		appointmentsLoading
+	} from '$lib/store/dataStore';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { _ } from 'svelte-i18n';
 	import { browser } from '$app/environment';
 	import Select from 'svelte-select';
 	import { parsePhoneNumber, isValidNumber } from 'libphonenumber-js';
+	import { goto } from '$app/navigation';
 
 	let email: string = '';
 	let password: string = '';
@@ -80,6 +87,46 @@
 		}
 	}
 
+	async function getUser(user: any) {
+		try {
+			let time = new Date().getTime();
+			const response = await fetch(
+				`https://tekoplast.az/docktr/api/?user&id=${user.user.uid}&t=${time}`
+			);
+			const result = await response.json();
+			if (result?.doctor) goto('./doctor');
+			if (!result) {
+				let usr = user.user;
+				let data = {
+					uid: usr.uid,
+					displayName: usr.displayName,
+					email: !usr.email.endsWith('@sehiyye.online') ? usr.email : null,
+					phoneNumber: usr.email.endsWith('@sehiyye.online')
+						? usr.email.substring(0, usr.email.length - 15)
+						: null,
+					photoURL: usr?.photoURL,
+					fcmToken: usr?.fcmToken || null
+				};
+				postData(data);
+				dataLoading.set(false);
+				return;
+			} else {
+				session.set({
+					user: result,
+					loggedIn: true,
+					loading: false
+				});
+				dataLoading.set(false);
+				getAppointments(result);
+				registerCM();
+			}
+			return response;
+		} catch (error) {
+			console.error(error);
+			dataLoading.set(false);
+		}
+	}
+
 	async function login() {
 		dataLoading.set(true);
 		disabled = true;
@@ -97,6 +144,7 @@
 					// Signed up
 					const user = userCredential;
 					updateProfile(user.user, { displayName });
+					dataLoading.set(false);
 					await getUser(user);
 					toast.push(`Xoş gəldiniz ${user.user.displayName ?? ''}!`, {
 						duration: 2000,
@@ -118,7 +166,8 @@
 			await signInWithEmailAndPassword(auth, email, password)
 				.then(async (result) => {
 					const { user }: UserCredential = result;
-					await getUser(result);
+					dataLoading.set(false);
+					closeModal();
 					toast.push(`Xoş gəldiniz ${result.user.displayName ?? ''}!`, {
 						duration: 2000,
 						theme: {
@@ -127,13 +176,12 @@
 							'--toastBarBackground': '#1d5b3c'
 						}
 					});
-					closeModal();
+					await getUser(result);
 				})
 				.catch((error) => {
 					disabled = false;
 					showError = true;
 					dataLoading.set(false);
-					console.log(error);
 					return error;
 				});
 		}
@@ -141,7 +189,6 @@
 
 	// REGISTER FOR PUSH NOTIFICATIONS
 	function registerCM() {
-		dataLoading.set(true);
 		navigator.serviceWorker
 			.register('/service-worker.js', {
 				type: 'module'
@@ -166,16 +213,45 @@
 									});
 								}
 							} else {
-								dataLoading.set(false);
 								console.log('error');
 							}
 						})
 						.catch((err) => {
-							dataLoading.set(false);
 							console.log(err);
 						});
 				}
 			});
+	}
+
+	// RETRIEVE EXISTING APPOINTMENTS OF LOGGED IN USER
+	async function getAppointments(user: any) {
+		try {
+			let time = new Date().getTime();
+			let response;
+			if (user.doctor) {
+				response = await fetch(
+					`https://tekoplast.az/docktr/api/?appointments&id=${user.doctor}&type=doctor&t=${time}`
+				);
+			} else {
+				response = await fetch(
+					`https://tekoplast.az/docktr/api/?appointments&id=${user.uid}&t=${time}`
+				);
+			}
+
+			const result = await response.json();
+			if (result) {
+				appointments.set(result);
+				appointmentsLoading.set(false);
+				dataLoading.set(false);
+				return null;
+			}
+			return response;
+		} catch (error) {
+			console.error(error);
+			appointmentsLoading.set(false);
+			dataLoading.set(false);
+			return null;
+		}
 	}
 
 	function confirm(event: any) {

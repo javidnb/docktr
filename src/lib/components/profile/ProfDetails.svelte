@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { session } from '$lib/session';
-	import { dataLoading, loginModal } from '$lib/store/dataStore';
+	import { dataLoading, loginModal, putData } from '$lib/store/dataStore';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { _ } from 'svelte-i18n';
 	import Confirm from '$lib/helpers/Confirm.svelte';
@@ -58,50 +58,61 @@
 	};
 
 	async function updateProf() {
+		let result;
 		disabled = true;
 		if (file) {
 			await uploadFile();
 		}
-		if ($session.user?.uid) {
-			const docRef = doc(db, 'users', $session.user?.uid);
-			const docSnap = await getDoc(docRef);
-
-			if (docSnap.exists()) {
-				let usrData = {
-					...docSnap.data(),
+		if (userData.user?.uid) {
+			result = await putData('users', 'uid', userData.user?.uid, { displayName, photoURL }, true);
+		}
+		if (result) {
+			if (auth.currentUser) {
+				await updateProfile(auth.currentUser, {
 					displayName: displayName,
 					photoURL: photoURL ?? null
-				};
-				await setDoc(docRef, usrData);
-				session.set({
-					user: usrData,
-					loggedIn: true,
-					loading: false
 				});
-				if (auth.currentUser) {
-					updateProfile(auth.currentUser, {
-						displayName: displayName,
-						photoURL: photoURL ?? null
-					}).then(
-						() => {
-							dataLoading.set(false);
-						},
-						function (error) {
-							dataLoading.set(false);
-						}
-					);
-				}
-				toast.push($_('actions.success'), {
-					duration: 2000,
-					theme: {
-						'--toastColor': 'mintcream',
-						'--toastBackground': 'rgb(91 144 77)',
-						'--toastBarBackground': '#1d5b3c'
-					}
-				});
-				disabled = false;
 			}
+			$session.user = { ...$session.user, displayName, photoURL };
+			toast.push($_('actions.success'), {
+				duration: 2000,
+				theme: {
+					'--toastColor': 'mintcream',
+					'--toastBackground': 'rgb(91 144 77)',
+					'--toastBarBackground': '#1d5b3c'
+				}
+			});
+			disabled = false;
 		}
+		// FIRESTORE
+		// if ($session.user?.uid) {
+		// 	const docRef = doc(db, 'users', $session.user?.uid);
+		// 	const docSnap = await getDoc(docRef);
+
+		// 	if (docSnap.exists()) {
+		// 		let usrData = {
+		// 			...docSnap.data(),
+		// 			displayName: displayName,
+		// 			photoURL: photoURL ?? null
+		// 		};
+		// 		await setDoc(docRef, usrData);
+		// 		session.set({
+		// 			user: usrData,
+		// 			loggedIn: true,
+		// 			loading: false
+		// 		});
+
+		// 		toast.push($_('actions.success'), {
+		// 			duration: 2000,
+		// 			theme: {
+		// 				'--toastColor': 'mintcream',
+		// 				'--toastBackground': 'rgb(91 144 77)',
+		// 				'--toastBarBackground': '#1d5b3c'
+		// 			}
+		// 		});
+		// 		disabled = false;
+		// 	}
+		// }
 	}
 
 	async function uploadFile() {
@@ -184,6 +195,7 @@
 						aspect-ratio: 1/1; object-fit: cover; cursor: pointer"
 						data-bs-toggle="dropdown"
 					/>
+
 					<div class="dropdown">
 						<button
 							class="btn btn-secondary"

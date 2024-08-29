@@ -159,11 +159,15 @@
 								<div class="d-flex gap-3 align-items-center">
 									<!-- svelte-ignore a11y-img-redundant-alt -->
 									{#if $session.user?.photoURL}
-										<img
-											src={$session.user?.photoURL}
-											alt="Profile Photo"
-											style="max-height: 60px;  padding: 5px; border-radius: 100%; background: #f6f6f6"
-										/>
+										<div
+											style="min-height: 60px; min-width: 60px; display: flex; align-items: center; justify-content: center"
+										>
+											<img
+												src={$session.user?.photoURL}
+												alt="Profile Photo"
+												style="max-height: 60px;  padding: 5px; border-radius: 100%; background: #f6f6f6"
+											/>
+										</div>
 									{:else}
 										<span
 											style="font-size: 50px !important;

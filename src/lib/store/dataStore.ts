@@ -209,55 +209,62 @@ export async function sendNotification(
 }
 
 export async function getUser(user: any) {
+	dataLoading.set(false);
 	let usr = user.user ? user.user : user;
-
-	let data = {
-		uid: usr.uid,
-		displayName: usr.displayName,
-		email: !usr.email.endsWith('@sehiyye.online') ? usr.email : null,
-		phoneNumber: usr.email.endsWith('@sehiyye.online')
-			? usr.email.substring(0, usr.email.length - 15)
-			: null,
-		photoURL: usr?.photoURL,
-		fcmToken: usr?.fcmToken || null
-	};
-
-	const docRef = doc(db, 'users', usr.uid);
-	const docSnap = await getDoc(docRef);
-
-	if (docSnap.exists()) {
-		session.set({
-			user: docSnap.data(),
-			loggedIn: true,
-			loading: false
-		});
-		dataLoading.set(false);
-		getAppointments(docSnap.data());
-		if (docSnap.data().doctor) goto('/doctor');
-	} else {
-		await setDoc(docRef, data);
-		session.set({
-			user: data,
-			loggedIn: true,
-			loading: false
-		});
-		dataLoading.set(false);
+	let time = new Date().getTime();
+	const response = await fetch(`https://tekoplast.az/docktr/api/?user&id=${usr.uid}&t=${time}`);
+	const result = await response.json();
+	if (result?.doctor) goto('./doctor');
+	if (result) {
+		getAppointments(result);
+		// registerCM();
 	}
+	session.set({
+		user: result,
+		loggedIn: true,
+		loading: false
+	});
+	dataLoading.set(false);
+	return response;
+
+	// FIRESTORE
+	// let usr = user.user ? user.user : user;
+
+	// let data = {
+	// 	uid: usr.uid,
+	// 	displayName: usr.displayName,
+	// 	email: !usr.email.endsWith('@sehiyye.online') ? usr.email : null,
+	// 	phoneNumber: usr.email.endsWith('@sehiyye.online')
+	// 		? usr.email.substring(0, usr.email.length - 15)
+	// 		: null,
+	// 	photoURL: usr?.photoURL,
+	// 	fcmToken: usr?.fcmToken || null
+	// };
+
+	// const docRef = doc(db, 'users', usr.uid);
+	// const docSnap = await getDoc(docRef);
+
+	// if (docSnap.exists()) {
+	// 	session.set({
+	// 		user: docSnap.data(),
+	// 		loggedIn: true,
+	// 		loading: false
+	// 	});
+	// 	dataLoading.set(false);
+	// 	getAppointments(docSnap.data());
+	// 	if (docSnap.data().doctor) goto('/doctor');
+	// } else {
+	// 	await setDoc(docRef, data);
+	// 	session.set({
+	// 		user: data,
+	// 		loggedIn: true,
+	// 		loading: false
+	// 	});
+	// 	dataLoading.set(false);
+	// }
 }
 
 async function getAppointments(user: any) {
-	// const q = query(
-	// 	collection(db, 'appointments'),
-	// 	where('participants', 'array-contains', user.uid)
-	// );
-
-	// const result = await getDocs(q);
-
-	// const data = result.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-
-	// console.log(data);
-	console.log(user);
-
 	try {
 		let time = new Date().getTime();
 		let response;
@@ -284,4 +291,12 @@ async function getAppointments(user: any) {
 		appointmentsLoading.set(false);
 		return null;
 	}
+
+	// FIRESTORE
+	// const q = query(
+	// 	collection(db, 'appointments'),
+	// 	where('participants', 'array-contains', user.uid)
+	// );
+	// const result = await getDocs(q);
+	// const data = result.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 }

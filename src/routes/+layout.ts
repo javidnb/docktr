@@ -4,6 +4,7 @@ import { initializeFirebase, auth } from '$lib/firebase.client';
 import { browser } from '$app/environment';
 import { onAuthStateChanged } from 'firebase/auth';
 import { appointmentsLoading, dataLoading, getUser } from '$lib/store/dataStore.js';
+import { session } from '$lib/session.js';
 
 let doctorsData: any = null;
 
@@ -20,6 +21,7 @@ export async function load({ url }) {
 		return new Promise((resolve) => {
 			onAuthStateChanged(auth, (user) => {
 				if (user) {
+					session.set({ user, loggedIn: true });
 					getUser(user);
 				} else {
 					dataLoading.set(false);

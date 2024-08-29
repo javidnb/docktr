@@ -251,17 +251,13 @@ async function getAppointments(user: any) {
 	try {
 		let time = new Date().getTime();
 		let response;
-		if (user.doctor) {
-			response = await fetch(
-				`https://tekoplast.az/docktr/api/?appointments&id=${user.doctor}&type=doctor&t=${time}`
-			);
-		} else {
-			response = await fetch(
-				`https://tekoplast.az/docktr/api/?appointments&id=${user.uid}&t=${time}`
-			);
-		}
+
+		response = await fetch(
+			`https://tekoplast.az/docktr/api/?appointments&id=${user.uid}&t=${time}`
+		);
 
 		const result = await response.json();
+		console.log(result);
 		if (result) {
 			appointments.set(result);
 			dataLoading.set(false);

@@ -1,9 +1,9 @@
 /** @type {import('./$types').LayoutLoad} */
 
-import { initializeFirebase, auth, db } from '$lib/firebase.client';
+import { initializeFirebase, auth } from '$lib/firebase.client';
 import { browser } from '$app/environment';
 import { onAuthStateChanged } from 'firebase/auth';
-import { appointments, appointmentsLoading, dataLoading, getUser } from '$lib/store/dataStore.js';
+import { appointmentsLoading, dataLoading, getUser } from '$lib/store/dataStore.js';
 
 let doctorsData: any = null;
 

@@ -265,7 +265,7 @@
 	on:touchend={handleTouch}
 	style="overflow-x: hidden;"
 >
-	<div class="row mb-5 pb-5 row-gap-3" in:slideIn>
+	<div class="mb-5 pb-5 row-gap-3" in:slideIn>
 		<ul class="nav nav-tabs pc-mt">
 			<li class="nav-item">
 				<button
@@ -514,7 +514,7 @@
 			<!-- APOINTMENTS LOADING -->
 			<div class="card mt-3 p-3">Loading</div>
 		{:else if $session.loggedIn}
-			<div class="container px-3">
+			<div class="container p-3">
 				{#key pastAppointmentsActive}
 					<span in:scaleFade>{$_('appointment.no_appointment')}</span>
 				{/key}

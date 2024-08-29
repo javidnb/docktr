@@ -2,6 +2,10 @@ import { writable } from 'svelte/store';
 import type { Doctor } from '../interfaces/doctor.interface';
 import { toast } from '@zerodevx/svelte-toast';
 import { browser } from '$app/environment';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { db } from '$lib/firebase.client';
+import { session } from '$lib/session';
+import { goto } from '$app/navigation';
 
 export const doctors = writable<Doctor[]>([]);
 export const appointments = writable<any[]>([]);
@@ -201,5 +205,72 @@ export async function sendNotification(
 		dataLoading.set(false);
 	} else {
 		dataLoading.set(false);
+	}
+}
+
+export async function getUser(user: any) {
+	let usr = user.user ? user.user : user;
+
+	let data = {
+		uid: usr.uid,
+		displayName: usr.displayName,
+		email: !usr.email.endsWith('@sehiyye.online') ? usr.email : null,
+		phoneNumber: usr.email.endsWith('@sehiyye.online')
+			? usr.email.substring(0, usr.email.length - 15)
+			: null,
+		photoURL: usr?.photoURL,
+		fcmToken: usr?.fcmToken || null
+	};
+
+	const docRef = doc(db, 'users', usr.uid);
+	const docSnap = await getDoc(docRef);
+
+	if (docSnap.exists()) {
+		session.set({
+			user: docSnap.data(),
+			loggedIn: true,
+			loading: false
+		});
+		dataLoading.set(false);
+		if (docSnap.data().doctor) goto('/doctor');
+		appointmentsLoading.set(false);
+	} else {
+		await setDoc(docRef, data);
+		session.set({
+			user: data,
+			loggedIn: true,
+			loading: false
+		});
+		dataLoading.set(false);
+	}
+
+	getAppointments(user);
+}
+
+async function getAppointments(user: any) {
+	try {
+		let time = new Date().getTime();
+		let response;
+		if (user.doctor) {
+			response = await fetch(
+				`https://tekoplast.az/docktr/api/?appointments&id=${user.doctor}&type=doctor&t=${time}`
+			);
+		} else {
+			response = await fetch(
+				`https://tekoplast.az/docktr/api/?appointments&id=${user.uid}&t=${time}`
+			);
+		}
+
+		const result = await response.json();
+		if (result) {
+			appointments.set(result);
+			dataLoading.set(false);
+			return null;
+		}
+		return response;
+	} catch (error) {
+		console.error(error);
+		dataLoading.set(false);
+		return null;
 	}
 }

@@ -302,7 +302,7 @@
 			</div>
 		{:else if filteredAppointments?.length && filteredAppointments}
 			{#key pastAppointmentsActive}
-				<div in:scaleFade>
+				<div class="row row-gap-3" in:scaleFade>
 					{#each filteredAppointments as appointment}
 						<div class="col-md-6 col-lg-4">
 							<div class="card mt-3 p-3 h-100">
@@ -515,7 +515,9 @@
 			<div class="card mt-3 p-3">Loading</div>
 		{:else if $session.loggedIn}
 			<div class="container px-3">
-				<span>{$_('appointment.no_appointment')}</span>
+				{#key pastAppointmentsActive}
+					<span in:scaleFade>{$_('appointment.no_appointment')}</span>
+				{/key}
 			</div>
 		{:else}
 			<div class="px-3">

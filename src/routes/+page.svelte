@@ -9,7 +9,7 @@
 </script>
 
 <div style="overflow-x: hidden;">
-	<div in:zoomOut>
+	<div>
 		<section style="overflow-x: hidden;">
 			<div
 				class="jumbotron homeJumbo"
@@ -20,7 +20,7 @@
 					background-blend-mode: overlay;"
 			>
 				<div class="container">
-					<div class="row justify-content-center">
+					<div class="row justify-content-center" in:zoomOut>
 						<div class="col col-md-8 d-flex align-items-center flex-column text-center">
 							<div style="min-height: 180px;">
 								<img

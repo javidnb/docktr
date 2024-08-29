@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { session } from '$lib/session';
-	import { auth, messaging } from '$lib/firebase.client';
+	import { auth, db, messaging } from '$lib/firebase.client';
 	import {
 		signInWithEmailAndPassword,
 		type UserCredential,
@@ -10,13 +10,12 @@
 	} from 'firebase/auth';
 	import { getToken } from 'firebase/messaging';
 	import { onMount } from 'svelte';
-	import { dataLoading, loginModal, putData, appointments } from '$lib/store/dataStore';
+	import { dataLoading, loginModal, putData, appointments, getUser } from '$lib/store/dataStore';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { _ } from 'svelte-i18n';
 	import { browser } from '$app/environment';
 	import Select from 'svelte-select';
 	import { parsePhoneNumber, isValidNumber } from 'libphonenumber-js';
-	import { goto } from '$app/navigation';
 
 	let email: string = '';
 	let password: string = '';
@@ -81,43 +80,6 @@
 		}
 	}
 
-	async function getUser(user: any) {
-		try {
-			let time = new Date().getTime();
-			const response = await fetch(
-				`https://tekoplast.az/docktr/api/?user&id=${user.user.uid}&t=${time}`
-			);
-			const result = await response.json();
-			if (result?.doctor) goto('./doctor');
-			if (!result) {
-				let usr = user.user;
-				let data = {
-					uid: usr.uid,
-					displayName: usr.displayName,
-					email: usr.email,
-					phoneNumber: usr.phoneNumber || null,
-					photoURL: usr.photoURL,
-					fcmToken: usr.fcmToken
-				};
-				postData(data);
-				return;
-			} else {
-				getAppointments(result);
-				registerCM();
-			}
-			session.set({
-				user: result,
-				loggedIn: true,
-				loading: false
-			});
-			dataLoading.set(false);
-			return response;
-		} catch (error) {
-			console.error(error);
-			dataLoading.set(false);
-		}
-	}
-
 	async function login() {
 		dataLoading.set(true);
 		disabled = true;
@@ -171,6 +133,7 @@
 					disabled = false;
 					showError = true;
 					dataLoading.set(false);
+					console.log(error);
 					return error;
 				});
 		}
@@ -213,35 +176,6 @@
 						});
 				}
 			});
-	}
-
-	// RETRIEVE EXISTING APPOINTMENTS OF LOGGED IN USER
-	async function getAppointments(user: any) {
-		try {
-			let time = new Date().getTime();
-			let response;
-			if (user.doctor) {
-				response = await fetch(
-					`https://tekoplast.az/docktr/api/?appointments&id=${user.doctor}&type=doctor&t=${time}`
-				);
-			} else {
-				response = await fetch(
-					`https://tekoplast.az/docktr/api/?appointments&id=${user.uid}&t=${time}`
-				);
-			}
-
-			const result = await response.json();
-			if (result) {
-				appointments.set(result);
-				dataLoading.set(false);
-				return null;
-			}
-			return response;
-		} catch (error) {
-			console.error(error);
-			dataLoading.set(false);
-			return null;
-		}
 	}
 
 	function confirm(event: any) {

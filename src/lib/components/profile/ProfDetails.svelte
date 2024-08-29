@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { session } from '$lib/session';
-	import { dataLoading, loginModal, mobile } from '$lib/store/dataStore';
-	import { putData } from '$lib/store/dataStore';
+	import { dataLoading, loginModal } from '$lib/store/dataStore';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { _ } from 'svelte-i18n';
 	import Confirm from '$lib/helpers/Confirm.svelte';
-	import { auth } from '$lib/firebase.client';
+	import { auth, db } from '$lib/firebase.client';
 	import { updateProfile } from 'firebase/auth';
+	import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 	let file: any;
 	let uploadAfterSelect: boolean = false;
@@ -14,6 +14,9 @@
 	let uploading = false;
 	let disabled = false;
 	let showModal: boolean = false;
+	let displayName: any = null;
+	let photoURL: any = null;
+	let dataRetrieved: boolean = false;
 
 	$: userData = $session;
 
@@ -26,6 +29,11 @@
 				phoneNumber: $session.user?.email.substring(0, $session.user?.email.length - 15)
 			};
 			userData = { ...userData, user: us };
+		}
+		if (!dataRetrieved) {
+			photoURL = $session.user.photoURL;
+			displayName = $session.user.displayName;
+			dataRetrieved = true;
 		}
 	}
 
@@ -47,56 +55,56 @@
 				formData.append('file', image);
 			}
 		};
-		if (uploadAfterSelect) uploadFile(e);
 	};
 
-	async function formSubmit(e: SubmitEvent) {
-		dataLoading.set(true);
+	async function updateProf() {
 		disabled = true;
-
 		if (file) {
-			uploadFile(e);
-			return;
+			await uploadFile();
 		}
-		let result;
+		if ($session.user?.uid) {
+			const docRef = doc(db, 'users', $session.user?.uid);
+			const docSnap = await getDoc(docRef);
 
-		const formData: any = new FormData(e.target as HTMLFormElement);
-		const data: any = {};
-		for (let field of formData) {
-			const [key, value] = field;
-			data[key] = value;
-		}
-		console.log('data: ', data);
-		if (userData.user?.uid) result = await putData('users', 'uid', userData.user?.uid, { ...data });
-		if (result) {
-			toast.push($_('actions.success'), {
-				duration: 2000,
-				theme: {
-					'--toastColor': 'mintcream',
-					'--toastBackground': 'rgb(91 144 77)',
-					'--toastBarBackground': '#1d5b3c'
+			if (docSnap.exists()) {
+				let usrData = {
+					...docSnap.data(),
+					displayName: displayName,
+					photoURL: photoURL ?? null
+				};
+				await setDoc(docRef, usrData);
+				session.set({
+					user: usrData,
+					loggedIn: true,
+					loading: false
+				});
+				if (auth.currentUser) {
+					updateProfile(auth.currentUser, {
+						displayName: displayName,
+						photoURL: photoURL ?? null
+					}).then(
+						() => {
+							dataLoading.set(false);
+						},
+						function (error) {
+							dataLoading.set(false);
+						}
+					);
 				}
-			});
-			disabled = false;
-		}
-		$session.user = { ...$session.user, ...data };
-
-		if (auth.currentUser) {
-			updateProfile(auth.currentUser, {
-				displayName: data.displayName,
-				photoURL: data.photoURL
-			}).then(
-				() => {
-					dataLoading.set(false);
-				},
-				function (error) {
-					dataLoading.set(false);
-				}
-			);
+				toast.push($_('actions.success'), {
+					duration: 2000,
+					theme: {
+						'--toastColor': 'mintcream',
+						'--toastBackground': 'rgb(91 144 77)',
+						'--toastBarBackground': '#1d5b3c'
+					}
+				});
+				disabled = false;
+			}
 		}
 	}
 
-	function uploadFile(e: SubmitEvent) {
+	async function uploadFile() {
 		if (!file) {
 			alert('Please select a file');
 			return;
@@ -105,82 +113,62 @@
 		const formData = new FormData();
 		formData.append('file', file);
 
-		const xhr = new XMLHttpRequest();
+		try {
+			const response: any = await new Promise((resolve, reject) => {
+				const xhr = new XMLHttpRequest();
 
-		xhr.upload.addEventListener('progress', (event) => {
-			if (event.lengthComputable) {
-				uploadProgress = (event.loaded / event.total) * 100;
-			}
-		});
+				xhr.upload.addEventListener('progress', (event) => {
+					if (event.lengthComputable) {
+						uploadProgress = (event.loaded / event.total) * 100;
+					}
+				});
 
-		xhr.upload.addEventListener('loadstart', () => {
-			uploading = true;
-			uploadProgress = 0;
-		});
+				xhr.upload.addEventListener('loadstart', () => {
+					uploading = true;
+					uploadProgress = 0;
+				});
 
-		xhr.upload.addEventListener('loadend', () => {
-			uploading = false;
-			file = null;
-			formSubmit(e);
-		});
+				xhr.upload.addEventListener('loadend', () => {
+					uploading = false;
+					file = null;
+				});
 
-		xhr.onreadystatechange = async () => {
-			if (xhr.readyState === XMLHttpRequest.DONE) {
-				const response = JSON.parse(xhr.responseText);
-
-				if (xhr.status === 200 && response.status === 'success') {
-					console.log('File uploaded successfully: ' + response.filename);
-					if (userData.user?.uid) {
-						let photoURL = `https://ik.imagekit.io/d2nwsj0ktvh/docktr/uploads/${response.filename}`;
-						await putData(
-							'users',
-							'uid',
-							userData.user?.uid,
-							{
-								photoURL
-							},
-							true
-						);
-						userData.user.photoURL = photoURL;
-						session.set({ ...userData });
-						if (uploadAfterSelect) {
-							disabled = false;
-							uploadAfterSelect = false;
+				xhr.onreadystatechange = () => {
+					if (xhr.readyState === XMLHttpRequest.DONE) {
+						if (xhr.status === 200) {
+							resolve(JSON.parse(xhr.responseText));
+						} else {
+							reject(new Error('File upload failed: ' + xhr.statusText));
 						}
 					}
-				} else {
-					console.log('File upload failed: ' + response.message);
-				}
-			}
-		};
+				};
 
-		xhr.open('POST', 'https://tekoplast.az/docktr/api/?upload');
-		xhr.send(formData);
+				xhr.open('POST', 'https://tekoplast.az/docktr/api/?upload');
+				xhr.send(formData);
+			});
+
+			if (response.status === 'success') {
+				photoURL = `https://ik.imagekit.io/d2nwsj0ktvh/docktr/uploads/${response.filename}`;
+			} else {
+				console.log('File upload failed: ' + response.message);
+			}
+		} catch (error) {
+			console.error(error);
+		}
 	}
 
 	// remove profile picture
 	async function modalConfirmed() {
 		showModal = false;
-		dataLoading.set(true);
-		if (userData.user?.uid) {
-			await putData(
-				'users',
-				'uid',
-				userData.user?.uid,
-				{
-					photoURL: null
-				},
-				true
-			);
-			userData.user.photoURL = null;
-			session.set({ ...userData });
-			dataLoading.set(false);
-		}
+		file = null;
+		photoURL = null;
+		avatar = null;
+		updateProf();
 	}
 </script>
 
 {#if $session.user}
-	<form class="d-flex flex-column gap-1" on:submit|preventDefault={formSubmit}>
+	<form class="d-flex flex-column gap-1 h-100" on:submit|preventDefault={updateProf}>
 		<!-- USER PHOTO-->
 		<div
 			style="position: relative;
@@ -256,7 +244,9 @@
 				border: 3px solid var(--primaryColor);
 				display: flex; align-items: center; justify-content: center; position: relative"
 				>
-					<span class="material-symbols-outlined icon-fill" style="font-size: 4rem!important"> person </span>
+					<span class="material-symbols-outlined icon-fill" style="font-size: 4rem!important">
+						person
+					</span>
 					<span
 						class="material-symbols-outlined icon-fill"
 						style="position: absolute; right: -5px; bottom: -5px;
@@ -308,24 +298,30 @@
 			id="displayName"
 			type="text"
 			class="form-control"
-			value={userData?.user?.displayName ?? ''}
+			bind:value={displayName}
 		/>
-		<label for="email">{$_('login.email')}</label>
-		<input
-			name="email"
-			id="email"
-			type="email"
-			class="form-control"
-			value={userData?.user?.email}
-		/>
-		<label for="phone">{$_('login.mobile')}</label>
-		<input
-			name="phoneNumber"
-			id="phone"
-			type="text"
-			class="form-control"
-			value={userData?.user?.phoneNumber ?? ''}
-		/>
+		{#if userData?.user?.email}
+			<label for="email">{$_('login.email')}</label>
+			<input
+				name="email"
+				id="email"
+				type="email"
+				class="form-control"
+				value={userData?.user?.email}
+				disabled
+			/>
+		{/if}
+		{#if userData?.user?.phoneNumber}
+			<label for="phone">{$_('login.mobile')}</label>
+			<input
+				name="phoneNumber"
+				id="phone"
+				type="text"
+				class="form-control"
+				value={userData?.user?.phoneNumber ?? ''}
+				disabled
+			/>
+		{/if}
 		<button class="btn btn-primary mt-3 btnLoader" {disabled}>
 			<span>{$_('actions.update')}</span>
 			{#if $dataLoading}
@@ -380,8 +376,9 @@
 		border-radius: 10px;
 		padding: 1rem;
 	} */
-	.progress-bar {
+	.progress .progress-bar {
 		background-color: var(--primaryColor);
+		position: relative;
 	}
 	.btn-primary:disabled {
 		background-color: gray;

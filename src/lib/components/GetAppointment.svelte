@@ -36,7 +36,6 @@
 	async function postAppointment() {
 		init = false;
 		if (!$session.user) {
-			console.log('login');
 			appointmentModal.set(false);
 			loginModal.set(true);
 			return;
@@ -63,7 +62,7 @@
 						'--toastBarBackground': '#1d5b3c'
 					}
 				});
-				goto('../appointment')
+				goto('../appointment');
 			}
 		}
 	}
@@ -97,7 +96,7 @@
 				<DatePicker />
 			</div>
 		{:else}
-			<div class="row d-flex">
+			<div class="row d-flex pt-3">
 				<div class="d-flex flex-column ps-3" style="width: fit-content;">
 					<div
 						class="d-flex justify-content-center flex-column"

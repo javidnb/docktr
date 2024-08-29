@@ -2,7 +2,7 @@ import { writable } from 'svelte/store';
 import type { Doctor } from '../interfaces/doctor.interface';
 import { toast } from '@zerodevx/svelte-toast';
 import { browser } from '$app/environment';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore';
 import { db } from '$lib/firebase.client';
 import { session } from '$lib/session';
 import { goto } from '$app/navigation';
@@ -232,8 +232,8 @@ export async function getUser(user: any) {
 			loading: false
 		});
 		dataLoading.set(false);
+		getAppointments(docSnap.data());
 		if (docSnap.data().doctor) goto('/doctor');
-		appointmentsLoading.set(false);
 	} else {
 		await setDoc(docRef, data);
 		session.set({
@@ -243,30 +243,45 @@ export async function getUser(user: any) {
 		});
 		dataLoading.set(false);
 	}
-
-	getAppointments(user);
 }
 
 async function getAppointments(user: any) {
+	// const q = query(
+	// 	collection(db, 'appointments'),
+	// 	where('participants', 'array-contains', user.uid)
+	// );
+
+	// const result = await getDocs(q);
+
+	// const data = result.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+	// console.log(data);
+	console.log(user);
+
 	try {
 		let time = new Date().getTime();
 		let response;
 
-		response = await fetch(
-			`https://tekoplast.az/docktr/api/?appointments&id=${user.uid}&t=${time}`
-		);
+		if (user.doctor) {
+			response = await fetch(
+				`https://tekoplast.az/docktr/api/?appointments&id=${user.doctor}&type=doctor&t=${time}`
+			);
+		} else {
+			response = await fetch(
+				`https://tekoplast.az/docktr/api/?appointments&id=${user.uid}&t=${time}`
+			);
+		}
 
 		const result = await response.json();
-		console.log(result);
 		if (result) {
 			appointments.set(result);
-			dataLoading.set(false);
+			appointmentsLoading.set(false);
 			return null;
 		}
 		return response;
 	} catch (error) {
 		console.error(error);
-		dataLoading.set(false);
+		appointmentsLoading.set(false);
 		return null;
 	}
 }

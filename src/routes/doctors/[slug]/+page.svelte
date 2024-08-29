@@ -166,7 +166,7 @@
 <Modal bind:showModal>
 	<!-- <h4 slot="header" class="px-3 pt-2">Görüş</h4> -->
 
-	<ol class="px-0 mt-3">
+	<ol class="px-0">
 		<GetAppointment doc={doctor} />
 	</ol>
 </Modal>

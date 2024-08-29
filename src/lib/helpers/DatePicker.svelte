@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { selectedAppointmentDate } from '$lib/store/dataStore';
 	export let showDatePicker: boolean = false;
+	export let selectedDay: any = null;
 	// Function to get dates starting from tomorrow
 	function getDatesFromTomorrow(numDays: any) {
 		const daysOfWeek = [];
@@ -34,6 +35,8 @@
 	}
 
 	let daysOfWeek = getDatesFromTomorrow(7); // Get dates starting from tomorrow
+	console.log(daysOfWeek);
+	selectedDay = daysOfWeek[0].date;
 	let selectedTime: any = null;
 
 	function selectTime(day: any, time: any, startDate?: any, endDate?: any) {
@@ -49,43 +52,68 @@
 </script>
 
 <div class="container">
+	<div
+		class="row"
+		style="position: sticky; background: white; top: .5rem; border-bottom: 1px solid #ececec"
+	>
+		<div class="col">
+			<div
+				class="d-flex pb-2 px-1 gap-2 dateSelector"
+				style="overflow: scroll; max-height: 300px; padding-top:3px"
+			>
+				{#each daysOfWeek as { day, date }}
+					<button
+						class="btn btn-outline-primary d-flex flex-column h-100 align-items-center justify-content-center flex-1"
+						style="min-height: 75px;"
+						class:active={selectedDay == date}
+						on:click={() => {
+							selectedDay = date;
+						}}
+					>
+						<span style="font-size: small">{day}</span>
+						<span style="font-weight: 500;">{date}</span>
+					</button>
+				{/each}
+			</div>
+		</div>
+	</div>
 	<div class="row">
 		<div class="col">
-			<div class="d-flex gap-2 px-3 pb-3" style="overflow: scroll; max-height: 300px">
-				{#each daysOfWeek as { day, date }}
-					<div class="d-flex flex-column" style="max-width: 80px;">
-						<div
-							class="d-flex flex-column align-items-center mb-2"
-							style="position: sticky;
-                            top: 0; background: white; font-size: small"
-						>
-							<span>{day}</span>
-							<span>{date}</span>
-						</div>
-						<div>
-							<div class="d-flex flex-column row-gap-2 pb-2">
-								{#each Array.from({ length: 10 }, (_, i) => i + 9) as hour}
-									{#each [0, 30] as minute}
-										{#if !(hour === 18 && minute === 30)}
-											<button
-												class="btn btn-outline-primary"
-												on:click={() =>
-													selectTime(
-														`${day} - ${date}`,
-														`${hour.toString().padStart(2, '0')}:${minute === 0 ? '00' : '30'}`,
-														`${date} ${hour}:${minute}`
-													)}
-											>
-												{hour.toString().padStart(2, '0')}:{minute === 0 ? '00' : '30'}
-											</button>
-										{/if}
-									{/each}
-								{/each}
-							</div>
-						</div>
-					</div>
+			<div
+				class="d-flex flex-wrap gap-3 pb-2 pt-4 px-3 justify-content-center"
+				style="max-width: 705px;"
+			>
+				{#each Array.from({ length: 10 }, (_, i) => i + 9) as hour}
+					{#each [0, 30] as minute}
+						{#if !(hour === 18 && minute === 30)}
+							<button
+								class="btn btn-outline-primary flex-1"
+								style="max-width: 80px;"
+								on:click={() => {
+									selectTime(
+										`${selectedDay} - ${hour}:${minute}`,
+										`${hour.toString().padStart(2, '0')}:${minute === 0 ? '00' : '30'}`,
+										`${selectedDay} ${hour}:${minute}`
+									);
+								}}
+							>
+								{hour.toString().padStart(2, '0')}:{minute === 0 ? '00' : '30'}
+							</button>
+						{/if}
+					{/each}
 				{/each}
 			</div>
 		</div>
 	</div>
 </div>
+
+<style>
+	.dateSelector .btn {
+		min-width: 80px;
+	}
+	.dateSelector .active {
+		background-color: var(--primaryColor);
+		color: white;
+		border-radius: 6px !important;
+	}
+</style>

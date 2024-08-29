@@ -498,7 +498,7 @@
 									{/if}
 								{:else}
 									<div
-										class="d-flex justify-content-center my-auto mt-2"
+										class="d-flex justify-content-center my-auto"
 										style="color: #375935;
 									font-weight: 500;"
 									>

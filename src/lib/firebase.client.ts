@@ -47,7 +47,7 @@ function clearUserData() {
 		appointments.set([]);
 		localStorage.removeItem('user');
 		dataLoading.set(false);
-		// document.cookie = 'user=; path=/; max-age=0';
+		localStorage.removeItem('msgs');
 	}, 100);
 }
 

@@ -60,6 +60,14 @@ body {
 	flex: 1;
 }
 
+.svelte-select {
+	display: flex;
+}
+
+.svelte-select input {
+	border: none;
+}
+
 @media screen and (min-width: 992px) {
 	.homeNav .active {
 		background-color: var(--primaryColor) !important;
@@ -84,7 +92,7 @@ body {
 		overflow: hidden;
 	}
 	.pc-mt {
-		margin-top: 1rem
+		margin-top: 1rem;
 	}
 }
 @media screen and (max-width: 992px) {

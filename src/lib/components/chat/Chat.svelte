@@ -3,7 +3,7 @@
 	import { collection, addDoc, query, where, onSnapshot, orderBy } from 'firebase/firestore';
 	import { db, initializeFirebase } from '$lib/firebase.client';
 	import { session } from '$lib/session';
-	import { selectedUser, users, mobile, doctors } from '$lib/store/dataStore';
+	import { selectedUser, users, mobile, doctors, sendNotification } from '$lib/store/dataStore';
 	import { timestamp } from '$lib/helpers/dateFormatter';
 	import { tooltip } from 'svooltip';
 	import 'svooltip/styles.css';
@@ -60,8 +60,6 @@
 					.filter((doc) => doc.data().participants.includes(userId))
 					.map((doc) => doc.data());
 				scrollToBottom();
-
-				console.log(messages);
 				files = messages.filter((m: any) => m.file);
 			});
 
@@ -79,7 +77,6 @@
 		let file = null;
 		if (selectedFile) {
 			file = await uploadFile(selectedFile);
-			console.log(file);
 		}
 		if (msg.trim() !== '' || file) {
 			await addDoc(messagesCollection, {
@@ -90,6 +87,13 @@
 				timestamp: new Date(),
 				file
 			});
+			sendNotification(
+				userId,
+				$doctors.find((u: any) => u.uid == $selectedUser) ? true : false,
+				$session.user?.displayName || 'Yeni mesaj',
+				msg,
+				'https://sehiyye.online/messages'
+			);
 		}
 	};
 
@@ -148,6 +152,12 @@
 
 	function getFileExtension(filename: string): string {
 		return filename.split('.').pop()?.toLowerCase() ?? '';
+	}
+
+	// check if file is an image to display thumbnails in chat
+	function checkFileExtension(str: any) {
+		const lastPart = str.split(',').pop().trim();
+		return lastPart.endsWith('jpg') || lastPart.endsWith('png');
 	}
 
 	const onFileSelected = (e: any) => {
@@ -212,11 +222,9 @@
 					const response = JSON.parse(xhr.responseText);
 
 					if (xhr.status === 200 && response.status === 'success') {
-						console.log('File uploaded successfully: ' + response.filename);
 						let fileURL = `https://sehiyye.online/uploads/${response.filename}`;
 						resolve({ url: fileURL, name: file.name });
 					} else {
-						console.log('File upload failed: ' + response.message);
 						reject(new Error('File upload failed: ' + response.message));
 					}
 				}
@@ -363,15 +371,33 @@
 					>
 						{message.message}
 						{#if message.file}
-							<a class="fileCard" href={message.file.url} target="_blank">
-								<span
-									style="font-size: 30px; color: #30552e"
-									class="material-symbols-outlined my-auto"
-								>
-									description
-								</span>
-								<span
-									style="padding-inline: 5px;
+							<a
+								class="fileCard"
+								class:h-200={checkFileExtension(message.file.name)}
+								href={message.file.url}
+								target="_blank"
+							>
+								{#if checkFileExtension(message.file.name)}
+									<div
+										style="display: flex; align-items-center-justify-content-center; max-width: 100%; max-height: 400px; overflow: hidden"
+									>
+										<img
+											style="width: 100%;
+											object-fit: cover;
+											object-position: center;"
+											src={message.file.url}
+											alt="Attachment"
+										/>
+									</div>
+								{:else}
+									<span
+										style="font-size: 30px; color: #30552e"
+										class="material-symbols-outlined my-auto"
+									>
+										description
+									</span>
+									<span
+										style="padding-inline: 5px;
 									font-size: smaller;
 									overflow-wrap: break-word;
 									max-height: 28px;
@@ -381,9 +407,10 @@
 									color: unset;
 									margin-bottom: 10px;
 									max-width: 80%"
-								>
-									{message.file.name}
-								</span>
+									>
+										{message.file.name}
+									</span>
+								{/if}
 							</a>
 						{/if}
 						<span style="font-size: small; color: gray">{@html timestamp(message.timestamp)}</span>
@@ -557,12 +584,18 @@
 	.msgRecipientTitle::-webkit-scrollbar {
 		display: none;
 	}
+	.h-200 {
+		height: 400px !important;
+	}
 	@media screen and (min-width: 992px) {
 		.msgBox {
 			width: 60% !important;
 		}
 	}
 	@media screen and (max-width: 992px) {
+		.h-200 {
+			height: 300px !important;
+		}
 		.chat {
 			max-height: calc(100dvh - 80px) !important;
 		}

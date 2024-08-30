@@ -187,22 +187,26 @@ export async function sendNotification(
 		: await fetch(`https://tekoplast.az/docktr/api/?getTokens&uid=${uid}&t=${time}`);
 	const fcmTokens = await fcmToken.json();
 
-	let requestData = {
-		tokens: JSON.stringify(fcmTokens[0].fcmToken),
-		title,
-		body,
-		url
-	};
-	const response = await fetch(`https://tekoplast.az/docktr/api/?pushNotification`, {
-		method: 'POST',
-		cache: 'no-store',
-		body: JSON.stringify({ ...requestData })
-	});
+	if (fcmTokens[0]?.fcmToken) {
+		let requestData = {
+			tokens: JSON.stringify(fcmTokens[0]?.fcmToken),
+			title,
+			body,
+			url
+		};
+		const response = await fetch(`https://tekoplast.az/docktr/api/?pushNotification`, {
+			method: 'POST',
+			cache: 'no-store',
+			body: JSON.stringify({ ...requestData })
+		});
 
-	if (response.ok) {
-		dataLoading.set(false);
+		if (response.ok) {
+			dataLoading.set(false);
+		} else {
+			dataLoading.set(false);
+		}
 	} else {
-		dataLoading.set(false);
+		console.log('no push tokens: ', fcmTokens);
 	}
 }
 

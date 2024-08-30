@@ -22,7 +22,8 @@
 	let usr: any;
 
 	onMount(() => {
-		fetchData();
+		appointmentsLoading.set(true);
+		// fetchData();
 	});
 
 	async function fetchData() {

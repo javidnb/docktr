@@ -39,8 +39,8 @@
 		"history": "Keçmiş Görüşlər"
 	},
 	"appointment": {
-		"loginToSee": "Randevuları görmək üçün hesaba",
-		"login": "giriş et",
+		"loginToSee": "Randevuları görmək üçün",
+		"login": "Hesaba Daxil Ol",
 		"get": "Həkimdən Görüş Al",
 		"no_appointment": "Görüş yoxdur",
 		"planned": "Planlaşdırılan görüş",

@@ -527,12 +527,13 @@
 				<div
 					class="card mt-3 p-3"
 					style="display: flex;
-					flex-direction: row;
-					align-items: baseline;
+					flex-direction: column;
+					align-items: center;
 					gap: .5rem;"
 				>
 					{$_('appointment.loginToSee')}
-					<button on:click={() => loginModal.set(true)} class="btn btn-outline-primary h-100">
+					<button on:click={() => loginModal.set(true)} class="btn btn-outline-primary h-100 mt-3"
+					style="min-width: 100px">
 						{$_('appointment.login')}
 					</button>
 				</div>

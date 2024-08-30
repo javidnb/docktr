@@ -435,10 +435,11 @@
 								src="https://ik.imagekit.io/d2nwsj0ktvh/online_VP_k7pe75.png"
 								alt="Get Appointment"
 								style="width: 85px;
-								position: absolute;
-								right: 1rem;
-								top: 50%;
-								transform: translateY(-50%);"
+									max-width: 20vw;
+									position: absolute;
+									right: 5px;
+									top: 50%;
+									transform: translateY(-50%);"
 							/>
 						</div>
 					</button>

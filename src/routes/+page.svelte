@@ -39,10 +39,11 @@
 							</h1> -->
 							<p
 								class="lead mb-0 py-2"
-								style="color: var(--primaryText); 
-								font-size: clamp(0.8rem, 3.4vw, 1.2rem);
+								style="color: var(--primaryText);
+								font-size: clamp(0.8rem, 4vw, 1.2rem);
 								font-family: Montserrat, sans-serif;
-								white-space: nowrap"
+								white-space: nowrap;
+								margin-top: -10px;"
 							>
 								{$_('home.lead')}
 							</p>
@@ -73,6 +74,7 @@
 												src="https://ik.imagekit.io/d2nwsj0ktvh/online_VP_k7pe75.png"
 												alt="Get Appointment"
 												style="width: 85px;
+													max-width: 20vw;
 													position: absolute;
 													right: 1rem;
 													top: 50%;

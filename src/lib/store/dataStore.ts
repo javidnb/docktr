@@ -215,7 +215,7 @@ export async function getUser(user: any) {
 	console.log('getting user from datastore');
 	if (result?.doctor) goto('./doctor');
 	if (result) {
-		// getAppointments(result);
+		getAppointments(result);
 		// registerCM();
 	}
 	session.set({

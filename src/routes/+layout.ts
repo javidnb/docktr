@@ -1,7 +1,7 @@
 import { initializeFirebase, auth } from '$lib/firebase.client';
 import { browser } from '$app/environment';
 import { onAuthStateChanged } from 'firebase/auth';
-import { appointments, appointmentsLoading, dataLoading, getUser } from '$lib/store/dataStore.js';
+import { appointmentsLoading, dataLoading, getUser } from '$lib/store/dataStore.js';
 import { session } from '$lib/session.js';
 
 let doctorsData: any = null;
@@ -48,6 +48,7 @@ export async function load({ url, data }) {
 		getAuthUser: getAuthUser,
 		doctors: doctorsData,
 		url: url.pathname,
-		appointments: data.appointments
+		appointments: data.appointments,
+		user: data.user
 	};
 }

@@ -21,10 +21,12 @@
 		doctors.set(dooc);
 	}
 
+	if (data?.user) {
+		session.set({ user: JSON.parse(data.user), loggedIn: true });
+	}
+
 	if (data?.appointments?.length) {
 		appointments.set(data.appointments);
-	} else {
-		appointments.set([]);
 	}
 
 	if (browser) {
@@ -34,12 +36,6 @@
 	}
 
 	onMount(async () => {
-		console.log(data);
-		// let userCookie: any = data?.user ? JSON.parse(data?.user || '') : null;
-		// if (userCookie) {
-		// 	session.set({ user: userCookie, loggedIn: true });
-		// 	dataLoading.set(false);
-		// }
 		let usr = await data.getAuthUser();
 		if (!usr) appointmentsLoading.set(false);
 	});

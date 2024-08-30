@@ -332,7 +332,7 @@
 												/>
 											{:else}
 												<div
-													style="width: 60px; height: 60px; color: var(--primaryColor); border-radius: 100%; border: 3px solid var(--primaryColor); display: flex; align-items: center; justify-content: center;"
+													style="width: 60px; height: 60px; color: var(--primaryText); border-radius: 100%; border: 3px solid var(--primaryColor); display: flex; align-items: center; justify-content: center;"
 												>
 													<span class="material-symbols-outlined icon-fill" style="font-size: 3rem"
 														>person</span
@@ -360,7 +360,7 @@
 										<div class="d-flex align-items-center w-100 docDetails">
 											<a
 												href="/doctors/{$doctors.find((d) => d.id == appointment.doctorId)?.slug}"
-												style="font-size: 1.2rem; text-align: center; text-decoration: none; color: #37592e; font-weight: 500; margin-inline: auto;"
+												style="font-size: 1.2rem; text-align: center; text-decoration: none; color: var(--primaryText); font-weight: 500; margin-inline: auto;"
 											>
 												{$doctors.find((d) => d.id == appointment.doctorId)?.name}
 											</a>
@@ -532,8 +532,11 @@
 					gap: .5rem;"
 				>
 					{$_('appointment.loginToSee')}
-					<button on:click={() => loginModal.set(true)} class="btn btn-outline-primary h-100 mt-3"
-					style="min-width: 100px">
+					<button
+						on:click={() => loginModal.set(true)}
+						class="btn btn-outline-primary h-100 mt-3"
+						style="min-width: 100px"
+					>
 						{$_('appointment.login')}
 					</button>
 				</div>

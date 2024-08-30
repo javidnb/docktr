@@ -22,8 +22,9 @@
 		showModal = false;
 		dialog.close();
 	}}
+	class:fullScreen
 	style={fullScreen
-		? 'margin:0; height: 100%; overflow-y: hidden; width: 100%; min-width: 100%; padding: 1rem'
+		? 'margin:0; height: calc(100dvh - 130px); overflow-y: hidden; width: 100%; min-width: 100%; padding: 1rem'
 		: ''}
 >
 	<!-- <button
@@ -54,8 +55,16 @@
 		/* min-width: min(30em, 100%); */
 		box-shadow: 0px 0px 8px #00000047;
 	}
-	dialog::backdrop {
+	dialog:not(.fullScreen)::backdrop {
 		background: rgba(0, 0, 0, 0.3);
+	}
+	dialog.fullScreen {
+		max-height: calc(100dvh - 130px);
+		top: 50% !important;
+		transform: translateY(-50%);
+	}
+	dialog.fullScreen::backdrop {
+		background: transparent;
 	}
 	dialog > div {
 		padding: 0em;

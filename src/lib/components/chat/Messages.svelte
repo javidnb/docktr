@@ -23,6 +23,7 @@
 	$: curPage = $page.route.id;
 	$: if ($session.user) getMsgs();
 	let dataLoading = writable(false);
+	let messagesUpdating = true;
 
 	onMount(async () => {
 		await initializeFirebase();
@@ -73,10 +74,12 @@
 				});
 
 				if (response.ok) {
+					messagesUpdating = false;
 					const data = await response.json();
 					localStorage.setItem('users', JSON.stringify(data));
 					users.set(data);
 				} else {
+					messagesUpdating = false;
 					console.error('Failed to fetch users data');
 				}
 			}
@@ -117,7 +120,10 @@
 	}
 </script>
 
-<div class="d-flex gap-2 flex-column">
+<div class="d-flex gap-2 flex-column" style="position: relative;">
+	{#if messagesUpdating}
+		<div class="loader" style="background-color: var(--primaryColor); top: 1rem; right: 10px"></div>
+	{/if}
 	{#if messagesGroupedByUser.length}
 		{#each messagesGroupedByUser as { user, uid }}
 			<!-- svelte-ignore a11y-click-events-have-key-events -->

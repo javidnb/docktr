@@ -4,10 +4,9 @@
 	import { initializeFirebase, db } from '$lib/firebase.client';
 	import { session } from '$lib/session';
 	import { createEventDispatcher } from 'svelte';
-	import { doctors, selectedUser, users } from '$lib/store/dataStore';
+	import { doctors, selectedUser, users, dataLoading } from '$lib/store/dataStore';
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
-	import { writable } from 'svelte/store';
 	import { _ } from 'svelte-i18n';
 	import { goto } from '$app/navigation';
 
@@ -22,7 +21,6 @@
 	const dispatch = createEventDispatcher();
 	$: curPage = $page.route.id;
 	$: if ($session.user) getMsgs();
-	let dataLoading = writable(false);
 	let messagesUpdating = true;
 
 	onMount(async () => {
@@ -34,7 +32,6 @@
 	});
 
 	async function getMsgs() {
-		dataLoading.set(true);
 		if (messagesCollection) {
 			const q = query(
 				messagesCollection,
@@ -115,13 +112,12 @@
 			messagesGroupedByUser = result;
 			// messagesGroupedByUser = [];
 			localStorage.setItem('msgs', JSON.stringify(messagesGroupedByUser));
-			dataLoading.set(false);
 		}
 	}
 </script>
 
 <div class="d-flex gap-2 flex-column" style="position: relative;">
-	{#if messagesUpdating}
+	{#if messagesUpdating && !$dataLoading}
 		<div class="loader" style="background-color: var(--primaryColor); top: 1rem; right: 10px"></div>
 	{/if}
 	{#if messagesGroupedByUser.length}

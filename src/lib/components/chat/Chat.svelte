@@ -379,12 +379,13 @@
 							>
 								{#if checkFileExtension(message.file.name)}
 									<div
-										style="display: flex; align-items-center-justify-content-center; max-width: 100%; max-height: 400px; overflow: hidden"
+										style="display: flex; align-items-center-justify-content-center; width: 100%; max-height: 400px; overflow: hidden"
 									>
 										<img
 											style="width: 100%;
 											object-fit: cover;
-											object-position: center;"
+											object-position: center;
+											border-radius: 6px"
 											src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/uploads/{message.file.url
 												.split('/')
 												.pop()}?tr=h-400"
@@ -587,7 +588,8 @@
 		display: none;
 	}
 	.h-200 {
-		height: 400px !important;
+		height: 100% !important;
+		max-height: 300px !important;
 	}
 	@media screen and (min-width: 992px) {
 		.msgBox {
@@ -595,9 +597,6 @@
 		}
 	}
 	@media screen and (max-width: 992px) {
-		.h-200 {
-			height: 300px !important;
-		}
 		.chat {
 			max-height: calc(100dvh - 80px) !important;
 		}

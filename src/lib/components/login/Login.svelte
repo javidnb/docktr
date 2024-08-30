@@ -292,7 +292,13 @@
 	}
 
 	// PHONE NUMBER INPUT FORMATTING
-	function handleInput() {
+	function handleInput(event: Event) {
+		if (method == 'mobile') {
+			const target = event.target as HTMLInputElement;
+			target.value = target.value.replace(/[^0-9]/g, '');
+			phoneNumber = target.value;
+		}
+
 		if (phoneNumber.length > 3) {
 			const country = selecedItem.value == '+994' ? 'AZ' : 'TR';
 			let num = parsePhoneNumber(phoneNumber, country);
@@ -372,21 +378,25 @@
 				/>
 			{/if}
 			{#if method == 'email'}
-				<input
-					class="form-control"
-					style="padding: .5rem; min-width: 300px"
-					bind:value={email}
-					on:input={() => {
-						if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-							disabled = false;
-						} else {
-							disabled = true;
-						}
-					}}
-					type="text"
-					placeholder={$_('login.email')}
-					required
-				/>
+				<div class="form-floating p-0">
+					<input
+						class="form-control"
+						bind:value={email}
+						on:input={() => {
+							if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+								disabled = false;
+							} else {
+								disabled = true;
+							}
+						}}
+						type="text"
+						placeholder={$_('login.email')}
+						required
+						id="emailInput"
+						style="min-width: 270px"
+					/>
+					<label for="emailInput" style="color: gray">{$_('login.email')}</label>
+				</div>
 			{:else if method == 'mobile'}
 				{#if !showConfimationInput}
 					<div class="p-0 input-group">
@@ -409,6 +419,7 @@
 								</div>
 							{/if}
 						{/if} -->
+
 						<Select
 							class="form-control"
 							items={selectItems}
@@ -420,15 +431,19 @@
 							bind:value={selecedItem}
 							clearable={false}
 						></Select>
-						<input
-							class="form-control"
-							style="padding: .5rem; margin-left: -5px"
-							bind:value={phoneNumber}
-							on:input={handleInput}
-							type="text"
-							placeholder={$_('login.mobile')}
-							required
-						/>
+						<div class="form-floating p-0">
+							<input
+								class="form-control"
+								style="margin-left: -5px"
+								bind:value={phoneNumber}
+								on:input={handleInput}
+								type="text"
+								placeholder={$_('login.mobile')}
+								required
+								id="phoneInput"
+							/>
+							<label for="phoneInput" style="color: gray">{$_('login.mobile')}</label>
+						</div>
 					</div>
 				{:else}
 					<div class="d-flex flex-column gap-3 p-0" in:scaleFade>
@@ -452,14 +467,21 @@
 					padding: 0"
 				></div> -->
 			{/if}
-			<input
-				class="form-control"
-				style="padding: .5rem;"
-				bind:value={password}
-				type="password"
-				placeholder={$_('login.pass')}
-				required
-			/>
+			<div class="form-floating p-0">
+				<input
+					class="form-control"
+					bind:value={password}
+					type="password"
+					placeholder={$_('login.pass')}
+					required
+					id="passwInput"
+				/>
+				<label for="passwInput" style="color: gray">{$_('login.pass')}</label>
+			</div>
+
+			{#if type == 'register'}
+				<span style="font-size: small; color: gray">Şifrə ən az 6 simvoldar ibarət olmalıdır</span>
+			{/if}
 			{#if showError}
 				<span style="color:#c40f0f">{$_('login.error')} <br />{$_('login.try_again')}</span>
 			{/if}
@@ -467,7 +489,9 @@
 				<button
 					class="btn"
 					id="btnLogin"
-					{disabled}
+					disabled={disabled ||
+						password.length < 6 ||
+						(type == 'register' && (!displayName || displayName.length < 3))}
 					type="submit"
 					style="padding: 0.5rem;
 					border-radius: 10px;

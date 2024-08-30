@@ -263,7 +263,7 @@
 {/if}
 
 {#if !showDocs && user}
-	<main class="d-flex flex-column h-100" style="min-height: calc(100dvh - 35px)!important">
+	<main class="d-flex flex-column h-100" style="min-height: calc(100dvh - 85px)!important">
 		<div
 			class="chat mb-3 d-flex flex-column gap-1"
 			id="messages-container"
@@ -385,7 +385,9 @@
 											style="width: 100%;
 											object-fit: cover;
 											object-position: center;"
-											src={message.file.url}
+											src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/uploads/{message.file.url
+												.split('/')
+												.pop()}?tr=h-400"
 											alt="Attachment"
 										/>
 									</div>

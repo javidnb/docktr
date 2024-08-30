@@ -47,7 +47,7 @@
                     margin-block: 0px;
                     font-size: large;
                     font-weight: 600;
-					color: #52694b">{props.name}</span
+					color: var(--primaryText)">{props.name}</span
 				>
 				<p
 					class="docDetails"

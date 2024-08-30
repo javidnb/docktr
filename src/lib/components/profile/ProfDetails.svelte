@@ -4,9 +4,8 @@
 	import { toast } from '@zerodevx/svelte-toast';
 	import { _ } from 'svelte-i18n';
 	import Confirm from '$lib/helpers/Confirm.svelte';
-	import { auth, db } from '$lib/firebase.client';
+	import { auth } from '$lib/firebase.client';
 	import { updateProfile } from 'firebase/auth';
-	import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 	let file: any;
 	let uploadAfterSelect: boolean = false;

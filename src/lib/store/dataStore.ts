@@ -2,8 +2,6 @@ import { writable } from 'svelte/store';
 import type { Doctor } from '../interfaces/doctor.interface';
 import { toast } from '@zerodevx/svelte-toast';
 import { browser } from '$app/environment';
-import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore';
-import { db } from '$lib/firebase.client';
 import { session } from '$lib/session';
 import { goto } from '$app/navigation';
 
@@ -24,7 +22,7 @@ export const ongoingAppointment = writable<any>();
 export const users = writable([]);
 export const selectedUser = writable();
 export const hideNav = writable(false);
-export const appointmentsLoading = writable(true);
+export const appointmentsLoading = writable(false);
 export const searchQuery = writable('');
 export const showGPT = writable(false);
 export const mobileComponent: any = writable(null);
@@ -217,7 +215,7 @@ export async function getUser(user: any) {
 	console.log('getting user from datastore');
 	if (result?.doctor) goto('./doctor');
 	if (result) {
-		getAppointments(result);
+		// getAppointments(result);
 		// registerCM();
 	}
 	session.set({

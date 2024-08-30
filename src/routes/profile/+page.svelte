@@ -99,7 +99,7 @@
 
 {#if !$dataLoading}
 	<section style="overflow-x: hidden;">
-		<div class="container mobileCont" in:slideIn>
+		<div class="container mobileCont">
 			<div class="row mt-3 pb-5 justify-content-center">
 				<div class="col-12 col-md-4 col-lg-3">
 					{#if !$mobileComponent}

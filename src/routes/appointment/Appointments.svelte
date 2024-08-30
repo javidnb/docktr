@@ -13,7 +13,7 @@
 		reviewModal,
 		slideIn
 	} from '$lib/store/dataStore';
-	import { onMount, tick } from 'svelte';
+	import { onMount } from 'svelte';
 	import { monthNames } from '$lib/helpers/dateFormatter';
 	import { session } from '$lib/session';
 	import ConfirmationModal from '$lib/helpers/AppointConfirmation.svelte';
@@ -36,7 +36,9 @@
 	let startX = 0;
 	let endX = 0;
 
-	$: if (!$session.user) appointments.set([]);
+	// $: if (!$session.user) appointments.set([]);
+
+	$: if (!!$appointments) console.log($appointments);
 
 	$: upcomingAppointments = $session?.user?.doctor
 		? $appointments
@@ -75,6 +77,7 @@
 			: [];
 
 	onMount(() => {
+		console.log($appointments);
 		const updateRemainingTime = () => {
 			if (filteredAppointments?.length) {
 				filteredAppointments = filteredAppointments.map((appointment: any) => {

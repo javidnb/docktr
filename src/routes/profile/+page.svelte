@@ -323,7 +323,7 @@
 					<div class="col-md-8 col-lg-9 kont pcOnly">
 						<div class="container h-100">
 							<div class="row h-100">
-								<div class="col pcOnly">
+								<div class="col pcOnly" style="position: relative;">
 									<svelte:component this={component} on:changeValue={handleChangeValue} />
 								</div>
 							</div>

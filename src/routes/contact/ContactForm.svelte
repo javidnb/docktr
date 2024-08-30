@@ -10,18 +10,22 @@
 	let displayName: string = '';
 	let phoneNumber: string = '';
 	let message: string = '';
+	let init = true;
 
 	$: if ($session.user) {
-		displayName = $session.user?.displayName || '';
-		phoneNumber = $session.user?.phoneNumber || $session.user?.email || '';
-		if ($doctors.length) {
-			if ($doctors.find((d) => d.id == $session.user?.doctor)) {
-				docData = $doctors.find((d) => d.id == $session.user?.doctor);
+		if (init) {
+			displayName = $session.user?.displayName || '';
+			phoneNumber = $session.user?.phoneNumber || $session.user?.email || '';
+			if ($doctors.length) {
+				if ($doctors.find((d) => d.id == $session.user?.doctor)) {
+					docData = $doctors.find((d) => d.id == $session.user?.doctor);
+				}
 			}
+			init = false;
 		}
 	}
 
-	let btnDisabled = writable(false);
+	let btnDisabled = writable(false); // this is for after sending a message
 	let btnText = $_('actions.send');
 
 	async function formSubmit(e: Event) {
@@ -67,7 +71,7 @@
 		id="name"
 		type="text"
 		class="form-control"
-		value={displayName}
+		bind:value={displayName}
 		required
 		autocomplete="off"
 		class:d-none={docData}
@@ -82,7 +86,7 @@
 		placeholder="Mobil / email"
 		required
 		autocomplete="off"
-		value={phoneNumber}
+		bind:value={phoneNumber}
 		class:d-none={docData}
 	/>
 

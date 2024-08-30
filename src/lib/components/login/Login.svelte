@@ -338,6 +338,7 @@
 					email = '';
 					password = '';
 					disabled = true;
+					showError = false;
 				}}
 				class="btn btn-outline-primary d-flex justify-content-center"
 				class:active={method == 'mobile'}
@@ -350,6 +351,7 @@
 					email = '';
 					password = '';
 					disabled = true;
+					showError = false;
 				}}
 				class="btn btn-outline-primary bg-white d-flex justify-content-center"
 				class:active={method == 'email'}
@@ -368,14 +370,18 @@
 				{type == 'login' ? $_('login.login_header') : $_('login.register')}
 			</h5>
 			{#if type == 'register'}
-				<input
-					class="form-control"
-					style="padding: .5rem; min-width: 300px"
-					bind:value={displayName}
-					type="text"
-					placeholder={$_('login.name_surname')}
-					required
-				/>
+				<div class="form-floating p-0">
+					<input
+						class="form-control"
+						style="min-width: 300px"
+						bind:value={displayName}
+						type="text"
+						placeholder={$_('login.name_surname')}
+						required
+						id="nameInput"
+					/>
+					<label for="nameInput" style="color: gray">{$_('login.name_surname')}</label>
+				</div>
 			{/if}
 			{#if method == 'email'}
 				<div class="form-floating p-0">
@@ -478,9 +484,20 @@
 				/>
 				<label for="passwInput" style="color: gray">{$_('login.pass')}</label>
 			</div>
-
 			{#if type == 'register'}
-				<span style="font-size: small; color: gray">Şifrə ən az 6 simvoldar ibarət olmalıdır</span>
+				<div
+					class="p-0"
+					style="min-height: 24px;
+							margin-top: -15px;
+							margin-bottom: -10px;
+							padding-left: 5px !important;"
+				>
+					{#if !password || password.length < 6}
+						<span style="font-size: small; color: gray"
+							>Şifrə ən az 6 simvoldar ibarət olmalıdır</span
+						>
+					{/if}
+				</div>
 			{/if}
 			{#if showError}
 				<span style="color:#c40f0f">{$_('login.error')} <br />{$_('login.try_again')}</span>

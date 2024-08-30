@@ -1,5 +1,3 @@
-/** @type {import('./$types').LayoutLoad} */
-
 import { initializeFirebase, auth } from '$lib/firebase.client';
 import { browser } from '$app/environment';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -21,9 +19,11 @@ export async function load({ url }) {
 		return new Promise((resolve) => {
 			onAuthStateChanged(auth, (user) => {
 				if (user) {
+					document.cookie = `user=${encodeURIComponent(JSON.stringify(user))}; path=/; max-age=${7 * 24 * 60 * 60}`;
 					session.set({ user, loggedIn: true });
 					getUser(user);
 				} else {
+					document.cookie = 'user=; path=/; max-age=0';
 					dataLoading.set(false);
 					appointmentsLoading.set(false);
 				}

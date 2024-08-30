@@ -3,7 +3,13 @@
 	import Nav from '$lib/components/Nav.svelte';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import type { LayoutData } from './$types';
-	import { appointmentsLoading, doctors, hideNav, postData } from '$lib/store/dataStore';
+	import {
+		appointments,
+		appointmentsLoading,
+		dataLoading,
+		doctors,
+		postData
+	} from '$lib/store/dataStore';
 	import '../lib/i18n';
 	import { locale, _ } from 'svelte-i18n';
 	import { session } from '$lib/session';
@@ -28,6 +34,12 @@
 	}
 
 	onMount(async () => {
+		console.log(data);
+		// let userCookie: any = data?.user ? JSON.parse(data?.user || '') : null;
+		// if (userCookie) {
+		// 	session.set({ user: userCookie, loggedIn: true });
+		// 	dataLoading.set(false);
+		// }
 		let usr = await data.getAuthUser();
 		if (!usr) appointmentsLoading.set(false);
 	});

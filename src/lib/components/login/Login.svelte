@@ -88,6 +88,7 @@
 	}
 
 	async function getUser(user: any) {
+		document.cookie = `user=${encodeURIComponent(JSON.stringify(user))}; path=/; max-age=${7 * 24 * 60 * 60}`;
 		try {
 			let time = new Date().getTime();
 			const response = await fetch(

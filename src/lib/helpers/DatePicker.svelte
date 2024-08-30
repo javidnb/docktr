@@ -109,7 +109,7 @@
 
 <style>
 	.dateSelector .btn {
-		min-width: 80px;
+		min-width: 90px;
 	}
 	.dateSelector .active {
 		background-color: var(--primaryColor);

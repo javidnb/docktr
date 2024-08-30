@@ -255,7 +255,7 @@
     padding-left: 20px;
     height: 40px;
     box-shadow: unset;
-    z-index: 99;"
+    z-index: 999;"
 		on:click={() => selectedUser.set(null)}
 	>
 		<span class="material-symbols-outlined">arrow_back_ios</span>
@@ -274,7 +274,7 @@
 				style="position: sticky;
 				top: 0px;
 				background: #f8f8f8;
-				border-bottom: 1px solid #ececec;"
+				border-bottom: 1px solid #ececec; z-index:99"
 			>
 				<div class="d-flex align-items-center w-100 pt-1 py-2 mobile-left-padding">
 					{#if $user?.photoURL}
@@ -368,14 +368,19 @@
 						class="message d-flex flex-column flex-1 px-3 {message.fromUser === currentUser
 							? 'sent'
 							: 'received'}"
+						style="position: relative;"
+						class:padding-3px={message.file}
 					>
-						{message.message}
+						{#if message.message}
+							{message.message}
+						{/if}
 						{#if message.file}
 							<a
 								class="fileCard"
 								class:h-200={checkFileExtension(message.file.name)}
 								href={message.file.url}
 								target="_blank"
+								class:mt-0={message.file}
 							>
 								{#if checkFileExtension(message.file.name)}
 									<div
@@ -416,7 +421,7 @@
 								{/if}
 							</a>
 						{/if}
-						<span style="font-size: small; color: gray">{@html timestamp(message.timestamp)}</span>
+						<span class="msgTime" style="font-size: small; color: gray; text-align: right">{@html timestamp(message.timestamp)}</span>
 					</div>
 				</div>
 			{/each}
@@ -545,6 +550,7 @@
 		background: #dddada;
 		box-shadow: 0px 0px 5px #00000012;
 		/* max-width: 0%; */
+		color: #415e39;
 	}
 	.sent {
 		background-color: #65a3547d;
@@ -552,6 +558,9 @@
 	}
 	.received {
 		background-color: white;
+	}
+	.sent .msgTime {
+		color: #f8f8f8!important;
 	}
 	.progress-bar {
 		background-color: var(--primaryColor);
@@ -580,6 +589,9 @@
 	}
 	.sent .fileCard {
 		align-self: end;
+	}
+	.padding-3px {
+		padding: 5px !important;
 	}
 	.fileCard:hover {
 		background: #e6e6e6;

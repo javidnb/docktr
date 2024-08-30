@@ -7,7 +7,13 @@
 	import { writable } from 'svelte/store';
 	import Appointments from '../appointment/Appointments.svelte';
 	import { _ } from 'svelte-i18n';
-	import { appointmentsLoading, selectedUser, joinVideoCall, mobile } from '$lib/store/dataStore';
+	import {
+		appointmentsLoading,
+		selectedUser,
+		joinVideoCall,
+		mobile,
+		appointments
+	} from '$lib/store/dataStore';
 	import { goto } from '$app/navigation';
 	import History from '$lib/components/profile/History.svelte';
 	import Chat from '$lib/components/chat/Chat.svelte';
@@ -23,17 +29,27 @@
 
 	onMount(() => {
 		appointmentsLoading.set(true);
+		if (data.user) {
+			dataLoading.set(true);
+		} else {
+			appointmentsLoading.set(false);
+			dataLoading.set(false);
+		}
 		// fetchData();
 	});
 
-	async function fetchData() {
-		dataLoading.set(true);
-		try {
-			usr = await data.getAuthUser();
-		} finally {
-			if (!usr) appointmentsLoading.set(false);
-		}
+	$: if ($appointments?.length) {
+		dataLoading.set(false);
 	}
+
+	// async function fetchData() {
+	// 	dataLoading.set(true);
+	// 	try {
+	// 		usr = await data.getAuthUser();
+	// 	} finally {
+	// 		if (!usr) appointmentsLoading.set(false);
+	// 	}
+	// }
 
 	$: if (!$joinVideoCall && (component == Appointments || component == Chat)) {
 		if ($selectedUser) component = Chat;
@@ -45,7 +61,7 @@
 	}
 </script>
 
-{#if !$appointmentsLoading}
+{#if !$dataLoading}
 	{#if $session.loggedIn && $session?.user?.doctor}
 		<div class="sidenavContainer">
 			<button
@@ -145,7 +161,9 @@
 						<span class="navtext">Ayarlar</span>
 					</button>
 					<button
-						on:click={logout}
+						on:click={() => {
+							logout();
+						}}
 						class="btn mb-2 d-flex flex-row align-items-center gap-2 cursor-pointer"
 					>
 						<span class="material-symbols-outlined"> logout </span>
@@ -193,9 +211,11 @@
 				/>
 			</div>
 
-			<div class="my-auto">
-				<Login></Login>
-			</div>
+			{#if !$dataLoading || !$appointmentsLoading}
+				<div class="my-auto">
+					<Login></Login>
+				</div>
+			{/if}
 		</div>
 	{/if}
 {:else}

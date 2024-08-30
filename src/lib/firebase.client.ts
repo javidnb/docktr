@@ -55,7 +55,9 @@ export async function logout() {
 	clearUserData();
 	try {
 		await signOut(auth);
+		dataLoading.set(false);
 	} catch (error) {
 		console.error('Error signing out:', error);
+		dataLoading.set(false);
 	}
 }

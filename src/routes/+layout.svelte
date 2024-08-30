@@ -3,7 +3,13 @@
 	import Nav from '$lib/components/Nav.svelte';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import type { LayoutData } from './$types';
-	import { appointments, appointmentsLoading, doctors, postData } from '$lib/store/dataStore';
+	import {
+		appointments,
+		appointmentsLoading,
+		dataLoading,
+		doctors,
+		postData
+	} from '$lib/store/dataStore';
 	import '../lib/i18n';
 	import { locale, _ } from 'svelte-i18n';
 	import { session } from '$lib/session';
@@ -23,6 +29,8 @@
 
 	if (data?.user) {
 		session.set({ user: JSON.parse(data.user), loggedIn: true });
+	} else {
+		dataLoading.set(false);
 	}
 
 	if (data?.appointments?.length) {

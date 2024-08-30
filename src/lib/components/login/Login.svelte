@@ -95,7 +95,10 @@
 				`https://tekoplast.az/docktr/api/?user&id=${user.user.uid}&t=${time}`
 			);
 			const result = await response.json();
-			if (result?.doctor) goto('./doctor');
+			if (result?.doctor) {
+				dataLoading.set(false);
+				goto('./doctor');
+			}
 			if (!result) {
 				let usr = user.user;
 				let data = {
@@ -227,6 +230,7 @@
 
 	// RETRIEVE EXISTING APPOINTMENTS OF LOGGED IN USER
 	async function getAppointments(user: any) {
+		appointmentsLoading.set(true);
 		try {
 			let time = new Date().getTime();
 			let response;

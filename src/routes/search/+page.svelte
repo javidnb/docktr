@@ -6,6 +6,7 @@
 	import { _ } from 'svelte-i18n';
 	import { onMount } from 'svelte';
 	import BranchSlider from '$lib/components/BranchSlider.svelte';
+	import DoctorCard from '$lib/components/DoctorCard.svelte';
 
 	let inputElement: any;
 	const charMap: any = {
@@ -160,9 +161,9 @@
                     width: 100%;"
 			>
 				{#if filteredResults.length}
-					{#if ($symptoms.length && !selection.doctors && !selection.branches && !selection.diseases && !selection.symptoms) || selection.symptoms}
+					{#if $symptoms.length && $searchQuery.length > 4}
 						<div
-							class="d-flex column-gap-1 p-3 align-items-center"
+							class="d-flex column-gap-1 p-3 pt-2 align-items-center"
 							style="width: 100%;
 								overflow-x: hidden;
 								background: rgba(236, 236, 236, 0.47);
@@ -185,92 +186,75 @@
 							{/each}
 						</div>
 					{/if}
+
+					<!-- BRANCHES -->
+					<div class="d-flex flex-wrap gap-3 px-3 mt-3">
+						{#each filteredResults as item, index}
+							{#if item.type === 'disease'}
+								<a
+									on:click={() => selectedBranch.set({ value: item.id })}
+									href="/doctors"
+									class="hover card mx-3 d-flex align-items-center"
+									style="flex: 1; min-width: unset; margin:0!important; width: 125px; transition-duration: .2s"
+								>
+									{#if item.icon}
+										<img style="width: 55px;" src="{item.icon}?tr=w-100" alt="icon" />
+									{:else}
+										<span
+											class="material-symbols-outlined"
+											style="font-size: 45px; color: 
+											var(--primaryColor); height: 3rem;
+											display: flex;
+											align-items: center;"
+										>
+											biotech
+										</span>
+									{/if}
+									<span
+										class="card-link"
+										style="text-decoration: none; text-align: center;
+									margin-top: 1rem; color: black; font-weight: 600;
+									display: flex; align-items:center; height:100%">{item.name}</span
+									>
+									{#if Object.entries(item.filteredConditions).length == 1}
+										<ul
+											class="list-group pt-1 d-flex flex-wrap my-auto"
+											style="list-style-type: inherit;
+											margin-bottom: 0px;
+											font-size: small; line-height: 1; color: gray; text-align: center"
+										>
+											{#each Object.entries(item.filteredConditions).slice(0, 2) as [key, val]}
+												<li
+													class="list-group-item p-1"
+													style="width: fit-content;border:none; color: gray"
+												>
+													{key}
+												</li>
+											{/each}
+										</ul>
+									{/if}
+									<!-- <div class="mt-2 d-flex column-gap-1 flex-wrap">
+										{#each Object.entries(item.filteredConditions) as [key, val]}
+											<span class="symptom">{val}</span>
+										{/each}
+									</div> -->
+								</a>
+							{/if}
+						{/each}
+					</div>
+
 					<!-- DOCTORS -->
 					{#each filteredResults as item, index}
 						{#if (item.type === 'doctor' && !selection.doctors && !selection.branches && !selection.diseases && !selection.symptoms) || selection.doctors}
-							<a class="d-flex gap-3 hover card mx-3" href="/doctors/{item.slug}">
-								<div class="d-flex align-items-center">
-									<img
-										style="height:80px; border-radius: 6px"
-										src={item.img
-											? item.img
-											: 'https://ik.imagekit.io/d2nwsj0ktvh/docktr/uploads/docplaceholder.jpg'}
-										alt={item.name}
-									/>
-									<h4 style="margin-bottom:0px; margin-inline: auto">{item.name}</h4>
-								</div>
-								<div
-									style="max-height: 80px;
-                                        overflow-y: hidden;
-                                        display: flex;
-                                        flex-direction: column;
-                                        text-align: left;"
-								>
-									<p>{@html item.details}</p>
-								</div>
-							</a>
+							<div class="px-3">
+								<DoctorCard props={item} />
+							</div>
 							<!-- BRANCHES -->
 						{/if}
 						<!-- {#if index < filteredResults.length - 1}
 							<hr style="margin:0" />
 						{/if} -->
 					{/each}
-
-					<div class="d-flex flex-wrap gap-3 px-3">
-						{#each filteredResults as item, index}
-							{#if item.type === 'disease'}
-								<a
-									on:click={() => selectedBranch.set({ value: item.id })}
-									href="/doctors"
-									class="hover card mx-3"
-									style="display: inline-block; flex: 1; min-width: unset; margin:0!important"
-								>
-									
-										{#if item.icon}
-											<img style="width: 55px;" src="{item.icon}?tr=w-100" alt="icon" />
-										{:else}
-											<span
-												class="material-symbols-outlined"
-												style="
-						font-size: 45px; color: var(--primaryColor); height: 3rem;
-						display: flex;
-						align-items: center;"
-											>
-												biotech
-											</span>
-										{/if}
-										<span
-											class="card-link"
-											style="text-decoration: none; text-align: center;
-									margin-block: 1rem; color: black; font-weight: 600">{item.name}</span
-										>
-										{#if Object.entries(item.filteredConditions).length}
-											<ul
-												class="list-group pt-1 d-flex flex-wrap mt-auto"
-												style="list-style-type: inherit;
-											margin-bottom: 0px;
-											font-size: small; line-height: 1; color: gray"
-											>
-												{#each Object.entries(item.filteredConditions).slice(0, 2) as [key, val]}
-													<li
-														class="list-group-item p-1"
-														style="width: fit-content;border:none; color: gray"
-													>
-														{key}
-													</li>
-												{/each}
-											</ul>
-										{/if}
-										<!-- <div class="mt-2 d-flex column-gap-1 flex-wrap">
-										{#each Object.entries(item.filteredConditions) as [key, val]}
-											<span class="symptom">{val}</span>
-										{/each}
-									</div> -->
-									
-								</a>
-							{/if}
-						{/each}
-					</div>
 				{:else}
 					<div style="padding:1rem">Nəticə tapılmadı ...</div>
 				{/if}
@@ -280,89 +264,38 @@
 				<!-- <span
 					>{$_('nav.docs')}, {$_('nav.branches')}, {$_('nav.diseases')}, {$_('home.symptoms')}</span
 				> -->
-				<div class="container">
-					<div class="d-flex gap-2 align-items-center">
-						<!-- <h1 class="jumboHeader w-100">Şöbələr</h1> -->
-						<!-- <button
-							class="btn btn-outline-primary w-100"
-							on:click={() => {
-								goto('/diseases');
-							}}>Hansı şöbəni seçməli olduğumu bilmirəm</button
-						>-->
-					</div>
-
-					<div class="searchBranches d-flex flex-row">
-						{#each branches as item}
-							{#if item.id}
-								<button
-									on:click={() => {
-										selectedBranch.set({ value: item.id });
-										goto(`./doctors`);
-									}}
-									class="card align-items-center"
+				<div class="d-flex flex-wrap gap-3 px-3 mt-3">
+					{#each branches as item}
+						{#if item.id}
+							<a
+								on:click={() => selectedBranch.set({ value: item.id })}
+								href="/doctors"
+								class="hover card mx-3 d-flex align-items-center"
+								style="flex: 1; min-width: unset; margin:0!important; width: 125px"
+							>
+								{#if item.icon}
+									<img style="width: 55px;" src="{item.icon}?tr=w-100" alt="icon" />
+								{:else}
+									<span
+										class="material-symbols-outlined"
+										style="font-size: 45px; 
+												color: var(--primaryColor); height: 3rem;
+												display: flex;
+												align-items: center;"
+									>
+										biotech
+									</span>
+								{/if}
+								<span
+									class="card-link h-100 d-flex align-items-center"
+									style="text-decoration: none; text-align: center;
+									margin-top: 1rem; color: black; font-weight: 600">{item.name}</span
 								>
-									<div class="card-body d-flex flex-column align-items-center">
-										{#if item.icon}
-											<img style="width: 55px;" src="{item.icon}?tr=w-100" alt="icon" />
-										{:else}
-											<span
-												class="material-symbols-outlined"
-												style="
-						font-size: 45px; color: var(--primaryColor); height: 3rem;
-						display: flex;
-						align-items: center;"
-											>
-												biotech
-											</span>
-										{/if}
-										<span
-											class="card-link"
-											style="text-decoration: none; text-align: center;
-									margin-block: 1rem; color: black; font-weight: 600">{item.name}</span
-										>
-									</div>
-								</button>
-							{/if}
-						{/each}
-					</div>
+							</a>
+						{/if}
+					{/each}
 				</div>
 			</div>
-			<!-- <div class="d-flex flex-wrap gap-2 px-3 mt-4 justify-content-center">
-				<button
-					class="card py-2 align-items-center"
-					style="color: gray;"
-					on:click={() => {
-						selection.doctors = !selection.doctors;
-					}}
-					class:active={selection.doctors}
-				>
-					{$_('nav.docs')}
-				</button>
-				<button
-					class="card py-2 align-items-center"
-					on:click={() => {
-						selection.branches = !selection.branches;
-					}}
-					class:active={selection.branches}
-					style="color: gray;">{$_('nav.branches')}</button
-				>
-				<button
-					class="card py-2 align-items-center"
-					on:click={() => {
-						selection.diseases = !selection.diseases;
-					}}
-					class:active={selection.diseases}
-					style="color: gray;">{$_('nav.diseases')}</button
-				>
-				<button
-					class="card py-2 align-items-center"
-					on:click={() => {
-						selection.symptoms = !selection.symptoms;
-					}}
-					class:active={selection.symptoms}
-					style="color: gray;">{$_('home.symptoms')}</button
-				>
-			</div> -->
 		{/if}
 	</div>
 </div>
@@ -384,6 +317,7 @@
 		align-items: normal;
 		overflow-x: hidden;
 		min-width: fit-content;
+		box-shadow: 0px 0px 5px #00000012;
 	}
 	.searchBox {
 		background: #00000017;
@@ -403,9 +337,9 @@
 	.searchBox:focus {
 		box-shadow: unset !important;
 	}
-	.btn-outline-primary:not(:hover) {
+	/* .btn-outline-primary:not(:hover) {
 		background-color: white;
-	}
+	} */
 	.searchBranches {
 		display: flex;
 		gap: 1rem;

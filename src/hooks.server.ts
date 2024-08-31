@@ -1,10 +1,8 @@
-// import type { Handle } from '@sveltejs/kit';
-// import { locale } from 'svelte-i18n';
+import type { RequestEvent } from '@sveltejs/kit';
 
-// export const handle: Handle = async ({ event, resolve }) => {
-// 	const lang = event.request.headers.get('accept-language')?.split(',')[0];
-// 	if (lang) {
-// 		locale.set(lang);
-// 	}
-// 	return resolve(event);
-// };
+export function handleError({ event, error }: { event: RequestEvent; error: Error }) {
+	return {
+		message: 'An error occurred',
+		stack: error
+	};
+}

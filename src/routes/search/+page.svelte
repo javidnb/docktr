@@ -123,7 +123,7 @@
 		<input
 			type="search"
 			class="form-control searchBox"
-			aria-label="Sizing example input"
+			aria-label="Search"
 			aria-describedby="inputGroup-sizing-sm"
 			placeholder={$_('home.search')}
 			bind:value={$searchQuery}
@@ -185,6 +185,7 @@
 							{/each}
 						</div>
 					{/if}
+					<!-- DOCTORS -->
 					{#each filteredResults as item, index}
 						{#if (item.type === 'doctor' && !selection.doctors && !selection.branches && !selection.diseases && !selection.symptoms) || selection.doctors}
 							<a class="d-flex gap-3 hover card mx-3" href="/doctors/{item.slug}">
@@ -208,38 +209,68 @@
 									<p>{@html item.details}</p>
 								</div>
 							</a>
-						{:else if item.type === 'disease'}
-							<a
-								on:click={() => selectedBranch.set({ value: item.id })}
-								href="/doctors"
-								class="hover card mx-3"
-								style="display: inline-block;"
-							>
-								<div style="text-align: left;">
-									<h4 class="ps-1 mb-0">{item.name}</h4>
-									{#if Object.entries(item.filteredConditions).length}
-										<ul
-											class="list-group list-group-flush pt-1"
-											style="list-style-type: inherit;
-											margin-bottom: 0px;"
-										>
-											{#each Object.entries(item.filteredConditions).slice(0, 3) as [key, val]}
-												<li class="list-group-item">{key}</li>
-											{/each}
-										</ul>
-									{/if}
-									<!-- <div class="mt-2 d-flex column-gap-1 flex-wrap">
-										{#each Object.entries(item.filteredConditions) as [key, val]}
-											<span class="symptom">{val}</span>
-										{/each}
-									</div> -->
-								</div>
-							</a>
+							<!-- BRANCHES -->
 						{/if}
 						<!-- {#if index < filteredResults.length - 1}
 							<hr style="margin:0" />
 						{/if} -->
 					{/each}
+
+					<div class="d-flex flex-wrap gap-3 px-3">
+						{#each filteredResults as item, index}
+							{#if item.type === 'disease'}
+								<a
+									on:click={() => selectedBranch.set({ value: item.id })}
+									href="/doctors"
+									class="hover card mx-3"
+									style="display: inline-block; flex: 1; min-width: unset; margin:0!important"
+								>
+									
+										{#if item.icon}
+											<img style="width: 55px;" src="{item.icon}?tr=w-100" alt="icon" />
+										{:else}
+											<span
+												class="material-symbols-outlined"
+												style="
+						font-size: 45px; color: var(--primaryColor); height: 3rem;
+						display: flex;
+						align-items: center;"
+											>
+												biotech
+											</span>
+										{/if}
+										<span
+											class="card-link"
+											style="text-decoration: none; text-align: center;
+									margin-block: 1rem; color: black; font-weight: 600">{item.name}</span
+										>
+										{#if Object.entries(item.filteredConditions).length}
+											<ul
+												class="list-group pt-1 d-flex flex-wrap mt-auto"
+												style="list-style-type: inherit;
+											margin-bottom: 0px;
+											font-size: small; line-height: 1; color: gray"
+											>
+												{#each Object.entries(item.filteredConditions).slice(0, 2) as [key, val]}
+													<li
+														class="list-group-item p-1"
+														style="width: fit-content;border:none; color: gray"
+													>
+														{key}
+													</li>
+												{/each}
+											</ul>
+										{/if}
+										<!-- <div class="mt-2 d-flex column-gap-1 flex-wrap">
+										{#each Object.entries(item.filteredConditions) as [key, val]}
+											<span class="symptom">{val}</span>
+										{/each}
+									</div> -->
+									
+								</a>
+							{/if}
+						{/each}
+					</div>
 				{:else}
 					<div style="padding:1rem">Nəticə tapılmadı ...</div>
 				{/if}

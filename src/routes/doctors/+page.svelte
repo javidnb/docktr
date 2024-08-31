@@ -225,9 +225,9 @@
 		animation: skeleton-loading 1s linear infinite alternate;
 	}
 
-	.btnFilter:not(:hover) {
+	/* .btnFilter:not(:hover) {
 		background-color: white;
-	}
+	} */
 
 	@keyframes skeleton-loading {
 		0% {
@@ -244,8 +244,8 @@
 			height: auto !important;
 			visibility: visible;
 		}
-		.btnFilter {
+		/* .btnFilter {
 			display: none !important;
-		}
+		} */
 	}
 </style>

@@ -149,7 +149,6 @@ export async function putData(
 			}
 		});
 		dataLoading.set(false);
-		console.log('response: ', response.json());
 		return 'error';
 	}
 }
@@ -216,7 +215,6 @@ export async function getUser(user: any) {
 	let time = new Date().getTime();
 	const response = await fetch(`https://tekoplast.az/docktr/api/?user&id=${usr.uid}&t=${time}`);
 	const result = await response.json();
-	console.log('getting user from datastore');
 	if (result?.doctor) goto('./doctor');
 	if (result) {
 		getAppointments(result);

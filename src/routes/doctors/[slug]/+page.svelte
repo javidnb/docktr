@@ -249,7 +249,10 @@
 						{/if}
 					</div>
 					{#if $mobile}
-						<div class="row px-3 mt-5">
+						<div
+							class="row p-3 mt-2"
+							style="position: sticky; top: 0; background: #f9f9f9; z-index: 99; margin-bottom: -2rem"
+						>
 							{#if !existingAppointment}
 								<button
 									class="btn btn-outline-primary d-flex justify-content-center align-items-center btnRandevu w-100"
@@ -426,15 +429,9 @@
 								</div>
 							{:else}
 								<!-- POST COMMENT -->
-								{#if $session.loggedIn && !$alreadyCommented}
+								<!-- {#if $session.loggedIn && !$alreadyCommented}
 									<div class="col-12">
-										<form class="d-flex flex-column" on:submit|preventDefault={postComment}>
-											<!-- <span
-											>{$session.user?.displayName ||
-												$session.user?.email ||
-												$session.user?.phoneNumber}</span
-										> -->
-
+										<form class="d-flex flex-column" on:submit|preventDefault={postComment}>					
 											<div class="d-flex gap-3 align-items-center">
 												<label style="font-size: small" for="comment"
 													>{$_('doctor.your_comment')}</label
@@ -461,7 +458,7 @@
 											>
 										</form>
 									</div>
-								{/if}
+								{/if} -->
 								<!-- COMMENTS -->
 								<div
 									class="d-flex flex-column gap-3 mt-2 pt-3"
@@ -498,7 +495,7 @@
 														{/if}
 													</div>
 													<div>
-														<div class="d-flex gap-2">
+														<div class="d-flex gap-2 commentor">
 															<span
 																>{comment.displayName || comment.email || 'Adsız İstifadəçi'}</span
 															>

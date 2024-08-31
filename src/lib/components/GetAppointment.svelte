@@ -101,15 +101,24 @@
 					<div
 						class="d-flex justify-content-center flex-column"
 						style="font-size: large;
-						background: rgb(243, 243, 243);
+						background: var(--primaryText);
 						border-radius: 6px;
 						padding: 0px 15px;
-						color: #6f8769;
+						color: white;
 						box-shadow: 0px 0px 7px 0px #6f876954;"
 					>
 						<div class="d-flex align-items-center gap-2 mt-3 mb-1">
+							<span class="material-symbols-outlined"> calendar_month </span>
+							<span class="mx-auto"
+								><span
+									>{new Date($selectedAppointmentDate.end ?? '').getDate()}
+									{monthNames[new Date($selectedAppointmentDate.end ?? '').getMonth()]}</span
+								></span
+							>
+						</div>
+						<div class="d-flex align-items-center gap-2 mb-3">
 							<span class="material-symbols-outlined"> schedule </span>
-							<div>
+							<div class="mx-auto">
 								<span
 									>{new Date($selectedAppointmentDate.start ?? '').getHours()}:{new Date(
 										$selectedAppointmentDate.start ?? ''
@@ -118,7 +127,7 @@
 										: new Date($selectedAppointmentDate.start ?? '').getMinutes() + '0'}</span
 								>
 								-
-								<span
+								<span class="mx-auto"
 									>{new Date($selectedAppointmentDate.end ?? '').getHours()}:{new Date(
 										$selectedAppointmentDate.end ?? ''
 									).getMinutes() > 9
@@ -126,15 +135,6 @@
 										: new Date($selectedAppointmentDate.end ?? '').getMinutes() + '0'}</span
 								>
 							</div>
-						</div>
-						<div class="d-flex align-items-center gap-2 mb-3">
-							<span class="material-symbols-outlined"> calendar_month </span>
-							<span
-								><span
-									>{new Date($selectedAppointmentDate.end ?? '').getDate()}
-									{monthNames[new Date($selectedAppointmentDate.end ?? '').getMonth()]}</span
-								></span
-							>
 						</div>
 					</div>
 

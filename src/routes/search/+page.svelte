@@ -340,7 +340,7 @@
 	/* .btn-outline-primary:not(:hover) {
 		background-color: white;
 	} */
-	.searchBranches {
+	/* .searchBranches {
 		display: flex;
 		gap: 1rem;
 		overflow-x: scroll;
@@ -359,5 +359,5 @@
 		border-radius: 20px;
 		cursor: pointer;
 		width: 125px;
-	}
+	} */
 </style>

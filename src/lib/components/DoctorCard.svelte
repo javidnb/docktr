@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { diseases } from '$lib/store/diseases';
 	import type { Doctor } from '$lib/interfaces/doctor.interface';
+	import { selectedBranch } from '$lib/store/dataStore';
 	export let props: Doctor;
 
 	function getBranchName(id: number) {
@@ -54,27 +55,28 @@
 					style="font-size: medium;
 						line-height: 1.3;
 						text-align: center;
-						color: #575757;"
+						color: #575757; margin-bottom:0"
 				>
 					{@html truncateString(props.details, 120)}
 				</p>
 			</div>
 		</div>
 
-		<div class="row w-100 mt-auto" style="margin-top: auto">
-			<div class="branch">
-				{#each props.branches as br, i}
-					<span style="min-width: max-content;">{getBranchName(br)}</span>
-					{#if i !== props.branches.length - 1}
-						,
-					{/if}
-				{/each}
+		{#if !$selectedBranch}
+			<div class="row w-100 mt-2">
+				<div class="branch">
+					{#each props.branches as br, i}
+						<span style="min-width: max-content;">{getBranchName(br)}</span>
+						{#if i !== props.branches.length - 1}
+							,
+						{/if}
+					{/each}
+				</div>
 			</div>
-		</div>
-
-		<div class="row w-100">
-			<div class="col"></div>
-		</div>
+			<div class="row w-100">
+				<div class="col"></div>
+			</div>
+		{/if}
 	</div>
 </a>
 

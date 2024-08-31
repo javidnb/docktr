@@ -19,8 +19,6 @@
 
 	$: doctor = $doctors.find((d) => d.slug == $page.params.slug);
 
-	const doc = writable<any>(doctor);
-
 	let existingAppointment: any;
 	$: if (doctor?.id)
 		existingAppointment = $appointments.find(
@@ -40,12 +38,14 @@
 
 	const today = new Date();
 	onMount(async () => {
-		if (!doctor?.userComments) {
-			getComments();
-		} else {
-			comments.set(doctor.userComments);
-			commentsLoading = false;
-			console.log(doctor);
+		if (doctor) {
+			if (!doctor?.userComments) {
+				getComments();
+			} else {
+				comments.set(doctor.userComments);
+				commentsLoading = false;
+				console.log(doctor);
+			}
 		}
 	});
 
@@ -163,46 +163,47 @@
 	</div>
 </section>
 
-<Modal bind:showModal>
-	<!-- <h4 slot="header" class="px-3 pt-2">Görüş</h4> -->
+{#if doctor}
+	<Modal bind:showModal>
+		<!-- <h4 slot="header" class="px-3 pt-2">Görüş</h4> -->
 
-	<ol class="px-0">
-		<GetAppointment doc={doctor} />
-	</ol>
-</Modal>
+		<ol class="px-0">
+			<GetAppointment doc={doctor} />
+		</ol>
+	</Modal>
 
-<section class="pt-3 pb-5" style="background-color: rgb(249 249 249);">
-	<div class="container pb-3">
-		<div class="row px-3">
-			<div class="col-md-8">
-				<div class="row ps-1">
-					<div class="col-4 col-md-4 col-lg-2">
-						<div
-							class="docImageContainer h-100"
-							style={`background-image: url(${
-								doctor?.img
-									? doctor.img
-									: 'https://ik.imagekit.io/d2nwsj0ktvh/docktr/uploads/docplaceholder.jpg'
-							});`}
-						>
-							<img
-								src={doctor?.img
-									? doctor.img
-									: 'https://ik.imagekit.io/d2nwsj0ktvh/docktr/uploads/docplaceholder.jpg'}
-								alt={doctor?.name}
-								style="max-height: 130px;
+	<section class="pt-3 pb-5" style="background-color: rgb(249 249 249);">
+		<div class="container pb-3">
+			<div class="row px-3">
+				<div class="col-md-8">
+					<div class="row ps-1">
+						<div class="col-4 col-md-4 col-lg-2">
+							<div
+								class="docImageContainer h-100"
+								style={`background-image: url(${
+									doctor?.img
+										? doctor.img
+										: 'https://ik.imagekit.io/d2nwsj0ktvh/docktr/uploads/docplaceholder.jpg'
+								});min-height:100px`}
+							>
+								<img
+									src={doctor?.img
+										? doctor.img
+										: 'https://ik.imagekit.io/d2nwsj0ktvh/docktr/uploads/docplaceholder.jpg'}
+									alt={doctor?.name}
+									style="max-height: 130px;
 									aspect-ratio: 1/1;
 									object-fit: cover;
 									object-position: top;
 									border-radius: 100%;
 									box-shadow: 0px 0px 6px #0000000a"
-							/>
+								/>
+							</div>
 						</div>
-					</div>
-					{#if !$session?.user?.doctor}
-						<div class="col-8 col-md-8 col-lg-10">
-							<div class="d-flex flex-column h-100 ps-3">
-								<!-- <div class="d-flex align-items-center gap-1 mt-2">
+						{#if !$session?.user?.doctor}
+							<div class="col-8 col-md-8 col-lg-10">
+								<div class="d-flex flex-column h-100 ps-3">
+									<!-- <div class="d-flex align-items-center gap-1 mt-2">
 									<span
 										style="color: var(--primaryColor)"
 										class="material-symbols-outlined icon-fill"
@@ -211,384 +212,404 @@
 									</span><span>17 il iş təcrübəsi</span>
 								</div> -->
 
-								{#if doctor?.hospital}
-									<div class="d-flex align-items-center gap-1">
-										<span
-											style="color: var(--primaryColor)"
-											class="material-symbols-outlined icon-fill"
-										>
-											home_health
-										</span><span>{JSON.parse(doctor?.hospital)[0]}</span>
-									</div>
-								{/if}
-								{#if doctor?.nationality}
-									<div class="d-flex align-items-center gap-1">
-										<span
-											style="color: var(--primaryColor)"
-											class="material-symbols-outlined icon-fill"
-										>
-											location_on
-										</span><span>{$_(`nations.` + doctor?.nationality)}</span>
-									</div>
-								{/if}
-								{#if doctor?.branches}
-									<div class="branch d-flex flex-wrap gap-2 mt-auto">
-										{#each doctor.branches as br}
-											<button
-												on:click={() => {
-													selectedBranch.set({ value: br });
-													goto(`../doctors`);
-												}}>{getBranchName(br)}</button
+									{#if doctor?.hospital}
+										<div class="d-flex align-items-center gap-1">
+											<span
+												style="color: var(--primaryColor)"
+												class="material-symbols-outlined icon-fill"
 											>
-										{/each}
-									</div>
-								{/if}
-							</div>
-						</div>
-					{/if}
-				</div>
-				{#if $mobile}
-					<div class="row px-3 mt-5">
-						{#if !existingAppointment}
-							<button
-								class="btn btn-outline-primary d-flex justify-content-center align-items-center btnRandevu w-100"
-								on:click={openModal}
-								><span class="material-symbols-outlined">local_library</span><span
-									style="margin-inline: auto;">{$_('appointment.get')}</span
-								></button
-							>
-						{:else}
-							<div
-								class="card p-4 mt-auto"
-								style="max-height: 250px;
-							min-width: min(100%, 350px);
-							border-radius: 8px;
-							align-self: baseline"
-							>
-								<span style="font-size: small;">{$_('appointment.planned')}: </span>
-								<span class="my-auto">{formatDate(new Date(existingAppointment.startTime))}</span>
-								<button
-									class="btn btn-outline-primary mt-2 d-flex align-items-center"
-									on:click={() => {
-										goto('../appointment');
-									}}
-								>
-									<span class="material-symbols-outlined"> info </span>
-									<span class="mx-auto">{$_('actions.details')}</span>
-								</button>
-								{#if existingAppointment.purchased}
-									<button
-										class="btn btn-outline-primary mt-3 w-100 d-flex"
-										on:click={() => {
-											selectedUser.set(doctor?.uid);
-											goto('../messages');
-										}}
-									>
-										<span class="material-symbols-outlined"> send </span>
-										<span class="mx-auto">{$_('actions.send_msg')}</span>
-									</button>
-								{/if}
+												home_health
+											</span><span>{JSON.parse(doctor?.hospital)[0]}</span>
+										</div>
+									{/if}
+									{#if doctor?.nationality}
+										<div class="d-flex align-items-center gap-1">
+											<span
+												style="color: var(--primaryColor)"
+												class="material-symbols-outlined icon-fill"
+											>
+												location_on
+											</span><span>{$_(`nations.` + doctor?.nationality)}</span>
+										</div>
+									{/if}
+									{#if doctor?.branches}
+										<div class="branch d-flex flex-wrap gap-2 mt-auto">
+											{#each doctor.branches as br}
+												<button
+													on:click={() => {
+														selectedBranch.set({ value: br });
+														goto(`../doctors`);
+													}}>{getBranchName(br)}</button
+												>
+											{/each}
+										</div>
+									{/if}
+								</div>
 							</div>
 						{/if}
 					</div>
-				{/if}
-				<div class="row mt-3">
-					<div class="p-3">
-						<div class="card-body d-flex flex-column">
-							{#if doctor?.details}
-								<div class="card p-3">
-									<div class="d-flex align-items-center gap-1" style="color: #54744c">
+					{#if $mobile}
+						<div class="row px-3 mt-5">
+							{#if !existingAppointment}
+								<button
+									class="btn btn-outline-primary d-flex justify-content-center align-items-center btnRandevu w-100"
+									on:click={() => {
+										goto('/book/' + doctor.slug);
+									}}
+									><span class="material-symbols-outlined">local_library</span><span
+										style="margin-inline: auto;">{$_('appointment.get')}</span
+									></button
+								>
+							{:else}
+								<div
+									class="card p-4 mt-auto"
+									style="max-height: 250px;
+							min-width: min(100%, 350px);
+							border-radius: 8px;
+							align-self: baseline"
+								>
+									<span style="font-size: small;">{$_('appointment.planned')}: </span>
+									<span class="my-auto">{formatDate(new Date(existingAppointment.startTime))}</span>
+									<button
+										class="btn btn-outline-primary mt-2 d-flex align-items-center"
+										on:click={() => {
+											goto('../appointment');
+										}}
+									>
 										<span class="material-symbols-outlined"> info </span>
-										<h6 class="mb-0">{$_('doctor.about')}</h6>
-									</div>
-									<div class="mt-3 ps-3">
-										{@html doctor?.details}
-									</div>
+										<span class="mx-auto">{$_('actions.details')}</span>
+									</button>
+									{#if existingAppointment.purchased}
+										<button
+											class="btn btn-outline-primary mt-3 w-100 d-flex"
+											on:click={() => {
+												selectedUser.set(doctor?.uid);
+												goto('../messages');
+											}}
+										>
+											<span class="material-symbols-outlined"> send </span>
+											<span class="mx-auto">{$_('actions.send_msg')}</span>
+										</button>
+									{/if}
 								</div>
-								{#if doctor?.hospital}
-									<div class="card p-3 mt-3" style="color: #54744c">
-										<div class="d-flex align-items-center gap-1">
-											<span class="material-symbols-outlined"> home_health </span>
-											<h6 class="mb-0">{$_('doctor.hospitals')}</h6>
-										</div>
-
-										<ul class="list-group list-group-flush mt-1">
-											{#each JSON.parse(doctor?.hospital) as hospital}
-												<li class="list-group-item">{hospital}</li>
-											{/each}
-										</ul>
-									</div>
-								{/if}
-								{#if doctor?.certificates}
-									<div class="card p-3 mt-3" style="color: #54744c">
-										<div class="d-flex align-items-center gap-1">
-											<span class="material-symbols-outlined"> workspace_premium </span>
-											<h6 class="mb-0">{$_('doctor.certificates')}</h6>
-										</div>
-
-										<ul class="list-group list-group-flush mt-1">
-											{#each JSON.parse(doctor?.certificates) as hospital}
-												<li class="list-group-item">{hospital}</li>
-											{/each}
-										</ul>
-									</div>
-								{/if}
-								{#if doctor?.langs}
-									<div class="card p-3 mt-3" style="color: #54744c">
-										<div class="d-flex align-items-center gap-1">
-											<span class="material-symbols-outlined"> language </span>
-											<h6 class="mb-0">{$_('doctor.langs_spoken')}</h6>
-										</div>
-
-										<ul class="list-group list-group-flush mt-1">
-											{#each JSON.parse(doctor?.langs) as hospital}
-												<li class="list-group-item">{$_(`langs.` + hospital)}</li>
-											{/each}
-										</ul>
-									</div>
-								{/if}
-								{#if doctor?.diseases}
-									<div class="card p-3 mt-3" style="color: #54744c">
-										<div class="d-flex align-items-center gap-1">
-											<span class="material-symbols-outlined"> microbiology </span>
-											<h6 class="mb-0">{$_('doctor.diseases')}</h6>
-										</div>
-
-										<ul class="list-group list-group-flush mt-1">
-											{#each JSON.parse(doctor?.diseases) as hospital}
-												<li class="list-group-item">{hospital}</li>
-											{/each}
-										</ul>
-									</div>
-								{/if}
 							{/if}
 						</div>
+					{/if}
+					<div class="row mt-3">
+						<div class="p-3">
+							<div class="card-body d-flex flex-column">
+								{#if doctor?.details}
+									<div class="card p-3">
+										<div class="d-flex align-items-center gap-1" style="color: #54744c">
+											<span class="material-symbols-outlined"> info </span>
+											<h6 class="mb-0">{$_('doctor.about')}</h6>
+										</div>
+										<div class="mt-3 ps-3">
+											{@html doctor?.details}
+										</div>
+									</div>
+									{#if doctor?.hospital}
+										<div class="card p-3 mt-3" style="color: #54744c">
+											<div class="d-flex align-items-center gap-1">
+												<span class="material-symbols-outlined"> home_health </span>
+												<h6 class="mb-0">{$_('doctor.hospitals')}</h6>
+											</div>
+
+											<ul class="list-group list-group-flush mt-1">
+												{#each JSON.parse(doctor?.hospital) as hospital}
+													<li class="list-group-item">{hospital}</li>
+												{/each}
+											</ul>
+										</div>
+									{/if}
+									{#if doctor?.certificates}
+										<div class="card p-3 mt-3" style="color: #54744c">
+											<div class="d-flex align-items-center gap-1">
+												<span class="material-symbols-outlined"> workspace_premium </span>
+												<h6 class="mb-0">{$_('doctor.certificates')}</h6>
+											</div>
+
+											<ul class="list-group list-group-flush mt-1">
+												{#each JSON.parse(doctor?.certificates) as hospital}
+													<li class="list-group-item">{hospital}</li>
+												{/each}
+											</ul>
+										</div>
+									{/if}
+									{#if doctor?.langs}
+										<div class="card p-3 mt-3" style="color: #54744c">
+											<div class="d-flex align-items-center gap-1">
+												<span class="material-symbols-outlined"> language </span>
+												<h6 class="mb-0">{$_('doctor.langs_spoken')}</h6>
+											</div>
+
+											<ul class="list-group list-group-flush mt-1">
+												{#each JSON.parse(doctor?.langs) as hospital}
+													<li class="list-group-item">{$_(`langs.` + hospital)}</li>
+												{/each}
+											</ul>
+										</div>
+									{/if}
+									{#if doctor?.diseases}
+										<div class="card p-3 mt-3" style="color: #54744c">
+											<div class="d-flex align-items-center gap-1">
+												<span class="material-symbols-outlined"> microbiology </span>
+												<h6 class="mb-0">{$_('doctor.diseases')}</h6>
+											</div>
+
+											<ul class="list-group list-group-flush mt-1">
+												{#each JSON.parse(doctor?.diseases) as hospital}
+													<li class="list-group-item">{hospital}</li>
+												{/each}
+											</ul>
+										</div>
+									{/if}
+								{/if}
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="col-md-4">
-				{#if !$mobile}
-					<div class="row px-3">
-						{#if !existingAppointment}
-							<button
-								class="btn btn-outline-primary d-flex justify-content-center align-items-center btnRandevu w-100"
-								on:click={openModal}
-								><span class="material-symbols-outlined">local_library</span><span
-									style="margin-inline: auto;">{$_('appointment.get')}</span
-								></button
-							>
-						{:else}
-							<div
-								class="card p-4 mt-auto"
-								style="max-height: 250px;
+				<div class="col-md-4">
+					{#if !$mobile}
+						<div class="row px-3">
+							{#if !existingAppointment}
+								<button
+									class="btn btn-outline-primary d-flex justify-content-center align-items-center btnRandevu w-100"
+									on:click={openModal}
+									><span class="material-symbols-outlined">local_library</span><span
+										style="margin-inline: auto;">{$_('appointment.get')}</span
+									></button
+								>
+							{:else}
+								<div
+									class="card p-4 mt-auto"
+									style="max-height: 250px;
 							min-width: min(100%, 350px);
 							border-radius: 8px;
 							align-self: baseline"
-							>
-								<span style="font-size: small;">{$_('appointment.planned')}: </span>
-								<span class="my-auto">{formatDate(new Date(existingAppointment.startTime))}</span>
-								<button
-									class="btn btn-outline-primary mt-2 d-flex align-items-center"
-									on:click={() => {
-										goto('../appointment');
-									}}
 								>
-									<span class="material-symbols-outlined"> info </span>
-									<span class="mx-auto">{$_('actions.details')}</span>
-								</button>
-								{#if existingAppointment.purchased}
+									<span style="font-size: small;">{$_('appointment.planned')}: </span>
+									<span class="my-auto">{formatDate(new Date(existingAppointment.startTime))}</span>
 									<button
-										class="btn btn-outline-primary mt-3 w-100 d-flex"
+										class="btn btn-outline-primary mt-2 d-flex align-items-center"
 										on:click={() => {
-											selectedUser.set(doctor?.uid);
-											goto('../messages');
+											goto('../appointment');
 										}}
 									>
-										<span class="material-symbols-outlined"> send </span>
-										<span class="mx-auto">{$_('actions.send_msg')}</span>
+										<span class="material-symbols-outlined"> info </span>
+										<span class="mx-auto">{$_('actions.details')}</span>
 									</button>
-								{/if}
-							</div>
-						{/if}
-					</div>
-				{/if}
-				<!-- COMMENTS CONTAINER -->
-				<div class="row px-3 mt-3">
-					<div class="card p-3 px-4" style="position: relative;">
-						<span>{$_('doctor.comments')}</span>
+									{#if existingAppointment.purchased}
+										<button
+											class="btn btn-outline-primary mt-3 w-100 d-flex"
+											on:click={() => {
+												selectedUser.set(doctor?.uid);
+												goto('../messages');
+											}}
+										>
+											<span class="material-symbols-outlined"> send </span>
+											<span class="mx-auto">{$_('actions.send_msg')}</span>
+										</button>
+									{/if}
+								</div>
+							{/if}
+						</div>
+					{/if}
+					<!-- COMMENTS CONTAINER -->
+					<div class="row px-3 mt-3">
+						<div class="card p-3 px-4" style="position: relative;">
+							<span>{$_('doctor.comments')}</span>
 
-						{#if commentsLoading}
-							<div class="progress-bar">
-								<div class="progress-animation"></div>
-							</div>
-						{:else}
-							<!-- POST COMMENT -->
-							{#if $session.loggedIn && !$alreadyCommented}
-								<div class="col-12">
-									<form class="d-flex flex-column" on:submit|preventDefault={postComment}>
-										<!-- <span
+							{#if commentsLoading}
+								<div class="progress-bar">
+									<div class="progress-animation"></div>
+								</div>
+							{:else}
+								<!-- POST COMMENT -->
+								{#if $session.loggedIn && !$alreadyCommented}
+									<div class="col-12">
+										<form class="d-flex flex-column" on:submit|preventDefault={postComment}>
+											<!-- <span
 											>{$session.user?.displayName ||
 												$session.user?.email ||
 												$session.user?.phoneNumber}</span
 										> -->
 
-										<div class="d-flex gap-3 align-items-center">
-											<label style="font-size: small" for="comment"
-												>{$_('doctor.your_comment')}</label
-											>
-
-											<div class="d-flex">
-												{#each [1, 2, 3, 4, 5] as star, index}
-													<button
-														on:click|preventDefault={() => (selectedStarPoint = index + 1)}
-														class="material-symbols-outlined star"
-														class:icon-fill={selectedStarPoint >= star}
-													>
-														star
-													</button>
-												{/each}
-											</div>
-										</div>
-										<textarea class="form-control mt-2" name="comment" id="comment" />
-										<button
-											class="btn btn-outline-primary mt-3"
-											type="submit"
-											disabled={btnCommentDisabled || selectedStarPoint == 0}
-											>{btnCommentText}</button
-										>
-									</form>
-								</div>
-							{/if}
-							<!-- COMMENTS -->
-							<div
-								class="d-flex flex-column gap-3 mt-2 pt-3"
-								style="border-top: 1px solid #ececec;"
-							>
-								{#each $comments as comment}
-									{#if comment.status == null && comment.userId == $session.user?.uid}
-										<div class="card commentCard p-3" style="background-color: rgb(243 243 243);">
 											<div class="d-flex gap-3 align-items-center">
-												<div>
-													{#if comment?.photoURL}
-														<img
-															src={comment?.photoURL}
-															alt="Profile Pic"
-															style="max-width: 40px; border-radius: 100%; aspect-ratio: 1/1; object-fit: cover;"
-														/>
-													{:else}
-														<div
-															style="width: 40px; 
-																	height: 40px;
-																	color: var(--primaryColor);
-																	border-radius: 100%;
-																	border: 3px solid var(--primaryColor);
-																	display: flex; align-items: center; 
-																	justify-content: center;"
-														>
-															<span
-																class="material-symbols-outlined icon-fill"
-																style="font-size: 1.8rem"
-															>
-																person
-															</span>
-														</div>
-													{/if}
-												</div>
-												<div>
-													<div class="d-flex gap-2">
-														<span>{comment.displayName || comment.email || 'Adsız İstifadəçi'}</span
-														>
-														<div class="d-flex">
-															{#each Array.from({ length: comment.star }) as _}
-																<span class="material-symbols-outlined icon-fill star"> star </span>
-															{/each}
-															{#each Array.from({ length: 5 - comment.star }) as _}
-																<span class="material-symbols-outlined star"> star </span>
-															{/each}
-														</div>
-													</div>
+												<label style="font-size: small" for="comment"
+													>{$_('doctor.your_comment')}</label
+												>
 
-													<span class="text-secondary" style="font-size: small"
-														>{changeDateFormat(comment.date)}</span
-													>
+												<div class="d-flex">
+													{#each [1, 2, 3, 4, 5] as star, index}
+														<button
+															on:click|preventDefault={() => (selectedStarPoint = index + 1)}
+															class="material-symbols-outlined star"
+															class:icon-fill={selectedStarPoint >= star}
+														>
+															star
+														</button>
+													{/each}
 												</div>
 											</div>
-
-											{#if comment.comment.length}
-												<p style="margin-top: 1rem; padding-left: 3.5rem">
-													{@html comment.comment}
-												</p>
-											{/if}
-											<span style="font-style: italic; font-size: small"
-												>{$_('doctor.await_confirmation')}</span
+											<textarea class="form-control mt-2" name="comment" id="comment" />
+											<button
+												class="btn btn-outline-primary mt-3"
+												type="submit"
+												disabled={btnCommentDisabled || selectedStarPoint == 0}
+												>{btnCommentText}</button
 											>
-										</div>
-									{/if}
-									{#if comment.status !== null}
-										<div class="card commentCard p-3">
-											<div class="d-flex gap-3 align-items-center">
-												<div>
-													{#if comment?.photoURL}
-														<img
-															src={comment?.photoURL}
-															alt="Profile Pic"
-															style="max-width: 40px; border-radius: 100%;  aspect-ratio: 1/1; object-fit: cover;"
-														/>
-													{:else}
-														<div
-															style="width: 40px; 
-																	height: 40px;
-																	color: var(--primaryColor);
-																	border-radius: 100%;
-																	border: 3px solid var(--primaryColor);
-																	display: flex; align-items: center; 
-																	justify-content: center;"
-														>
-															<span
-																class="material-symbols-outlined icon-fill"
-																style="font-size: 1.8rem"
-															>
-																person
-															</span>
-														</div>
-													{/if}
-												</div>
-												<div>
-													<div class="d-flex gap-2 commentor">
-														<span class="name"
-															>{comment.displayName || comment.email || 'Adsız İstifadəçi'}</span
-														>
-														<div class="d-flex">
-															{#each Array.from({ length: comment.star }) as _}
-																<span class="material-symbols-outlined icon-fill star"> star </span>
-															{/each}
-															{#each Array.from({ length: 5 - comment.star }) as _}
-																<span class="material-symbols-outlined star"> star </span>
-															{/each}
-														</div>
-													</div>
-
-													<span class="text-secondary" style="font-size: small"
-														>{changeDateFormat(comment.date)}</span
-													>
-												</div>
-											</div>
-
-											{#if comment.comment.length}
-												<p style="margin-top: 1rem; padding-left: 3.5rem">
-													{@html comment.comment}
-												</p>
-											{/if}
-										</div>
-									{/if}
-								{/each}
-								{#if !$comments.length}
-									<span>{$_('doctor.no_comments')}</span>
+										</form>
+									</div>
 								{/if}
-							</div>{/if}
+								<!-- COMMENTS -->
+								<div
+									class="d-flex flex-column gap-3 mt-2 pt-3"
+									style="border-top: 1px solid #ececec;"
+								>
+									{#each $comments as comment}
+										{#if comment.status == null && comment.userId == $session.user?.uid}
+											<div class="card commentCard p-3" style="background-color: rgb(243 243 243);">
+												<div class="d-flex gap-3 align-items-center">
+													<div>
+														{#if comment?.photoURL}
+															<img
+																src={comment?.photoURL}
+																alt="Profile Pic"
+																style="max-width: 40px; border-radius: 100%; aspect-ratio: 1/1; object-fit: cover;"
+															/>
+														{:else}
+															<div
+																style="width: 40px; 
+																	height: 40px;
+																	color: var(--primaryColor);
+																	border-radius: 100%;
+																	border: 3px solid var(--primaryColor);
+																	display: flex; align-items: center; 
+																	justify-content: center;"
+															>
+																<span
+																	class="material-symbols-outlined icon-fill"
+																	style="font-size: 1.8rem"
+																>
+																	person
+																</span>
+															</div>
+														{/if}
+													</div>
+													<div>
+														<div class="d-flex gap-2">
+															<span
+																>{comment.displayName || comment.email || 'Adsız İstifadəçi'}</span
+															>
+															<div class="d-flex">
+																{#each Array.from({ length: comment.star }) as _}
+																	<span class="material-symbols-outlined icon-fill star">
+																		star
+																	</span>
+																{/each}
+																{#each Array.from({ length: 5 - comment.star }) as _}
+																	<span class="material-symbols-outlined star"> star </span>
+																{/each}
+															</div>
+														</div>
+
+														<span class="text-secondary" style="font-size: small"
+															>{changeDateFormat(comment.date)}</span
+														>
+													</div>
+												</div>
+
+												{#if comment.comment.length}
+													<p style="margin-top: 1rem; padding-left: 3.5rem">
+														{@html comment.comment}
+													</p>
+												{/if}
+												<span style="font-style: italic; font-size: small"
+													>{$_('doctor.await_confirmation')}</span
+												>
+											</div>
+										{/if}
+										{#if comment.status !== null}
+											<div class="card commentCard p-3">
+												<div class="d-flex gap-3 align-items-center">
+													<div>
+														{#if comment?.photoURL}
+															<img
+																src={comment?.photoURL}
+																alt="Profile Pic"
+																style="max-width: 40px; border-radius: 100%;  aspect-ratio: 1/1; object-fit: cover;"
+															/>
+														{:else}
+															<div
+																style="width: 40px; 
+																	height: 40px;
+																	color: var(--primaryColor);
+																	border-radius: 100%;
+																	border: 3px solid var(--primaryColor);
+																	display: flex; align-items: center; 
+																	justify-content: center;"
+															>
+																<span
+																	class="material-symbols-outlined icon-fill"
+																	style="font-size: 1.8rem"
+																>
+																	person
+																</span>
+															</div>
+														{/if}
+													</div>
+													<div>
+														<div class="d-flex gap-2 commentor">
+															<span class="name"
+																>{comment.displayName || comment.email || 'Adsız İstifadəçi'}</span
+															>
+															<div class="d-flex">
+																{#each Array.from({ length: comment.star }) as _}
+																	<span class="material-symbols-outlined icon-fill star">
+																		star
+																	</span>
+																{/each}
+																{#each Array.from({ length: 5 - comment.star }) as _}
+																	<span class="material-symbols-outlined star"> star </span>
+																{/each}
+															</div>
+														</div>
+
+														<span class="text-secondary" style="font-size: small"
+															>{changeDateFormat(comment.date)}</span
+														>
+													</div>
+												</div>
+
+												{#if comment.comment.length}
+													<p style="margin-top: 1rem; padding-left: 3.5rem">
+														{@html comment.comment}
+													</p>
+												{/if}
+											</div>
+										{/if}
+									{/each}
+									{#if !$comments.length}
+										<span>{$_('doctor.no_comments')}</span>
+									{/if}
+								</div>{/if}
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+	</section>
+{:else}
+	<div class="d-flex flex-column align-items-center mt-5">
+		<span>Həkim tapılmadı</span>
+		<button
+			class="btn btn-primary mt-3"
+			on:click={() => {
+				goto('/doctors');
+			}}
+		>
+			Həkimlər
+		</button>
 	</div>
-</section>
+{/if}

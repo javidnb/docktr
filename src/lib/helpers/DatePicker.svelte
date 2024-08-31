@@ -34,8 +34,7 @@
 		return azerbaijaniDays[dayIndex];
 	}
 
-	let daysOfWeek = getDatesFromTomorrow(7); // Get dates starting from tomorrow
-	console.log(daysOfWeek);
+	let daysOfWeek = getDatesFromTomorrow(7);
 	selectedDay = daysOfWeek[0].date;
 	let selectedTime: any = null;
 
@@ -54,7 +53,7 @@
 <div class="container">
 	<div
 		class="row"
-		style="position: sticky; background: white; top: .5rem; border-bottom: 1px solid #ececec"
+		style="position: sticky; top: .5rem; border-bottom: 1px solid #ececec"
 	>
 		<div class="col">
 			<div

@@ -72,14 +72,30 @@
 		</div>
 
 		{#if !$selectedBranch}
-			<div class="row w-100 mt-2">
-				<div class="branch">
+			<div class="row w-100 mt-2 align-items-center">
+				<div class="branch w-50">
 					{#each props.branches as br, i}
 						<span style="min-width: max-content;">{getBranchName(br)}</span>
 						{#if i !== props.branches.length - 1}
 							,
 						{/if}
 					{/each}
+				</div>
+				<div class="d-flex justify-content-end gap-3 w-50" style="color: var(--primaryText);">
+					{#if props.appointmentDuration}
+						<div class="d-flex align-items-center gap-1">
+							<span class="material-symbols-outlined" style="font-size: small!important;">
+								schedule
+							</span>
+							<span>{props.appointmentDuration}</span>
+						</div>
+					{/if}
+					{#if props.price}
+						<div class="d-flex align-items-center gap-1">
+							<span style="font-size: small;"> ₼ </span>
+							<span style="font-size: large">{(props.price + 15).toFixed(2)}</span>
+						</div>
+					{/if}
 				</div>
 			</div>
 			<div class="row w-100">
@@ -119,6 +135,8 @@
 		background: aliceblue;
 		color: black;
 		overflow: hidden;
+		width: fit-content;
+		margin-top: 0 !important;
 	}
 	.star {
 		color: var(--primaryColor) !important;

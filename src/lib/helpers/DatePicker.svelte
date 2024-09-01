@@ -74,7 +74,7 @@
 		<div class="col">
 			<div
 				class="d-flex flex-wrap gap-3 pb-2 pt-4 px-1 justify-content-between timeSelector"
-				style="max-width: 705px;"
+				style="max-width: 705px; max-height: calc(100dvh - 430px); overflow-y: scroll;"
 			>
 				{#each Array.from({ length: 10 }, (_, i) => i + 9) as hour}
 					{#each [0, 30] as minute}

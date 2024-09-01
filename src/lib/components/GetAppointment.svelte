@@ -90,20 +90,28 @@
 </script>
 
 <section>
-	<div class="container-fluid" 
-	style="height: calc(100dvh - 150px);
+	<div
+		class="container-fluid"
+		style="height: calc(100dvh - 150px);
     display: flex;
-    flex-direction: column;">
-		<div class="card p-3 mb-3 d-flex flex-column" style="color: var(--primaryText)">
+    flex-direction: column;"
+	>
+		<div class="card p-3 mb-3 d-flex flex-column" style="color: var(--primaryText); flex:0">
 			<div class="d-flex align-items-center">
 				<span style="font-size: small;">Randevu müddəti:</span>
-				<span style="font-weight: 500; margin-left: auto">{doc.appointmentDuration}</span>
-				<span style="font-size: small;">dq.</span>
+				{#if doc.appointmentDuration}
+					<span style="font-weight: 500; margin-left: auto">{doc.appointmentDuration}</span>
+					<span style="font-size: small;">dq.</span>
+				{/if}
 			</div>
 			<div class="d-flex align-items-center">
 				<span style="font-size: small;">Qiymət:</span>
-				<span style="font-weight: 500; margin-left: auto">{(doc.price + 15.0).toFixed(2)}</span>
-				<span style="font-size: small;">₼</span>
+				{#if doc.price}
+					<span style="font-weight: 500; margin-left: auto"
+						>{(doc.price + 15.0).toFixed(2) ?? ''}</span
+					>
+					<span style="font-size: small;">₼</span>
+				{/if}
 			</div>
 			{#if $selectedAppointmentDate.day}
 				<hr />
@@ -131,10 +139,9 @@
 				<DatePicker />
 			</div>
 		{:else}
-			<div class="row d-flex pt-3 mt-auto">
+			<div class="row d-flex mt-auto">
 				<div class="d-flex flex-column ps-3" style="width: fit-content;">
-
-					<div class="d-flex flex-column mt-3" style="font-size: small; width: fit-content">
+					<div class="d-flex flex-column mt-auto" style="font-size: small; width: fit-content">
 						<span style="color: #bc0000;">* {$_('legal.1')}</span>
 						<span style="color: #bc0000;padding-left: 10px;">{$_('legal.2')}</span>
 						<span>* {$_('legal.3')} </span>
@@ -152,7 +159,7 @@
 						>
 						<button {disabled} class="btn btn-primary w-100 d-flex" on:click={postAppointment}
 							><span class="material-symbols-outlined"> check </span>
-							<span class="mx-auto">{$_('actions.confirm')}</span>
+							<span class="mx-auto">{$_('actions.pay')}</span>
 						</button>
 					</div>
 				</div>

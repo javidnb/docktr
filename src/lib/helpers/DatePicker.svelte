@@ -51,15 +51,9 @@
 </script>
 
 <div class="container">
-	<div
-		class="row"
-		style="position: sticky; top: .5rem; border-bottom: 1px solid #ececec"
-	>
+	<div class="row" style="position: sticky; top: .5rem; border-bottom: 1px solid #ececec">
 		<div class="col">
-			<div
-				class="d-flex pb-2 px-1 gap-2 dateSelector"
-				style="overflow: scroll; max-height: 300px; padding-top:3px"
-			>
+			<div class="d-flex pb-2 px-1 gap-2 dateSelector">
 				{#each daysOfWeek as { day, date }}
 					<button
 						class="btn btn-outline-primary d-flex flex-column h-100 align-items-center justify-content-center flex-1"
@@ -79,7 +73,7 @@
 	<div class="row">
 		<div class="col">
 			<div
-				class="d-flex flex-wrap gap-3 pb-2 pt-4 px-3 justify-content-center"
+				class="d-flex flex-wrap gap-3 pb-2 pt-4 px-1 justify-content-between timeSelector"
 				style="max-width: 705px;"
 			>
 				{#each Array.from({ length: 10 }, (_, i) => i + 9) as hour}
@@ -107,11 +101,21 @@
 </div>
 
 <style>
-	.dateSelector .btn {
+	.dateSelector {
+		padding-top: 3px;
+		padding-bottom: 1rem !important;
+		flex-direction: column;
+		max-height: 190px;
+		overflow-x: scroll;
+		flex-wrap: wrap;
+		gap: 1rem!important;
+	}
+	.dateSelector .btn:not(:hover), .timeSelector .btn:not(:hover) {
 		min-width: 90px;
+		background-color: white;
 	}
 	.dateSelector .active {
-		background-color: var(--primaryColor);
+		background-color: var(--primaryColor) !important;
 		color: white;
 		border-radius: 6px !important;
 	}

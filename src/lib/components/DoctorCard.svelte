@@ -154,7 +154,7 @@
 		overflow: hidden;
 		margin-top: 0 !important;
 		overflow-x: scroll;
-		max-width: 45%;
+		max-width: 35%;
 		width: fit-content !important;
 		background-color: #f8f8f8;
 	}
@@ -169,6 +169,11 @@
 		display: none;
 	}
 	.margin-top-1 {
-		margin-top: -2rem !important;
+		margin-top: -1rem !important;
+	}
+	@media screen and (max-width: 992px) {
+		.margin-top-1 {
+			margin-top: -1.5rem !important;
+		}
 	}
 </style>

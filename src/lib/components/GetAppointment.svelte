@@ -103,7 +103,7 @@
 					<span style="font-size: small;">Randevu müddəti:</span>
 					{#if doc.appointmentDuration}
 						<span style="font-weight: 500; margin-left: auto">{doc.appointmentDuration}</span>
-						<span style="font-size: small;">dq.</span>
+						<span style="font-size: small; padding-top: 3px">dq.</span>
 					{/if}
 				</div>
 				<div class="d-flex align-items-center">
@@ -112,7 +112,7 @@
 						<span style="font-weight: 500; margin-left: auto"
 							>{(doc.price + 15.0).toFixed(2) ?? ''}</span
 						>
-						<span style="font-size: small;">₼</span>
+						<span style="font-size: small; padding-top: 3px">₼</span>
 					{/if}
 				</div>
 				{#if $selectedAppointmentDate.day}

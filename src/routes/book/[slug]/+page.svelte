@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import GetAppointment from '$lib/components/GetAppointment.svelte';
-	import { doctors } from '$lib/store/dataStore';
+	import { doctors, selectedAppointmentDate } from '$lib/store/dataStore';
 
 	$: doctor = $doctors.find((d) => d.slug == $page.params.slug);
 </script>
@@ -10,7 +10,11 @@
 {#if doctor}
 	<button
 		on:click={() => {
-			history.back();
+			if ($selectedAppointmentDate.day) {
+				selectedAppointmentDate.set({ day: null, time: null, start: null, end: null });
+			} else {
+				history.back();
+			}
 		}}
 		class="btnBack mobileOnly btn"
 		type="button"

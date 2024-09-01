@@ -610,3 +610,9 @@
 		</button>
 	</div>
 {/if}
+
+<style>
+	.branch button {
+		color: var(--primaryText);
+	}
+</style>

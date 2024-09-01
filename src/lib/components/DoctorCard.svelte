@@ -85,6 +85,7 @@
 			<div
 				class="d-flex justify-content-end gap-3 ms-auto w-auto"
 				class:w-100={$selectedBranch}
+				class:margin-top-1={$selectedBranch}
 				style="color: var(--primaryText);"
 			>
 				{#if props.appointmentDuration}
@@ -166,5 +167,8 @@
 	}
 	.branch::-webkit-scrollbar {
 		display: none;
+	}
+	.margin-top-1 {
+		margin-top: -2rem !important;
 	}
 </style>

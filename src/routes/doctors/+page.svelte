@@ -179,7 +179,7 @@
 								--border-focused="1px solid var(--primaryColor)"
 								--item-is-active-bg="var(--primaryColor)"
 								--item-hover-bg="#d9e1d7"
-								--padding="0px 0px 0px 35px"
+								--padding="0px 0px 0px 37px"
 								searchable={false}
 								on:change={(event) => {
 									selectedOrder.set(event.detail.value);
@@ -248,11 +248,6 @@
 
 	.skeleton {
 		animation: skeleton-loading 1s linear infinite alternate;
-	}
-
-	.filterCollapse .active {
-		justify-content: start;
-		align-items: start;
 	}
 
 	/* .btnFilter:not(:hover) {

@@ -653,7 +653,7 @@ body {
 	}
 	.homeNavContainer .active {
 		border-radius: 0;
-		background-color: white !important;
+		background-color: unset !important;
 	}
 	.homeNav .nav-item:not(:last-child) {
 		border-right: 0px;
@@ -790,3 +790,10 @@ body {
 	bottom: 0;
 }
 /* END NAVBAR */
+
+.filterCollapse .active {
+	flex-direction: row;
+	justify-content: start;
+	align-items: start;
+	display: flex;
+}

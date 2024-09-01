@@ -1,6 +1,6 @@
 {
 	"name": "docktr",
-	"version": "0.0.234",
+	"version": "0.0.235",
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",

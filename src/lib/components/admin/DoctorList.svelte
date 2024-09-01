@@ -64,9 +64,19 @@
 	let details = '';
 	let docName: string = '';
 	let contact: string = '';
+	let price: string = '';
+	let appointmentDuration: string = '';
 	let hospitals: any = [''];
 	let certificates: any = [''];
 	let hastalik: any = [];
+
+	let titles = [
+		{ value: 1, label: 'Dr' },
+		{ value: 2, label: 'Doç' },
+		{ value: 3, label: 'Asistan' }
+	];
+
+	let selectedTitle: any = 'Dr';
 
 	$: if ($selectedDoc) {
 		if (selectedDoctor !== get(doctors).find((doc) => doc.id == $selectedDoc)) {
@@ -77,6 +87,8 @@
 				docName = selectedDoctor.name || '';
 				contact = selectedDoctor.contact || '';
 				details = selectedDoctor.details || '';
+				selectedTitle =
+					titles.find((t) => t.value == selectedDoctor.title) || titles.find((t) => t.value == 1);
 				selectedNationality = nationality.find((n: any) => n.value == selectedDoctor.nationality);
 				hospitals = selectedDoctor.hospital
 					? JSON.parse(selectedDoctor.hospital) || selectedDoctor.hospital
@@ -120,6 +132,7 @@
 		details = '';
 		docName = '';
 		contact = '';
+		selectedTitle = titles.find((t) => t.value == 1);
 		hospitals = [''];
 		certificates = [''];
 		hastalik = [];
@@ -150,6 +163,9 @@
 		data.branches = selectedBranches.length
 			? JSON.stringify(selectedBranches.map((sb: any) => sb.value))
 			: null;
+		data.title = selectedTitle.value;
+		data.appointmentDuration = data.appointmentDuration ? parseInt(data.appointmentDuration) : null;
+		data.price = data.price ? parseFloat(data.price) : null;
 		data.diseases = selectedDiseases?.length
 			? JSON.stringify(JSON.parse(data.diseases).map((dd: any) => dd.label))
 			: null;
@@ -311,8 +327,13 @@
 				<button
 					class="list-group-item"
 					style="text-align: left"
-					on:click={() => selectedDoc.set(doc.id)}>{doc.name}</button
+					on:click={() => selectedDoc.set(doc.id)}
 				>
+					{#if titles.find((t) => t.value == doc.title)}
+						{titles.find((t) => t.value == doc.title)?.label + ' '}
+					{/if}
+					{doc.name}
+				</button>
 			{/each}
 		{:else}
 			<div class="pb-3">
@@ -421,27 +442,30 @@
 						<label for="name" class="form-label"
 							>Ad Soyad <span style="font-weight: 600; color: red">*</span></label
 						>
-						<input
-							name="name"
-							type="text"
-							class="form-control"
-							id="name"
-							placeholder="Ad Soyad"
-							value={docName}
-							required
-						/>
+						<div class="input-group">
+							<Select
+								class="form-control"
+								items={titles}
+								--width="150px"
+								--border-radius="0px"
+								--border-focused="1px solid var(--primaryColor)"
+								--item-is-active-bg="var(--primaryColor)"
+								--item-hover-bg="#d9e1d7"
+								bind:value={selectedTitle}
+								clearable={false}
+							></Select>
+							<input
+								name="name"
+								type="text"
+								class="form-control"
+								id="name"
+								placeholder="Ad Soyad"
+								value={docName}
+								required
+							/>
+						</div>
 					</div>
-					<div class="form-group mt-3">
-						<label for="details" class="form-label">Məlumat</label>
-						<Editor
-							licenseKey="93fkaai35581b9yg7s333g4s65y6ckgbhvlc1abz90od47x9"
-							scriptSrc="tinymce/tinymce.min.js"
-							id="details"
-							bind:value={details}
-							{conf}
-							required
-						/>
-					</div>
+
 					<!-- BRANSLAR -->
 					<div class="form-group mt-3">
 						<label for="branchSelector" class="form-label"
@@ -464,6 +488,20 @@
 							</div>
 						</Select>
 					</div>
+
+					<!-- DETAILS -->
+					<div class="form-group mt-3">
+						<label for="details" class="form-label">Məlumat</label>
+						<Editor
+							licenseKey="93fkaai35581b9yg7s333g4s65y6ckgbhvlc1abz90od47x9"
+							scriptSrc="tinymce/tinymce.min.js"
+							id="details"
+							bind:value={details}
+							{conf}
+							required
+						/>
+					</div>
+
 					<!-- ILGI ALANLARI -->
 					<div class="form-group mt-3">
 						<label for="branchSelector" class="form-label">Müalicə etdiyi xəstəliklər</label>
@@ -584,6 +622,39 @@
 								</div>
 							{/each}
 						</ul>
+					</div>
+
+					<!-- APPOINTMENT DETAILS -->
+					<div class="row">
+						<div class="col col-md-6">
+							<div class="form-group mt-3">
+								<label for="appointmentDuration" class="form-label">Randevu süresi (dakika)</label>
+								<input
+									name="appointmentDuration"
+									type="text"
+									class="form-control"
+									id="appointmentDuration"
+									placeholder="30"
+									value={appointmentDuration}
+									required
+								/>
+							</div>
+						</div>
+
+						<div class="col col-md-6">
+							<div class="form-group mt-3">
+								<label for="price" class="form-label">Ücret</label>
+								<input
+									name="price"
+									type="text"
+									class="form-control"
+									id="price"
+									placeholder="9.99"
+									value={price}
+									required
+								/>
+							</div>
+						</div>
 					</div>
 
 					<!-- CONTACT -->

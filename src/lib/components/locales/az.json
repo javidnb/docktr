@@ -38,6 +38,11 @@
 		"documents": "Dokumentlər",
 		"history": "Keçmiş Görüşlər"
 	},
+	"titles": {
+		"1": "Dr",
+		"2": "Doçent",
+		"3": "Asistant"
+	},
 	"appointment": {
 		"loginToSee": "Randevuları görmək üçün",
 		"login": "Hesaba Daxil Ol",

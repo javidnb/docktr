@@ -2,7 +2,6 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import GetAppointment from '$lib/components/GetAppointment.svelte';
-	import DatePicker from '$lib/helpers/DatePicker.svelte';
 	import { doctors } from '$lib/store/dataStore';
 
 	$: doctor = $doctors.find((d) => d.slug == $page.params.slug);

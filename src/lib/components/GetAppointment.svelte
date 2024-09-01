@@ -90,53 +90,49 @@
 </script>
 
 <section>
-	<div class="container-fluid">
+	<div class="container-fluid" 
+	style="height: calc(100dvh - 150px);
+    display: flex;
+    flex-direction: column;">
+		<div class="card p-3 mb-3 d-flex flex-column" style="color: var(--primaryText)">
+			<div class="d-flex align-items-center">
+				<span style="font-size: small;">Randevu müddəti:</span>
+				<span style="font-weight: 500; margin-left: auto">{doc.appointmentDuration}</span>
+				<span style="font-size: small;">dq.</span>
+			</div>
+			<div class="d-flex align-items-center">
+				<span style="font-size: small;">Qiymət:</span>
+				<span style="font-weight: 500; margin-left: auto">{(doc.price + 15.0).toFixed(2)}</span>
+				<span style="font-size: small;">₼</span>
+			</div>
+			{#if $selectedAppointmentDate.day}
+				<hr />
+				<div class="d-flex align-items-center">
+					<span style="font-size: small;">Görüş tarixi:</span>
+					<span style="font-weight: 500; margin-left: auto"
+						>{new Date($selectedAppointmentDate.end ?? '').getDate()}
+						{monthNames[new Date($selectedAppointmentDate.end ?? '').getMonth()]}</span
+					>
+				</div>
+				<div class="d-flex align-items-center">
+					<span style="font-size: small;">Görüş saatı:</span>
+					<span style="font-weight: 500; margin-left: auto"
+						>{new Date($selectedAppointmentDate.start ?? '').getHours()}:{new Date(
+							$selectedAppointmentDate.start ?? ''
+						).getMinutes() > 9
+							? new Date($selectedAppointmentDate.start ?? '').getMinutes()
+							: new Date($selectedAppointmentDate.start ?? '').getMinutes() + '0'}</span
+					>
+				</div>
+			{/if}
+		</div>
 		{#if !$selectedAppointmentDate.day}
 			<div class="row">
 				<DatePicker />
 			</div>
 		{:else}
-			<div class="row d-flex pt-3">
+			<div class="row d-flex pt-3 mt-auto">
 				<div class="d-flex flex-column ps-3" style="width: fit-content;">
-					<div
-						class="d-flex justify-content-center flex-column"
-						style="font-size: large;
-						background: var(--primaryText);
-						border-radius: 6px;
-						padding: 0px 15px;
-						color: white;
-						box-shadow: 0px 0px 7px 0px #6f876954;"
-					>
-						<div class="d-flex align-items-center gap-2 mt-3 mb-1">
-							<span class="material-symbols-outlined"> calendar_month </span>
-							<span class="mx-auto"
-								><span
-									>{new Date($selectedAppointmentDate.end ?? '').getDate()}
-									{monthNames[new Date($selectedAppointmentDate.end ?? '').getMonth()]}</span
-								></span
-							>
-						</div>
-						<div class="d-flex align-items-center gap-2 mb-3">
-							<span class="material-symbols-outlined"> schedule </span>
-							<div class="mx-auto">
-								<span
-									>{new Date($selectedAppointmentDate.start ?? '').getHours()}:{new Date(
-										$selectedAppointmentDate.start ?? ''
-									).getMinutes() > 9
-										? new Date($selectedAppointmentDate.start ?? '').getMinutes()
-										: new Date($selectedAppointmentDate.start ?? '').getMinutes() + '0'}</span
-								>
-								-
-								<span class="mx-auto"
-									>{new Date($selectedAppointmentDate.end ?? '').getHours()}:{new Date(
-										$selectedAppointmentDate.end ?? ''
-									).getMinutes() > 9
-										? new Date($selectedAppointmentDate.end ?? '').getMinutes()
-										: new Date($selectedAppointmentDate.end ?? '').getMinutes() + '0'}</span
-								>
-							</div>
-						</div>
-					</div>
 
 					<div class="d-flex flex-column mt-3" style="font-size: small; width: fit-content">
 						<span style="color: #bc0000;">* {$_('legal.1')}</span>

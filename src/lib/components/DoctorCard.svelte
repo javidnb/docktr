@@ -2,6 +2,7 @@
 	import { diseases } from '$lib/store/diseases';
 	import type { Doctor } from '$lib/interfaces/doctor.interface';
 	import { selectedBranch } from '$lib/store/dataStore';
+	import { _ } from 'svelte-i18n';
 	export let props: Doctor;
 
 	function getBranchName(id: number) {
@@ -44,12 +45,20 @@
 			<div class="col-7 text-center d-flex flex-column">
 				<span
 					style="text-decoration: none;
-                    text-align: center;
-                    margin-block: 0px;
-                    font-size: large;
-                    font-weight: 600;
-					color: var(--primaryText)">{props.name}</span
+					text-align: center;
+					margin-block: 0px 5px;
+					font-size: large;
+					font-weight: 600;
+					color: var(--primaryText);
+					display: flex;
+					flex-direction: column;
+					line-height: 1;"
 				>
+					{#if props.title}
+						<span style="font-size: small; font-weight: 400;">{$_('titles.' + props.title)}</span>
+					{/if}
+					<span>{props.name}</span>
+				</span>
 				<p
 					class="docDetails"
 					style="font-size: medium;

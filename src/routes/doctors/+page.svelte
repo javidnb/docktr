@@ -121,6 +121,7 @@
 									--border-focused="1px solid var(--primaryColor)"
 									--item-is-active-bg="var(--primaryColor)"
 									--item-hover-bg="#d9e1d7"
+									--padding="0px 0px 0px 35px"
 									on:change={(event) => {
 										selectedBranch.set(event.detail);
 									}}
@@ -130,7 +131,15 @@
 									}}
 									searchable={$mobile ? false : true}
 								>
-									<div slot="prepend" class="d-flex align-items-center" style="padding-right: 10px">
+									<div
+										slot="prepend"
+										class="d-flex align-items-center"
+										style="position: absolute;
+										left: 10px;
+										top: 50%;
+										transform: translateY(-50%);
+										color: var(--primaryText)"
+									>
 										<span class="material-symbols-outlined"> arrow_drop_down </span>
 									</div>
 								</Select>
@@ -170,6 +179,7 @@
 								--border-focused="1px solid var(--primaryColor)"
 								--item-is-active-bg="var(--primaryColor)"
 								--item-hover-bg="#d9e1d7"
+								--padding="0px 0px 0px 35px"
 								searchable={false}
 								on:change={(event) => {
 									selectedOrder.set(event.detail.value);
@@ -179,7 +189,15 @@
 									filterDocs();
 								}}
 							>
-								<div slot="prepend" class="d-flex align-items-center" style="padding-right: 10px">
+								<div
+									slot="prepend"
+									class="d-flex align-items-center"
+									style="position: absolute;
+										left: 10px;
+										top: 50%;
+										transform: translateY(-50%);
+										color: var(--primaryText)"
+								>
 									<span class="material-symbols-outlined"> swap_vert </span>
 								</div>
 							</Select>

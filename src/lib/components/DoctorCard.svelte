@@ -82,12 +82,19 @@
 					{/each}
 				</div>
 			{/if}
-			<div class="d-flex justify-content-end gap-3 ms-auto w-auto" class:w-100={$selectedBranch} style="color: var(--primaryText);">
+			<div
+				class="d-flex justify-content-end gap-3 ms-auto w-auto"
+				class:w-100={$selectedBranch}
+				style="color: var(--primaryText);"
+			>
 				{#if props.appointmentDuration}
-					<div class="d-flex align-items-center" 
-					style="border: 1px solid #ececec;
-					border-radius: 8px;
-					padding: 1px 10px;">
+					<div
+						class="d-flex align-items-center"
+						style="border: 1px solid #ececec;
+						border-radius: 8px;
+						padding: 1px 10px;
+						background: #f8f8f8"
+					>
 						<span class="material-symbols-outlined" style="font-size: small!important;">
 							schedule
 						</span>
@@ -96,12 +103,15 @@
 					</div>
 				{/if}
 				{#if props.price}
-					<div class="d-flex align-items-center gap-1" 
-					style="border: 1px solid #ececec;
-					border-radius: 8px;
-					padding: 1px 10px;">
+					<div
+						class="d-flex align-items-center gap-1"
+						style="border: 1px solid #ececec;
+						border-radius: 8px;
+						padding: 1px 10px;
+						background: #f8f8f8"
+					>
 						<span style="font-size: small;"> ₼ </span>
-						<span style="font-size: large">{(props.price + 15).toFixed(2)}</span>
+						<span>{(props.price + 15).toFixed(2)}</span>
 					</div>
 				{/if}
 			</div>
@@ -144,7 +154,8 @@
 		margin-top: 0 !important;
 		overflow-x: scroll;
 		max-width: 45%;
-		width: fit-content!important;
+		width: fit-content !important;
+		background-color: #f8f8f8;
 	}
 	.star {
 		color: var(--primaryColor) !important;

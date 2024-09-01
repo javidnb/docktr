@@ -71,8 +71,8 @@
 			</div>
 		</div>
 
-		{#if !$selectedBranch}
-			<div class="row w-100 mt-2 align-items-center">
+		<div class="row w-100 mt-2 align-items-center">
+			{#if !$selectedBranch}
 				<div class="branch w-50">
 					{#each props.branches as br, i}
 						<span style="min-width: max-content;">{getBranchName(br)}</span>
@@ -81,27 +81,34 @@
 						{/if}
 					{/each}
 				</div>
-				<div class="d-flex justify-content-end gap-3 w-50" style="color: var(--primaryText);">
-					{#if props.appointmentDuration}
-						<div class="d-flex align-items-center gap-1">
-							<span class="material-symbols-outlined" style="font-size: small!important;">
-								schedule
-							</span>
-							<span>{props.appointmentDuration}</span>
-						</div>
-					{/if}
-					{#if props.price}
-						<div class="d-flex align-items-center gap-1">
-							<span style="font-size: small;"> ₼ </span>
-							<span style="font-size: large">{(props.price + 15).toFixed(2)}</span>
-						</div>
-					{/if}
-				</div>
+			{/if}
+			<div class="d-flex justify-content-end gap-3 ms-auto w-auto" class:w-100={$selectedBranch} style="color: var(--primaryText);">
+				{#if props.appointmentDuration}
+					<div class="d-flex align-items-center" 
+					style="border: 1px solid #ececec;
+					border-radius: 8px;
+					padding: 1px 10px;">
+						<span class="material-symbols-outlined" style="font-size: small!important;">
+							schedule
+						</span>
+						<span class="ms-1">{props.appointmentDuration}</span>
+						<span style="font-size: small; padding-top: 3px">dq.</span>
+					</div>
+				{/if}
+				{#if props.price}
+					<div class="d-flex align-items-center gap-1" 
+					style="border: 1px solid #ececec;
+					border-radius: 8px;
+					padding: 1px 10px;">
+						<span style="font-size: small;"> ₼ </span>
+						<span style="font-size: large">{(props.price + 15).toFixed(2)}</span>
+					</div>
+				{/if}
 			</div>
-			<div class="row w-100">
-				<div class="col"></div>
-			</div>
-		{/if}
+		</div>
+		<div class="row w-100">
+			<div class="col"></div>
+		</div>
 	</div>
 </a>
 
@@ -132,11 +139,12 @@
 		border: 1px solid #ececec;
 		padding: 5px 10px;
 		border-radius: 10px;
-		background: aliceblue;
-		color: black;
+		color: var(--primaryText);
 		overflow: hidden;
-		width: fit-content;
 		margin-top: 0 !important;
+		overflow-x: scroll;
+		max-width: 45%;
+		width: fit-content!important;
 	}
 	.star {
 		color: var(--primaryColor) !important;
@@ -144,5 +152,8 @@
 	}
 	.icon-fill {
 		padding: 0;
+	}
+	.branch::-webkit-scrollbar {
+		display: none;
 	}
 </style>

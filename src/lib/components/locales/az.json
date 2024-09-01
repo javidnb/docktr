@@ -35,6 +35,8 @@
 		"nationality": "Milli mənsubiyyət",
 		"order_by": "Sırala",
 		"order_by_point": "Xala görə",
+		"order_by_name": "Ada görə",
+		"order_by_price": "Qiymətə görə",
 		"documents": "Dokumentlər",
 		"history": "Keçmiş Görüşlər"
 	},

@@ -1,5 +1,4 @@
 <script async script lang="ts">
-	import { onDestroy } from 'svelte';
 	import { doctors, selectedBranch, mobile, slideIn } from '$lib/store/dataStore';
 	import DoctorCard from '$lib/components/DoctorCard.svelte';
 	import { diseases } from '$lib/store/diseases';
@@ -22,7 +21,8 @@
 
 	let orderBy = [
 		{ value: 1, label: $_('doctor.order_by_point') },
-		{ value: 2, label: 'Ada Görə' }
+		{ value: 2, label: $_('doctor.order_by_price') },
+		{ value: 3, label: $_('doctor.order_by_name') }
 	];
 	let selectedOrder: any = writable(null);
 
@@ -48,6 +48,12 @@
 				filterNo += 1;
 			}
 			if ($selectedOrder == 2) {
+				docs = docs.sort((a, b) => a.price - b.price);
+				filterNo += 1;
+			} else {
+				docs = docs.sort((a, b) => b.star - a.star);
+			}
+			if ($selectedOrder == 3) {
 				docs = docs.sort((a, b) =>
 					a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
 				);
@@ -56,10 +62,6 @@
 			filteredDocs = docs;
 		}
 	}
-
-	onDestroy(() => {
-		selectedBranch.set(null);
-	});
 </script>
 
 <section>
@@ -70,7 +72,10 @@
 
 <section class="pb-5 pt-1">
 	<div class="container pb-5">
-		<div class="row py-2 px-1 my-1" style="position: sticky; top:0; z-index: 99; background: #f9f9f9">
+		<div
+			class="row py-2 px-1 my-1"
+			style="position: sticky; top:0; z-index: 99; background: #f9f9f9"
+		>
 			<div class="col">
 				<!-- <button
 					class="btn btn-outline-primary btnFilter d-flex w-100"
@@ -225,6 +230,11 @@
 
 	.skeleton {
 		animation: skeleton-loading 1s linear infinite alternate;
+	}
+
+	.filterCollapse .active {
+		justify-content: start;
+		align-items: start;
 	}
 
 	/* .btnFilter:not(:hover) {

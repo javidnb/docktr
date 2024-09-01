@@ -1,8 +1,8 @@
 export const diseases = [
 	{
 		id: 1,
-		name: 'Dermatologiya',
-		slug: 'dermatologiya',
+		name: 'Dermatoloq',
+		slug: 'dermatoloq',
 		icon: 'https://ik.imagekit.io/d2nwsj0ktvh/dry-skin_lSJDoTO-3.png',
 		conditions: {
 			Ekzema: [
@@ -80,8 +80,8 @@ export const diseases = [
 	},
 	{
 		id: 2,
-		name: 'Psixiatriya',
-		slug: 'psixiatriya',
+		name: 'Psixiatr',
+		slug: 'psixiatr',
 		icon: 'https://ik.imagekit.io/d2nwsj0ktvh/psychiatry_GtaGAnQXg.png',
 		conditions: {
 			Depressiya: [
@@ -219,8 +219,8 @@ export const diseases = [
 	},
 	{
 		id: 4,
-		name: 'Psixologiya',
-		slug: 'psixologiya',
+		name: 'Psixoloq',
+		slug: 'psixoloq',
 		icon: 'https://ik.imagekit.io/d2nwsj0ktvh/therapy_fd93-9l79.png',
 		conditions: {
 			Depressiya: [
@@ -487,8 +487,8 @@ export const diseases = [
 	},
 	{
 		id: 7,
-		name: 'Ginekologiya və Doğuş',
-		slug: 'kadin-hastaliklari-ve-dogum',
+		name: 'Ginekoloq',
+		slug: 'ginekoloq',
 		icon: 'https://ik.imagekit.io/d2nwsj0ktvh/pregnant_4hGkfvOb7.png',
 		conditions: {
 			'Menstrual Problemler': [

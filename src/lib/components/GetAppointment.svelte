@@ -174,7 +174,9 @@
 			{/if}
 			<!-- PAYMENT -->
 		{:else}
-			<h1>Pay biacth</h1>
+			<div class="card">
+				
+			</div>
 		{/if}
 	</div>
 </section>

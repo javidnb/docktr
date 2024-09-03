@@ -24,7 +24,6 @@
 
 	onMount(() => {
 		const initialize = async () => {
-			console.log('uid: ', userId);
 			if (userId && !files) {
 				await initializeFirebase();
 				if (db) {
@@ -131,7 +130,6 @@
 			timestamp: new Date(),
 			file
 		};
-		console.log(msgData);
 		await addDoc(messagesCollection, msgData);
 		selectedFile = null;
 	};

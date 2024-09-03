@@ -1,17 +1,24 @@
 <script lang="ts">
 	import { db, initializeFirebase } from '$lib/firebase.client';
 	import { session } from '$lib/session';
-	import { dataLoading, users, selectedUser, loginModal } from '$lib/store/dataStore';
+	import { users, selectedUser, loginModal, doctors } from '$lib/store/dataStore';
 	import { collection, getDocs, query, where, type CollectionReference } from 'firebase/firestore';
 	import { onMount } from 'svelte';
 	import DocumentsByUser from '../DocumentsByUser.svelte';
+	import { browser } from '$app/environment';
 
 	let messagesCollection: CollectionReference;
 	let messagesGroupedByUser: any = [];
 	let selectedUserFiles: any = [];
 
+	if (browser) {
+		messagesGroupedByUser = localStorage.getItem('msgs')
+			? JSON.parse(localStorage.getItem('msgs') || '')
+			: [];
+		if (localStorage.getItem('users')) users.set(JSON.parse(localStorage.getItem('users') || ''));
+	}
+
 	onMount(async () => {
-		console.log('yoo');
 		await initializeFirebase();
 		if (db) {
 			messagesCollection = collection(db, 'messages');
@@ -24,7 +31,6 @@
 	} else loginModal.set(false);
 
 	async function getMsgs() {
-		dataLoading.set(true);
 		if (messagesCollection) {
 			const q = query(
 				messagesCollection,
@@ -32,14 +38,11 @@
 			);
 			const querySnapshot = await getDocs(q);
 
-			// console.log(querySnapshot);
-
 			const groupedMessages: any = {};
 			let uids: string[] = [];
 
 			querySnapshot.forEach((doc) => {
 				const data = doc.data();
-				// console.log(data);
 				if (data.file) {
 					const fromUser = data.fromUser == $session.user?.uid ? data.toUser : data.fromUser;
 
@@ -58,24 +61,26 @@
 
 			// GET USERS DATA
 			uids = [...new Set(uids)];
+			if ($selectedUser && !uids.find((u) => u == $selectedUser)) {
+				uids.push($selectedUser.toString());
+			}
 
-			const response = await fetch('https://tekoplast.az/docktr/api/?usersByArray', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ uids })
-			});
+			if (uids.length) {
+				const response = await fetch('https://tekoplast.az/docktr/api/?usersByArray', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ uids })
+				});
 
-			if (response.ok) {
-				console.log(response);
-				return;
-				dataLoading.set(false);
-				const data = await response.json();
-				localStorage.setItem('users', JSON.stringify(data));
-				users.set(data);
-			} else {
-				console.error('Failed to fetch users data');
+				if (response.ok) {
+					const data = await response.json();
+					localStorage.setItem('users', JSON.stringify(data));
+					users.set(data);
+				} else {
+					console.error('Failed to fetch users data');
+				}
 			}
 
 			// Convert groupedMessages object to an array for easier rendering
@@ -89,6 +94,14 @@
 				};
 			});
 
+			if ($selectedUser && !messagesGroupedByUser.find((m: any) => m.uid == $selectedUser)) {
+				messagesGroupedByUser.push({
+					uid: $selectedUser,
+					messages: [],
+					lastMsgTime: new Date()
+				});
+			}
+
 			// Sort by lastMsgTime in descending order
 			messagesGroupedByUser.sort(
 				(a: any, b: any) => (b.lastMsgTime as number) - (a.lastMsgTime as number)
@@ -96,11 +109,19 @@
 
 			let result: {}[] = [];
 			messagesGroupedByUser.forEach((msg: any) => {
-				let user = $users.find((u: any) => u.uid == msg.uid);
-				result.push({ ...msg, user });
+				let user: any = $users.find((u: any) => u.uid == msg.uid);
+				let doc = $doctors.find((u: any) => u.uid == msg.uid);
+				if (doc && user) {
+					user.photoURL = doc.img;
+					user.displayName = doc.name;
+				}
+				if (msg.uid != $session.user?.uid) {
+					result.push({ ...msg, user });
+				}
 			});
 			messagesGroupedByUser = result;
-			dataLoading.set(false);
+			// messagesGroupedByUser = [];
+			localStorage.setItem('msgs', JSON.stringify(messagesGroupedByUser));
 		}
 	}
 

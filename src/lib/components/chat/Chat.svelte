@@ -58,13 +58,19 @@
 	});
 
 	function resizeScreen(event: any) {
-		if (mainContainer && event.target) {
+		if (mainContainer) {
 			const viewportHeight = window.visualViewport
 				? (event.target as VisualViewport).height
 				: window.innerHeight;
 			mainContainer.style.height = `${viewportHeight - 30}px`;
 		}
 	}
+
+	const showMsgInput = () => {
+		setTimeout(() => {
+			msgInput.scrollIntoView({ behavior: 'auto' });
+		}, 15);
+	};
 
 	afterUpdate(() => {
 		scrollToBottom();
@@ -563,6 +569,7 @@
 						inputFocused = false;
 					}, 50);
 				}}
+				on:input={showMsgInput}
 			/>
 			<button
 				style="min-width: 60px;"

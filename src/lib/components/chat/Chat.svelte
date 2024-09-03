@@ -58,28 +58,12 @@
 	});
 
 	function resizeScreen(event: any) {
-		toast.push('main', {
-				duration: 2000,
-				theme: {
-					'--toastColor': 'mintcream',
-					'--toastBackground': 'rgb(176 24 24)',
-					'--toastBarBackground': '#5b1010'
-				}
-			});
 		if (mainContainer) {
-			toast.push('resizing', {
-				duration: 2000,
-				theme: {
-					'--toastColor': 'mintcream',
-					'--toastBackground': 'rgb(176 24 24)',
-					'--toastBarBackground': '#5b1010'
-				}
-			});
 			const viewportHeight = window.visualViewport
 				? (event.target as VisualViewport).height
 				: window.innerHeight;
 
-			toast.push(viewportHeight.toString(), {
+			toast.push(`resized : ${viewportHeight ?? 0}`, {
 				duration: 2000,
 				theme: {
 					'--toastColor': 'mintcream',

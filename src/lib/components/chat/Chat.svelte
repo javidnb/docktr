@@ -60,6 +60,7 @@
 			const viewportHeight = (event.target as VisualViewport).height;
 			console.log(viewportHeight);
 			mainContainer.style.height = `${viewportHeight - 100}px!important`;
+			scrollToBottom();
 		}
 	}
 

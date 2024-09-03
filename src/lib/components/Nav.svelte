@@ -316,6 +316,7 @@
 						aria-expanded="false"
 						aria-controls="moreBtns"
 						class:active={curPage == '/messages'}
+						style="background: white!important;"
 					>
 						<img
 							src="https://ik.imagekit.io/d2nwsj0ktvh/logo_hyRmOQCNQ.png?updatedAt=1722624724577"

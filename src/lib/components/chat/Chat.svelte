@@ -20,6 +20,7 @@
 	let showDocs: boolean = false;
 	let msgInput: HTMLElement;
 	let files: any = [];
+	let inputFocused: boolean = false;
 
 	$: if ($selectedUser) {
 		userId = $selectedUser;
@@ -100,9 +101,11 @@
 	// SCROLLS MESSAGES CONTAINER TO BOTTOM TO SHOW NEWER MSGS
 	const scrollToBottom = () => {
 		const container = document.getElementById('messages-container');
-		if (container) {
-			container.scrollTop = container.scrollHeight;
-		}
+		setTimeout(() => {
+			if (container) {
+				container.scrollTop = container.scrollHeight;
+			}
+		}, 5);
 	};
 
 	// ADDING FILES
@@ -263,7 +266,7 @@
 {/if}
 
 {#if !showDocs && user}
-	<main class="d-flex flex-column h-100" style="min-height: calc(100dvh - 85px)!important">
+	<main class="d-flex flex-column h-100 mainContainer" class:minimizedChat={inputFocused}>
 		<div
 			class="chat mb-3 d-flex flex-column gap-1"
 			id="messages-container"
@@ -277,26 +280,38 @@
 				border-bottom: 1px solid #ececec; z-index:99"
 			>
 				<div class="d-flex align-items-center w-100 pt-1 py-2 mobile-left-padding">
-					{#if $user?.photoURL}
-						<img
-							src={$user?.photoURL}
-							alt="PP"
-							style="width: 35px;
+					{#if $user?.displayName}
+						{#if $user?.photoURL}
+							<img
+								src={$user?.photoURL}
+								alt="PP"
+								style="width: 35px;
 							height: 35px;
 							border-radius: 100%;
 							margin-left: 10px;
 							margin-right: 5px;
 							object-fit: cover;
 							object-position: center;"
-						/>
-					{/if}
-					<h5
-						class="flex-1 mb-0 msgRecipientTitle"
-						style="max-width: 100%;
+							/>
+						{/if}
+						<h5
+							class="flex-1 mb-0 msgRecipientTitle"
+							style="max-width: 100%;
     					overflow-x: auto; overflow-y: hidden"
-					>
-						{$user?.displayName || $user?.email || $user?.phoneNumber || ''}
-					</h5>
+						>
+							{$user?.displayName || ''}
+						</h5>
+					{:else}
+						<div
+							class="loader"
+							style="background-color: var(--primaryColor);
+						top: 0;
+						right: 10px;
+						position: relative;
+						margin-inline: auto;"
+						></div>
+					{/if}
+
 					<div class="d-flex gap-2 ml-auto" style="width: fit-content;">
 						<!-- <button
 						class="btn btn-outline-primary d-flex align-items-center gap-1"
@@ -421,7 +436,9 @@
 								{/if}
 							</a>
 						{/if}
-						<span class="msgTime" style="font-size: small; color: gray; text-align: right">{@html timestamp(message.timestamp)}</span>
+						<span class="msgTime" style="font-size: small; color: gray; text-align: right"
+							>{@html timestamp(message.timestamp)}</span
+						>
 					</div>
 				</div>
 			{/each}
@@ -510,8 +527,16 @@
 				placeholder="Type a message..."
 				on:keydown={handleKeyDown}
 				bind:this={msgInput}
-				on:click={() => {
-					if ($mobile) msgInput.scrollIntoView();
+				on:focus={() => {
+					inputFocused = true;
+					setTimeout(() => {
+						scrollToBottom();
+					}, 200);
+				}}
+				on:blur={() => {
+					setTimeout(() => {
+						inputFocused = false;
+					}, 50);
 				}}
 			/>
 			<button
@@ -538,6 +563,9 @@
 {/if}
 
 <style>
+	.mainContainer {
+		min-height: calc(100dvh - 85px) !important;
+	}
 	.chat {
 		max-height: calc(100dvh - 150px);
 		overflow-y: auto;
@@ -560,7 +588,7 @@
 		background-color: white;
 	}
 	.sent .msgTime {
-		color: #f8f8f8!important;
+		color: #f8f8f8 !important;
 	}
 	.progress-bar {
 		background-color: var(--primaryColor);
@@ -609,8 +637,16 @@
 		}
 	}
 	@media screen and (max-width: 992px) {
+		.mainContainer {
+			min-height: calc(100dvh - 30px) !important;
+			transition-duration: 0.2s;
+		}
 		.chat {
 			max-height: calc(100dvh - 80px) !important;
+		}
+		.minimizedChat {
+			height: 50dvh !important;
+			min-height: unset !important;
 		}
 		.msgBox {
 			width: 100% !important;

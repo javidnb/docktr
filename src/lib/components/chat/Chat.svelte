@@ -60,7 +60,7 @@
 			// const viewportHeight = (event.target as VisualViewport).height;
 			// console.log(viewportHeight);
 			// mainContainer.style.height = `${viewportHeight - 25}px`;
-			scrollToBottom();
+			showMsgInput();
 		}
 	}
 
@@ -122,10 +122,15 @@
 	const scrollToBottom = () => {
 		const container = document.getElementById('messages-container');
 		setTimeout(() => {
-			msgInput.scrollIntoView({ behavior: 'auto' });
 			if (container) {
 				container.scrollTop = container.scrollHeight;
 			}
+		}, 5);
+	};
+
+	const showMsgInput = () => {
+		setTimeout(() => {
+			msgInput.scrollIntoView({ behavior: 'auto' });
 		}, 5);
 	};
 

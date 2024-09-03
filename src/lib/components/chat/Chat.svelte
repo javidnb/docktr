@@ -41,9 +41,7 @@
 	onMount(() => {
 		mainContainer = document.querySelector('.mainContainer');
 		if (window.visualViewport) {
-			window.visualViewport.addEventListener('resize', () => {
-				setTimeout(resizeScreen, 50);
-			});
+			window.visualViewport.addEventListener('resize', resizeScreen);
 		}
 		(async () => {
 			await initializeFirebase();
@@ -58,21 +56,20 @@
 	});
 
 	function resizeScreen(event: any) {
-		if (mainContainer) {
-			const viewportHeight = window.visualViewport
-				? (event.target as VisualViewport).height
-				: window.innerHeight;
+		if (mainContainer && event?.target) {
+			if (event.target) {
+				const viewportHeight = (event?.target as VisualViewport).height;
+				toast.push(`resized : ${viewportHeight}`, {
+					duration: 2000,
+					theme: {
+						'--toastColor': 'mintcream',
+						'--toastBackground': 'rgb(176 24 24)',
+						'--toastBarBackground': '#5b1010'
+					}
+				});
 
-			toast.push(`resized : ${viewportHeight ?? 0}`, {
-				duration: 2000,
-				theme: {
-					'--toastColor': 'mintcream',
-					'--toastBackground': 'rgb(176 24 24)',
-					'--toastBarBackground': '#5b1010'
-				}
-			});
-
-			mainContainer.style.height = `${viewportHeight - 30}px`;
+				mainContainer.style.height = `${viewportHeight - 30}px`;
+			}
 		}
 	}
 

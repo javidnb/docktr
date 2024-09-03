@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, afterUpdate } from 'svelte';
+	import { onMount, afterUpdate, onDestroy } from 'svelte';
 	import { collection, addDoc, query, where, onSnapshot, orderBy } from 'firebase/firestore';
 	import { db, initializeFirebase } from '$lib/firebase.client';
 	import { session } from '$lib/session';
@@ -21,6 +21,7 @@
 	let msgInput: HTMLElement;
 	let files: any = [];
 	let inputFocused: boolean = false;
+	let mainContainer: HTMLDivElement | null = null;
 
 	$: if ($selectedUser) {
 		userId = $selectedUser;
@@ -38,11 +39,29 @@
 	const messagesCollection = collection(db, 'messages');
 
 	onMount(() => {
+		mainContainer = document.querySelector('.mainContainer');
+		if (window.visualViewport) {
+			window.visualViewport.addEventListener('resize', resizeScreen);
+		}
 		(async () => {
 			await initializeFirebase();
 			getMessages();
 		})();
 	});
+
+	onDestroy(() => {
+		if (window.visualViewport) {
+			window.visualViewport?.removeEventListener('resize', resizeScreen);
+		}
+	});
+
+	function resizeScreen(event: any) {
+		if (mainContainer && event.target) {
+			const viewportHeight = (event.target as VisualViewport).height;
+			console.log(viewportHeight);
+			mainContainer.style.height = `${viewportHeight - 100}px!important`;
+		}
+	}
 
 	afterUpdate(() => {
 		scrollToBottom();
@@ -266,7 +285,10 @@
 {/if}
 
 {#if !showDocs && user}
-	<main class="d-flex flex-column h-100 mainContainer" class:minimizedChat={inputFocused}>
+	<div
+		class="d-flex flex-column h-100 mainContainer"
+		class:minimizedChat={inputFocused && !window.visualViewport}
+	>
 		<div
 			class="chat mb-3 d-flex flex-column gap-1"
 			id="messages-container"
@@ -546,7 +568,7 @@
 				on:click={sendMessage}><span class="material-symbols-outlined"> send </span></button
 			>
 		</div>
-	</main>
+	</div>
 {:else}
 	<div class="d-flex flex-column h-100">
 		<button
@@ -646,7 +668,7 @@
 		}
 		.minimizedChat {
 			height: 50dvh !important;
-			min-height: unset !important;
+			min-height: 50dvh !important;
 		}
 		.msgBox {
 			width: 100% !important;

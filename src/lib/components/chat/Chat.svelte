@@ -57,10 +57,8 @@
 
 	function resizeScreen(event: any) {
 		if (mainContainer && event.target) {
-			// const viewportHeight = (event.target as VisualViewport).height;
-			// console.log(viewportHeight);
-			// mainContainer.style.height = `${viewportHeight - 25}px`;
-			showMsgInput();
+			const viewportHeight = (event.target as VisualViewport).height;
+			mainContainer.style.height = `${viewportHeight - 30}px`;
 		}
 	}
 
@@ -126,12 +124,6 @@
 				container.scrollTop = container.scrollHeight;
 			}
 		}, 5);
-	};
-
-	const showMsgInput = () => {
-		setTimeout(() => {
-			msgInput.scrollIntoView({ behavior: 'auto' });
-		}, 15);
 	};
 
 	// ADDING FILES
@@ -561,15 +553,12 @@
 					setTimeout(() => {
 						scrollToBottom();
 					}, 200);
-					showMsgInput();
 				}}
 				on:blur={() => {
 					setTimeout(() => {
 						inputFocused = false;
 					}, 50);
-					showMsgInput();
 				}}
-				on:input={showMsgInput}
 			/>
 			<button
 				style="min-width: 60px;"

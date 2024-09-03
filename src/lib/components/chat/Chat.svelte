@@ -42,6 +42,14 @@
 		mainContainer = document.querySelector('.mainContainer');
 		if (window.visualViewport) {
 			window.visualViewport.addEventListener('resize', () => {
+				toast.push('resize', {
+					duration: 2000,
+					theme: {
+						'--toastColor': 'mintcream',
+						'--toastBackground': 'rgb(176 24 24)',
+						'--toastBarBackground': '#5b1010'
+					}
+				});
 				setTimeout(resizeScreen, 50);
 			});
 		}
@@ -59,6 +67,7 @@
 
 	function resizeScreen(event: any) {
 		if (mainContainer) {
+			
 			const viewportHeight = window.visualViewport
 				? (event.target as VisualViewport).height
 				: window.innerHeight;

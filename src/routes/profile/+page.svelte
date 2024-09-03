@@ -215,7 +215,7 @@
 									class="card btn btn-outline-primary d-flex flex-row w-100"
 									on:click={() => {
 										changeComponent(Favourites, true);
-										if ($session.user) mobileHeader.set($_('profile.docs'));
+										if ($session.user) mobileHeader.set($_('profile.doctors'));
 									}}
 								>
 									<span class="material-symbols-outlined"> clinical_notes </span>{$_(

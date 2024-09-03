@@ -64,12 +64,6 @@
 		}
 	}
 
-	const showMsgInput = () => {
-		setTimeout(() => {
-			msgInput.scrollIntoView({ behavior: 'auto' });
-		}, 15);
-	};
-
 	afterUpdate(() => {
 		scrollToBottom();
 	});
@@ -567,7 +561,6 @@
 						inputFocused = false;
 					}, 50);
 				}}
-				on:input={showMsgInput}
 			/>
 			<button
 				style="min-width: 60px;"

@@ -453,12 +453,43 @@
 							goto('/gpt');
 						}}
 					>
-						<span
-							class="material-symbols-outlined s-y_bCXRrkrYfP"
-							style="font-size: 30px;">contact_support</span
+						<span class="material-symbols-outlined s-y_bCXRrkrYfP" style="font-size: 30px;"
+							>contact_support</span
 						>
 						<span class="mx-auto"> Bizə Sual Ver </span>
 					</button>
+					<div class="d-flex gap-2 mt-2">
+						{#if $session.user}
+							<button
+								class="btn btn-outline-primary d-flex w-100"
+								disabled={$dataLoading}
+								data-bs-toggle="collapse"
+								data-bs-target="#moreBtns"
+								on:click={() => {
+									goto('/messages');
+								}}
+							>
+								<span class="material-symbols-outlined s-y_bCXRrkrYfP" style="font-size: 30px;"
+									>mail</span
+								>
+								<span class="mx-auto"> {$_('nav.messages')} </span>
+							</button>
+						{/if}
+						<button
+							class="btn btn-outline-primary d-flex w-100"
+							disabled={$dataLoading}
+							data-bs-toggle="collapse"
+							data-bs-target="#moreBtns"
+							on:click={() => {
+								goto('/contact');
+							}}
+						>
+							<span class="material-symbols-outlined s-y_bCXRrkrYfP" style="font-size: 30px;"
+								>dialpad</span
+							>
+							<span class="mx-auto"> {$_('nav.contact')} </span>
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>

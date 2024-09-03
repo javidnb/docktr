@@ -42,14 +42,6 @@
 		mainContainer = document.querySelector('.mainContainer');
 		if (window.visualViewport) {
 			window.visualViewport.addEventListener('resize', () => {
-				toast.push('resize', {
-					duration: 2000,
-					theme: {
-						'--toastColor': 'mintcream',
-						'--toastBackground': 'rgb(176 24 24)',
-						'--toastBarBackground': '#5b1010'
-					}
-				});
 				setTimeout(resizeScreen, 50);
 			});
 		}
@@ -67,10 +59,19 @@
 
 	function resizeScreen(event: any) {
 		if (mainContainer) {
-			
 			const viewportHeight = window.visualViewport
 				? (event.target as VisualViewport).height
 				: window.innerHeight;
+
+			toast.push(viewportHeight.toString(), {
+				duration: 2000,
+				theme: {
+					'--toastColor': 'mintcream',
+					'--toastBackground': 'rgb(176 24 24)',
+					'--toastBarBackground': '#5b1010'
+				}
+			});
+
 			mainContainer.style.height = `${viewportHeight - 30}px`;
 		}
 	}
@@ -605,7 +606,7 @@
 
 <style>
 	.mainContainer {
-		min-height: calc(100dvh - 85px) !important;
+		min-height: calc(100dvh - 85px);
 	}
 	.chat {
 		max-height: calc(100dvh - 150px);
@@ -679,7 +680,7 @@
 	}
 	@media screen and (max-width: 992px) {
 		.mainContainer {
-			min-height: calc(100dvh - 30px) !important;
+			min-height: calc(100dvh - 30px);
 			transition-duration: 0.2s;
 		}
 		.chat {

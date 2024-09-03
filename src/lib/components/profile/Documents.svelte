@@ -11,6 +11,7 @@
 	let selectedUserFiles: any = [];
 
 	onMount(async () => {
+		console.log('yoo');
 		await initializeFirebase();
 		if (db) {
 			messagesCollection = collection(db, 'messages');
@@ -67,6 +68,9 @@
 			});
 
 			if (response.ok) {
+				console.log(response);
+				return;
+				dataLoading.set(false);
 				const data = await response.json();
 				localStorage.setItem('users', JSON.stringify(data));
 				users.set(data);

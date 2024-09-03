@@ -131,7 +131,7 @@
 	const showMsgInput = () => {
 		setTimeout(() => {
 			msgInput.scrollIntoView({ behavior: 'auto' });
-		}, 5);
+		}, 15);
 	};
 
 	// ADDING FILES

@@ -6,10 +6,10 @@
 	--primaryText: #639057;
 	--bs-nav-pills-link-active-bg: var(--primaryColor) !important;
 }
-/* html,
+html,
 body {
-	scrollbar-gutter: stable;
-} */
+	scroll-behavior: auto;
+}
 .homeNav {
 	background: white;
 	border-radius: 40px;

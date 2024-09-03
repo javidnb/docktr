@@ -16,6 +16,7 @@
 	} from '$lib/store/dataStore';
 	import Chat from '$lib/components/chat/Chat.svelte';
 	import Documents from '$lib/components/profile/Documents.svelte';
+	import Favourites from '$lib/components/profile/Favourites.svelte';
 
 	let userEmail: any = '';
 	let component: any = $mobile ? null : ProfDetails;
@@ -127,11 +128,17 @@
 								>
 									<span class="material-symbols-outlined"> draft </span>{$_('profile.docs')}
 								</button>
-								<li class="list-group-item">
+								<button
+									class="list-group-item w-100"
+									on:click={() => {
+										changeComponent(Favourites);
+									}}
+									class:active={component == Documents}
+								>
 									<span class="material-symbols-outlined"> clinical_notes </span>{$_(
 										'profile.doctors'
 									)}
-								</li>
+								</button>
 								{#if $session.user}
 									<a
 										class="list-group-item mt-auto bg-secondary text-white"
@@ -204,11 +211,17 @@
 								>
 									<span class="material-symbols-outlined"> draft </span>{$_('profile.docs')}
 								</button>
-								<li class="card btn btn-outline-primary d-flex flex-row w-100">
+								<button
+									class="card btn btn-outline-primary d-flex flex-row w-100"
+									on:click={() => {
+										changeComponent(Favourites, true);
+										if ($session.user) mobileHeader.set($_('profile.docs'));
+									}}
+								>
 									<span class="material-symbols-outlined"> clinical_notes </span>{$_(
 										'profile.doctors'
 									)}
-								</li>
+								</button>
 								<button
 									class="card btn btn-outline-primary d-flex flex-row w-100"
 									style="border-radius: 20px!important;"

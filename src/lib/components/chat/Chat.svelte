@@ -561,12 +561,15 @@
 					setTimeout(() => {
 						scrollToBottom();
 					}, 200);
+					showMsgInput();
 				}}
 				on:blur={() => {
 					setTimeout(() => {
 						inputFocused = false;
 					}, 50);
+					showMsgInput();
 				}}
+				on:input={showMsgInput}
 			/>
 			<button
 				style="min-width: 60px;"

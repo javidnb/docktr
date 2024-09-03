@@ -38,7 +38,7 @@
 			<h1 class="display-4">{doctor?.name || ''}</h1>
 		</div>
 	</section>
-	<div class="mt-3">
+	<div>
 		<GetAppointment doc={doctor} />
 	</div>
 {:else}

@@ -5,7 +5,8 @@
 		selectedAppointmentDate,
 		appointmentModal,
 		postData,
-		appointments
+		appointments,
+		dataLoading
 	} from '$lib/store/dataStore';
 	import { session } from '$lib/session';
 	import DatePicker from '$lib/helpers/DatePicker.svelte';
@@ -22,6 +23,7 @@
 	let init = true;
 	let disabled: boolean = false;
 	let payment: boolean = false;
+	let apiUrl: string = 'https://sandbox-api-gateway.tokenpay.com.tr';
 
 	onMount(async () => {
 		init = true;
@@ -32,6 +34,43 @@
 	// after user logs in launches appointment modal again, if it was launched earlier
 	$: if ($session.user && $selectedAppointmentDate.day && !init) {
 		appointmentModal.set(true);
+	}
+
+	async function pay() {
+		dataLoading.set(true);
+		let responseMessage;
+
+		let body = {
+			price: parseFloat((doc.price + 15.0).toFixed(2)),
+			paidPrice: parseFloat((doc.price + 15.0).toFixed(2)),
+			currency: 'AZN',
+			paymentGroup: 'LISTING_OR_SUBSCRIPTION',
+			callbackUrl: 'https://sehiyye.online'
+		};
+
+		try {
+			const response = await fetch(apiUrl + '/payment/v1/checkout-payments/init', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					body
+				})
+			});
+
+			if (response.ok) {
+				const data = await response.json();
+				responseMessage = 'Success: ' + data.message;
+			} else {
+				responseMessage = 'Failed to post data';
+			}
+		} catch (error: any) {
+			responseMessage = error;
+			console.log(error);
+		}
+		// console.log(responseMessage);
+		dataLoading.set(false);
 	}
 
 	async function postAppointment() {
@@ -91,12 +130,7 @@
 </script>
 
 <section>
-	<div
-		class="container-fluid"
-		style="height: calc(100dvh - 150px);
-			display: flex;
-			flex-direction: column;"
-	>
+	<div class="container-fluid pt-3 appointmentContainer d-flex flex-column">
 		{#if !payment}
 			<div class="card p-3 mb-3 d-flex flex-column" style="color: var(--primaryText); flex:0">
 				<div class="d-flex align-items-center">
@@ -159,12 +193,7 @@
 								><span class="material-symbols-outlined"> replay </span>
 								<span class="mx-auto">{$_('actions.change')}</span></button
 							>
-							<button
-								{disabled}
-								class="btn btn-primary w-100 d-flex"
-								on:click={() => {
-									payment = true;
-								}}
+							<button {disabled} class="btn btn-primary w-100 d-flex" on:click={pay}
 								><span class="material-symbols-outlined"> check </span>
 								<span class="mx-auto">{$_('actions.pay')}</span>
 							</button>
@@ -174,12 +203,15 @@
 			{/if}
 			<!-- PAYMENT -->
 		{:else}
-			<div class="card">
-				
-			</div>
+			<div class="card"></div>
 		{/if}
 	</div>
 </section>
 
 <style>
+	@media screen and (max-width: 992px) {
+		.appointmentContainer {
+			height: calc(100dvh - 150px);
+		}
+	}
 </style>

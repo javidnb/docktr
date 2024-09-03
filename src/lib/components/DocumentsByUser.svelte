@@ -24,7 +24,8 @@
 
 	onMount(() => {
 		const initialize = async () => {
-			if (userId) {
+			console.log('uid: ', userId);
+			if (userId && !files) {
 				await initializeFirebase();
 				if (db) {
 					let messagesCollection: CollectionReference;
@@ -36,7 +37,6 @@
 							files = querySnapshot.docs.map((doc) => doc.data()).filter((data) => data.file);
 						});
 
-						// Cleanup listener when component is destroyed
 						return unsubscribe;
 					}
 				}
@@ -123,14 +123,16 @@
 		if (selectedFile) {
 			file = await uploadFile(selectedFile);
 		}
-		await addDoc(messagesCollection, {
+		let msgData = {
 			fromUser: $session.user?.uid,
 			toUser: userId,
 			message: '',
 			participants: [$session.user?.uid, userId].sort(),
 			timestamp: new Date(),
 			file
-		});
+		};
+		console.log(msgData);
+		await addDoc(messagesCollection, msgData);
 		selectedFile = null;
 	};
 
@@ -193,7 +195,7 @@
 				}}
 				data-bs-toggle="collapse"
 				data-bs-target="#endCall"
-                style="border:none"
+				style="border:none"
 			>
 				<span style="font-size: 30px;" class="material-symbols-outlined my-auto">
 					description
@@ -214,6 +216,8 @@
 				</span>
 			</button>
 		{/each}
+	{:else}
+		<span>{$_('other.no_file')}</span>
 	{/if}
 </div>
 

@@ -533,7 +533,7 @@
 			><span class="material-symbols-outlined"> arrow_back_ios </span>
 			<span>{$_('actions.back')}</span></button
 		>
-		<DocumentsByUser {files} newFile={true} />
+		<DocumentsByUser {files} userId={$selectedUser} />
 	</div>
 {/if}
 

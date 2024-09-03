@@ -50,7 +50,7 @@
 	}
 </script>
 
-<div class="container">
+<div class="container datePickerContainer">
 	<div class="row" style="position: sticky; top: .5rem; border-bottom: 1px solid #ececec">
 		<div class="col">
 			<div class="d-flex pb-2 px-1 gap-2 dateSelector">
@@ -71,7 +71,7 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col">
+		<div class="col d-flex justify-content-center">
 			<div
 				class="d-flex flex-wrap gap-3 pb-2 pt-4 px-1 justify-content-between timeSelector"
 				style="max-width: 705px; max-height: calc(100dvh - 430px); overflow-y: scroll;"
@@ -108,9 +108,10 @@
 		max-height: 190px;
 		overflow-x: scroll;
 		flex-wrap: wrap;
-		gap: 1rem!important;
+		gap: 1rem !important;
 	}
-	.dateSelector .btn:not(:hover), .timeSelector .btn:not(:hover) {
+	.dateSelector .btn:not(:hover),
+	.timeSelector .btn:not(:hover) {
 		min-width: 90px;
 		background-color: white;
 	}
@@ -118,5 +119,8 @@
 		background-color: var(--primaryColor) !important;
 		color: white;
 		border-radius: 6px !important;
+	}
+	.datePickerContainer .btn:hover {
+		min-width: 90px!important;
 	}
 </style>

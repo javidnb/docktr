@@ -487,7 +487,7 @@ export const diseases = [
 	},
 	{
 		id: 7,
-		name: 'Ginekoloq',
+		name: 'Ginekoloq və Hamiləlik Təqibi',
 		slug: 'ginekoloq',
 		icon: 'https://ik.imagekit.io/d2nwsj0ktvh/pregnant_4hGkfvOb7.png',
 		conditions: {

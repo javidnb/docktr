@@ -27,7 +27,8 @@
 		await initializeFirebase();
 		if (db) {
 			messagesCollection = collection(db, 'messages');
-			if ($session.user) getMsgs();
+			if ($session.user) await getMsgs();
+			console.log(messagesGroupedByUser);
 		}
 	});
 
@@ -60,6 +61,9 @@
 
 			// GET USERS DATA
 			uids = [...new Set(uids)];
+			if ($selectedUser && !uids.find((u) => u == $selectedUser)) {
+				uids.push($selectedUser.toString());
+			}
 
 			if (uids.length) {
 				const response = await fetch('https://tekoplast.az/docktr/api/?usersByArray', {
@@ -91,6 +95,14 @@
 					lastMsgTime
 				};
 			});
+
+			if ($selectedUser && !messagesGroupedByUser.find((m: any) => m.uid == $selectedUser)) {
+				messagesGroupedByUser.push({
+					uid: $selectedUser,
+					messages: [],
+					lastMsgTime: new Date()
+				});
+			}
 
 			// Sort by lastMsgTime in descending order
 			messagesGroupedByUser.sort(

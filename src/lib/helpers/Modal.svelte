@@ -54,6 +54,7 @@
 		padding: 0;
 		/* min-width: min(30em, 100%); */
 		box-shadow: 0px 0px 8px #00000047;
+		background-color: #f8f8f8;
 	}
 	dialog:not(.fullScreen)::backdrop {
 		background: rgba(0, 0, 0, 0.3);

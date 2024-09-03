@@ -12,11 +12,11 @@
 <div class="container d-flex justify-content-center">
 	<div class="col col-md-8">
 		<div class="row mb-5">
-			<div class="d-flex justify-content-center" style="height: 136px;">
+			<div class="d-flex justify-content-center mt-3" style="height: 136px;">
 				<img
 					src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/logo.png"
 					alt="Sehiyye logo"
-					style="width: 150px; margin-top: 1rem"
+					style="width: 150px;"
 				/>
 			</div>
 

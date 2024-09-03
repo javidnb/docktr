@@ -59,7 +59,7 @@
 		if (mainContainer && event.target) {
 			const viewportHeight = (event.target as VisualViewport).height;
 			console.log(viewportHeight);
-			mainContainer.style.height = `${viewportHeight - 100}px!important`;
+			mainContainer.style.height = `${viewportHeight - 25}px`;
 			scrollToBottom();
 		}
 	}
@@ -287,7 +287,7 @@
 
 {#if !showDocs && user}
 	<div
-		class="d-flex flex-column h-100 mainContainer"
+		class="d-flex flex-column mainContainer"
 		class:minimizedChat={inputFocused && !window.visualViewport}
 	>
 		<div

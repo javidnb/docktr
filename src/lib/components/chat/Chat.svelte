@@ -57,9 +57,9 @@
 
 	function resizeScreen(event: any) {
 		if (mainContainer && event.target) {
-			const viewportHeight = (event.target as VisualViewport).height;
-			console.log(viewportHeight);
-			mainContainer.style.height = `${viewportHeight - 25}px`;
+			// const viewportHeight = (event.target as VisualViewport).height;
+			// console.log(viewportHeight);
+			// mainContainer.style.height = `${viewportHeight - 25}px`;
 			scrollToBottom();
 		}
 	}
@@ -125,6 +125,7 @@
 			if (container) {
 				container.scrollTop = container.scrollHeight;
 			}
+			msgInput.scrollIntoView({ behavior: 'smooth' });
 		}, 5);
 	};
 

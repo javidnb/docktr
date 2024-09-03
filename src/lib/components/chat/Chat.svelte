@@ -41,7 +41,9 @@
 	onMount(() => {
 		mainContainer = document.querySelector('.mainContainer');
 		if (window.visualViewport) {
-			window.visualViewport.addEventListener('resize', resizeScreen);
+			window.visualViewport.addEventListener('resize', () => {
+				setTimeout(resizeScreen, 50);
+			});
 		}
 		(async () => {
 			await initializeFirebase();
@@ -57,7 +59,9 @@
 
 	function resizeScreen(event: any) {
 		if (mainContainer && event.target) {
-			const viewportHeight = (event.target as VisualViewport).height;
+			const viewportHeight = window.visualViewport
+				? (event.target as VisualViewport).height
+				: window.innerHeight;
 			mainContainer.style.height = `${viewportHeight - 30}px`;
 		}
 	}

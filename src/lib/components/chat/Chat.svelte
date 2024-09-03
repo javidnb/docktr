@@ -125,7 +125,7 @@
 			if (container) {
 				container.scrollTop = container.scrollHeight;
 			}
-			msgInput.scrollIntoView({ behavior: 'smooth' });
+			msgInput.scrollIntoView({ behavior: 'auto' });
 		}, 5);
 	};
 

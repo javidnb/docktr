@@ -120,9 +120,9 @@
 
 	// SCROLLS MESSAGES CONTAINER TO BOTTOM TO SHOW NEWER MSGS
 	const scrollToBottom = () => {
-		msgInput.scrollIntoView({ behavior: 'auto' });
 		const container = document.getElementById('messages-container');
 		setTimeout(() => {
+			msgInput.scrollIntoView({ behavior: 'auto' });
 			if (container) {
 				container.scrollTop = container.scrollHeight;
 			}

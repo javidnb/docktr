@@ -133,7 +133,7 @@
 									on:click={() => {
 										changeComponent(Favourites);
 									}}
-									class:active={component == Documents}
+									class:active={component == Favourites}
 								>
 									<span class="material-symbols-outlined"> clinical_notes </span>{$_(
 										'profile.doctors'

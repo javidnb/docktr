@@ -6,7 +6,7 @@
 	import Contacts from '$lib/components/admin/Contacts.svelte';
 	import AwaitingComments from '$lib/components/admin/AwaitingComments.svelte';
 	import AiChat from '$lib/components/admin/AiChat.svelte';
-	import { hideNav, mobile } from '$lib/store/dataStore';
+	import { dataLoading, hideNav, mobile } from '$lib/store/dataStore';
 	import Reviews from '$lib/components/admin/Reviews.svelte';
 	import Home from '$lib/components/admin/Home.svelte';
 	import UpcomingAppointments from '$lib/components/admin/UpcomingAppointments.svelte';
@@ -19,7 +19,7 @@
 
 	onMount(async () => {
 		hideNav.set(true);
-		if (!$session?.loggedIn || !$session.user?.admin) {
+		if ((!$session?.loggedIn || !$session.user?.admin) && !dataLoading) {
 			goto('../');
 		}
 	});

@@ -499,6 +499,20 @@
 			</div>
 		{/if}
 
+		<button
+			class="btn d-flex videoControlBtn"
+			on:click={cycleCamera}
+			disabled={$dataLoading}
+			style="position: absolute;
+			top: 1.5rem;
+			right: 1.5rem;
+			filter: opacity(0.5);"
+		>
+			<span class="material-symbols-outlined icon-fill" style="font-size: 30px">
+				cameraswitch
+			</span>
+		</button>
+
 		<div
 			class="collapse"
 			id="moreBtns"
@@ -529,11 +543,6 @@
 				>
 					<span class="material-symbols-outlined icon-fill" style="font-size: 30px">
 						{camOn ? 'videocam' : 'videocam_off'}
-					</span>
-				</button>
-				<button class="btn d-flex videoControlBtn" on:click={cycleCamera} disabled={$dataLoading}>
-					<span class="material-symbols-outlined icon-fill" style="font-size: 30px">
-						cameraswitch
 					</span>
 				</button>
 				<button

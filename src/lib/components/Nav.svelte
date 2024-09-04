@@ -23,7 +23,7 @@
 	let currentDate = new Date();
 	let showModal: boolean = false;
 	$: upcomingAppointments = $appointments.length
-		? $appointments.filter((ap) => new Date(ap.startTime) > new Date())
+		? $appointments.filter((ap) => new Date(ap.endTime) > new Date())
 		: [];
 
 	onMount(async () => {

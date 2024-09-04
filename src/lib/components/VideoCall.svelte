@@ -500,7 +500,7 @@
 		{/if}
 
 		<button
-			class="btn d-flex videoControlBtn"
+			class="btn d-flex videoControlBtn cameraSwitchButton"
 			on:click={cycleCamera}
 			disabled={$dataLoading}
 			style="position: absolute;
@@ -625,6 +625,12 @@
 	.endCallBtn:hover {
 		background-color: rgb(134 30 30) !important;
 	}
+	.cameraSwitchButton:hover {
+		filter: opacity(1) !important;
+		transition-duration: 0.2s;
+		background: #000000ab !important;
+	}
+
 	@media screen and (min-width: 992px) {
 		.responsiveVideo {
 			height: 100%;

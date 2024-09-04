@@ -1,6 +1,15 @@
 <script lang="ts">
 	import { onMount, afterUpdate, onDestroy } from 'svelte';
-	import { collection, addDoc, query, where, onSnapshot, orderBy } from 'firebase/firestore';
+	import {
+		collection,
+		addDoc,
+		query,
+		where,
+		onSnapshot,
+		orderBy,
+		deleteDoc,
+		doc
+	} from 'firebase/firestore';
 	import { db, initializeFirebase } from '$lib/firebase.client';
 	import { session } from '$lib/session';
 	import { selectedUser, users, mobile, doctors, sendNotification } from '$lib/store/dataStore';
@@ -56,7 +65,7 @@
 	});
 
 	function resizeScreen(event: any) {
-		if (mainContainer && event?.target) {
+		if (mainContainer && event?.target && $mobile) {
 			if (event.target) {
 				const viewportHeight = (event?.target as VisualViewport).height;
 				mainContainer.style.height = `${viewportHeight - 30}px`;
@@ -79,7 +88,10 @@
 			const unsubscribe = onSnapshot(q, (snapshot) => {
 				messages = snapshot.docs
 					.filter((doc) => doc.data().participants.includes(userId))
-					.map((doc) => doc.data());
+					.map((doc) => ({
+						id: doc.id, // Include document ID
+						...doc.data() // Include other data
+					}));
 				scrollToBottom();
 				files = messages.filter((m: any) => m.file);
 			});
@@ -125,7 +137,7 @@
 			if (container) {
 				container.scrollTop = container.scrollHeight;
 			}
-		}, 5);
+		}, 15);
 	};
 
 	// ADDING FILES
@@ -263,29 +275,44 @@
 			sendMessage();
 		}
 	}
+
+	function downloadFile(url: string, filename: string) {
+		fetch(url)
+			.then((response) => response.blob())
+			.then((blob) => {
+				const link = document.createElement('a');
+				link.href = URL.createObjectURL(blob);
+				link.download = filename;
+				link.click();
+				URL.revokeObjectURL(link.href); // Clean up after download
+			})
+			.catch((error) => console.error('Download failed:', error));
+	}
+
+	async function deleteFile(id: string) {
+		const docRef = doc(db, 'messages', id);
+		await deleteDoc(docRef);
+	}
 </script>
 
-{#if !showDocs}
+{#if !showDocs && user}
 	<button
 		class="btn btn-outline-primary mobileOnly"
 		style="position: absolute;
-    top: 10px;
-    left: 5px;
-    color: rgb(41, 71, 41);
-    border: none !important;
-    text-align: center;
-    width: 56px;
-    padding-left: 20px;
-    height: 40px;
-    box-shadow: unset;
-    z-index: 999;"
+		top: 10px;
+		left: 5px;
+		color: rgb(41, 71, 41);
+		border: none !important;
+		text-align: center;
+		width: 56px;
+		padding-left: 20px;
+		height: 40px;
+		box-shadow: unset;
+		z-index: 999;"
 		on:click={() => selectedUser.set(null)}
 	>
 		<span class="material-symbols-outlined">arrow_back_ios</span>
 	</button>
-{/if}
-
-{#if !showDocs && user}
 	<div
 		class="d-flex flex-column mainContainer"
 		class:minimizedChat={inputFocused && !window.visualViewport}
@@ -410,7 +437,7 @@
 						class:padding-3px={message.file}
 					>
 						{#if message.message}
-							{message.message}
+							<span class:px-2={message.file} class:pb-2={message.file}>{message.message}</span>
 						{/if}
 						{#if message.file}
 							<a
@@ -444,24 +471,78 @@
 									</span>
 									<span
 										style="padding-inline: 5px;
-									font-size: smaller;
-									overflow-wrap: break-word;
-									max-height: 28px;
-									overflow-y: hidden;
-									line-height: normal;
-									text-decoration: none;
-									color: unset;
-									margin-bottom: 10px;
-									max-width: 80%"
+										font-size: smaller;
+										overflow-wrap: break-word;
+										max-height: 28px;
+										overflow-y: hidden;
+										line-height: normal;
+										text-decoration: none;
+										color: unset;
+										margin-bottom: 10px;
+										max-width: 80%"
 									>
 										{message.file.name}
 									</span>
 								{/if}
 							</a>
 						{/if}
-						<span class="msgTime" style="font-size: small; color: gray; text-align: right"
-							>{@html timestamp(message.timestamp)}</span
-						>
+						{#if message.file && checkFileExtension(message.file.name)}
+							<div
+								class="d-flex px-3"
+								style="justify-content: space-between;
+								align-items: center;
+								padding-right: 10px;
+								background: #00000061;
+								border-radius: 7px;
+								border-top-left-radius: 0px;
+								border-top-right-radius: 0px;
+								color: white !important;
+								position: absolute;
+								bottom: 8px;
+								width: calc(100% - 10px);"
+							>
+								<div class="d-flex gap-1">
+									<!-- svelte-ignore a11y-missing-attribute -->
+									<!-- svelte-ignore a11y-click-events-have-key-events -->
+									<!-- svelte-ignore a11y-no-static-element-interactions -->
+									<!-- svelte-ignore a11y-interactive-supports-focus -->
+									<a
+										on:click={() => {
+											downloadFile(
+												`https://ik.imagekit.io/d2nwsj0ktvh/docktr/uploads/${message.file.url
+													.split('/')
+													.pop()}`,
+												message.file.name
+											);
+										}}
+										class="btn"
+										role="button"
+									>
+										<span class="material-symbols-outlined" style="color: white"> download </span>
+									</a>
+									<button
+										class="btn"
+										on:click={() => {
+											deleteFile(message.id);
+										}}
+									>
+										<span class="material-symbols-outlined" style="color: white"> delete </span>
+									</button>
+								</div>
+
+								<span
+									class="msgTime"
+									style="font-size: small; color: white!important; text-align: right;"
+									>{@html timestamp(message.timestamp)}</span
+								>
+							</div>
+						{:else}
+							<span
+								class="msgTime"
+								style="font-size: small; color: gray!important; text-align: right; padding-bottom: 3px"
+								>{@html timestamp(message.timestamp)}</span
+							>
+						{/if}
 					</div>
 				</div>
 			{/each}
@@ -627,7 +708,8 @@
 		align-items: center;
 		font-size: small;
 		overflow-x: clip;
-		height: 80px;
+		height: 80px !important;
+		min-height: 80px !important;
 		border-radius: 6px;
 		box-shadow: 0px 0px 5px #00000024;
 		margin-block: 0.5rem;
@@ -642,7 +724,7 @@
 		align-self: end;
 	}
 	.padding-3px {
-		padding: 5px !important;
+		padding: 5px 5px 0px 5px !important;
 	}
 	.fileCard:hover {
 		background: #e6e6e6;

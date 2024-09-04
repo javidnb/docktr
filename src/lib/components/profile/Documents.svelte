@@ -134,10 +134,11 @@
 </script>
 
 {#if !$selectedUser}
-	<div class="d-flex flex-column gap-2">
+	<div class="d-flex flex-column gap-2 mt-1">
 		{#each messagesGroupedByUser as { user, uid }}
 			<button
 				class="btnUser"
+				style="border-radius: 8px!important"
 				on:click={() => {
 					selectedUser.set(uid);
 				}}

@@ -116,7 +116,9 @@
 		"end": "Görüşü sonlandır",
 		"no": "Xeyr",
 		"yes": "Sonladır",
-		"ended": "Görüş sonlandırıldı"
+		"ended": "Görüş sonlandırıldı",
+		"join": "Video Görüşə Qoşul",
+		"wait": "Gözləyin"
 	},
 	"login": {
 		"login_header": "Hesaba giriş",

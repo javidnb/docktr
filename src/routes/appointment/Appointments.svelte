@@ -38,8 +38,6 @@
 
 	// $: if (!$session.user) appointments.set([]);
 
-	$: if (!!$appointments) console.log($appointments);
-
 	$: upcomingAppointments = $session?.user?.doctor
 		? $appointments
 				.filter((ap) => new Date(ap.endTime) > new Date() && ap.purchased)
@@ -77,7 +75,6 @@
 			: [];
 
 	onMount(() => {
-		console.log($appointments);
 		const updateRemainingTime = () => {
 			if (filteredAppointments?.length) {
 				filteredAppointments = filteredAppointments.map((appointment: any) => {
@@ -222,7 +219,6 @@
 	}
 
 	function sendMsg(appointment: any, doctor?: boolean) {
-		console.log(appointment);
 		if (doctor) {
 			let doc = $doctors.find((d) => d.id == appointment.doctorId);
 			if (doc) {
@@ -411,7 +407,7 @@
 
 								{#if !appointment.ended && new Date(appointment.endTime) > new Date()}
 									<!-- Section 3: Appointment Status -->
-									{#if appointment.purchased}
+									{#if appointment.purchased && appointment.status !== 2}
 										{#if appointment.status == 1}
 											<span class="d-flex my-auto py-2 gap-1" style="color: #93930a">
 												<span class="material-symbols-outlined">pending</span>
@@ -490,12 +486,12 @@
 									{:else if appointment.status == 2}
 										<button
 											on:click={() => joinCall(appointment)}
-											class="btn btn-outline-primary mt-3 mb-2 d-flex align-items-center"
+											class="btn btn-outline-primary mt-4 py-2 d-flex align-items-center btnJoinCall"
 											style="background: var(--primaryColor); color: white;"
 										>
 											<span class="material-symbols-outlined">video_call</span>
 											<span class="mx-auto"
-												>{!$joinVideoCall ? 'Video görüşə qoşul' : 'Gözləyin'}</span
+												>{!$joinVideoCall ? $_('call.join') : $_('call.wait')}</span
 											>
 										</button>
 									{/if}
@@ -586,5 +582,8 @@
 		border-bottom: 3px solid !important;
 		background-color: unset;
 		color: var(--primaryText) !important;
+	}
+	.btnJoinCall:hover {
+		background-color: #87a47f !important;
 	}
 </style>

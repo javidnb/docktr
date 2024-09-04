@@ -24,7 +24,7 @@
 
 	onMount(() => {
 		const initialize = async () => {
-			if (userId && !files) {
+			if (userId && (!files || !files.length)) {
 				await initializeFirebase();
 				if (db) {
 					let messagesCollection: CollectionReference;
@@ -176,6 +176,11 @@
 		'application/x-tar',
 		'application/gzip'
 	];
+
+	function checkFileExtension(str: any) {
+		const lastPart = str.split(',').pop().trim();
+		return lastPart.endsWith('jpg') || lastPart.endsWith('png');
+	}
 </script>
 
 <div
@@ -195,23 +200,40 @@
 				data-bs-target="#endCall"
 				style="border:none"
 			>
-				<span style="font-size: 30px;" class="material-symbols-outlined my-auto">
-					description
-				</span>
-				<span
-					style="padding-inline: 5px;
-                    font-size: smaller;
-                    overflow-wrap: break-word;
-                    max-height: 28px;
-                    overflow-y: hidden;
-                    line-height: normal;
-                    text-decoration: none;
-                    color: unset;
-                    margin-bottom: 10px;
-                    max-width: 80%"
-				>
-					{file.file?.name || ''}
-				</span>
+				{#if checkFileExtension(file.file?.name)}
+					<div
+						style="display: flex; align-items-center-justify-content-center; width: 100%; max-height: 400px; overflow: hidden"
+					>
+						<img
+							style="width: 100%;
+							object-fit: cover;
+							object-position: center;
+							border-radius: 6px"
+							src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/uploads/{file.file.url
+								.split('/')
+								.pop()}?tr=h-400"
+							alt="Attachment"
+						/>
+					</div>
+				{:else}
+					<span style="font-size: 30px;" class="material-symbols-outlined my-auto">
+						description
+					</span>
+					<span
+						style="padding-inline: 5px;
+			font-size: smaller;
+			overflow-wrap: break-word;
+			max-height: 28px;
+			overflow-y: hidden;
+			line-height: normal;
+			text-decoration: none;
+			color: unset;
+			margin-bottom: 10px;
+			max-width: 80%"
+					>
+						{file.file?.name || ''}
+					</span>
+				{/if}
 			</button>
 		{/each}
 	{:else}

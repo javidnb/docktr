@@ -5,8 +5,8 @@
 			"destination": "https://tekoplast.az/docktr/uploads/:path*"
 		},
 		{
-			"source": "/api/:path*",
-			"destination": "https://tekoplast.az/docktr/api/index.php?:path*"
+			"source": "/api/(.*)",
+			"destination": "https://tekoplast.az/docktr/api/index.php?$1"
 		}
 	]
 }

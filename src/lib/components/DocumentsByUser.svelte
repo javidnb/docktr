@@ -317,4 +317,7 @@
 	.progress-bar {
 		background-color: var(--primaryColor);
 	}
+	/* .cavid {
+		background-color: aliceblue;
+	} */
 </style>

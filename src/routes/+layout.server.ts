@@ -24,6 +24,8 @@ export async function load({ cookies }: { cookies: Cookies }) {
 		dataLoading.set(false);
 	}
 
+	let doctors = await getDoctors();
+
 	async function getAppointments(user: any) {
 		let time = new Date().getTime();
 		let response;
@@ -43,8 +45,17 @@ export async function load({ cookies }: { cookies: Cookies }) {
 		return res;
 	}
 
+	async function getDoctors() {
+		let time = new Date().getTime();
+		const docs = await fetch(`https://tekoplast.az/docktr/api/?doctors&t=${time}`);
+		const result: any = docs.json();
+		const res = await result;
+		return res;
+	}
+
 	return {
 		user,
-		appointments: bookings
+		appointments: bookings,
+		doctors
 	};
 }

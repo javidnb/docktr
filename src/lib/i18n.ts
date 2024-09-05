@@ -15,9 +15,8 @@ register('ru', () => import('$lib/components/locales/ru.json'));
 addMessages('tr', tr);
 addMessages('az', az);
 
-// Initialize with the default locale
-init({
-	// initialLocale: browser ? getLocaleFromNavigator()?.slice(0, 2) : defaultLocale,
-	initialLocale: defaultLocale,
-	fallbackLocale: defaultLocale
-});
+	init({
+		// initialLocale: browser ? getLocaleFromNavigator()?.slice(0, 2) : defaultLocale,
+		initialLocale: defaultLocale,
+		fallbackLocale: defaultLocale
+	});

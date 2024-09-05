@@ -1,7 +1,7 @@
 import { initializeFirebase, auth } from '$lib/firebase.client';
 import { browser } from '$app/environment';
 import { onAuthStateChanged } from 'firebase/auth';
-import { appointmentsLoading, dataLoading, getUser } from '$lib/store/dataStore.js';
+import { appointmentsLoading, dataLoading, doctors, getUser } from '$lib/store/dataStore.js';
 import { session } from '$lib/session.js';
 
 let doctorsData: any = null;
@@ -32,6 +32,16 @@ export async function load({ url, data }) {
 		});
 	}
 
+	if (data?.doctors?.length) {
+		const dooc = data.doctors
+			.map((item: any) => ({
+				...item,
+				branches: JSON.parse(item.branches)
+			}))
+			.sort((a: any, b: any) => b.star - a.star);
+		doctors.set(dooc);
+	}
+
 	if (!doctorsData) {
 		doctorsData = await getDoctors();
 	}
@@ -46,7 +56,7 @@ export async function load({ url, data }) {
 
 	return {
 		getAuthUser: getAuthUser,
-		doctors: doctorsData,
+		doctors: data.doctors,
 		url: url.pathname,
 		appointments: data.appointments,
 		user: data.user

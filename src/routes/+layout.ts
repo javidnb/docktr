@@ -1,8 +1,7 @@
 import { initializeFirebase, auth } from '$lib/firebase.client';
 import { browser } from '$app/environment';
 import { onAuthStateChanged } from 'firebase/auth';
-import { appointmentsLoading, dataLoading, doctors, getUser } from '$lib/store/dataStore.js';
-import { session } from '$lib/session.js';
+import { appointmentsLoading, dataLoading, getUser } from '$lib/store/dataStore.js';
 
 let doctorsData: any = null;
 
@@ -19,8 +18,8 @@ export async function load({ url, data }) {
 		return new Promise((resolve) => {
 			onAuthStateChanged(auth, (user) => {
 				if (user) {
+					console.log('getting user');
 					document.cookie = `user=${encodeURIComponent(JSON.stringify(user))}; path=/; max-age=${7 * 24 * 60 * 60}`;
-					session.set({ user, loggedIn: true });
 					getUser(user);
 				} else {
 					document.cookie = 'user=; path=/; max-age=0';
@@ -30,16 +29,6 @@ export async function load({ url, data }) {
 				resolve(user ? user : false);
 			});
 		});
-	}
-
-	if (data?.doctors?.length) {
-		const dooc = data.doctors
-			.map((item: any) => ({
-				...item,
-				branches: JSON.parse(item.branches)
-			}))
-			.sort((a: any, b: any) => b.star - a.star);
-		doctors.set(dooc);
 	}
 
 	if (!doctorsData) {
@@ -59,6 +48,7 @@ export async function load({ url, data }) {
 		doctors: data.doctors,
 		url: url.pathname,
 		appointments: data.appointments,
-		user: data.user
+		user: data.user,
+		userData: data.uusData
 	};
 }

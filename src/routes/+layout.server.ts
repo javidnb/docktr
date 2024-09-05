@@ -1,16 +1,20 @@
 import { session } from '$lib/session';
-import { dataLoading, appointments, appointmentsLoading } from '$lib/store/dataStore';
+import { dataLoading, appointments, appointmentsLoading, getUser } from '$lib/store/dataStore';
 import type { Cookies } from '@sveltejs/kit';
 
 export async function load({ cookies }: { cookies: Cookies }) {
-	const user = cookies.get('user');
+	let user = cookies.get('user');
+	let uusData = null;
 	let init = true;
 	let bookings: any = null;
+	let time = new Date().getTime();
 
 	if (user) {
 		let usr = JSON.parse(user);
 		if (usr.uid) {
-			session.set({ user: JSON.parse(user), loggedIn: true });
+			let uus = await fetch(`https://tekoplast.az/docktr/api/?user&id=${usr.uid}&t=${time}`);
+			uusData= await uus.json();
+			session.set({ user: uusData, loggedIn: true });
 			if (init) {
 				let res = await getAppointments(usr);
 				bookings = res;
@@ -21,13 +25,13 @@ export async function load({ cookies }: { cookies: Cookies }) {
 		}
 	} else {
 		session.set({ user: null, loggedIn: false });
+		appointments.set([]);
 		dataLoading.set(false);
 	}
 
 	let doctors = await getDoctors();
 
 	async function getAppointments(user: any) {
-		let time = new Date().getTime();
 		let response;
 
 		if (user.doctor) {
@@ -56,6 +60,7 @@ export async function load({ cookies }: { cookies: Cookies }) {
 	return {
 		user,
 		appointments: bookings,
-		doctors
+		doctors,
+		uusData
 	};
 }

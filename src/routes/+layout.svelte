@@ -10,8 +10,18 @@
 	import { page } from '$app/stores';
 	export let data: LayoutData;
 
-	if (data?.user) {
-		session.set({ user: JSON.parse(data.user), loggedIn: true });
+	if (data?.doctors?.length) {
+		const dooc = data.doctors
+			.map((item: any) => ({
+				...item,
+				branches: JSON.parse(item.branches)
+			}))
+			.sort((a: any, b: any) => b.star - a.star);
+		doctors.set(dooc);
+	}
+
+	if (data?.userData) {
+		session.set({ user: data.userData, loggedIn: true });
 	} else {
 		dataLoading.set(false);
 	}

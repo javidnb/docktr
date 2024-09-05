@@ -217,7 +217,6 @@ export async function getUser(user: any) {
 	if (result?.doctor) goto('./doctor');
 	if (result) {
 		getAppointments(result);
-		// registerCM();
 	}
 	session.set({
 		user: result,
@@ -283,12 +282,14 @@ async function getAppointments(user: any) {
 		if (result) {
 			appointments.set(result);
 			appointmentsLoading.set(false);
+			dataLoading.set(false);
 			return null;
 		}
 		return response;
 	} catch (error) {
 		console.error(error);
 		appointmentsLoading.set(false);
+		dataLoading.set(false);
 		return null;
 	}
 

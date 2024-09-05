@@ -3,12 +3,11 @@
 	import { afterUpdate, onMount } from 'svelte';
 	import { get, writable } from 'svelte/store';
 	import { _ } from 'svelte-i18n';
-	import { hideNav, mobile, postData, showGPT } from '$lib/store/dataStore';
+	import { hideNav, mobile, postData } from '$lib/store/dataStore';
 	import { session } from '$lib/session';
-	import { goto } from '$app/navigation';
 
 	let newMessage: string = '';
-	const MODEL = 'ft:gpt-4o-mini-2024-07-18:personal:sehiyye:9yEr2roV';
+	const MODEL = 'ft:gpt-4o-mini-2024-07-18:personal:sehiyye:A3nBVifN';
 	const api_endpoint = 'https://api.openai.com/v1/chat/completions';
 	let messages = writable<any[]>([]);
 	let awaitingResponse = writable(false);
@@ -239,12 +238,12 @@
 	}
 
 	.btnClear,
-	.btnClose {
+	/* .btnClose {
 		padding: 2px 25px;
 		width: fit-content;
 		align-self: center;
 		border-radius: 6px;
-	}
+	} */
 
 	.btnClear:not(:hover) {
 		background: white;

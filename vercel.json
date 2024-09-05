@@ -3,6 +3,10 @@
 		{
 			"source": "/uploads/:path*",
 			"destination": "https://tekoplast.az/docktr/uploads/:path*"
+		},
+		{
+			"source": "/api/:path*",
+			"destination": "https://tekoplast.az/docktr/api/:path*"
 		}
 	]
 }

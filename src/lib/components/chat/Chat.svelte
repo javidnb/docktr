@@ -391,6 +391,7 @@
 					class="d-flex msgBox align-items-center {message.fromUser !== currentUser
 						? 'flex-row'
 						: 'flex-row-reverse align-self-end'}"
+					style="position: relative;"
 				>
 					{#if message.fromUser === currentUser}
 						{#if $session.user?.photoURL}
@@ -435,6 +436,8 @@
 							: 'received'}"
 						style="position: relative;"
 						class:padding-3px={message.file}
+						data-bs-toggle="collapse"
+						data-bs-target="#{message.id}"
 					>
 						{#if message.message}
 							<span class:px-2={message.file} class:pb-2={message.file}>{message.message}</span>
@@ -539,10 +542,23 @@
 						{:else}
 							<span
 								class="msgTime"
-								style="font-size: small; color: gray!important; text-align: right; padding-bottom: 3px"
+								style="font-size: small; color: gray!important; text-align: right;
+								padding-bottom: 3px;"
 								>{@html timestamp(message.timestamp)}</span
 							>
 						{/if}
+						<div
+							class="collapse"
+							id={message.id}
+							style="position: absolute;
+							top: -4rem;
+							left: 0;
+							width: 100%;"
+						>
+							<div class="card card-body">
+								<button>del</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			{/each}

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { selectedAppointmentDate } from '$lib/store/dataStore';
+	import { monthNames } from './dateFormatter';
 	export let showDatePicker: boolean = false;
 	export let selectedDay: any = null;
 	// Function to get dates starting from tomorrow
@@ -64,7 +65,7 @@
 						}}
 					>
 						<span style="font-size: small">{day}</span>
-						<span style="font-weight: 500;">{date}</span>
+						<span style="font-weight: 500;">{new Date(date).getDate()} {monthNames[new Date(date).getMonth()].slice(0,3)}</span>
 					</button>
 				{/each}
 			</div>
@@ -121,6 +122,9 @@
 		border-radius: 6px !important;
 	}
 	.datePickerContainer .btn:hover {
-		min-width: 90px!important;
+		min-width: 90px !important;
+	}
+	.dateSelector::-webkit-scrollbar {
+		display: none;
 	}
 </style>

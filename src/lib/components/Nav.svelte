@@ -12,7 +12,8 @@
 		hideNav,
 		showGPT,
 		mobileComponent,
-		mobileHeader
+		mobileHeader,
+		selectedBranch
 	} from '$lib/store/dataStore';
 	import Modal from '$lib/helpers/Modal.svelte';
 	import Login from './login/Login.svelte';
@@ -281,7 +282,15 @@
 					</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="/doctors" class:active={curPage?.includes('/doctors')}
+					<a
+						class="nav-link"
+						href="/doctors"
+						on:click={() => {
+							if (curPage == '/doctors') {
+								selectedBranch.set(null);
+							}
+						}}
+						class:active={curPage?.includes('/doctors')}
 						><span
 							class="material-symbols-outlined"
 							class:icon-fill={curPage?.includes('/doctors')}

@@ -148,7 +148,7 @@
 		{#if !payment}
 			<div
 				class="card p-3 mb-3 d-flex flex-column"
-				style="color: var(--primaryText); flex:0; min-width: 400px"
+				style="color: var(--primaryText); flex:0; min-width: min(400px,90vw)"
 			>
 				<div class="d-flex align-items-center">
 					<span style="font-size: small;">Randevu müddəti:</span>
@@ -220,7 +220,7 @@
 								/>
 								<label class="form-check-label" for="usage">
 									<button
-										class="p-0 ms-2"
+										class="p-0 ms-2 hover-border"
 										on:click|preventDefault={() => {
 											showTermsModal.set(true);
 										}}
@@ -264,6 +264,9 @@
 		.appointmentContainer {
 			height: calc(100dvh - 150px);
 		}
+	}
+	.hover-border:hover {
+		text-decoration: underline;
 	}
 	.form-check-input:checked {
 		background-color: var(--primaryColor);

@@ -23,6 +23,8 @@ export const users = writable([]);
 export const selectedUser = writable();
 export const hideNav = writable(false);
 export const appointmentsLoading = writable(false);
+export const termsAccepted = writable(false);
+export const showTermsModal = writable(false);
 export const searchQuery = writable('');
 export const showGPT = writable(false);
 export const mobileComponent: any = writable(null);
@@ -300,4 +302,15 @@ async function getAppointments(user: any) {
 	// );
 	// const result = await getDocs(q);
 	// const data = result.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+}
+
+export async function sha1(message: string): Promise<string> {
+	const encoder = new TextEncoder();
+	const data = encoder.encode(message);
+	const hashBuffer = await crypto.subtle.digest('SHA-1', data);
+
+	// Base64 encoding
+	const base64Hash = btoa(String.fromCharCode(...new Uint8Array(hashBuffer)));
+
+	return base64Hash;
 }

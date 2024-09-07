@@ -27,6 +27,7 @@
 	import ReviewCall from '$lib/components/ReviewCall.svelte';
 	import Modal from '$lib/helpers/Modal.svelte';
 
+	export let showLatestAppointment = false;
 	let confirmationData: any = {};
 	let showDatePicker: boolean = false;
 	let upcomingAppointments: any, pastAppointments: any;
@@ -265,29 +266,31 @@
 	style="overflow-x: hidden;"
 >
 	<div class="mb-5 pb-5 row-gap-3" in:slideIn>
-		<ul class="nav nav-tabs pc-mt">
-			<li class="nav-item">
-				<button
-					class="nav-link"
-					class:active={!pastAppointmentsActive}
-					aria-current="page"
-					on:click={() => {
-						pastAppointmentsActive = false;
-						filteredAppointments = upcomingAppointments;
-					}}>Planlanan Görüşlər</button
-				>
-			</li>
-			<li class="nav-item">
-				<button
-					class="nav-link"
-					class:active={pastAppointmentsActive}
-					on:click={() => {
-						pastAppointmentsActive = true;
-						filteredAppointments = pastAppointments;
-					}}>Keçmiş Görüşlər</button
-				>
-			</li>
-		</ul>
+		{#if !showLatestAppointment}
+			<ul class="nav nav-tabs pc-mt">
+				<li class="nav-item">
+					<button
+						class="nav-link"
+						class:active={!pastAppointmentsActive}
+						aria-current="page"
+						on:click={() => {
+							pastAppointmentsActive = false;
+							filteredAppointments = upcomingAppointments;
+						}}>Planlanan Görüşlər</button
+					>
+				</li>
+				<li class="nav-item">
+					<button
+						class="nav-link"
+						class:active={pastAppointmentsActive}
+						on:click={() => {
+							pastAppointmentsActive = true;
+							filteredAppointments = pastAppointments;
+						}}>Keçmiş Görüşlər</button
+					>
+				</li>
+			</ul>
+		{/if}
 		{#if $appointmentsLoading}
 			<!-- APOINTMENTS LOADING -->
 			<div class="d-flex flex-column justify-content-center align-items-center my-5">
@@ -301,10 +304,14 @@
 			</div>
 		{:else if filteredAppointments?.length && filteredAppointments}
 			{#key pastAppointmentsActive}
-				<div class="row row-gap-3" in:scaleFade>
-					{#each filteredAppointments as appointment}
+				<div
+					class="row row-gap-3"
+					class:justify-content-center={showLatestAppointment}
+					in:scaleFade
+				>
+					{#each showLatestAppointment ? filteredAppointments.slice(0, 1) : filteredAppointments as appointment}
 						<div class="col-md-6 col-lg-4">
-							<div class="card mt-3 p-3 h-100">
+							<div class="card mt-3 p-3 h-100 w-100">
 								<!-- Section 1: Image and Name -->
 								<div
 									class="d-flex gap-3 align-items-center"
@@ -483,7 +490,7 @@
 												</span>
 											{/if}
 										</button>
-									{:else if appointment.status == 2}
+									{:else if appointment.status == 2 && appointment.purchased == 1}
 										<button
 											on:click={() => joinCall(appointment)}
 											class="btn btn-outline-primary mt-4 py-2 d-flex align-items-center btnJoinCall"

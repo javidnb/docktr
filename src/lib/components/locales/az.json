@@ -69,6 +69,8 @@
 		"a3": "Həkiminizlə videozəngə qoşulmaq üçün bu addımları yerinə yetirin: Hesabınıza daxil olun. 'Mənim görüşlərim' bölməsinə keçin. Qarşıdan gələn görüşü tapın və üzərinə klikləyin. Planlaşdırılmış vaxtda ' Video Zəngə Qoşulun' düyməsi. Zəng üçün kameranızın və mikrofonunuzun aktiv olduğundan əmin olun."
 	},
 	"legal": {
+		"header": "İstifadə Şərtləri",
+		"accept": "Qəbul et",
 		"1": "Nəzərinizə çatdırırıq ki, görüşünüzün vaxtı həkim tərəfindən dəyişdirilə bilər.",
 		"2": "Bu təqdirdə yeni təyin olunan vaxt sizə bildiriş olaraq göndərilir və dəyişikliklər profilinizdə qeyd olunur.",
 		"3": "Pasient və həkimlər arasında qurulan dialoq və paylaşılan məlumatların konfidensiallığı qorunmaqdadır.",

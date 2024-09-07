@@ -76,7 +76,7 @@
 				<div class="row align-items-center py-3">
 					<div class="col-12 col-md-9">
 						<div class="d-flex gap-3">
-							<a class="footerLink" href="/legal">{$_('usage.header')}</a>
+							<a class="footerLink" href="/usage">{$_('usage.header')}</a>
 							<a class="footerLink" href="/contact">{$_('nav.about')}</a>
 							<a class="footerLink" href="/contact">{$_('nav.contact')}</a>
 						</div>

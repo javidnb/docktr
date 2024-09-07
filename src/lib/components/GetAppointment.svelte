@@ -1,12 +1,15 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import {
 		loginModal,
 		selectedAppointmentDate,
 		appointmentModal,
 		postData,
 		appointments,
-		dataLoading
+		dataLoading,
+		sha1,
+		termsAccepted,
+		showTermsModal
 	} from '$lib/store/dataStore';
 	import { session } from '$lib/session';
 	import DatePicker from '$lib/helpers/DatePicker.svelte';
@@ -15,6 +18,8 @@
 	import { monthNames } from '$lib/helpers/dateFormatter';
 	import { _ } from 'svelte-i18n';
 	import { goto } from '$app/navigation';
+	import Modal from '$lib/helpers/Modal.svelte';
+	import Legal from '../../routes/appointment/Legal.svelte';
 
 	export let doc: any;
 
@@ -24,11 +29,16 @@
 	let disabled: boolean = false;
 	let payment: boolean = false;
 	let apiUrl: string = 'https://sandbox-api-gateway.tokenpay.com.tr';
+	let showTermsError: boolean = false;
 
 	onMount(async () => {
 		init = true;
 		selectedAppointmentDate.set({ day: null, time: null, start: null, end: null });
 		appointmentModal.set(false);
+	});
+
+	onDestroy(() => {
+		termsAccepted.set(false);
 	});
 
 	// after user logs in launches appointment modal again, if it was launched earlier
@@ -37,6 +47,10 @@
 	}
 
 	async function pay() {
+		if (!$termsAccepted) {
+			showTermsError = true;
+			return;
+		}
 		dataLoading.set(true);
 		let responseMessage;
 
@@ -129,10 +143,13 @@
 	}
 </script>
 
-<section>
-	<div class="container-fluid pt-3 appointmentContainer d-flex flex-column">
+<section class="container">
+	<div class="pt-3 appointmentContainer d-flex flex-column">
 		{#if !payment}
-			<div class="card p-3 mb-3 d-flex flex-column" style="color: var(--primaryText); flex:0">
+			<div
+				class="card p-3 mb-3 d-flex flex-column"
+				style="color: var(--primaryText); flex:0; min-width: 400px"
+			>
 				<div class="d-flex align-items-center">
 					<span style="font-size: small;">Randevu müddəti:</span>
 					{#if doc.appointmentDuration}
@@ -180,8 +197,38 @@
 						<div class="d-flex flex-column mt-auto" style="font-size: small; width: fit-content">
 							<span style="color: #bc0000;">* {$_('legal.1')}</span>
 							<span style="color: #bc0000;padding-left: 10px;">{$_('legal.2')}</span>
-							<span>* {$_('legal.3')} </span>
-							<span>* {$_('legal.4')}</span><span style="padding-left: 10px;">{$_('legal.5')}</span>
+						</div>
+
+						<div class="d-flex flex-column ps-2 py-2">
+							<!-- svelte-ignore a11y-click-events-have-key-events -->
+							<!-- svelte-ignore a11y-no-static-element-interactions -->
+							<div
+								class="form-check d-flex align-items-center"
+								class:errorBorder={showTermsError}
+								on:click={() => {
+									showTermsError = false;
+								}}
+								style="transition-duration: .2s;"
+							>
+								<input
+									class="form-check-input"
+									type="radio"
+									id="usage"
+									style="margin-bottom: 4px;"
+									bind:value={$termsAccepted}
+									checked={$termsAccepted}
+								/>
+								<label class="form-check-label" for="usage">
+									<button
+										class="p-0 ms-2"
+										on:click|preventDefault={() => {
+											showTermsModal.set(true);
+										}}
+										style="color: var(--primaryText); border:0; background: unset"
+										>İstifadə şərtlərini</button
+									> <span class="mt-1">oxudum və qəbul edirəm.</span>
+								</label>
+							</div>
 						</div>
 
 						<div class="d-flex gap-3 mt-3">
@@ -193,7 +240,7 @@
 								><span class="material-symbols-outlined"> replay </span>
 								<span class="mx-auto">{$_('actions.change')}</span></button
 							>
-							<button {disabled} class="btn btn-primary w-100 d-flex" on:click={pay}
+							<button class="btn btn-primary w-100 d-flex" on:click={pay}
 								><span class="material-symbols-outlined"> check </span>
 								<span class="mx-auto">{$_('actions.pay')}</span>
 							</button>
@@ -208,10 +255,24 @@
 	</div>
 </section>
 
+<Modal bind:showModal={$showTermsModal}>
+	<Legal />
+</Modal>
+
 <style>
 	@media screen and (max-width: 992px) {
 		.appointmentContainer {
 			height: calc(100dvh - 150px);
 		}
+	}
+	.form-check-input:checked {
+		background-color: var(--primaryColor);
+		border-color: var(--primaryColor);
+	}
+	.errorBorder {
+		border: 1px solid red;
+		border-radius: 6px;
+		justify-content: center;
+		padding-block: 5px;
 	}
 </style>

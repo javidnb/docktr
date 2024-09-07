@@ -1239,8 +1239,9 @@ export const diseases = [
 	},
 	{
 		id: 16,
-		name: 'Endokrinoloji',
-		slug: 'endrokinoloji',
+		name: 'Endokrinoloq',
+		slug: 'endrokinologiya',
+		icon: 'https://ik.imagekit.io/d2nwsj0ktvh/endocrinology_bb8cKn94U.png',
 		conditions: {
 			Diabet: [
 				'Tez-tez susuzluq',

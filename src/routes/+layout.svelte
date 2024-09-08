@@ -74,17 +74,36 @@
 		>
 			<div class="container">
 				<div class="row align-items-center py-3">
-					<div class="col-12 col-md-9">
+					<div class="col-12 col-md-7">
 						<div class="d-flex gap-3">
 							<a class="footerLink" href="/usage">{$_('usage.header')}</a>
-							<a class="footerLink" href="/contact">{$_('nav.about')}</a>
+							<a class="footerLink" href="/about">{$_('nav.about')}</a>
 							<a class="footerLink" href="/contact">{$_('nav.contact')}</a>
 						</div>
-					</div>
-					<div class="col-12 col-md-3">
-						<div class="d-flex gap-2 align-items-center">
+						<div class="d-flex gap-2 align-items-center mt-2">
 							<span>© Səhiyyə.online</span>
 							<span>2023-{new Date().getFullYear()}</span>
+						</div>
+					</div>
+					<div class="col-12 col-md-5">
+						<div class="d-flex gap-2 align-items-center justify-content-end">
+							<a href="tel:+994502803233" class="btn btn-primary d-flex gap-2 align-items-center"
+								><img
+									src="https://ik.imagekit.io/d2nwsj0ktvh/phone_VpGG5ckQl.png"
+									style="width: 30px;"
+									alt="Phone"
+								/> <span>+994 50 280 3233</span></a
+							>
+							<a
+								href="https://www.instagram.com/sehiyye.online/"
+								target="_blank"
+								class="btn btn-primary d-flex gap-2 align-items-center"
+								><img
+									src="https://ik.imagekit.io/d2nwsj0ktvh/instagram_v7_8wPhd2.png"
+									style="width: 30px;"
+									alt="Phone"
+								/> <span>/sehiyye.online</span></a
+							>
 						</div>
 					</div>
 				</div>

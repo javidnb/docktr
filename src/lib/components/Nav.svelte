@@ -370,7 +370,7 @@
 					</button>
 				</li> -->
 				<li class="nav-item pcOnly">
-					<a class="nav-link" href="/"
+					<a class="nav-link" href="/blog" class:active={curPage == '/blog'}
 						><span class="material-symbols-outlined"> rss_feed </span>
 						<span class="navLinkText">{$_('nav.blog')}</span></a
 					>

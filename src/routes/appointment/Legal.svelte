@@ -7,12 +7,25 @@
 	<div class="container">
 		<div class="col">
 			<div class="row mt-3 justify-content-center">
-				<div class="d-flex flex-column mt-auto" style="width: fit-content">
-					<h4>{$_('legal.header')}</h4>
-					<span style="color: #bc0000;">* {$_('legal.1')}</span>
-					<span style="color: #bc0000;padding-left: 10px;">{$_('legal.2')}</span>
-					<span>* {$_('legal.3')} </span>
-					<span>* {$_('legal.4')}</span><span style="padding-left: 10px;">{$_('legal.5')}</span>
+				<h4>{$_('legal.header')}</h4>
+
+				<div class="d-flex flex-column mt-auto" style="width: fit-content; max-height: 75dvh; overflow-y: scroll">
+					<h6>{$_('legal.h1')}</h6>
+					<span>{$_('legal.c1')}</span>
+					<h6 class="mt-2">{$_('legal.h2')}</h6>
+					<span>{$_('legal.c2')}</span>
+					<h6 class="mt-2">{$_('legal.h3')}</h6>
+					<span>{$_('legal.c3')}</span>
+					<h6 class="mt-2">{$_('legal.h4')}</h6>
+					<span>{$_('legal.c4')}</span>
+					<h6 class="mt-2">{$_('legal.h5')}</h6>
+					<span>{$_('legal.c5')}</span>
+					<h6 class="mt-2">{$_('legal.h6')}</h6>
+					<span>{$_('legal.c6')}</span>
+					<h6 class="mt-2">{$_('legal.h7')}</h6>
+					<span>{$_('legal.c7')}</span>
+					<h6 class="mt-2">{$_('legal.h8')}</h6>
+					<span>{$_('legal.c8')}</span>
 				</div>
 			</div>
 		</div>

@@ -1,67 +1,201 @@
 {
 	"home": {
-		"hero": "Sağlık Hizmetlerine Dijital Yaklaşım",
-		"lead": "Doktorunuzla İnternet Üzerinden Bağlantı Kurun, Sağlığınızı Şimdi Yönetin",
-		"search": "Arama",
-		"symptoms": "Semptomlar",
-		"faq": "Sıkça sorulan sorular",
-		"doctor": "doktor"
+	  "hero": "Sağlık Hizmetlerine Dijital Yaklaşım",
+	  "lead": "YABANCI DOKTORLARLA GÖRÜNTÜLÜ DANIŞMA",
+	  "search": "Arama",
+	  "symptoms": "Belirtiler",
+	  "faq": "Sık sorulan sorular",
+	  "doctor": "doktor"
 	},
 	"nav": {
-		"home": "Ana Sayfa",
-		"docs": "Doktorlar",
-		"branches": "Branşlar",
-		"diseases": "Hastalıklar",
-		"appointments": "Randevular",
-		"blog": "Blog",
-		"contact": "İletişim",
-		"account": "Hesabım",
-		"login": "Giriş"
+	  "home": "Ana Sayfa",
+	  "docs": "Doktorlar",
+	  "branches": "Bölümler",
+	  "diseases": "hastalıklar",
+	  "appointments": "Toplantılar",
+	  "blog": "Blog",
+	  "contact": "Temas etmek",
+	  "account": "Hesabım",
+	  "login": "giriiş",
+	  "logout": "Çıkış",
+	  "messages": "Mesajlar",
+	  "about": "Hakkımızda",
+	  "menu": "Menü"
 	},
 	"doctor": {
-		"about": "Doktor hakkında",
-		"comments": "Yorumlar",
-		"your_comment": "Yorumunuz"
+	  "about": "Doktor hakkında",
+	  "comments": "Yorumlar",
+	  "your_comment": "Yorum yaz",
+	  "await_confirmation": "Yorumunuz onay bekliyor.",
+	  "no_comments": "Doktor hakkında yorum yok",
+	  "hospitals": "Çalıştığı hastaneler",
+	  "certificates": "Sertifikalar",
+	  "langs_spoken": "Konuşulan diller",
+	  "diseases": "Tedavi edilen hastalıklar",
+	  "nationality": "Milliyet",
+	  "order_by": "Sırala",
+	  "order_by_point": "Teyzeye göre",
+	  "order_by_name": "İsmine göre",
+	  "order_by_price": "Fiyat için",
+	  "documents": "Belgeler",
+	  "history": "Geçmiş Toplantılar"
+	},
+	"titles": {
+	  "1": "Dr.",
+	  "2": "Doçent",
+	  "3": "Asistan"
 	},
 	"appointment": {
-		"loginToSee": "Randevularınızı görmek için ",
-		"login": "hesabınıza girin",
-		"get": "Randevu Al",
-		"no_appointment": "Bekleyen randevu yok .."
-	},
-	"legal": {
-		"1": "Randevu saatinizin doktorunuz tarafından değiştirilebileceğini bildiririz.",
-		"2": "Bu durumda yeni ayarlanan saat tarafınıza bildirim olarak gönderilir ve değişiklikler profilinize kaydedilir.",
-		"3": "Hasta ve doktor arasında kurulan diyalogun ve paylaşılan bilgilerin gizliliği korunur.",
-		"4": "Doktorların önerdiği tedavi yöntemleri ve ilaçlar kendi sorumluluğundadır.",
-		"5": "Platformumuz bu tedavilerin ve ilaçların etkililiği veya etkisizliği konusunda herhangi bir sorumluluk kabul etmez."
-	},
-	"actions": {
-		"change": "Değiştir",
-		"confirm": "Onayla",
-		"send": "Gönder"
-	},
-	"login": {
-		"login_header": "Hesaba giriş yapın",
-		"mobile": "Mobil",
-		"pass": "Şifre",
-		"login": "Giriş",
-		"no_account": "Hesabınız yok mu?",
-		"yes_account": "Hesabınız var mı?",
-		"register": "Kayıt ol",
-		"login_account": "Hesaba giriş yapın",
-		"name_surname": "Ad Soyadı",
-		"email": "E-posta"
+	  "loginToSee": "Randevuları görüntülemek için",
+	  "login": "Hesaba giriş yapın",
+	  "get": "Bir doktorla randevu alın",
+	  "no_appointment": "Toplantı yok",
+	  "planned": "Planlanmış toplantı",
+	  "list": "Toplantılarım"
 	},
 	"other": {
-		"notFound": "Sonuç bulunamadı"
+	  "notFound": "Sonuç bulunamadı",
+	  "search_symptoms": "Belirtilerinizi yazın",
+	  "welcome": "Rica ederim",
+	  "no_msg": "Yeni mesaj yok",
+	  "no_file": "Dosya yok"
 	},
 	"faq": {
-		"q1": "Doktordan nasıl randevu alabilirim?",
-		"a1": "Randevu almak çok basit. Şu adımları izleyin: Hesabınızda oturum açın. 'Randevu Al' bölümüne gidin. Mevcut doktorlar listesinden bir doktor seçin. Randevunuz için uygun bir tarih ve saat seçin. Randevu bilgilerinizi doğrulayın ve rezervasyonu tamamlayın.",
-		"q2": "Randevumu iptal etmem veya yeniden planlamam gerekirse ne yapmalıyım?",
-		"a2": "Randevunuzu iptal etmeniz veya yeniden planlamanız gerekiyorsa şu adımları izleyin: Hesabınızda oturum açın. 'Randevularım' bölümüne gidin. Değiştirmek istediğiniz randevuyu bulun. 'İptal' veya ' Yeniden Planla' düğmesi.Yeniden planlama yapıyorsanız yeni bir tarih ve saat seçin ve değişiklikleri onaylayın.",
-		"q3": "Doktorumla görüntülü görüşmeye nasıl katılabilirim?",
-		"a3": "Doktorunuzla görüntülü görüşmeye katılmak için şu adımları izleyin: Hesabınızda oturum açın. 'Randevularım' bölümüne gidin. Yaklaşan randevuyu bulun ve tıklayın. Planlanan saatte ' Görüntülü Aramaya Katıl' düğmesi. Kameranızın ve mikrofonunuzun arama için etkinleştirildiğinden emin olun."
+	  "q1": "Doktor randevusunu nasıl alabilirim?",
+	  "a1": "Randevu almak basittir. ",
+	  "q2": "Randevumu iptal etmem veya yeniden planlamam gerekirse ne olur?",
+	  "a2": "Randevunuzu iptal etmeniz veya yeniden planlamanız gerekirse şu adımları izleyin: Hesabınızda oturum açın. ",
+	  "q3": "Bir doktorla görüntülü görüşmeye nasıl katılabilirim?",
+	  "a3": "Doktorunuzla görüntülü görüşmeye katılmak için şu adımları izleyin: Hesabınızda oturum açın. "
+	},
+	"legal": {
+	  "1": "Randevu saatinizin doktorunuz tarafından değiştirilebileceğini lütfen unutmayın.",
+	  "2": "Bu durumda yeni ayarlanan saat size bildirim olarak gönderilir ve değişiklikler profilinize kaydedilir.",
+	  "3": "Hasta ile doktor arasında kurulan diyaloğun ve paylaşılan bilgilerin gizliliği korunur.",
+	  "4": "Doktorların önerdiği tedavi yöntemleri ve ilaçlar kendi sorumluluğundadır.",
+	  "5": "Platformumuz bu tedavilerin ve ilaçların etkililiği veya etkisizliği konusunda herhangi bir sorumluluk taşımamaktadır.",
+	  "header": "Kullanım Koşulları",
+	  "accept": "Kabul et",
+	  "about_1": "<b>sağlık.net</b> platform, tıbbi hizmetlere yenilikçi ve dijital bir yaklaşım sağlamak amacıyla inşa edildi. ",
+	  "about_2": "Healthcare.net aracılığıyla dünyanın farklı ülkelerindeki hastanelerde çalışma tecrübesine sahip doktorlardan ihtiyacınız olan tıbbi alanlarla ilgili tavsiyeler alabilir, teşhis ve tedavi süreçlerini online olarak gerçekleştirebilirsiniz. ",
+	  "about_3": "Tıp dünyasında güvenilirlik ve profesyonellik en önemli önceliklerimizdir. ",
+	  "h1": "1. Genel Şartlar ve Koşullar",
+	  "c1": "Healthcare.net, kullanıcılara çevrimiçi tıbbi tavsiye sağlamak amacıyla faaliyet gösteriyor. Platform, tıbbi tavsiye hizmeti sunsa da, tam tedavi veya teşhis için sağlık sorunlarıyla ilgili karar vermeden önce yerel sağlık yetkililerine de danışmalıdır.",
+	  "h2": "2. Hekimin Sorumluluğu",
+	  "c2": "Doktorlar reçete ettikleri tedavi ve ilaçların tüm sorumluluğunu üstlenmekte olup, hasta tarafından sehiyye.net platformuna karşı herhangi bir hak iddia edilemez. ",
+	  "h3": "3. Hizmetin Sınırlandırılması",
+	  "c3": "Healthcare.net aracılığıyla sağlanan hizmetler yalnızca tavsiye amaçlı olup, tam tedavi veya acil tıbbi bakım amacıyla kullanılamaz. ",
+	  "h4": "4. Kullanıcı Sorumluluğu",
+	  "c4": "Kullanıcılar, platform üzerinden sunulan hizmetlerden kişisel kullanımları için faydalanabilmektedir. ",
+	  "h5": "5. Gizlilik Politikası",
+	  "c5": "sehiyye.net, kullanıcıların kişisel bilgilerinin korunmasına büyük önem vermektedir. ",
+	  "h6": "6. Ödeme ve Geri Ödeme Koşulları",
+	  "c6": "Platformda sağlanan hizmetlere ilişkin ödemeler alındıktan sonra iade edilmez. ",
+	  "h7": "7. Platform Faaliyeti ve Sorumluluğu",
+	  "c7": "sehiyye.net platformunun kesintisiz ve sorunsuz çalışması için gerekli tüm önlemler alınmıştır. ",
+	  "h8": "8. Kullanım Koşullarının Değiştirilmesi",
+	  "c8": "sehiyye.net bu şartları herhangi bir zamanda değiştirme hakkını saklı tutar. "
+	},
+	"gpt": {
+	  "ask_anything": "Sorunuz?",
+	  "error": "Hata! ",
+	  "clear": "Temizlemek"
+	},
+	"actions": {
+	  "change": "Değiştir onu",
+	  "confirm": "Onaylamak",
+	  "send": "Göndermek",
+	  "clear": "Temizlemek",
+	  "leave": "Çıkış",
+	  "leave_call": "Kapat onu",
+	  "update": "Yenile",
+	  "success": "Başarılı",
+	  "add_pp": "Yeni bir fotoğraf ekle",
+	  "remove_pp": "Profil resmini kaldır",
+	  "view_pp": "Resme bak",
+	  "close": "Kapat onu",
+	  "add_file": "Dosya ekle",
+	  "wait": "Beklemek",
+	  "details": "Daha",
+	  "send_msg": "Mesaj gönder",
+	  "message_sent": "Mesaj gönderildi!",
+	  "thank_for_contact": "İletişime geçtiğiniz için teşekkürler",
+	  "back": "Geri",
+	  "thank_for_review": "Takdiriniz için teşekkürler",
+	  "contact_us": "Bize Ulaşın",
+	  "lang_selection": "Dil Seçimi",
+	  "pay": "Ödemek"
+	},
+	"profile": {
+	  "docs": "Analizlerim ve Tariflerim",
+	  "doctors": "doktorlarım",
+	  "logout": "Oturumu Kapat"
+	},
+	"call": {
+	  "mic_off": "Mikrofonu kapat",
+	  "mic_on": "Mikrofonu aç",
+	  "end": "Toplantıyı sonlandır",
+	  "no": "HAYIR",
+	  "yes": "Bitiyor",
+	  "ended": "Toplantı sonlandırıldı",
+	  "join": "Görüntülü Toplantıya Katılın",
+	  "wait": "Beklemek"
+	},
+	"login": {
+	  "login_header": "Hesap girişi",
+	  "mobile": "Mobil",
+	  "pass": "Şifre",
+	  "login": "giriiş",
+	  "no_account": "Hesabınız yok mu?",
+	  "yes_account": "Hesabınız var mı?",
+	  "register": "Kayıt",
+	  "login_account": "Hesap girişi",
+	  "name_surname": "Adı Soyadı",
+	  "email": "E-posta",
+	  "error": "Hata! ",
+	  "try_again": "Lütfen tekrar deneyin",
+	  "contact": "İletişim aracı",
+	  "message": "Mesajınız"
+	},
+	"usage": {
+	  "header": "Kullanım Koşulları",
+	  "register": "Kayıt",
+	  "register_details": "Öncelikle platforma kayıt olarak kişisel bir profil hesabı oluşturun. ",
+	  "get_appointment": "Randevu al",
+	  "get_appointment_details": "Kayıt olduktan sonra hesabınıza giriş yapın ve 'Randevu Al'a gidin. ",
+	  "payment": "Ödeme yap",
+	  "payment_details": "Hizmet bedelini randevu öncesinde online olarak ödeyebilirsiniz. ",
+	  "join_appointment": "Bir doktora görün",
+	  "join_appointment_details": "Planladığınız saatte platforma giriş yapın ve 'Randevularım' bölümünden görüntülü görüşmeye katılın. ",
+	  "check_appointment": "Verileri görüntüle",
+	  "check_appointment_details": "Her randevu sonrasında doktorla yazışmalarınızı, konsültasyon geçmişinizi ve diğer tüm bilgileri profilinizde görebilirsiniz."
+	},
+	"months": {
+	  "1": "Ocak",
+	  "2": "Şubat",
+	  "3": "Mart",
+	  "4": "Nisan",
+	  "5": "Mayıs",
+	  "6": "Haziran",
+	  "7": "Temmuz",
+	  "8": "Ağustos",
+	  "9": "Eylül",
+	  "10": "Ekim",
+	  "11": "Kasım",
+	  "12": "Aralık"
+	},
+	"nations": {
+	  "arab": "Arap",
+	  "iran": "İran",
+	  "turk": "Türkiye",
+	  "aze": "Azerbaycan"
+	},
+	"langs": {
+	  "arab": "Arapça",
+	  "iran": "Farsça",
+	  "turk": "Türkçe",
+	  "aze": "Azerice",
+	  "eng": "İngilizce",
+	  "ru": "Rusça"
 	}
-}
+  }

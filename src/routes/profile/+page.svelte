@@ -311,6 +311,9 @@
 							<a href="/contact" class="card btn btn-outline-primary d-flex flex-row w-100">
 								<span class="material-symbols-outlined"> dialpad </span>{$_('actions.contact_us')}
 							</a>
+							<a href="/about" class="card btn btn-outline-primary d-flex flex-row w-100">
+								<span class="material-symbols-outlined"> shield_question </span>{$_('nav.about')}
+							</a>
 							{#if $session.user && $session.user.admin}
 								<a class="card btn btn-outline-primary d-flex flex-row w-100" href="./admin">
 									<span class="material-symbols-outlined"> admin_panel_settings </span>Admin

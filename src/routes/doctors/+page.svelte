@@ -26,7 +26,8 @@
 	];
 	let selectedOrder: any = writable(null);
 
-	$: if ($selectedLangs || $selectedBranch || $selectedOrder) filterDocs();
+	$: if ($selectedLangs || $selectedBranch || $selectedOrder || $selectedBranch == null)
+		filterDocs();
 
 	function filterDocs() {
 		filterNo = 0;

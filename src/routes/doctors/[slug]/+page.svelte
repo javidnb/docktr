@@ -39,6 +39,7 @@
 	const today = new Date();
 	onMount(async () => {
 		if (doctor) {
+			console.log(doctor);
 			if (!doctor?.userComments) {
 				getComments();
 			} else {
@@ -154,7 +155,7 @@
 		class="jumbotron jumboHeader mobile-left-padding"
 		style="padding-block: 1rem; background-color: #e2e9ef"
 	>
-		<h1 class="display-4">{doctor?.name || ''}</h1>
+		<h1 class="display-4">{$_('titles.' + doctor?.title)} {doctor?.name || ''}</h1>
 		<!-- <p>
 			It uses utility classes for typography and spacing to space content out within the larger
 			container.

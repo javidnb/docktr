@@ -139,7 +139,7 @@
 		max-width: 100%;
 		aspect-ratio: 2 / 1.5;
 		object-fit: cover;
-		object-position: top;
+		object-position: center;
 		border-radius: 10px;
 	}
 	.branch {

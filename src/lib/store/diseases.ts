@@ -1460,5 +1460,91 @@ export const diseases = [
 				'Görmə itkisi'
 			]
 		}
+	},
+	{
+		id: 18,
+		name: 'Psixoterapevt',
+		slug: 'psixoterapevt',
+		icon: 'https://ik.imagekit.io/d2nwsj0ktvh/therapy_fd93-9l79.png',
+		conditions: {
+			Depressiya: [
+				'Davamlı kədər halı',
+				'Marağın və zövqün itirilməsi',
+				'Yorğunluq və enerji itkisi',
+				'Yuxu problemləri',
+				'İştah dəyişiklikləri',
+				'Diqqəti toplama və qərar vermə zorlukları',
+				'İntihar düşüncələri'
+			],
+			'Anksiyete Bozuklukları': [
+				'Həddindən artıq narahatlıq və qorxu',
+				'Panik ataklar',
+				'Əzələ gərginliyi',
+				'Hızlı kalp atışı',
+				'Terleme',
+				'Yuxu problemləri',
+				'Diqqəti toplama çətinlikləri'
+			],
+			'Bipolyar Bozukluk': [
+				'Manik və depressiv ataklar',
+				'Həddindən artıq şənlik və ya əsəbilik',
+				'Artan enerji və fəaliyyət səviyyəsi',
+				'Azalan uyku ihtiyacı',
+				'İrritabilik',
+				'Qərar vermə və düşüncə sürətində dəyişikliklər'
+			],
+			Şizofreniya: [
+				'Halüsinasyonlar',
+				'Sanrılar',
+				'Düşüncə bozuklukları',
+				'Sosial geri çəkilmə',
+				'Motivasiya itkisi',
+				'Duygusal ifadesizlik'
+			],
+			'Obsesif-Kompulsif Bozukluk (OKB)': [
+				'Təkrarlanan, istənilməyən düşüncələr (obsesiyalar)',
+				'Zorlayıcı, təkrarlanan davranışlar (kompulsiyalar)',
+				'Narahatlıq və sıkıntı hissi'
+			],
+			'Travma Sonrası Stress Bozukluğu (TSSB)': [
+				'Travmatik hadisələrin təkrar-təkrar yaşanması (flashback)',
+				'Kabuslar',
+				'Həddindən artıq uyarılma və tetikte olma',
+				'Sosial geri çəkilmə',
+				'Yuxu problemləri'
+			],
+			'Yeme Bozuklukları': [
+				'Anoreksiya nervoza',
+				'Bulimiya nervoza',
+				'Həddindən artıq yemək bozukluğu',
+				'Bədən dismorfik bozukluğu'
+			],
+			'Diqqət Əskikliyi və Hiperaktivite Bozukluğu (DEHB)': [
+				'Diqqət dağınıqlığı',
+				'Hiperaktivite',
+				'Dürtüsellik',
+				'Organizasyon və planlama çətinlikləri'
+			],
+			'Bağımlılık Bozuklukları': [
+				'Maddə bağımlılığı',
+				'Alkol bağımlılığı',
+				'Kumar bağımlılığı',
+				'İnternet və oyun bağımlılığı'
+			],
+			'Digər Psikoloji Bozukluklar': [
+				'Kədər və ümidsizlik',
+				'Günahkarlıq və utanc',
+				'Düşük özünəinam',
+				'Sosial geri çəkilmə',
+				'İrrasional düşüncələr',
+				'Paranoia və şübhələr',
+				'Özünə zərər vermə',
+				'Realite itkisi və halüsinasiyalar',
+				'Konsentrasiya çətinliyi',
+				'Yaddaş problemləri',
+				'Əhval dəyişikliyi',
+				'Yuxusuzluq və ya həddindən artıq yuxululuq'
+			]
+		}
 	}
 ];

@@ -87,6 +87,8 @@
 				docName = selectedDoctor.name || '';
 				contact = selectedDoctor.contact || '';
 				details = selectedDoctor.details || '';
+				price = selectedDoctor.price || '';
+				appointmentDuration = selectedDoctor.appointmentDuration || '';
 				selectedTitle =
 					titles.find((t) => t.value == selectedDoctor.title) || titles.find((t) => t.value == 1);
 				selectedNationality = nationality.find((n: any) => n.value == selectedDoctor.nationality);

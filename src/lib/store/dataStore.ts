@@ -156,7 +156,7 @@ export async function putData(
 
 export async function postData(table: string, data: any) {
 	let dataToPost = { table: table, data: { ...data } };
-	const response = await fetch('https://tekoplast.az/docktr/api/?postData', {
+	const response = await fetch('https://sehiyye.net/api/postData', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'

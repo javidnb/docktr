@@ -28,7 +28,6 @@
 	let init = true;
 	let disabled: boolean = false;
 	let payment: boolean = false;
-	let apiUrl: string = 'https://sandbox-api-gateway.tokenpay.com.tr';
 	let showTermsError: boolean = false;
 
 	onMount(async () => {
@@ -52,39 +51,33 @@
 			return;
 		}
 		dataLoading.set(true);
-		let responseMessage;
 
-		let body = {
-			price: parseFloat((doc.price + 15.0).toFixed(2)),
-			paidPrice: parseFloat((doc.price + 15.0).toFixed(2)),
-			currency: 'AZN',
-			paymentGroup: 'LISTING_OR_SUBSCRIPTION',
-			callbackUrl: 'https://sehiyye.online'
-		};
+		let order_id = await postAppointment();
+		console.log(order_id);
+		goto('/appointments');
 
-		try {
-			const response = await fetch(apiUrl + '/payment/v1/checkout-payments/init', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					body
-				})
-			});
-
-			if (response.ok) {
-				const data = await response.json();
-				responseMessage = 'Success: ' + data.message;
-			} else {
-				responseMessage = 'Failed to post data';
-			}
-		} catch (error: any) {
-			responseMessage = error;
-			console.log(error);
-		}
-		// console.log(responseMessage);
 		dataLoading.set(false);
+
+		// let body = {
+		// 	public_key: import.meta.env.VITE_EPOINT_KEY,
+		// 	amount: parseFloat((doc.price + 15.0).toFixed(2)),
+		// 	currency: 'AZN',
+		// 	language: 'az',
+		// 	order_id: 1
+		// };
+
+		// const response = await fetch('https://tekoplast.az/docktr/api/?sendPaymentRequest', {
+		// 	method: 'POST',
+		// 	headers: { 'Content-Type': 'application/json' },
+		// 	body: JSON.stringify(body)
+		// });
+
+		// const result = await response.json();
+		// console.log(result);
+		// if (result.status == 'success') {
+		// 	window.location.href = result.redirect_url;
+		// }
+		// dataLoading.set(false);
 	}
 
 	async function postAppointment() {
@@ -103,20 +96,22 @@
 				endTime: jsDateToSQL($selectedAppointmentDate.end),
 				status: 1
 			};
-			let post = await postData('appointments', data);
-			if (post == 'ok') {
+			let dataToPost = { table: 'appointments', data: { ...data } };
+			const response = await fetch('https://sehiyye.net/api/postData', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ ...dataToPost }),
+				cache: 'no-cache'
+			});
+
+			if (response.ok) {
 				appointments.set([...$appointments, data]);
-				appointmentModal.set(false);
-				sendNotification(doc.id);
-				toast.push('Randevu qeydə alındı!', {
-					duration: 2000,
-					theme: {
-						'--toastColor': 'mintcream',
-						'--toastBackground': 'rgb(91 144 77)',
-						'--toastBarBackground': '#1d5b3c'
-					}
-				});
-				goto('../appointment');
+				return response.json();
+			} else {
+				dataLoading.set(false);
+				return 'error';
 			}
 		}
 	}
@@ -240,9 +235,16 @@
 								><span class="material-symbols-outlined"> replay </span>
 								<span class="mx-auto">{$_('actions.change')}</span></button
 							>
-							<button class="btn btn-primary w-100 d-flex" on:click={pay}
+							<button
+								class="btn btn-primary w-100 d-flex"
+								on:click={pay}
+								disabled={$dataLoading}
+								style="position: relative;"
 								><span class="material-symbols-outlined"> check </span>
-								<span class="mx-auto">{$_('actions.pay')}</span>
+								{#if $dataLoading}
+									<div class="loader" style="left:40%"></div>{:else}
+									<span class="mx-auto">{$_('actions.pay')}</span>
+								{/if}
 							</button>
 						</div>
 					</div>
@@ -277,5 +279,9 @@
 		border-radius: 6px;
 		justify-content: center;
 		padding-block: 5px;
+		transition-duration: 0.2s;
+		padding-inline: 2rem;
+		gap: 5px;
+		justify-content: center;
 	}
 </style>

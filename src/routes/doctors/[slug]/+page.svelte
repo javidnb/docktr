@@ -194,7 +194,7 @@
 									style="max-height: 130px;
 									aspect-ratio: 1/1;
 									object-fit: cover;
-									object-position: top;
+									object-position: center;
 									border-radius: 100%;
 									box-shadow: 0px 0px 6px #0000000a"
 								/>

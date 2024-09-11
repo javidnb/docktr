@@ -51,6 +51,11 @@
 			showTermsError = true;
 			return;
 		}
+		if (!$session.user) {
+			appointmentModal.set(false);
+			loginModal.set(true);
+			return;
+		}
 		dataLoading.set(true);
 
 		let order_id = await postAppointment();
@@ -63,7 +68,6 @@
 			order_id: order_id.id
 		};
 		// amount: parseFloat((doc.price + $comission).toFixed(2)),
-
 
 		const response = await fetch('https://tekoplast.az/docktr/api/?sendPaymentRequest', {
 			method: 'POST',
@@ -96,11 +100,12 @@
 		if ($loginModal == false) {
 			disabled = true;
 			let data = {
-				userId: $session.user.uid,
+				userId: $session.user?.uid,
 				doctorId: doc.id,
 				startTime: jsDateToSQL($selectedAppointmentDate.start),
 				endTime: jsDateToSQL($selectedAppointmentDate.end),
-				status: 1
+				status: 1,
+				amount: parseFloat((doc.price + $comission).toFixed(2))
 			};
 			let dataToPost = { table: 'appointments', data: { ...data } };
 			const response = await fetch('https://sehiyye.net/api/postData', {

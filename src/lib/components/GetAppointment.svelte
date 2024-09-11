@@ -62,6 +62,8 @@
 			language: 'az',
 			order_id: order_id.id
 		};
+		// amount: parseFloat((doc.price + $comission).toFixed(2)),
+
 
 		const response = await fetch('https://tekoplast.az/docktr/api/?sendPaymentRequest', {
 			method: 'POST',

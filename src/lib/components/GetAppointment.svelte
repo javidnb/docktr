@@ -18,7 +18,6 @@
 	import { toast } from '@zerodevx/svelte-toast';
 	import { monthNames } from '$lib/helpers/dateFormatter';
 	import { _ } from 'svelte-i18n';
-	import { goto } from '$app/navigation';
 	import Modal from '$lib/helpers/Modal.svelte';
 	import Legal from '../../routes/appointments/Legal.svelte';
 
@@ -47,6 +46,7 @@
 	}
 
 	async function pay() {
+		init = false;
 		if (!$termsAccepted) {
 			showTermsError = true;
 			return;
@@ -105,7 +105,8 @@
 				startTime: jsDateToSQL($selectedAppointmentDate.start),
 				endTime: jsDateToSQL($selectedAppointmentDate.end),
 				status: 1,
-				amount: parseFloat((doc.price + $comission).toFixed(2))
+				amount: parseFloat((doc.price + $comission).toFixed(2)),
+				comission: $comission
 			};
 			let dataToPost = { table: 'appointments', data: { ...data } };
 			const response = await fetch('https://sehiyye.net/api/postData', {

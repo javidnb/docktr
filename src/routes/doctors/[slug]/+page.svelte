@@ -3,6 +3,7 @@
 	import { goto } from '$app/navigation';
 	import {
 		cancelAppointment,
+		comission,
 		doctors,
 		mobile,
 		selectedBranch,
@@ -131,6 +132,41 @@
 	function openModal() {
 		appointmentModal.set(true);
 		selectedAppointmentDate.set({ day: null, time: null, start: null, end: null });
+	}
+
+	async function pay() {
+		dataLoading.set(true);
+
+		let order_id = existingAppointment.id;
+
+		let body = {
+			public_key: import.meta.env.VITE_EPOINT_KEY,
+			amount: existingAppointment.amount,
+			currency: 'AZN',
+			language: 'az',
+			order_id: order_id
+		};
+		// amount: parseFloat((doc.price + $comission).toFixed(2)),
+
+		const response = await fetch('https://tekoplast.az/docktr/api/?sendPaymentRequest', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(body)
+		});
+
+		const result = await response.json();
+		if (result.status == 'success') {
+			window.location.href = result.redirect_url;
+		} else {
+			toast.push('Xəta! Zəhmət olmasa yenidən cəhd edin.', {
+				duration: 2000,
+				theme: {
+					'--toastColor': 'mintcream',
+					'--toastBackground': 'rgb(176 24 24)',
+					'--toastBarBackground': '#5b1010'
+				}
+			});
+		}
 	}
 
 	async function removeAppointment() {
@@ -317,9 +353,21 @@
 											<span class="mx-auto">{$_('actions.send_msg')}</span>
 										</button>
 									{:else}
-										<button class="btn btn-outline-primary mt-2 d-flex align-items-center">
+										<button
+											class="btn btn-outline-primary mt-2 d-flex align-items-center"
+											disabled={$dataLoading}
+											on:click={pay}
+										>
 											<span class="material-symbols-outlined"> shopping_cart </span>
 											<span class="mx-auto">{$_('actions.pay')}</span>
+										</button>
+										<button
+											class="btn btn-outline-primary mt-3 d-flex align-items-center"
+											disabled={$dataLoading}
+											on:click={removeAppointment}
+										>
+											<span class="material-symbols-outlined"> cancel </span>
+											<span class="mx-auto">{$_('actions.cancel_appointment')}</span>
 										</button>
 									{/if}
 								</div>
@@ -443,7 +491,11 @@
 											<span class="mx-auto">{$_('actions.send_msg')}</span>
 										</button>
 									{:else}
-										<button class="btn btn-outline-primary mt-3 py-2 d-flex align-items-center">
+										<button
+											class="btn btn-outline-primary mt-3 py-2 d-flex align-items-center"
+											disabled={$dataLoading}
+											on:click={pay}
+										>
 											<span class="material-symbols-outlined"> shopping_cart </span>
 											<span class="mx-auto">{$_('actions.pay')}</span>
 										</button>

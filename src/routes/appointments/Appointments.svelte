@@ -11,7 +11,8 @@
 		ongoingAppointment,
 		selectedUser,
 		reviewModal,
-		slideIn
+		slideIn,
+		cancelAppointment
 	} from '$lib/store/dataStore';
 	import { onMount } from 'svelte';
 	import { monthNames } from '$lib/helpers/dateFormatter';
@@ -256,6 +257,60 @@
 			}
 		};
 	}
+
+	async function pay(appointmentId: any, amount: any) {
+		dataLoading.set(true);
+
+		let order_id = appointmentId;
+
+		let body = {
+			public_key: import.meta.env.VITE_EPOINT_KEY,
+			amount,
+			currency: 'AZN',
+			language: 'az',
+			order_id: order_id
+		};
+		// amount: parseFloat((doc.price + $comission).toFixed(2)),
+
+		const response = await fetch('https://tekoplast.az/docktr/api/?sendPaymentRequest', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(body)
+		});
+
+		const result = await response.json();
+		if (result.status == 'success') {
+			window.location.href = result.redirect_url;
+		} else {
+			toast.push('Xəta! Zəhmət olmasa yenidən cəhd edin.', {
+				duration: 2000,
+				theme: {
+					'--toastColor': 'mintcream',
+					'--toastBackground': 'rgb(176 24 24)',
+					'--toastBarBackground': '#5b1010'
+				}
+			});
+		}
+	}
+
+	async function removeAppointment(appointmentId: any) {
+		dataLoading.set(true);
+		let result = await cancelAppointment(appointmentId, $session.user?.uid);
+		if (result.status == 'success') {
+			appointments.set($appointments.filter((item) => item.id !== appointmentId));
+			dataLoading.set(false);
+			goto('/appointments');
+		} else {
+			toast.push('Xəta! Zəhmət olmasa yenidən cəhd edin.', {
+				duration: 2000,
+				theme: {
+					'--toastColor': 'mintcream',
+					'--toastBackground': 'rgb(176 24 24)',
+					'--toastBarBackground': '#5b1010'
+				}
+			});
+		}
+	}
 </script>
 
 <div
@@ -357,7 +412,7 @@
 										<!-- User View: Show Doctor Info -->
 										<img
 											src={$doctors.find((d) => d.id == appointment.doctorId)?.img}
-											style="max-height: 80px; aspect-ratio: 1.5/1; max-width: 120px; border-radius: 6px; object-fit: cover; object-position: top"
+											style="max-height: 80px; aspect-ratio: 1.5/1; max-width: 120px; border-radius: 6px; object-fit: cover; object-position: center"
 											alt="doctor pic"
 										/>
 										<div class="d-flex align-items-center w-100 docDetails">
@@ -458,10 +513,23 @@
 										{#if !appointment.purchased}
 											<button
 												class="btn btn-outline-primary mt-auto mb-2 d-flex align-items-center"
-												on:click={()=>{console.log(appointment)}}
+												disabled={$dataLoading}
+												on:click={() => {
+													pay(appointment.id, appointment.amount);
+												}}
 											>
 												<span class="material-symbols-outlined">shopping_cart</span>
 												<span class="mx-auto">{$_('actions.pay')}</span>
+											</button>
+											<button
+												class="btn btn-outline-primary mt-2 d-flex align-items-center"
+												disabled={$dataLoading}
+												on:click={() => {
+													removeAppointment(appointment.id);
+												}}
+											>
+												<span class="material-symbols-outlined"> cancel </span>
+												<span class="mx-auto">{$_('actions.cancel_appointment')}</span>
 											</button>
 										{/if}
 									{/if}

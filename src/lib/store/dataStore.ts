@@ -322,7 +322,7 @@ export async function cancelAppointment(appointmentId: number, userId: any) {
 		}
 
 		const result = await response.json();
-		// appointments.set($appointments.filter(item => item.id !== idToRemove))
+		console.log(result);
 		return result;
 	} catch (error) {
 		console.error('Error canceling appointment:', error);

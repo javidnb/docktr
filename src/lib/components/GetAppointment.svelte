@@ -54,10 +54,6 @@
 		dataLoading.set(true);
 
 		let order_id = await postAppointment();
-		console.log(order_id);
-		// goto('/appointments');
-
-		// dataLoading.set(false);
 
 		let body = {
 			public_key: import.meta.env.VITE_EPOINT_KEY,

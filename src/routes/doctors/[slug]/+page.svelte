@@ -22,6 +22,7 @@
 	import { formatDate } from '$lib/helpers/dateFormatter';
 	import GetAppointment from '$lib/components/GetAppointment.svelte';
 	import Modal from '$lib/helpers/Modal.svelte';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	$: doctor = $doctors.find((d) => d.slug == $page.params.slug);
 
@@ -130,6 +131,24 @@
 	function openModal() {
 		appointmentModal.set(true);
 		selectedAppointmentDate.set({ day: null, time: null, start: null, end: null });
+	}
+
+	async function removeAppointment() {
+		dataLoading.set(true);
+		let result = await cancelAppointment(existingAppointment.id, $session.user?.uid);
+		if (result.status == 'success') {
+			appointments.set($appointments.filter((item) => item.id !== existingAppointment.id));
+			dataLoading.set(false);
+		} else {
+			toast.push('Xəta! Zəhmət olmasa yenidən cəhd edin.', {
+				duration: 2000,
+				theme: {
+					'--toastColor': 'mintcream',
+					'--toastBackground': 'rgb(176 24 24)',
+					'--toastBarBackground': '#5b1010'
+				}
+			});
+		}
 	}
 </script>
 
@@ -428,15 +447,14 @@
 											<span class="material-symbols-outlined"> shopping_cart </span>
 											<span class="mx-auto">{$_('actions.pay')}</span>
 										</button>
-										<!-- <button
+										<button
 											class="btn btn-outline-primary mt-3 d-flex align-items-center"
-											on:click={() => {
-												cancelAppointment(existingAppointment.id, $session.user?.uid);
-											}}
+											disabled={$dataLoading}
+											on:click={removeAppointment}
 										>
 											<span class="material-symbols-outlined"> cancel </span>
 											<span class="mx-auto">{$_('actions.cancel_appointment')}</span>
-										</button> -->
+										</button>
 									{/if}
 								</div>
 							{/if}

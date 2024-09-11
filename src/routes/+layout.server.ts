@@ -13,7 +13,7 @@ export async function load({ cookies }: { cookies: Cookies }) {
 		let usr = JSON.parse(user);
 		if (usr.uid) {
 			let uus = await fetch(`https://tekoplast.az/docktr/api/?user&id=${usr.uid}&t=${time}`);
-			uusData= await uus.json();
+			uusData = await uus.json();
 			session.set({ user: uusData, loggedIn: true });
 			if (init) {
 				let res = await getAppointments(usr);
@@ -22,6 +22,22 @@ export async function load({ cookies }: { cookies: Cookies }) {
 				appointmentsLoading.set(false);
 				init = false;
 			}
+		} else if (usr.user.uid) {
+			let uus = await fetch(`https://tekoplast.az/docktr/api/?user&id=${usr.user.uid}&t=${time}`);
+			uusData = await uus.json();
+			session.set({ user: uusData, loggedIn: true });
+			if (init) {
+				let res = await getAppointments(usr.user);
+				bookings = res;
+				appointments.set(res);
+				appointmentsLoading.set(false);
+				init = false;
+			}
+		} else {
+			document.cookie = 'user=; path=/; max-age=0';
+			session.set({ user: null, loggedIn: false });
+			appointments.set([]);
+			dataLoading.set(false);
 		}
 	} else {
 		session.set({ user: null, loggedIn: false });
@@ -58,7 +74,7 @@ export async function load({ cookies }: { cookies: Cookies }) {
 	}
 
 	return {
-		user,
+		user: user ?? null,
 		appointments: bookings,
 		doctors,
 		uusData

@@ -90,10 +90,15 @@
 			>
 				<div class="d-flex flex-column sidenavContent">
 					<div class="d-flex justify-content-center title gap-2">
+						<!-- svelte-ignore a11y-click-events-have-key-events -->
+						<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 						<img
 							src="https://ik.imagekit.io/d2nwsj0ktvh/logo_hyRmOQCNQ.png?updatedAt=1722624724577"
 							alt="Sehiyye logo"
 							style="width: 24px;"
+							on:click={() => {
+								goto('/');
+							}}
 						/>
 						<span
 							>Səhiyyə<span style="font-size: smaller; color: rgb(0 0 0 / 70%)">.online</span></span
@@ -199,16 +204,18 @@
 			style="height: 100dvh; background: #f0f0f0; "
 		>
 			<div class="img-responsive">
-				<!-- svelte-ignore a11y-click-events-have-key-events -->
-				<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-				<img
-					src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/logo.png"
-					alt="Sehiyye logo"
-					style="width: 150px; margin-top: 1rem; cursor: pointer"
+				<button
+					class="btn"
 					on:click={() => {
 						goto('./');
 					}}
-				/>
+				>
+					<img
+						src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/logo.png"
+						alt="Sehiyye logo"
+						style="width: 150px; margin-top: 1rem; cursor: pointer"
+					/>
+				</button>
 			</div>
 
 			{#if !$dataLoading || !$appointmentsLoading}

@@ -2,6 +2,8 @@ import { initializeFirebase, auth } from '$lib/firebase.client';
 import { browser } from '$app/environment';
 import { onAuthStateChanged } from 'firebase/auth';
 import { appointmentsLoading, dataLoading, getUser } from '$lib/store/dataStore.js';
+import { redirect } from '@sveltejs/kit';
+import { locale } from 'svelte-i18n';
 
 export async function load({ url, data }) {
 	if (browser) {
@@ -10,6 +12,16 @@ export async function load({ url, data }) {
 		} catch (ex) {
 			console.error(ex);
 		}
+	}
+
+	if (data?.uusData && data?.uusData?.lang) {
+		locale.set(data.uusData.lang);
+	} else {
+		locale.set('az');
+	}
+
+	if (data?.uusData && data.uusData?.doctor && url.pathname == '/') {
+		throw redirect(302, '/doctor');
 	}
 
 	function getAuthUser() {

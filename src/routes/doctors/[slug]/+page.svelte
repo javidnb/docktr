@@ -1,7 +1,13 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { doctors, mobile, selectedBranch, selectedUser } from '$lib/store/dataStore';
+	import {
+		cancelAppointment,
+		doctors,
+		mobile,
+		selectedBranch,
+		selectedUser
+	} from '$lib/store/dataStore';
 	import { diseases } from '$lib/store/diseases';
 	import { onMount } from 'svelte';
 	import { _ } from 'svelte-i18n';
@@ -39,13 +45,11 @@
 	const today = new Date();
 	onMount(async () => {
 		if (doctor) {
-			console.log(doctor);
 			if (!doctor?.userComments) {
 				getComments();
 			} else {
 				comments.set(doctor.userComments);
 				commentsLoading = false;
-				console.log(doctor);
 			}
 		}
 	});
@@ -99,7 +103,7 @@
 		};
 
 		let dataToPost = { table: 'comments', data: { ...postData } };
-		const response = await fetch('https://tekoplast.az/docktr/api/?postData', {
+		const response = await fetch('https://sehiyye.net/api/postData', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -109,12 +113,10 @@
 		});
 
 		if (response.ok) {
-			console.log('Success');
 			btnCommentText = 'Uğurlu! Şərhiniz təsdiq gözləyir..';
 			getComments();
 			dataLoading.set(false);
 		} else {
-			console.log('error');
 			btnCommentText = 'Xəta :(';
 			dataLoading.set(false);
 		}
@@ -274,16 +276,17 @@
 								>
 									<span style="font-size: small;">{$_('appointment.planned')}: </span>
 									<span class="my-auto">{formatDate(new Date(existingAppointment.startTime))}</span>
-									<button
-										class="btn btn-outline-primary mt-2 d-flex align-items-center"
-										on:click={() => {
-											goto('../appointment');
-										}}
-									>
-										<span class="material-symbols-outlined"> info </span>
-										<span class="mx-auto">{$_('actions.details')}</span>
-									</button>
+
 									{#if existingAppointment.purchased}
+										<button
+											class="btn btn-outline-primary mt-2 d-flex align-items-center"
+											on:click={() => {
+												goto('../appointments');
+											}}
+										>
+											<span class="material-symbols-outlined"> info </span>
+											<span class="mx-auto">{$_('actions.details')}</span>
+										</button>
 										<button
 											class="btn btn-outline-primary mt-3 w-100 d-flex"
 											on:click={() => {
@@ -293,6 +296,11 @@
 										>
 											<span class="material-symbols-outlined"> send </span>
 											<span class="mx-auto">{$_('actions.send_msg')}</span>
+										</button>
+									{:else}
+										<button class="btn btn-outline-primary mt-2 d-flex align-items-center">
+											<span class="material-symbols-outlined"> shopping_cart </span>
+											<span class="mx-auto">{$_('actions.pay')}</span>
 										</button>
 									{/if}
 								</div>
@@ -394,16 +402,17 @@
 								>
 									<span style="font-size: small;">{$_('appointment.planned')}: </span>
 									<span class="my-auto">{formatDate(new Date(existingAppointment.startTime))}</span>
-									<button
-										class="btn btn-outline-primary mt-2 d-flex align-items-center"
-										on:click={() => {
-											goto('../appointment');
-										}}
-									>
-										<span class="material-symbols-outlined"> info </span>
-										<span class="mx-auto">{$_('actions.details')}</span>
-									</button>
+
 									{#if existingAppointment.purchased}
+										<button
+											class="btn btn-outline-primary mt-2 d-flex align-items-center"
+											on:click={() => {
+												goto('../appointments');
+											}}
+										>
+											<span class="material-symbols-outlined"> info </span>
+											<span class="mx-auto">{$_('actions.details')}</span>
+										</button>
 										<button
 											class="btn btn-outline-primary mt-3 w-100 d-flex"
 											on:click={() => {
@@ -414,6 +423,20 @@
 											<span class="material-symbols-outlined"> send </span>
 											<span class="mx-auto">{$_('actions.send_msg')}</span>
 										</button>
+									{:else}
+										<button class="btn btn-outline-primary mt-3 py-2 d-flex align-items-center">
+											<span class="material-symbols-outlined"> shopping_cart </span>
+											<span class="mx-auto">{$_('actions.pay')}</span>
+										</button>
+										<!-- <button
+											class="btn btn-outline-primary mt-3 d-flex align-items-center"
+											on:click={() => {
+												cancelAppointment(existingAppointment.id, $session.user?.uid);
+											}}
+										>
+											<span class="material-symbols-outlined"> cancel </span>
+											<span class="mx-auto">{$_('actions.cancel_appointment')}</span>
+										</button> -->
 									{/if}
 								</div>
 							{/if}

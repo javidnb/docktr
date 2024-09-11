@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { diseases } from '$lib/store/diseases';
 	import type { Doctor } from '$lib/interfaces/doctor.interface';
-	import { selectedBranch } from '$lib/store/dataStore';
+	import { comission, selectedBranch } from '$lib/store/dataStore';
 	import { _ } from 'svelte-i18n';
 	export let props: Doctor;
 
@@ -24,8 +24,9 @@
 						? props.img
 						: 'https://ik.imagekit.io/d2nwsj0ktvh/docktr/uploads/docplaceholder.jpg'}
 					alt="Some Doc"
-					style="max-width: max(150px,100%)"
+					style="max-width: max(150px,100%);"
 				/>
+
 				<div
 					style="color: #rgb(99 141 88)"
 					class="d-flex flex-column justify-content-center align-items-center mt-1"
@@ -112,7 +113,7 @@
 						background: #f8f8f8"
 					>
 						<span style="font-size: small;"> ₼ </span>
-						<span>{(props.price + 15).toFixed(2)}</span>
+						<span>{(props.price + $comission).toFixed(2)}</span>
 					</div>
 				{/if}
 			</div>

@@ -124,7 +124,8 @@
 		"thank_for_review": "Dəyərləndirməniz üçün təşəkkürlər",
 		"contact_us": "Bizimlə Əlaqə",
 		"lang_selection": "Dil Seçimi",
-		"pay": "Ödəniş et"
+		"pay": "Ödəniş et",
+		"cancel_appointment": "Görüşü ləğv et"
 	},
 	"profile": {
 		"docs": "Analizlərim və Reseptlərim",
@@ -196,6 +197,7 @@
 		"turk": "Türkcə",
 		"aze": "Azərbaycanca",
 		"eng": "İngiliscə",
-		"ru": "Rusca"
+		"ru": "Rusca",
+		"french": "Fransızca"
 	}
 }

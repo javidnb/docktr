@@ -337,14 +337,14 @@
 				<li class="nav-item">
 					<a
 						class="nav-link"
-						href="/appointment"
-						class:active={curPage == '/appointment'}
+						href="/appointments"
+						class:active={curPage == '/appointments'}
 						style="position: relative;"
-						><span class="material-symbols-outlined" class:icon-fill={curPage == '/appointment'}>
+						><span class="material-symbols-outlined" class:icon-fill={curPage == '/appointments'}>
 							local_library
 						</span>
 						<span class="navLinkText">{$_('nav.appointments')}</span>
-						{#if upcomingAppointments.length && curPage !== '/appointment'}
+						{#if upcomingAppointments.length && curPage !== '/appointments'}
 							<span
 								class="redDot"
 								style="background: rgb(196, 15, 15);

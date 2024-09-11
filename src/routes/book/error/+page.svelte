@@ -1,6 +1,6 @@
 <script>
 	import { session } from '$lib/session';
-	import Appointments from '../../appointment/Appointments.svelte';
+	import Appointments from '../../appointments/Appointments.svelte';
 	import { _ } from 'svelte-i18n';
 </script>
 

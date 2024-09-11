@@ -30,13 +30,15 @@ export const showGPT = writable(false);
 export const mobileComponent: any = writable(null);
 export const mobileHeader: any = writable('Menyu');
 export const limitDashboardData = writable(true); // this is for admin page, to get only limited data in homepage
+export const comission = writable(15);
 
 export const langs: any = [
 	{ value: 'aze', label: 'Azərbaycanca' },
 	{ value: 'eng', label: 'İngiliscə' },
 	{ value: 'ru', label: 'Rusca' },
 	{ value: 'turk', label: 'Türkcə' },
-	{ value: 'iran', label: 'Farsca' }
+	{ value: 'iran', label: 'Farsca' },
+	{ value: 'french', label: 'Fransızca' }
 ];
 
 export const nationality: any = [
@@ -302,6 +304,30 @@ async function getAppointments(user: any) {
 	// );
 	// const result = await getDocs(q);
 	// const data = result.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+}
+
+export async function cancelAppointment(appointmentId: number, userId: any) {
+	try {
+		let data = { appointmentId, userId };
+		const response = await fetch('https://sehiyye.net/api/cancelAppointment', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ ...data })
+		});
+
+		if (!response.ok) {
+			throw new Error(`Error: ${response.status}`);
+		}
+
+		const result = await response.json();
+		// appointments.set($appointments.filter(item => item.id !== idToRemove))
+		return result;
+	} catch (error) {
+		console.error('Error canceling appointment:', error);
+		return { status: 'error', message: error };
+	}
 }
 
 export async function sha1(message: string): Promise<string> {

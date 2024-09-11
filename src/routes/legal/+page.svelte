@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
-	import Legal from '../appointment/Legal.svelte';
+	import Legal from '../appointments/Legal.svelte';
 </script>
 
 <section>

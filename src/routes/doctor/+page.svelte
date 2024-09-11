@@ -5,7 +5,7 @@
 	import { session } from '$lib/session';
 	import { logout } from '$lib/firebase.client';
 	import { writable } from 'svelte/store';
-	import Appointments from '../appointment/Appointments.svelte';
+	import Appointments from '../appointments/Appointments.svelte';
 	import { _ } from 'svelte-i18n';
 	import {
 		appointmentsLoading,

@@ -458,9 +458,10 @@
 										{#if !appointment.purchased}
 											<button
 												class="btn btn-outline-primary mt-auto mb-2 d-flex align-items-center"
+												on:click={()=>{console.log(appointment)}}
 											>
 												<span class="material-symbols-outlined">shopping_cart</span>
-												<span class="mx-auto">Ödəniş et</span>
+												<span class="mx-auto">{$_('actions.pay')}</span>
 											</button>
 										{/if}
 									{/if}

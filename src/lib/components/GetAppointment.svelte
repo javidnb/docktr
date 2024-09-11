@@ -9,7 +9,8 @@
 		dataLoading,
 		sha1,
 		termsAccepted,
-		showTermsModal
+		showTermsModal,
+		comission
 	} from '$lib/store/dataStore';
 	import { session } from '$lib/session';
 	import DatePicker from '$lib/helpers/DatePicker.svelte';
@@ -19,7 +20,7 @@
 	import { _ } from 'svelte-i18n';
 	import { goto } from '$app/navigation';
 	import Modal from '$lib/helpers/Modal.svelte';
-	import Legal from '../../routes/appointment/Legal.svelte';
+	import Legal from '../../routes/appointments/Legal.svelte';
 
 	export let doc: any;
 
@@ -54,30 +55,37 @@
 
 		let order_id = await postAppointment();
 		console.log(order_id);
-		goto('/appointments');
+		// goto('/appointments');
 
-		dataLoading.set(false);
-
-		// let body = {
-		// 	public_key: import.meta.env.VITE_EPOINT_KEY,
-		// 	amount: parseFloat((doc.price + 15.0).toFixed(2)),
-		// 	currency: 'AZN',
-		// 	language: 'az',
-		// 	order_id: 1
-		// };
-
-		// const response = await fetch('https://tekoplast.az/docktr/api/?sendPaymentRequest', {
-		// 	method: 'POST',
-		// 	headers: { 'Content-Type': 'application/json' },
-		// 	body: JSON.stringify(body)
-		// });
-
-		// const result = await response.json();
-		// console.log(result);
-		// if (result.status == 'success') {
-		// 	window.location.href = result.redirect_url;
-		// }
 		// dataLoading.set(false);
+
+		let body = {
+			public_key: import.meta.env.VITE_EPOINT_KEY,
+			amount: 0.01,
+			currency: 'AZN',
+			language: 'az',
+			order_id: order_id.id
+		};
+
+		const response = await fetch('https://tekoplast.az/docktr/api/?sendPaymentRequest', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(body)
+		});
+
+		const result = await response.json();
+		if (result.status == 'success') {
+			window.location.href = result.redirect_url;
+		} else {
+			toast.push('Xəta! Zəhmət olmasa yenidən cəhd edin.', {
+				duration: 2000,
+				theme: {
+					'--toastColor': 'mintcream',
+					'--toastBackground': 'rgb(176 24 24)',
+					'--toastBarBackground': '#5b1010'
+				}
+			});
+		}
 	}
 
 	async function postAppointment() {
@@ -111,6 +119,14 @@
 				return response.json();
 			} else {
 				dataLoading.set(false);
+				toast.push('Xəta! Zəhmət olmasa yenidən cəhd edin.', {
+					duration: 2000,
+					theme: {
+						'--toastColor': 'mintcream',
+						'--toastBackground': 'rgb(176 24 24)',
+						'--toastBarBackground': '#5b1010'
+					}
+				});
 				return 'error';
 			}
 		}
@@ -219,7 +235,7 @@
 										on:click|preventDefault={() => {
 											showTermsModal.set(true);
 										}}
-										style="color: var(--primaryText); border:0; background: unset"
+										style="color: var(--primaryText); border:0; background: unset; font-weight: 900; text-decoration: underline"
 										>İstifadə şərtlərini</button
 									> <span class="mt-1">oxudum və qəbul edirəm.</span>
 								</label>

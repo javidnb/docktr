@@ -105,6 +105,13 @@
 
 	// Send a new message
 	const sendMessage = async () => {
+		// let data = {
+		// 	uid: userId,
+		// 	doc: $doctors.find((u: any) => u.uid == $selectedUser) ? true : false,
+		// 	name: $session.user?.displayName || 'Yeni mesaj',
+		// 	msg: 'https://sehiyye.online/messages'
+		// };
+		// console.log(data);
 		let msg = newMessage;
 		newMessage = '';
 		let file = null;
@@ -122,8 +129,9 @@
 			});
 			sendNotification(
 				userId,
-				$doctors.find((u: any) => u.uid == $selectedUser) ? true : false,
-				$session.user?.displayName || 'Yeni mesaj',
+				$doctors.find((u: any) => u.uid == $session.user?.uid)
+					? $doctors.find((u: any) => u.uid == $session.user?.uid)?.name
+					: $session.user?.displayName || 'Yeni mesaj',
 				msg,
 				'https://sehiyye.online/messages'
 			);
@@ -543,8 +551,7 @@
 							<span
 								class="msgTime"
 								style="font-size: small; color: gray!important; text-align: right;
-								padding-bottom: 3px;"
-								>{@html timestamp(message.timestamp)}</span
+								padding-bottom: 3px;">{@html timestamp(message.timestamp)}</span
 							>
 						{/if}
 						<div

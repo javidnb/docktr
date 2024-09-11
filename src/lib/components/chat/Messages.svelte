@@ -28,7 +28,6 @@
 		if (db) {
 			messagesCollection = collection(db, 'messages');
 			if ($session.user) await getMsgs();
-			console.log(messagesGroupedByUser);
 		}
 	});
 

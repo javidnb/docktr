@@ -176,29 +176,20 @@ export async function postData(table: string, data: any) {
 	}
 }
 
-export async function sendNotification(
-	uid: string,
-	doctor: boolean,
-	title?: string,
-	body?: string,
-	url?: string
-) {
+export async function sendNotification(uid: string, title?: string, body?: string, url?: string) {
 	let time = new Date().getTime();
-	const fcmToken = doctor
-		? await fetch(`https://tekoplast.az/docktr/api/?getTokens&uid=${uid}&type=doctor&t=${time}`)
-		: await fetch(`https://tekoplast.az/docktr/api/?getTokens&uid=${uid}&t=${time}`);
+	const fcmToken = await fetch(`https://tekoplast.az/docktr/api/?getTokens&uid=${uid}&t=${time}`);
 	const fcmTokens = await fcmToken.json();
 
 	if (fcmTokens[0]?.fcmToken) {
 		let requestData = {
-			tokens: JSON.stringify(fcmTokens[0]?.fcmToken),
+			tokens: fcmTokens[0]?.fcmToken,
 			title,
 			body,
 			url
 		};
 		const response = await fetch(`https://tekoplast.az/docktr/api/?pushNotification`, {
 			method: 'POST',
-			cache: 'no-store',
 			body: JSON.stringify({ ...requestData })
 		});
 

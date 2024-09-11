@@ -172,7 +172,7 @@
 		const fcmTokens = await fcmToken.json();
 
 		let requestData = {
-			tokens: JSON.stringify(fcmTokens[0].fcmToken),
+			tokens: fcmTokens[0].fcmToken,
 			title: null,
 			body: appointment.changed
 				? 'Randevu yeni saata keçirilib.'

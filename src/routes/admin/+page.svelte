@@ -31,6 +31,18 @@
 	function toggleCollapse() {
 		isCollapsed = !isCollapsed;
 	}
+
+	async function sendNoti() {
+		let body = { uid: '1TgHpEOspfZmDhanm8m1XLgm29u1', title: 'salam qaqa' };
+		const response = await fetch('https://sehiyye.net/api/pushNotification', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(body)
+		});
+
+		const result = await response.json();
+		console.log(result);
+	}
 </script>
 
 {#if $session?.loggedIn && $session?.user?.admin}
@@ -211,6 +223,7 @@
 			<h5 class="ps-5 title">
 				{pageTitle}
 			</h5>
+			<button class="btn btn-outline-primary m-3" on:click={sendNoti}>Noti</button>
 			<div class="container">
 				<div class="row p-3" style="max-height: calc(100vh - 47px); overflow-y: scroll;">
 					<svelte:component this={component} />

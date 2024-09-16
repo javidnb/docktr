@@ -4,13 +4,15 @@
 	import { _ } from 'svelte-i18n';
 	import Modal from '$lib/helpers/Modal.svelte';
 	import Gpt from '$lib/components/Gpt.svelte';
-	import { hideNav, mobile, showGPT, zoomOut } from '$lib/store/dataStore';
+	import { hideNav, loginModal, mobile, showGPT, zoomOut } from '$lib/store/dataStore';
 	import { goto } from '$app/navigation';
+	import { session } from '$lib/session';
 </script>
 
 <div style="overflow-x: hidden;">
 	<div>
-		<section style="overflow-x: hidden;">
+		<!-- svelte-ignore a11y-no-static-element-interactions -->
+		<section style="overflow-x: hidden; position: relative">
 			<div
 				class="jumbotron homeJumbo"
 				style="padding-block: 3rem;
@@ -87,6 +89,44 @@
 						</div>
 					</div>
 				</div>
+			</div>
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<div
+				on:click={() => {
+					$session.user ? goto('/profile') : loginModal.set(true);
+				}}
+				class="mobileOnly"
+				style="position: absolute; left: 10px; top: 10px;"
+			>
+				{#if $session.user?.photoURL}
+					<div
+						style="min-height: 60px; 
+						min-width: 60px; display: flex; 
+						align-items: center; 
+						justify-content: center"
+					>
+						<!-- svelte-ignore a11y-img-redundant-alt -->
+						<img
+							src={$session.user?.photoURL}
+							alt="Profile Photo"
+							style="max-height: 40px;
+							border-radius: 100%;
+							background: rgb(248 248 248);
+							border: 1px solid #dedede;
+							padding: 7px;"
+						/>
+					</div>
+				{:else}
+					<span
+						style="font-size: 30px !important;
+							color: rgb(150 199 137);
+							background: rgb(248 248 248);
+							border-radius: 100%;
+							border: 1px solid #dedede;
+							padding: 7px;"
+						class="material-symbols-outlined icon-fill">person</span
+					>
+				{/if}
 			</div>
 		</section>
 		<section class="categories py-5">

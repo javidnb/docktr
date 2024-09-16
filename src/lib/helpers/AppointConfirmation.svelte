@@ -44,59 +44,61 @@
 	}
 </script>
 
-<Modal bind:showModal>
-	{#if !showDatePicker}
-		<h4 class="px-3 pt-2">Təsdiq et</h4>
+<div>
+	<Modal bind:showModal>
+		{#if !showDatePicker}
+			<h4 class="px-3 pt-2">Təsdiq et</h4>
 
-		<div class="container">
-			<div class="col">
-				<div class="row text-center pb-2">
-					<span>{@html confirmationData.text ?? ''}</span>
-					<div class="d-flex gap-3 mt-3">
-						{#if confirmationData.button1}
+			<div class="container">
+				<div class="col">
+					<div class="row text-center pb-2">
+						<span>{@html confirmationData.text ?? ''}</span>
+						<div class="d-flex gap-3 mt-3">
+							{#if confirmationData.button1}
+								<button
+									class="btn btn-secondary w-100 d-flex"
+									on:click={() => {
+										confirmationModal.set(false);
+									}}
+									><span class="material-symbols-outlined">
+										{confirmationData.button1_icon ?? 'replay'}
+									</span>
+									<span class="mx-auto">{confirmationData.button1 ?? 'Dəyişdir'}</span></button
+								>
+							{:else}
+								<button
+									class="btn btn-secondary w-100 d-flex"
+									on:click={() => {
+										if (confirmationData.button1_fn) {
+											confirmationData.button1_fn;
+											return;
+										}
+										showDatePicker = true;
+									}}
+									><span class="material-symbols-outlined">
+										{confirmationData.button1_icon ?? 'replay'}
+									</span>
+									<span class="mx-auto">{confirmationData.button1 ?? 'Dəyişdir'}</span></button
+								>
+							{/if}
 							<button
-								class="btn btn-secondary w-100 d-flex"
-								on:click={() => {
-									confirmationModal.set(false);
-								}}
-								><span class="material-symbols-outlined">
-									{confirmationData.button1_icon ?? 'replay'}
-								</span>
-								<span class="mx-auto">{confirmationData.button1 ?? 'Dəyişdir'}</span></button
-							>
-						{:else}
-							<button
-								class="btn btn-secondary w-100 d-flex"
-								on:click={() => {
-									if (confirmationData.button1_fn) {
-										confirmationData.button1_fn;
-										return;
-									}
-									showDatePicker = true;
-								}}
-								><span class="material-symbols-outlined">
-									{confirmationData.button1_icon ?? 'replay'}
-								</span>
-								<span class="mx-auto">{confirmationData.button1 ?? 'Dəyişdir'}</span></button
-							>
-						{/if}
-						<button
-							class="btn btn-primary w-100 d-flex"
-							on:click={() =>
-								dispatch('confirmed', {
-									text: confirmationData.text,
-									data: confirmationData.data ?? null
-								})}
-							disabled={$dataLoading}
-							><span class="material-symbols-outlined"> check </span>
-							<span class="mx-auto">{confirmationData.button2 ?? 'Təsdiqlə'}</span>
-						</button>
+								class="btn btn-primary w-100 d-flex"
+								on:click={() =>
+									dispatch('confirmed', {
+										text: confirmationData.text,
+										data: confirmationData.data ?? null
+									})}
+								disabled={$dataLoading}
+								><span class="material-symbols-outlined"> check </span>
+								<span class="mx-auto">{confirmationData.button2 ?? 'Təsdiqlə'}</span>
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	{:else}
-		<h4 class="px-3 pt-2">Randevu tarixini seçin</h4>
-		<DatePicker bind:showDatePicker />
-	{/if}
-</Modal>
+		{:else}
+			<h4 class="px-3 pt-2">Randevu tarixini seçin</h4>
+			<DatePicker bind:showDatePicker />
+		{/if}
+	</Modal>
+</div>

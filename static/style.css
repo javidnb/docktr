@@ -161,13 +161,9 @@ body {
 	box-shadow: 0px 0px 5px 0px #a1c398a1;
 	color: #678b5e;
 }
-.btn-outline-primary:hover {
+.btn-outline-primary:hover, .btn-outline-primary:disabled  {
 	background: var(--primaryColor);
 	color: white;
-}
-.btn:disabled {
-	background-color: white;
-	color: var(--primaryText);
 }
 .btn:active {
 	background-color: #7d9576 !important;

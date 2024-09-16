@@ -4,10 +4,8 @@
 		loginModal,
 		selectedAppointmentDate,
 		appointmentModal,
-		postData,
 		appointments,
 		dataLoading,
-		sha1,
 		termsAccepted,
 		showTermsModal,
 		comission
@@ -65,11 +63,13 @@
 			amount: 0.01,
 			currency: 'AZN',
 			language: 'az',
-			order_id: order_id.id
+			description: `${$_('titles.' + doc.title)} ${doc.name || ''}`,
+			order_id: order_id.id,
+			other_attr: [doc.uid]
 		};
 		// amount: parseFloat((doc.price + $comission).toFixed(2)),
 
-		const response = await fetch('https://tekoplast.az/docktr/api/?sendPaymentRequest', {
+		const response = await fetch('https://sehiyye.net/api/sendPaymentRequest', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(body)
@@ -114,8 +114,7 @@
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({ ...dataToPost }),
-				cache: 'no-cache'
+				body: JSON.stringify({ ...dataToPost })
 			});
 
 			if (response.ok) {
@@ -241,7 +240,7 @@
 								style="position: relative;"
 								><span class="material-symbols-outlined"> check </span>
 								{#if $dataLoading}
-									<div class="loader" style="left:40%"></div>{:else}
+									<div class="loader" style="left:40%;"></div>{:else}
 									<span class="mx-auto">{$_('actions.pay')}</span>
 								{/if}
 							</button>
@@ -282,5 +281,8 @@
 		padding-inline: 2rem;
 		gap: 5px;
 		justify-content: center;
+	}
+	.btn:disabled {
+		background-color: var(--primaryColor)!important;
 	}
 </style>

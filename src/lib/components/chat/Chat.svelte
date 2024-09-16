@@ -20,6 +20,7 @@
 	import { toast } from '@zerodevx/svelte-toast';
 	import { writable } from 'svelte/store';
 	import DocumentsByUser from '../DocumentsByUser.svelte';
+	import Confirm from '$lib/helpers/Confirm.svelte';
 
 	let messages: any = [];
 	let newMessage = '';
@@ -297,9 +298,12 @@
 			.catch((error) => console.error('Download failed:', error));
 	}
 
+	let confirmDelete: any = null;
+
 	async function deleteFile(id: string) {
 		const docRef = doc(db, 'messages', id);
 		await deleteDoc(docRef);
+		confirmDelete = null;
 	}
 </script>
 
@@ -444,8 +448,6 @@
 							: 'received'}"
 						style="position: relative;"
 						class:padding-3px={message.file}
-						data-bs-toggle="collapse"
-						data-bs-target="#{message.id}"
 					>
 						{#if message.message}
 							<span class:px-2={message.file} class:pb-2={message.file}>{message.message}</span>
@@ -534,7 +536,7 @@
 									<button
 										class="btn"
 										on:click={() => {
-											deleteFile(message.id);
+											confirmDelete = message.id;
 										}}
 									>
 										<span class="material-symbols-outlined" style="color: white"> delete </span>
@@ -554,18 +556,6 @@
 								padding-bottom: 3px;">{@html timestamp(message.timestamp)}</span
 							>
 						{/if}
-						<div
-							class="collapse"
-							id={message.id}
-							style="position: absolute;
-							top: -4rem;
-							left: 0;
-							width: 100%;"
-						>
-							<div class="card card-body">
-								<button>del</button>
-							</div>
-						</div>
 					</div>
 				</div>
 			{/each}
@@ -687,6 +677,18 @@
 		>
 		<DocumentsByUser {files} userId={$selectedUser} />
 	</div>
+{/if}
+
+{#if confirmDelete}
+	<Confirm
+		message={$_('actions.delete_file')}
+		onConfirm={() => {
+			deleteFile(confirmDelete);
+		}}
+		onCancel={() => {
+			confirmDelete = false;
+		}}
+	/>
 {/if}
 
 <style>

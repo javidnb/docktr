@@ -690,6 +690,7 @@
 {#if confirmDelete}
 	<Confirm
 		message={$_('actions.delete_file')}
+		no="İmtina et"
 		onConfirm={() => {
 			deleteFile(confirmDelete);
 		}}

@@ -15,7 +15,8 @@
 		loginModal,
 		putData,
 		appointments,
-		appointmentsLoading
+		appointmentsLoading,
+		slideIn
 	} from '$lib/store/dataStore';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { _ } from 'svelte-i18n';
@@ -23,10 +24,12 @@
 	import Select from 'svelte-select';
 	import { parsePhoneNumber, isValidNumber } from 'libphonenumber-js';
 	import { goto } from '$app/navigation';
+	import { fade, slide } from 'svelte/transition';
 
 	let email: string = '';
 	let password: string = '';
 	let phoneNumber: string = '';
+	let whatsappNumber: string = '';
 	let displayName: string;
 	let confirmationNumber: string = '';
 	let disabled = true;
@@ -36,6 +39,8 @@
 
 	let type: string = 'login';
 	let method: string = 'mobile';
+
+	let whatsappNotifications: boolean = false;
 
 	let selectItems = [
 		{ value: '+994', label: '+994' },
@@ -298,9 +303,11 @@
 
 	// PHONE NUMBER INPUT FORMATTING
 	function handleInput(event: Event) {
-		if (method == 'mobile') {
-			const target = event.target as HTMLInputElement;
-			target.value = target.value.replace(/[^0-9]/g, '');
+		const target = event.target as HTMLInputElement;
+		target.value = target.value.replace(/[^0-9]/g, '');
+		if (target.classList?.contains('whatsapp')) {
+			whatsappNumber = target.value;
+		} else {
 			phoneNumber = target.value;
 		}
 
@@ -314,22 +321,14 @@
 				disabled = true;
 			}
 		}
-	}
 
-	// ANIMATION
-	function scaleFade(node: HTMLElement, { duration = 70 }: { duration?: number } = {}) {
-		return {
-			duration,
-			css: (t: number) => {
-				const scale = 1.05 - 0.05 * t; // from 1.1 to 1
-				const opacity = t; // from 0 to 1
-				const x = -100 + 100 * t;
-				return `
-				 	transform: scale(${scale});					
-                    opacity: ${opacity};
-                `;
+		if (whatsappNotifications && whatsappNumber.length > 3) {
+			const country = selecedItem.value == '+994' ? 'AZ' : 'TR';
+			let num = parsePhoneNumber(whatsappNumber, country);
+			if (num.isValid()) {
+				whatsappNumber = num.formatNational().slice(1);
 			}
-		};
+		}
 	}
 </script>
 
@@ -345,10 +344,11 @@
 					disabled = true;
 					showError = false;
 				}}
-				class="btn btn-outline-primary d-flex justify-content-center"
+				class="btn btn-outline-primary d-flex flex-row justify-content-center gap-2"
 				class:active={method == 'mobile'}
-				><span class="material-symbols-outlined icon-fill"> call </span></button
-			>
+				><span class="material-symbols-outlined icon-fill"> call </span>
+				<span style="white-space: nowrap;">Mobil Nömrə</span>
+			</button>
 			<button
 				on:click={() => {
 					method = 'email';
@@ -358,10 +358,12 @@
 					disabled = true;
 					showError = false;
 				}}
-				class="btn btn-outline-primary bg-white d-flex justify-content-center"
+				style="min-width: 150px"
+				class="btn btn-outline-primary bg-white d-flex flex-row justify-content-center gap-2"
 				class:active={method == 'email'}
-				><span class="material-symbols-outlined icon-fill"> mail </span></button
-			>
+				><span class="material-symbols-outlined icon-fill"> mail </span>
+				<span>Email</span>
+			</button>
 		</div>
 		<form on:submit={login}>
 			<h5
@@ -409,68 +411,32 @@
 					<label for="emailInput" style="color: gray">{$_('login.email')}</label>
 				</div>
 			{:else if method == 'mobile'}
-				{#if !showConfimationInput}
-					<div class="p-0 input-group">
-						<!-- {#if type != 'register'}
-							{#if selecedItem.value == '+994'}
-								<div class="d-flex p-1 align-items-center">
-									<img
-										style="width:30px;height:30px"
-										src="https://ik.imagekit.io/d2nwsj0ktvh/img/az.png"
-										alt="Azerbaijan Flag"
-									/>
-								</div>
-							{:else}
-								<div class="d-flex p-1 align-items-center">
-									<img
-										style="width:30px;height:30px"
-										src="https://ik.imagekit.io/d2nwsj0ktvh/turkey_dBbuCptvk.png?updatedAt=1719140350211"
-										alt="Turkish Flag"
-									/>
-								</div>
-							{/if}
-						{/if} -->
-
-						<Select
-							class="form-control"
-							items={selectItems}
-							--width="80px"
-							--border-top-left-radius="10px"
-							--border-focused="1px solid var(--primaryColor)"
-							--item-is-active-bg="var(--primaryColor)"
-							--item-hover-bg="#d9e1d7"
-							bind:value={selecedItem}
-							clearable={false}
-						></Select>
-						<div class="form-floating p-0">
-							<input
-								class="form-control"
-								style="margin-left: -5px"
-								bind:value={phoneNumber}
-								on:input={handleInput}
-								type="text"
-								placeholder={$_('login.mobile')}
-								required
-								id="phoneInput"
-							/>
-							<label for="phoneInput" style="color: gray">{$_('login.mobile')}</label>
-						</div>
-					</div>
-				{:else}
-					<div class="d-flex flex-column gap-3 p-0" in:scaleFade>
+				<div class="p-0 input-group">
+					<Select
+						class="form-control"
+						items={selectItems}
+						--width="80px"
+						--border-top-left-radius="10px"
+						--border-focused="1px solid var(--primaryColor)"
+						--item-is-active-bg="var(--primaryColor)"
+						--item-hover-bg="#d9e1d7"
+						bind:value={selecedItem}
+						clearable={false}
+					></Select>
+					<div class="form-floating p-0">
 						<input
 							class="form-control"
-							style="padding: .5rem; min-width: 300px"
-							bind:value={confirmationNumber}
-							type="number"
-							placeholder="123456"
+							style="margin-left: -5px"
+							bind:value={phoneNumber}
+							on:input={handleInput}
+							type="text"
+							placeholder={$_('login.mobile')}
 							required
+							id="phoneInput"
 						/>
-						<button class="btn btn-outline-primary" on:click|preventDefault={confirm}>
-							{$_('actions.confirm')}
-						</button>
+						<label for="phoneInput" style="color: gray">{$_('login.mobile')}</label>
 					</div>
-				{/if}
+				</div>
 				<!-- <div
 					id="recap"
 					style="background: white;
@@ -478,7 +444,7 @@
 					padding: 0"
 				></div> -->
 			{/if}
-			<div class="form-floating p-0">
+			<div class="form-floating p-0" style="z-index: 0;">
 				<input
 					class="form-control"
 					bind:value={password}
@@ -492,17 +458,60 @@
 			{#if type == 'register'}
 				<div
 					class="p-0"
-					style="min-height: 24px;
-							margin-top: -15px;
-							margin-bottom: -10px;
-							padding-left: 5px !important;"
+					style="margin-top: -15px; margin-bottom: -10px; padding-left: 5px !important; transition-duration: .2s"
 				>
 					{#if !password || password.length < 6}
-						<span style="font-size: small; color: gray"
-							>Şifrə ən az 6 simvoldar ibarət olmalıdır</span
+						<span
+							style="font-size: small; color: gray"
+							in:slide={{ duration: 200 }}
+							out:slide={{ duration: 200 }}
 						>
+							Şifrə ən az 6 simvoldan ibarət olmalıdır
+						</span>
 					{/if}
 				</div>
+
+				<div class="d-flex align-items-center gap-2" style="padding: 5px 0px 0px 0px!important">
+					<label class="switch">
+						<input
+							type="checkbox"
+							bind:checked={whatsappNotifications}
+							on:click={() => {
+								whatsappNumber = phoneNumber;
+							}}
+						/>
+						<span class="slider round"></span>
+					</label>
+					<span>WhatsApp bildirişlər</span>
+				</div>
+				{#if whatsappNotifications}
+					<div class="p-0 input-group" in:slideIn>
+						<Select
+							class="form-control"
+							items={selectItems}
+							--width="80px"
+							--border-top-left-radius="10px"
+							--border-focused="1px solid var(--primaryColor)"
+							--item-is-active-bg="var(--primaryColor)"
+							--item-hover-bg="#d9e1d7"
+							bind:value={selecedItem}
+							clearable={false}
+						></Select>
+						<div class="form-floating p-0">
+							<input
+								class="form-control whatsapp"
+								style="margin-left: -5px"
+								bind:value={whatsappNumber}
+								on:input={handleInput}
+								type="text"
+								placeholder={$_('login.mobile')}
+								required
+								id="wpInput"
+							/>
+							<label for="wpInput" style="color: gray">WhatsApp No</label>
+						</div>
+					</div>
+				{/if}
 			{/if}
 			{#if showError}
 				<span style="color:#c40f0f">{$_('login.error')} <br />{$_('login.try_again')}</span>
@@ -573,5 +582,62 @@
 	}
 	.socials .active .material-symbols-outlined {
 		color: white !important;
+	}
+
+	/* Chechbox */
+	.switch {
+		position: relative;
+		display: inline-block;
+		width: 60px;
+		height: 28px;
+	}
+
+	.switch input {
+		opacity: 0;
+		width: 0;
+		height: 0;
+	}
+
+	.slider {
+		position: absolute;
+		cursor: pointer;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: #ccc;
+		-webkit-transition: 0.4s;
+		transition: 0.4s;
+	}
+
+	.slider:before {
+		position: absolute;
+		content: '';
+		height: 22px;
+		width: 26px;
+		left: 4px;
+		bottom: 3px;
+		background-color: white;
+		-webkit-transition: 0.4s;
+		transition: 0.4s;
+	}
+
+	input:checked + .slider {
+		background-color: var(--primaryColor);
+	}
+
+	input:checked + .slider:before {
+		-webkit-transform: translateX(26px);
+		-ms-transform: translateX(26px);
+		transform: translateX(26px);
+	}
+
+	/* Rounded sliders */
+	.slider.round {
+		border-radius: 34px;
+	}
+
+	.slider.round:before {
+		border-radius: 50%;
 	}
 </style>

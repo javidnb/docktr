@@ -4,7 +4,7 @@
 	import { _ } from 'svelte-i18n';
 	import Modal from '$lib/helpers/Modal.svelte';
 	import Gpt from '$lib/components/Gpt.svelte';
-	import { hideNav, loginModal, mobile, showGPT, zoomOut } from '$lib/store/dataStore';
+	import { loginModal, mobile, showGPT, zoomOut } from '$lib/store/dataStore';
 	import { goto } from '$app/navigation';
 	import { session } from '$lib/session';
 </script>

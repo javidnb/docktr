@@ -220,7 +220,7 @@
 									bind:value={$termsAccepted}
 									checked={$termsAccepted}
 								/>
-								<label class="form-check-label" for="usage">
+								<label class="form-check-label w-100" for="usage">
 									<span>Oxudum və qəbul edirəm.</span>
 								</label>
 							</div>

@@ -10,7 +10,8 @@
 		hideNav,
 		selectedUser,
 		reviewModal,
-		appointments
+		appointments,
+		doctors
 	} from '$lib/store/dataStore';
 	import { session } from '$lib/session';
 	import { _ } from 'svelte-i18n';
@@ -39,6 +40,7 @@
 			: '';
 
 	onMount(() => {
+		console.log($ongoingAppointment);
 		getRoom();
 		setLocalDevices();
 
@@ -198,8 +200,9 @@
 					if ($session.user?.uid == $ongoingAppointment.userId) {
 						console.log('sending notification');
 						sendNotification(
-							$ongoingAppointment.doctorId,
-							true,
+							$doctors.find((d: any) => {
+								d.id == $ongoingAppointment.doctorId;
+							})?.uid,
 							'Pasiyent görüşə qoşulmağınızı gözləyir',
 							'Qoşulmaq üçün klikləyin',
 							'https://sehiyye.online/appointment'
@@ -207,7 +210,6 @@
 					} else {
 						sendNotification(
 							$ongoingAppointment.userId,
-							false,
 							'Həkim görüşə qoşulmağınızı gözləyir',
 							'Qoşulmaq üçün klikləyin',
 							'https://sehiyye.online/appointment'

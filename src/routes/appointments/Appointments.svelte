@@ -77,6 +77,7 @@
 			: [];
 
 	onMount(() => {
+		console.log($doctors);
 		const updateRemainingTime = () => {
 			if (filteredAppointments?.length) {
 				filteredAppointments = filteredAppointments.map((appointment: any) => {
@@ -191,7 +192,7 @@
 		ongoingAppointment.set(appointment);
 		dataLoading.set(true);
 		appointmentId = appointment.id;
-		joinVideoCall.set(true);
+		// joinVideoCall.set(true);
 		if ($session.user) {
 			if (appointment.userId == $session.user.uid) {
 				selectedUser.set($doctors.find((doc) => doc.id == appointment.doctorId)?.uid);
@@ -199,6 +200,7 @@
 				selectedUser.set(appointment.userId);
 			}
 		}
+		goto(`./appointments/${appointmentId}`);
 	}
 
 	function checkTime(appointment: any) {

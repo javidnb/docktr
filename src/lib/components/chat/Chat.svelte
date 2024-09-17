@@ -75,7 +75,7 @@
 	}
 
 	afterUpdate(() => {
-		scrollToBottom();
+		// scrollToBottom();
 	});
 
 	function getMessages() {
@@ -327,6 +327,7 @@
 	</button>
 	<div
 		class="d-flex flex-column mainContainer"
+		style="position: relative"
 		class:minimizedChat={inputFocused && !window.visualViewport}
 	>
 		<div
@@ -663,6 +664,13 @@
 				on:click={sendMessage}><span class="material-symbols-outlined"> send </span></button
 			>
 		</div>
+		<button
+			class="btn btn-outline-primary d-flex align-items-center"
+			style="position: absolute; bottom: 3rem; right: 10px; border-radius: 20px"
+			on:click={scrollToBottom}
+		>
+			<span class="material-symbols-outlined"> keyboard_double_arrow_down </span>
+		</button>
 	</div>
 {:else}
 	<div class="d-flex flex-column h-100">

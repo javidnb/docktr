@@ -193,10 +193,19 @@
 						</div>
 
 						<div class="d-flex flex-column ps-2 py-2">
+							<button
+								class="btn btn-outline-primary"
+								style="font-weight: 600; text-decoration: underline"
+								on:click|preventDefault={() => {
+									showTermsModal.set(true);
+								}}
+							>
+								İstifadə şərtlərini buradan oxu
+							</button>
 							<!-- svelte-ignore a11y-click-events-have-key-events -->
 							<!-- svelte-ignore a11y-no-static-element-interactions -->
 							<div
-								class="form-check d-flex align-items-center"
+								class="form-check d-flex align-items-center mt-2 gap-2"
 								class:errorBorder={showTermsError}
 								on:click={() => {
 									showTermsError = false;
@@ -212,14 +221,7 @@
 									checked={$termsAccepted}
 								/>
 								<label class="form-check-label" for="usage">
-									<button
-										class="p-0 ms-2 hover-border"
-										on:click|preventDefault={() => {
-											showTermsModal.set(true);
-										}}
-										style="color: var(--primaryText); border:0; background: unset; font-weight: 900; text-decoration: underline"
-										>İstifadə şərtlərini</button
-									> <span class="mt-1">oxudum və qəbul edirəm.</span>
+									<span>Oxudum və qəbul edirəm.</span>
 								</label>
 							</div>
 						</div>
@@ -282,7 +284,10 @@
 		gap: 5px;
 		justify-content: center;
 	}
+	.btn-outline-primary:not(:hover) {
+		background-color: white;
+	}
 	.btn:disabled {
-		background-color: var(--primaryColor)!important;
+		background-color: var(--primaryColor) !important;
 	}
 </style>

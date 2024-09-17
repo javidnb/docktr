@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import GetAppointment from '$lib/components/GetAppointment.svelte';
 	import { doctors, selectedAppointmentDate } from '$lib/store/dataStore';
+	import { _ } from 'svelte-i18n';
 
 	$: doctor = $doctors.find((d) => d.slug == $page.params.slug);
 </script>
@@ -35,7 +36,7 @@
 			class="jumbotron jumboHeader mobile-left-padding"
 			style="padding-block: 1rem; background-color: #e2e9ef"
 		>
-			<h1 class="display-4">{doctor?.name || ''}</h1>
+			<h1 class="display-4">{$_('titles.' + doctor?.title)} {doctor?.name || ''}</h1>
 		</div>
 	</section>
 	<div>

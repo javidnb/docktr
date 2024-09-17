@@ -4,7 +4,6 @@
 	import {
 		signInWithEmailAndPassword,
 		type UserCredential,
-		type ConfirmationResult,
 		createUserWithEmailAndPassword,
 		updateProfile
 	} from 'firebase/auth';
@@ -24,18 +23,16 @@
 	import Select from 'svelte-select';
 	import { parsePhoneNumber, isValidNumber } from 'libphonenumber-js';
 	import { goto } from '$app/navigation';
-	import { fade, slide } from 'svelte/transition';
+	import { slide } from 'svelte/transition';
 
 	let email: string = '';
 	let password: string = '';
 	let phoneNumber: string = '';
 	let whatsappNumber: string = '';
 	let displayName: string;
-	let confirmationNumber: string = '';
 	let disabled = true;
 	let showError: boolean = false; // display login error
 	let showConfimationInput: boolean = false;
-	let confResult: ConfirmationResult;
 
 	let type: string = 'login';
 	let method: string = 'mobile';
@@ -85,7 +82,9 @@
 				loading: false
 			});
 			dataLoading.set(false);
-			registerCM();
+			if (!whatsappNotifications) {
+				registerCM();
+			}
 		} else {
 			console.error('Failed to post data');
 			dataLoading.set(false);
@@ -105,6 +104,7 @@
 				goto('./doctor');
 			}
 			if (!result) {
+				// CREATE NEW USER
 				let usr = user.user;
 				let data = {
 					uid: usr.uid,
@@ -114,12 +114,16 @@
 						? usr.email.substring(0, usr.email.length - 15)
 						: null,
 					photoURL: usr?.photoURL,
-					fcmToken: usr?.fcmToken || null
+					fcmToken: usr?.fcmToken || null,
+					whatsapp: whatsappNotifications
+						? (selecedItem.value + whatsappNumber).replace(/\s+/g, '')
+						: null
 				};
 				postData(data);
 				dataLoading.set(false);
 				return;
 			} else {
+				console.log(result);
 				session.set({
 					user: result,
 					loggedIn: true,
@@ -127,7 +131,9 @@
 				});
 				dataLoading.set(false);
 				getAppointments(result);
-				registerCM();
+				if (!result.whatsapp) {
+					registerCM();
+				}
 			}
 			return response;
 		} catch (error) {
@@ -175,7 +181,7 @@
 		} else {
 			await signInWithEmailAndPassword(auth, email, password)
 				.then(async (result) => {
-					const { user }: UserCredential = result;
+					session.set({ user: result.user, loggedIn: true });
 					dataLoading.set(false);
 					closeModal();
 					toast.push(`Xoş gəldiniz ${result.user.displayName ?? ''}!`, {
@@ -265,35 +271,6 @@
 		}
 	}
 
-	function confirm(event: any) {
-		event.target.disabled = true;
-		event.target.innerText = $_('actions.wait');
-		confResult
-			.confirm(confirmationNumber)
-			.then(async (result) => {
-				// User signed in successfully.
-				const user = result.user;
-				await getUser(result);
-				toast.push(`Xoş gəldiniz ${result.user.displayName ?? ''}!`, {
-					duration: 2000,
-					theme: {
-						'--toastColor': 'mintcream',
-						'--toastBackground': 'rgb(91 144 77)',
-						'--toastBarBackground': '#1d5b3c'
-					}
-				});
-				showConfimationInput = false;
-				showError = false;
-				closeModal();
-			})
-			.catch((error) => {
-				console.log(error);
-				event.target.disabled = false;
-				event.target.innerText = $_('actions.confirm');
-				showError = true;
-			});
-	}
-
 	function closeModal() {
 		loginModal.set(false);
 		disabled = false;
@@ -334,7 +311,17 @@
 
 <div class="login-form" style="max-width: 100%; overflow-x:hidden">
 	<div class="col pb-4" style="margin-top: 0; padding-top:0">
-		<div class="d-flex px-0 gap-2 socials w-100" style="padding: 1.5rem;">
+		<h5
+			class="text-center mb-0 mt-3"
+			style="padding-block: .5rem;
+				background: white;
+				box-shadow: 0px 0px 6px #0000000a;
+				border-radius: 6px;
+				color: #465543;"
+		>
+			{type == 'login' ? $_('login.login_header') : $_('login.register')}
+		</h5>
+		<div class="d-flex px-0 gap-2 socials w-100" style="padding: 1rem 1.5rem;">
 			<button
 				on:click={() => {
 					method = 'mobile';
@@ -366,16 +353,6 @@
 			</button>
 		</div>
 		<form on:submit={login}>
-			<h5
-				class="text-center mb-0"
-				style="padding-block: .5rem;
-				background: white;
-				box-shadow: 0px 0px 6px #0000000a;
-				border-radius: 6px;
-				color: #465543;"
-			>
-				{type == 'login' ? $_('login.login_header') : $_('login.register')}
-			</h5>
 			{#if type == 'register'}
 				<div class="form-floating p-0">
 					<input
@@ -540,7 +517,14 @@
 		</form>
 
 		<hr style="margin-top: 1rem" />
-		<div style="display: flex; flex-direction: column; gap: 1rem; align-items: center; padding:0">
+		<div
+			style="display: flex;
+			flex-direction: column;
+			gap: .5rem;
+			align-items: center;
+			padding: 0;
+			margin-top: -.5rem;"
+		>
 			<span>{type == 'login' ? $_('login.no_account') : $_('login.yes_account')}</span>
 			<button
 				on:click={() => (type = type == 'login' ? 'register' : 'login')}

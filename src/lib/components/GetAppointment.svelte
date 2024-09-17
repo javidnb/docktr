@@ -140,11 +140,11 @@
 	<div class="pt-3 appointmentContainer d-flex flex-column">
 		{#if !payment}
 			<div
-				class="card p-3 mb-3 d-flex flex-column"
+				class="card p-3 mx-1 mb-3 d-flex flex-column"
 				style="color: var(--primaryText); flex:0; min-width: min(400px,90vw)"
 			>
 				<div class="d-flex align-items-center">
-					<span style="font-size: small;">Randevu müddəti:</span>
+					<span style="font-size: small;">Görüş müddəti:</span>
 					{#if doc.appointmentDuration}
 						<span style="font-weight: 500; margin-left: auto">{doc.appointmentDuration}</span>
 						<span style="font-size: small; padding-top: 3px">dq.</span>
@@ -185,14 +185,14 @@
 					<DatePicker />
 				</div>
 			{:else}
-				<div class="row d-flex mt-auto">
-					<div class="d-flex flex-column ps-3" style="width: fit-content;">
-						<div class="d-flex flex-column mt-auto" style="font-size: small; width: fit-content">
-							<span style="color: #bc0000;">* {$_('legal.1')}</span>
-							<span style="color: #bc0000;padding-left: 10px;">{$_('legal.2')}</span>
+				<div class="row d-flex h-100">
+					<div class="d-flex flex-column ps-3">
+						<div class="d-flex flex-column my-auto px-2" style="color: rgb(165 3 3); text-align: justify">
+							<span>{$_('legal.1')}</span>
+							<span>{$_('legal.2')}</span>
 						</div>
 
-						<div class="d-flex flex-column ps-2 py-2">
+						<div class="d-flex flex-column px-2 py-2">
 							<button
 								class="btn btn-outline-primary"
 								style="font-weight: 600; text-decoration: underline"
@@ -200,7 +200,7 @@
 									showTermsModal.set(true);
 								}}
 							>
-								İstifadə şərtlərini buradan oxu
+								İstifadə şərtlərini oxu
 							</button>
 							<!-- svelte-ignore a11y-click-events-have-key-events -->
 							<!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -226,7 +226,7 @@
 							</div>
 						</div>
 
-						<div class="d-flex gap-3 mt-3">
+						<div class="d-flex gap-3 mt-3 mx-2">
 							<button
 								{disabled}
 								class="btn btn-secondary w-100 d-flex"
@@ -264,11 +264,8 @@
 <style>
 	@media screen and (max-width: 992px) {
 		.appointmentContainer {
-			height: calc(100dvh - 150px);
+			height: calc(100dvh - 130px);
 		}
-	}
-	.hover-border:hover {
-		text-decoration: underline;
 	}
 	.form-check-input:checked {
 		background-color: var(--primaryColor);

@@ -111,7 +111,7 @@
 					displayName: usr.displayName,
 					email: !usr.email.endsWith('@sehiyye.online') ? usr.email : null,
 					phoneNumber: usr.email.endsWith('@sehiyye.online')
-						? usr.email.substring(0, usr.email.length - 15)
+						? '+' + usr.email.substring(0, usr.email.length - 15)
 						: null,
 					photoURL: usr?.photoURL,
 					fcmToken: usr?.fcmToken || null,

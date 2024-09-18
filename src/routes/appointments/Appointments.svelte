@@ -77,7 +77,6 @@
 			: [];
 
 	onMount(() => {
-		console.log($doctors);
 		const updateRemainingTime = () => {
 			if (filteredAppointments?.length) {
 				filteredAppointments = filteredAppointments.map((appointment: any) => {

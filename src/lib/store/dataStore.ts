@@ -177,29 +177,21 @@ export async function postData(table: string, data: any) {
 }
 
 export async function sendNotification(uid: string, title?: string, body?: string, url?: string) {
-	let time = new Date().getTime();
-	const fcmToken = await fetch(`https://tekoplast.az/docktr/api/?getTokens&uid=${uid}&t=${time}`);
-	const fcmTokens = await fcmToken.json();
+	let requestData = {
+		uid,
+		title,
+		body,
+		url
+	};
+	const response = await fetch(`https://sehiyye.net/api/pushNotification`, {
+		method: 'POST',
+		body: JSON.stringify({ ...requestData })
+	});
 
-	if (fcmTokens[0]?.fcmToken) {
-		let requestData = {
-			tokens: fcmTokens[0]?.fcmToken,
-			title,
-			body,
-			url
-		};
-		const response = await fetch(`https://tekoplast.az/docktr/api/?pushNotification`, {
-			method: 'POST',
-			body: JSON.stringify({ ...requestData })
-		});
-
-		if (response.ok) {
-			dataLoading.set(false);
-		} else {
-			dataLoading.set(false);
-		}
+	if (response.ok) {
+		dataLoading.set(false);
 	} else {
-		console.log('no push tokens: ', fcmTokens);
+		dataLoading.set(false);
 	}
 }
 
@@ -319,15 +311,4 @@ export async function cancelAppointment(appointmentId: number, userId: any) {
 		console.error('Error canceling appointment:', error);
 		return { status: 'error', message: error };
 	}
-}
-
-export async function sha1(message: string): Promise<string> {
-	const encoder = new TextEncoder();
-	const data = encoder.encode(message);
-	const hashBuffer = await crypto.subtle.digest('SHA-1', data);
-
-	// Base64 encoding
-	const base64Hash = btoa(String.fromCharCode(...new Uint8Array(hashBuffer)));
-
-	return base64Hash;
 }

@@ -12,8 +12,8 @@
 	let selectedUserFiles: any = [];
 
 	if (browser) {
-		messagesGroupedByUser = localStorage.getItem('msgs')
-			? JSON.parse(localStorage.getItem('msgs') || '')
+		messagesGroupedByUser = localStorage.getItem('documents')
+			? JSON.parse(localStorage.getItem('documents') || '')
 			: [];
 		if (localStorage.getItem('users')) users.set(JSON.parse(localStorage.getItem('users') || ''));
 	}
@@ -121,7 +121,7 @@
 			});
 			messagesGroupedByUser = result;
 			// messagesGroupedByUser = [];
-			localStorage.setItem('msgs', JSON.stringify(messagesGroupedByUser));
+			localStorage.setItem('documents', JSON.stringify(messagesGroupedByUser));
 		}
 	}
 

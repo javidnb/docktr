@@ -134,7 +134,7 @@
 					? $doctors.find((u: any) => u.uid == $session.user?.uid)?.name
 					: $session.user?.displayName || 'Yeni mesaj',
 				msg,
-				'https://sehiyye.online/messages'
+				'https://sehiyye.net/messages'
 			);
 		}
 	};

@@ -132,7 +132,8 @@
 	"profile": {
 		"docs": "Analizlərim və Reseptlərim",
 		"doctors": "Həkimlərim",
-		"logout": "Hesabdan Çıxış"
+		"logout": "Hesabdan Çıxış",
+		"notifications": "Bildirişlər"
 	},
 	"call": {
 		"mic_off": "Mikrofonu söndür",

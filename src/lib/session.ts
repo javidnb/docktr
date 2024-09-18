@@ -11,6 +11,9 @@ export type User = {
 	fcmToken?: string;
 	accessToken?: string;
 	lang?: string;
+	whatsapp?: string;
+	inAppNotifs?: boolean;
+	emailNotifs?: string;
 };
 
 export type SessionState = {

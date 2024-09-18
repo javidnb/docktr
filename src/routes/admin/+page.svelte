@@ -32,8 +32,45 @@
 		isCollapsed = !isCollapsed;
 	}
 
+	async function emailNoti() {
+		let body = { to: 'cavidnebi@gmail.com', body: 'salam brad necesen' };
+		const response = await fetch('https://tekoplast.az/docktr/api/?emailNotification', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' }, // Make sure the content type is JSON
+			body: JSON.stringify(body) // Convert body to JSON string
+		});
+	}
+
+	async function smsNoti() {
+		let body = { to: '+994502803233', message: 'salam brad necesen' };
+		const response = await fetch('https://tekoplast.az/docktr/api/?smsNotification', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' }, // Make sure the content type is JSON
+			body: JSON.stringify(body) // Convert body to JSON string
+		});
+
+		const result = await response.json();
+		console.log(result);
+	}
+
+	async function pushNoti() {
+		let body = {
+			uid: '1TgHpEOspfZmDhanm8m1XLgm29u1',
+			body: 'test message',
+			url: 'https://sehiyye.net/messages'
+		};
+		const response = await fetch('https://sehiyye.net/api/pushNotification', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(body)
+		});
+
+		const result = await response.json();
+		console.log(result);
+	}
+
 	async function sendNoti() {
-		let body = { to: '+994502803233', message: 'salam' };
+		let body = { to: '+994502803233', message: 'salam brad necesen' };
 		const response = await fetch('https://tekoplast.az/docktr/api/?wpNotification', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' }, // Make sure the content type is JSON
@@ -224,6 +261,9 @@
 				{pageTitle}
 			</h5>
 			<button class="btn btn-outline-primary m-3 ms-4" on:click={sendNoti}>WP Notify</button>
+			<button class="btn btn-outline-primary m-3 ms-2" on:click={pushNoti}>Push Notify</button>
+			<button class="btn btn-outline-primary m-3 ms-2" on:click={smsNoti}>SMS Notify</button>
+			<button class="btn btn-outline-primary m-3 ms-2" on:click={emailNoti}>Email Notify</button>
 			<div class="container">
 				<div class="row p-3" style="max-height: calc(100vh - 47px); overflow-y: scroll;">
 					<svelte:component this={component} />

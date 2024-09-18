@@ -16,6 +16,7 @@
 	import Chat from '$lib/components/chat/Chat.svelte';
 	import Documents from '$lib/components/profile/Documents.svelte';
 	import Favourites from '$lib/components/profile/Favourites.svelte';
+	import NotificationSettings from '$lib/components/profile/NotificationSettings.svelte';
 
 	let userEmail: any = '';
 	let component: any = $mobile ? null : ProfDetails;
@@ -98,9 +99,17 @@
 			</button>
 		{/if}
 		<div class="collapse w-100 px-2" id="settings">
-			<button class="btn btn-outline-primary d-flex align-items-center gap-2 w-100 mb-3">
+			<button
+				on:click={() => {
+					changeComponent(NotificationSettings, true);
+					if ($session.user) mobileHeader.set($_('profile.notifications'));
+				}}
+				class="btn btn-outline-primary d-flex align-items-center gap-2 w-100 mb-3"
+				data-bs-toggle="collapse"
+				data-bs-target="#settings"
+			>
 				<span class="material-symbols-outlined"> notifications </span>
-				Notifications
+				{$_('profile.notifications')}
 			</button>
 		</div>
 	</div>
@@ -145,6 +154,17 @@
 								>
 									<span class="material-symbols-outlined"> clinical_notes </span>{$_(
 										'profile.doctors'
+									)}
+								</button>
+								<button
+									class="list-group-item w-100"
+									on:click={() => {
+										changeComponent(NotificationSettings);
+									}}
+									class:active={component == NotificationSettings}
+								>
+									<span class="material-symbols-outlined"> notifications </span>{$_(
+										'profile.notifications'
 									)}
 								</button>
 								{#if $session.user}

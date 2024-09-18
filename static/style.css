@@ -53,6 +53,10 @@ body {
 	margin-top: 1rem;
 }
 
+.fw-500 {
+	font-weight: 500;
+}
+
 .card {
 	border: none;
 	box-shadow: 0px 0px 5px #00000012;

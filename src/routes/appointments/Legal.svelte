@@ -5,7 +5,7 @@
 	export let termsOnly: boolean = false;
 </script>
 
-<div class="px-4 pb-3">
+<div class="px-4 pb-3" class:px-0={termsOnly}>
 	<div class="container">
 		<div class="col">
 			<div class="row mt-3 justify-content-center">
@@ -16,8 +16,9 @@
 				<div
 					class="d-flex flex-column mt-auto"
 					style="width: fit-content; max-height: {termsOnly
-						? '300px'
+						? 'unset'
 						: '75dvh'}; overflow-y: scroll"
+					class:px-10px={termsOnly}
 				>
 					<h6>{$_('legal.h1')}</h6>
 					<span>{$_('legal.c1')}</span>
@@ -54,3 +55,12 @@
 		</div>
 	{/if}
 </div>
+
+<style>
+	.px-0 {
+		padding-inline: 0 !important;
+	}
+	.px-10px {
+		padding-inline: 5px!important
+	}
+</style>

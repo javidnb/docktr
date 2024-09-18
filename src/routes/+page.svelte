@@ -147,7 +147,7 @@
 			</div>
 		</section>
 		<section class="faq pb-5 pt-4" style="background-color: #0000000a;">
-			<div class="container">
+			<div class="container pb-3">
 				<div class="row">
 					<div class="col">
 						<div class="accordion mt-3" id="accordionExample">
@@ -215,6 +215,7 @@
 									id="collapseThree"
 									class="accordion-collapse collapse"
 									data-bs-parent="#accordionExample"
+									style="max-height: 300px; overflow-y: scroll"
 								>
 									<div class="accordion-body">
 										<Legal termsOnly />

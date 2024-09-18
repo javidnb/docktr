@@ -85,7 +85,7 @@
 		>
 			{$mobileHeader}
 		</h1>
-		{#if $session.user}
+		{#if $session.user && !$mobileComponent}
 			<button
 				class="btn btnSettings mobileOnly"
 				style="position: absolute; top: 10px; right: 1rem; color: var(--primaryText)"
@@ -97,17 +97,8 @@
 				<span class="material-symbols-outlined icon-fill"> settings </span>
 			</button>
 		{/if}
-		<div
-			class="collapse"
-			id="settings"
-			style="position: absolute;
-			right: 10px;
-			top: 3rem;
-			z-index: 9;
-			background: white;
-			min-width: 200px"
-		>
-			<button class="btn btn-outline-primary d-flex align-items-center gap-2 w-100">
+		<div class="collapse w-100 px-2" id="settings">
+			<button class="btn btn-outline-primary d-flex align-items-center gap-2 w-100 mb-3">
 				<span class="material-symbols-outlined"> notifications </span>
 				Notifications
 			</button>
@@ -189,7 +180,11 @@
 											<img
 												src={$session.user?.photoURL}
 												alt="Profile Photo"
-												style="max-height: 60px;  padding: 5px; border-radius: 100%; background: #f6f6f6"
+												style="max-height: 60px;  padding: 5px; border-radius: 100%; 
+												background: #f6f6f6; 
+												aspect-ratio: 1 / 1;
+												object-fit: cover;
+												object-position: center;"
 											/>
 										</div>
 									{:else}
@@ -416,6 +411,9 @@
 	.btnSettings:focus {
 		background-color: unset !important;
 		border: unset !important;
+	}
+	.btn-outline-primary:not(:hover) {
+		background-color: white;
 	}
 	@media screen and (max-width: 768px) {
 		.list-group {

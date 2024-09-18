@@ -189,16 +189,20 @@
 					<div class="d-flex flex-column ps-3">
 						<div
 							class="d-flex flex-column my-auto px-2"
-							style="color: rgb(165 3 3); text-align: justify; font-weight: 600"
+							style="color: rgb(165 3 3); text-align: justify; font-weight: 500; font-size: 15px"
 						>
 							<span>{$_('legal.1')}</span>
-							<span>{$_('legal.2')}</span>
+							<span
+								style="max-width: 527px;
+    							margin-block: 5px;">
+								{$_('legal.2')}
+							</span>
 						</div>
 
 						<div class="d-flex flex-column px-2 py-2">
 							<button
 								class="btn btn-outline-primary"
-								style="font-weight: 600;"
+								style="font-weight: 600; text-decoration: underline"
 								on:click|preventDefault={() => {
 									showTermsModal.set(true);
 								}}

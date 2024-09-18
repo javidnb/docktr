@@ -34,7 +34,7 @@
 	let showError: boolean = false; // display login error
 	let showConfimationInput: boolean = false;
 
-	let type: string = 'login';
+	export let type: string = 'login';
 	let method: string = 'mobile';
 
 	let whatsappNotifications: boolean = false;

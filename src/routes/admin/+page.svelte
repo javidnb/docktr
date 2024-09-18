@@ -33,11 +33,11 @@
 	}
 
 	async function sendNoti() {
-		let body = { uid: '1TgHpEOspfZmDhanm8m1XLgm29u1', title: 'salam qaqa' };
-		const response = await fetch('https://sehiyye.net/api/pushNotification', {
+		let body = { to: '+994502803233', message: 'salam' };
+		const response = await fetch('https://tekoplast.az/docktr/api/?wpNotification', {
 			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(body)
+			headers: { 'Content-Type': 'application/json' }, // Make sure the content type is JSON
+			body: JSON.stringify(body) // Convert body to JSON string
 		});
 
 		const result = await response.json();
@@ -223,7 +223,7 @@
 			<h5 class="ps-5 title">
 				{pageTitle}
 			</h5>
-			<button class="btn btn-outline-primary m-3" on:click={sendNoti}>Noti</button>
+			<button class="btn btn-outline-primary m-3 ms-4" on:click={sendNoti}>WP Notify</button>
 			<div class="container">
 				<div class="row p-3" style="max-height: calc(100vh - 47px); overflow-y: scroll;">
 					<svelte:component this={component} />

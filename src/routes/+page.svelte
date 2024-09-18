@@ -114,8 +114,11 @@
 							style="max-height: 40px;
 							border-radius: 35%;
 							background: rgb(248 248 248);
-							border: 1px solid #dedede;
-							padding: 2px;"
+							box-shadow: 0px 0px 5px #00000012;
+							padding: 2px;
+							aspect-ratio: 1 / 1;
+							object-fit: cover;
+							object-position: center;"
 						/>
 					</div>
 				{:else}
@@ -124,7 +127,7 @@
 							color: rgb(150 199 137);
 							background: rgb(248 248 248);
 							border-radius: 35%;
-							border: 1px solid #dedede;
+							box-shadow: 0px 0px 5px #00000012;
 							padding: 7px;"
 						class="material-symbols-outlined icon-fill">person</span
 					>

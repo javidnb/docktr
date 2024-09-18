@@ -187,7 +187,10 @@
 			{:else}
 				<div class="row d-flex h-100">
 					<div class="d-flex flex-column ps-3">
-						<div class="d-flex flex-column my-auto px-2" style="color: rgb(165 3 3); text-align: justify">
+						<div
+							class="d-flex flex-column my-auto px-2"
+							style="color: rgb(165 3 3); text-align: justify; font-weight: 600"
+						>
 							<span>{$_('legal.1')}</span>
 							<span>{$_('legal.2')}</span>
 						</div>
@@ -195,7 +198,7 @@
 						<div class="d-flex flex-column px-2 py-2">
 							<button
 								class="btn btn-outline-primary"
-								style="font-weight: 600; text-decoration: underline"
+								style="font-weight: 600;"
 								on:click|preventDefault={() => {
 									showTermsModal.set(true);
 								}}
@@ -219,6 +222,9 @@
 									style="margin-bottom: 4px;"
 									bind:value={$termsAccepted}
 									checked={$termsAccepted}
+									on:click={() => {
+										termsAccepted.set(!$termsAccepted);
+									}}
 								/>
 								<label class="form-check-label w-100" for="usage">
 									<span>Oxudum və qəbul edirəm.</span>

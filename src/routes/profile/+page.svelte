@@ -54,7 +54,10 @@
 </script>
 
 <section>
-	<div class="jumbotron jumboHeader" style="padding-block: 1rem; background-color: #e2e9ef">
+	<div
+		class="jumbotron jumboHeader"
+		style="padding-block: 1rem; background-color: #e2e9ef; position: relative;"
+	>
 		{#if $mobileComponent}
 			<button
 				class="btn mobileOnly"
@@ -83,18 +86,24 @@
 		>
 			{$mobileHeader}
 		</h1>
-		<!-- WELCOME TEXT -->
-		<!-- {#if $session.user?.displayName && $mobile}
-			<div
-				class="d-flex gap-1 align-items-center justify-content-center"
-				style="color: #474747;
-				margin-top: -10px;
-				font-size: small;"
+		{#if $session.user}
+			<button
+				class="btn btnSettings mobileOnly"
+				style="position: absolute; top: 10px; right: 1rem; color: var(--primaryText)"
+				data-bs-toggle="collapse"
+				data-bs-target="#settings"
+				aria-expanded="false"
+				aria-controls="settings"
 			>
-				<span>{$_('other.welcome')},</span>
-				<span style="font-weight: 500;">{$session.user.displayName}</span>
-			</div>
-		{/if} -->
+				<span class="material-symbols-outlined icon-fill"> settings </span>
+			</button>
+		{/if}
+		<div class="collapse" id="settings">
+			<button class="btn btn-outline-primary d-flex align-items-center gap-2">
+				<span class="material-symbols-outlined"> notifications </span>
+				Notifications
+			</button>
+		</div>
 	</div>
 </section>
 
@@ -394,6 +403,11 @@
 	}
 	.display-4 {
 		transition-duration: 0.2s;
+	}
+	.btnSettings:active,
+	.btnSettings:focus {
+		background-color: unset !important;
+		border: unset !important;
 	}
 	@media screen and (max-width: 768px) {
 		.list-group {

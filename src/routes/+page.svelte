@@ -7,6 +7,7 @@
 	import { loginModal, mobile, showGPT, zoomOut } from '$lib/store/dataStore';
 	import { goto } from '$app/navigation';
 	import { session } from '$lib/session';
+	import Legal from './appointments/Legal.svelte';
 </script>
 
 <div style="overflow-x: hidden;">
@@ -96,10 +97,11 @@
 					$session.user ? goto('/profile') : loginModal.set(true);
 				}}
 				class="mobileOnly"
-				style="position: absolute; left: 10px; top: 10px;"
+				style="position: absolute; right: 10px; top: 10px;"
 			>
 				{#if $session.user?.photoURL}
 					<div
+						class="d-flex"
 						style="min-height: 60px; 
 						min-width: 60px; display: flex; 
 						align-items: center; 
@@ -110,7 +112,7 @@
 							src={$session.user?.photoURL}
 							alt="Profile Photo"
 							style="max-height: 40px;
-							border-radius: 100%;
+							border-radius: 35%;
 							background: rgb(248 248 248);
 							border: 1px solid #dedede;
 							padding: 7px;"
@@ -121,7 +123,7 @@
 						style="font-size: 30px !important;
 							color: rgb(150 199 137);
 							background: rgb(248 248 248);
-							border-radius: 100%;
+							border-radius: 35%;
 							border: 1px solid #dedede;
 							padding: 7px;"
 						class="material-symbols-outlined icon-fill">person</span
@@ -148,12 +150,6 @@
 			<div class="container">
 				<div class="row">
 					<div class="col">
-						<h5
-							class="text-center"
-							style="color: var(--primaryText); font-family: 'Montserrat', sans-serif;  padding-left: 10px"
-						>
-							{$_('home.faq')}
-						</h5>
 						<div class="accordion mt-3" id="accordionExample">
 							<div class="accordion-item">
 								<h2 class="accordion-header">
@@ -195,9 +191,10 @@
 									id="collapseTwo"
 									class="accordion-collapse collapse"
 									data-bs-parent="#accordionExample"
+									style="max-height: 300px; overflow-y: scroll"
 								>
 									<div class="accordion-body">
-										{$_('faq.a2')}
+										{@html $_('faq.faqs')}
 									</div>
 								</div>
 							</div>
@@ -220,7 +217,7 @@
 									data-bs-parent="#accordionExample"
 								>
 									<div class="accordion-body">
-										{$_('faq.a3')}
+										<Legal termsOnly />
 									</div>
 								</div>
 							</div>

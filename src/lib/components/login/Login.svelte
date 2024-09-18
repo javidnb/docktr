@@ -459,7 +459,7 @@
 						/>
 						<span class="slider round"></span>
 					</label>
-					<span>WhatsApp bildirişlər</span>
+					<span>WhatsApp ilə bildiriş al</span>
 				</div>
 				{#if whatsappNotifications}
 					<div class="p-0 input-group" in:slideIn>

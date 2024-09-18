@@ -519,12 +519,12 @@
 			class="collapse"
 			id="moreBtns"
 			style="position: absolute;
-			bottom: 6rem;
-			background: rgba(0, 0, 0, 0.368);
-			border-radius: 14px;
-			padding: 10px;
-			width: min(90dvw, 380px);
-			z-index: 99;"
+				bottom: 6rem;
+				background: rgba(0, 0, 0, 0.368);
+				border-radius: 14px;
+				padding: 10px;
+				width: min(90dvw, 380px);
+				z-index: 99;"
 		>
 			<div class="d-flex w-100 justify-content-around">
 				<button

@@ -1,15 +1,24 @@
 <script lang="ts">
 	import { showTermsModal, termsAccepted } from '$lib/store/dataStore';
 	import { _ } from 'svelte-i18n';
+
+	export let termsOnly: boolean = false;
 </script>
 
 <div class="px-4 pb-3">
 	<div class="container">
 		<div class="col">
 			<div class="row mt-3 justify-content-center">
-				<h4>{$_('legal.header')}</h4>
+				{#if !termsOnly}
+					<h4>{$_('legal.header')}</h4>
+				{/if}
 
-				<div class="d-flex flex-column mt-auto" style="width: fit-content; max-height: 75dvh; overflow-y: scroll">
+				<div
+					class="d-flex flex-column mt-auto"
+					style="width: fit-content; max-height: {termsOnly
+						? '300px'
+						: '75dvh'}; overflow-y: scroll"
+				>
 					<h6>{$_('legal.h1')}</h6>
 					<span>{$_('legal.c1')}</span>
 					<h6 class="mt-2">{$_('legal.h2')}</h6>
@@ -31,15 +40,17 @@
 		</div>
 	</div>
 
-	<div class="d-flex gap-3 mt-3">
-		<button
-			class="btn btn-primary w-100 d-flex"
-			on:click={() => {
-				termsAccepted.set(true);
-				showTermsModal.set(false);
-			}}
-			><span class="material-symbols-outlined"> check </span>
-			<span class="mx-auto">{$_('legal.accept')}</span>
-		</button>
-	</div>
+	{#if !termsOnly}
+		<div class="d-flex gap-3 mt-3">
+			<button
+				class="btn btn-primary w-100 d-flex"
+				on:click={() => {
+					termsAccepted.set(true);
+					showTermsModal.set(false);
+				}}
+				><span class="material-symbols-outlined"> check </span>
+				<span class="mx-auto">{$_('legal.accept')}</span>
+			</button>
+		</div>
+	{/if}
 </div>

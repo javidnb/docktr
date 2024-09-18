@@ -40,13 +40,8 @@
 			await putData('users', 'uid', $session.user?.uid, { lang: newLocale }, true);
 		}
 	};
-	let websiteName = $page.url.host;
 	let curPage: string | null = '/';
 	$: curPage = $page.route.id;
-
-	$: showModal = !!$loginModal;
-
-	$: if (showModal == false) loginModal.set(false);
 </script>
 
 {#if $dataLoading}
@@ -357,18 +352,6 @@
 					</a>
 				</li>
 
-				<!-- <li class="nav-item mobileOnly">
-					<button
-						class="nav-link"
-						on:click={() => ($session.loggedIn ? goto('/messages') : loginModal.set(true))}
-						class:active={curPage == '/messages'}
-						style="position: relative;"
-						><span class="material-symbols-outlined" class:icon-fill={curPage == '/messages'}>
-							mail
-						</span>
-						<span class="navLinkText">{$_('nav.messages')}</span>
-					</button>
-				</li> -->
 				<li class="nav-item pcOnly">
 					<a class="nav-link" href="/blog" class:active={curPage == '/blog'}
 						><span class="material-symbols-outlined"> rss_feed </span>
@@ -505,6 +488,6 @@
 	</section>
 {/if}
 
-<Modal bind:showModal>
+<Modal bind:showModal={$loginModal}>
 	<Login />
 </Modal>

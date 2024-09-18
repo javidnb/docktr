@@ -42,9 +42,9 @@
 							</h1> -->
 							<p
 								class="lead mb-0 py-2"
-								style="color: var(--primaryText);
+								style="color: #008037;
 								font-size: clamp(0.8rem, 4vw, 1.2rem);
-								font-family: Montserrat, sans-serif;
+								font-family: 'DM Sans';
 								white-space: nowrap;
 								margin-top: -10px;"
 							>
@@ -115,7 +115,7 @@
 							border-radius: 35%;
 							background: rgb(248 248 248);
 							border: 1px solid #dedede;
-							padding: 7px;"
+							padding: 2px;"
 						/>
 					</div>
 				{:else}
@@ -168,9 +168,21 @@
 									id="collapseOne"
 									class="accordion-collapse collapse show"
 									data-bs-parent="#accordionExample"
+									style="max-height: 300px; overflow-y: scroll"
 								>
 									<div class="accordion-body">
-										{$_('faq.a1')}
+										<div class="d-flex flex-column">
+											<div class="fw-500">{$_('usage.register')}</div>
+											<div>{$_('usage.register_details')}</div>
+											<div class="fw-500 mt-3">{$_('usage.get_appointment')}</div>
+											<div>{$_('usage.get_appointment_details')}</div>
+											<div class="fw-500 mt-3">{$_('usage.payment')}</div>
+											<div>{$_('usage.payment_details')}</div>
+											<div class="fw-500 mt-3">{$_('usage.join_appointment')}</div>
+											<div>{$_('usage.join_appointment_details')}</div>
+											<div class="fw-500 mt-3">{$_('usage.check_appointment')}</div>
+											<div>{$_('usage.check_appointment_details')}</div>
+										</div>
 									</div>
 								</div>
 							</div>

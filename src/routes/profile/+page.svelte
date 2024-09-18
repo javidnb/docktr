@@ -11,8 +11,7 @@
 		mobileComponent,
 		putData,
 		mobileHeader,
-		dataLoading,
-		slideIn
+		dataLoading
 	} from '$lib/store/dataStore';
 	import Chat from '$lib/components/chat/Chat.svelte';
 	import Documents from '$lib/components/profile/Documents.svelte';
@@ -98,8 +97,17 @@
 				<span class="material-symbols-outlined icon-fill"> settings </span>
 			</button>
 		{/if}
-		<div class="collapse" id="settings">
-			<button class="btn btn-outline-primary d-flex align-items-center gap-2">
+		<div
+			class="collapse"
+			id="settings"
+			style="position: absolute;
+			right: 10px;
+			top: 3rem;
+			z-index: 9;
+			background: white;
+			min-width: 200px"
+		>
+			<button class="btn btn-outline-primary d-flex align-items-center gap-2 w-100">
 				<span class="material-symbols-outlined"> notifications </span>
 				Notifications
 			</button>

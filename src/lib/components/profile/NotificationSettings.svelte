@@ -44,6 +44,10 @@
 					: null,
 				emailNotifs: email ? emailNotifs : null
 			};
+
+			// TODO BUNU NULL ELEYIREM AMMA DB`ya empty string dusur
+
+			console.log(updatedData);
 			if (userData?.uid) {
 				result = await putData('users', 'uid', userData?.uid, updatedData, true);
 				if (result) {

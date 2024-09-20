@@ -9,20 +9,12 @@
 	} from 'firebase/auth';
 	import { getToken } from 'firebase/messaging';
 	import { onMount } from 'svelte';
-	import {
-		dataLoading,
-		loginModal,
-		putData,
-		appointments,
-		appointmentsLoading,
-		slideIn
-	} from '$lib/store/dataStore';
+	import { dataLoading, loginModal, putData, slideIn } from '$lib/store/dataStore';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { _ } from 'svelte-i18n';
 	import { browser } from '$app/environment';
 	import Select from 'svelte-select';
 	import { parsePhoneNumber, isValidNumber } from 'libphonenumber-js';
-	import { goto } from '$app/navigation';
 	import { slide } from 'svelte/transition';
 
 	let email: string = '';
@@ -32,11 +24,12 @@
 	let displayName: string;
 	let disabled = true;
 	let showError: boolean = false; // display login error
+	let showPassRecoveryInput: boolean = false;
 
 	export let type: string = 'login';
 	let method: string = 'mobile';
 
-	let whatsappNotifications: boolean = false;
+	let whatsappNotifications: boolean = false; // enable wp when registering
 
 	let selectItems = [
 		{ value: '+994', label: '+994' },
@@ -45,10 +38,12 @@
 
 	let selecedItem = selectItems[0];
 
+	// on modal close
 	$: if ($loginModal == false) {
 		disabled = false;
 		showError = false;
 		type = 'login';
+		showPassRecoveryInput = false;
 	}
 
 	onMount(() => {
@@ -57,36 +52,65 @@
 			const asyncFunction = async () => {};
 			asyncFunction();
 		}
-
-		// if ($session.loggedIn) {
-		// 	goto('./profile');
-		// }
 	});
 
-	async function postData(userData: any) {
-		let dataToPost = { table: 'users', data: { ...userData } };
-		const response = await fetch('https://tekoplast.az/docktr/api/?postData', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ ...dataToPost }),
-			cache: 'no-cache'
-		});
+	async function login() {
+		dataLoading.set(true);
+		disabled = true;
+		showError = false;
 
-		if (response.ok) {
-			session.set({
-				user: userData,
-				loggedIn: true,
-				loading: false
-			});
-			dataLoading.set(false);
-			if (!whatsappNotifications) {
-				registerCM();
-			}
+		// MOBILE NUMBER LOGIN
+		if (method == 'mobile') {
+			const country = selecedItem.value == '+994' ? 'AZ' : 'TR';
+			email = parsePhoneNumber(phoneNumber, country).number.slice(1) + '@sehiyye.online';
+		}
+		// EMAIL LOGIN
+		if (type == 'register') {
+			createUserWithEmailAndPassword(auth, email, password)
+				.then(async (userCredential: UserCredential) => {
+					// Signed up
+					const user = userCredential;
+					updateProfile(user.user, { displayName });
+					await getUser(user);
+					dataLoading.set(false);
+					toast.push(`Xoş gəldiniz ${user.user.displayName ?? ''}!`, {
+						duration: 2000,
+						theme: {
+							'--toastColor': 'mintcream',
+							'--toastBackground': 'rgb(91 144 77)',
+							'--toastBarBackground': '#1d5b3c'
+						}
+					});
+					loginModal.set(false);
+				})
+				.catch((error) => {
+					dataLoading.set(false);
+					const errorCode = error.code;
+					const errorMessage = error.message;
+					showError = true;
+					// ..
+				});
 		} else {
-			console.error('Failed to post data');
-			dataLoading.set(false);
+			await signInWithEmailAndPassword(auth, email, password)
+				.then(async (result) => {
+					session.set({ user: result.user, loggedIn: true });
+					dataLoading.set(false);
+					loginModal.set(false);
+					toast.push(`Xoş gəldiniz ${result.user.displayName ?? ''}!`, {
+						duration: 2000,
+						theme: {
+							'--toastColor': 'mintcream',
+							'--toastBackground': 'rgb(91 144 77)',
+							'--toastBarBackground': '#1d5b3c'
+						}
+					});
+				})
+				.catch((error) => {
+					disabled = false;
+					showError = true;
+					dataLoading.set(false);
+					return error;
+				});
 		}
 	}
 
@@ -98,10 +122,6 @@
 				`https://tekoplast.az/docktr/api/?user&id=${user.user.uid}&t=${time}`
 			);
 			const result = await response.json();
-			if (result?.doctor) {
-				dataLoading.set(false);
-				goto('./doctor');
-			}
 			if (!result) {
 				// CREATE NEW USER
 				let usr = user.user;
@@ -129,7 +149,6 @@
 					loading: false
 				});
 				dataLoading.set(false);
-				getAppointments(result);
 				if (!result.whatsapp) {
 					registerCM();
 				}
@@ -141,64 +160,30 @@
 		}
 	}
 
-	async function login() {
-		dataLoading.set(true);
-		disabled = true;
-		showError = false;
+	async function postData(userData: any) {
+		let dataToPost = { table: 'users', data: { ...userData } };
+		const response = await fetch('https://tekoplast.az/docktr/api/?postData', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ ...dataToPost }),
+			cache: 'no-cache'
+		});
 
-		// MOBILE NUMBER LOGIN
-		if (method == 'mobile') {
-			const country = selecedItem.value == '+994' ? 'AZ' : 'TR';
-			email = parsePhoneNumber(phoneNumber, country).number.slice(1) + '@sehiyye.online';
-		}
-		// EMAIL LOGIN
-		if (type == 'register') {
-			createUserWithEmailAndPassword(auth, email, password)
-				.then(async (userCredential: UserCredential) => {
-					// Signed up
-					const user = userCredential;
-					updateProfile(user.user, { displayName });
-					dataLoading.set(false);
-					await getUser(user);
-					toast.push(`Xoş gəldiniz ${user.user.displayName ?? ''}!`, {
-						duration: 2000,
-						theme: {
-							'--toastColor': 'mintcream',
-							'--toastBackground': 'rgb(91 144 77)',
-							'--toastBarBackground': '#1d5b3c'
-						}
-					});
-					closeModal();
-				})
-				.catch((error) => {
-					dataLoading.set(false);
-					const errorCode = error.code;
-					const errorMessage = error.message;
-					showError = true;
-					// ..
-				});
+		if (response.ok) {
+			session.set({
+				user: userData,
+				loggedIn: true,
+				loading: false
+			});
+			dataLoading.set(false);
+			if (!whatsappNotifications) {
+				registerCM();
+			}
 		} else {
-			await signInWithEmailAndPassword(auth, email, password)
-				.then(async (result) => {
-					session.set({ user: result.user, loggedIn: true });
-					dataLoading.set(false);
-					closeModal();
-					toast.push(`Xoş gəldiniz ${result.user.displayName ?? ''}!`, {
-						duration: 2000,
-						theme: {
-							'--toastColor': 'mintcream',
-							'--toastBackground': 'rgb(91 144 77)',
-							'--toastBarBackground': '#1d5b3c'
-						}
-					});
-					await getUser(result);
-				})
-				.catch((error) => {
-					disabled = false;
-					showError = true;
-					dataLoading.set(false);
-					return error;
-				});
+			console.error('Failed to post data');
+			dataLoading.set(false);
 		}
 	}
 
@@ -238,44 +223,6 @@
 			});
 	}
 
-	// RETRIEVE EXISTING APPOINTMENTS OF LOGGED IN USER
-	async function getAppointments(user: any) {
-		appointmentsLoading.set(true);
-		try {
-			let time = new Date().getTime();
-			let response;
-			if (user.doctor) {
-				response = await fetch(
-					`https://tekoplast.az/docktr/api/?appointments&id=${user.doctor}&type=doctor&t=${time}`
-				);
-			} else {
-				response = await fetch(
-					`https://tekoplast.az/docktr/api/?appointments&id=${user.uid}&t=${time}`
-				);
-			}
-
-			const result = await response.json();
-			if (result) {
-				appointments.set(result);
-				appointmentsLoading.set(false);
-				dataLoading.set(false);
-				return null;
-			}
-			return response;
-		} catch (error) {
-			console.error(error);
-			appointmentsLoading.set(false);
-			dataLoading.set(false);
-			return null;
-		}
-	}
-
-	function closeModal() {
-		loginModal.set(false);
-		disabled = false;
-		showError = false;
-	}
-
 	// PHONE NUMBER INPUT FORMATTING
 	function handleInput(event: Event) {
 		const target = event.target as HTMLInputElement;
@@ -305,9 +252,31 @@
 			}
 		}
 	}
+
+	async function passRecovery() {
+		dataLoading.set(true);
+		let body: any = { getToken: true };
+		if (method == 'mobile') {
+			body.phoneNumber = parsePhoneNumber(selecedItem.value + phoneNumber).number;
+		} else {
+			body.email = email;
+		}
+		const response = await fetch('https://sehiyye.net/api/authToken', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(body)
+		});
+
+		const result = await response.json();
+		console.log(result);
+		if (result.success) {
+			showPassRecoveryInput = true;
+		}
+		dataLoading.set(false);
+	}
 </script>
 
-<div class="login-form" style="max-width: 100%; overflow-x:hidden">
+<div class="login-form" style="max-width: 100%; overflow-x:hidden; transition-duration: .2s">
 	<div class="col pb-4" style="margin-top: 0; padding-top:0">
 		<h5
 			class="text-center mb-0 mt-3"
@@ -323,150 +292,75 @@
 					? $_('login.forgot_pass')
 					: $_('login.register')}
 		</h5>
-		<div class="d-flex px-0 gap-2 socials w-100" style="padding: 1rem 1.5rem;">
-			<button
-				on:click={() => {
-					method = 'mobile';
-					phoneNumber = '';
-					email = '';
-					password = '';
-					disabled = true;
-					showError = false;
-				}}
-				class="btn btn-outline-primary d-flex flex-row justify-content-center gap-2"
-				class:active={method == 'mobile'}
-				><span class="material-symbols-outlined icon-fill"> call </span>
-				<span style="white-space: nowrap;">Mobil Nömrə</span>
-			</button>
-			<button
-				on:click={() => {
-					method = 'email';
-					phoneNumber = '';
-					email = '';
-					password = '';
-					disabled = true;
-					showError = false;
-				}}
-				style="min-width: 150px"
-				class="btn btn-outline-primary bg-white d-flex flex-row justify-content-center gap-2"
-				class:active={method == 'email'}
-				><span class="material-symbols-outlined icon-fill"> mail </span>
-				<span>Email</span>
-			</button>
-		</div>
-		<form on:submit={login}>
-			{#if type == 'register'}
-				<div class="form-floating p-0">
-					<input
-						class="form-control"
-						style="min-width: 300px"
-						bind:value={displayName}
-						type="text"
-						placeholder={$_('login.name_surname')}
-						required
-						id="nameInput"
-					/>
-					<label for="nameInput" style="color: gray">{$_('login.name_surname')}</label>
-				</div>
-			{/if}
-			{#if method == 'email'}
-				<div class="form-floating p-0">
-					<input
-						class="form-control"
-						bind:value={email}
-						on:input={() => {
-							if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-								disabled = false;
-							} else {
-								disabled = true;
-							}
-						}}
-						type="text"
-						placeholder={$_('login.email')}
-						required
-						id="emailInput"
-						style="min-width: 270px"
-					/>
-					<label for="emailInput" style="color: gray">{$_('login.email')}</label>
-				</div>
-			{:else if method == 'mobile'}
-				<div class="p-0 input-group">
-					<Select
-						class="form-control"
-						items={selectItems}
-						--width="80px"
-						--border-top-left-radius="10px"
-						--border-focused="1px solid var(--primaryColor)"
-						--item-is-active-bg="var(--primaryColor)"
-						--item-hover-bg="#d9e1d7"
-						bind:value={selecedItem}
-						clearable={false}
-					></Select>
+		{#if !showPassRecoveryInput}
+			<div class="d-flex px-0 gap-2 socials w-100" style="padding: 1rem 1.5rem;">
+				<button
+					on:click={() => {
+						method = 'mobile';
+						phoneNumber = '';
+						email = '';
+						password = '';
+						disabled = true;
+						showError = false;
+					}}
+					class="btn btn-outline-primary d-flex flex-row gap-2"
+					class:active={method == 'mobile'}
+					><span class="material-symbols-outlined icon-fill"> call </span>
+					<span class="mx-auto" style="white-space: nowrap;">Mobil Nömrə</span>
+				</button>
+				<button
+					on:click={() => {
+						method = 'email';
+						phoneNumber = '';
+						email = '';
+						password = '';
+						disabled = true;
+						showError = false;
+					}}
+					style="min-width: 150px"
+					class="btn btn-outline-primary bg-white d-flex flex-row gap-2"
+					class:active={method == 'email'}
+					><span class="material-symbols-outlined icon-fill"> mail </span>
+					<span class="mx-auto">Email</span>
+				</button>
+			</div>
+			<form on:submit={login}>
+				{#if type == 'register'}
 					<div class="form-floating p-0">
 						<input
 							class="form-control"
-							style="margin-left: -5px"
-							bind:value={phoneNumber}
-							on:input={handleInput}
+							style="min-width: 300px"
+							bind:value={displayName}
 							type="text"
-							placeholder={$_('login.mobile')}
+							placeholder={$_('login.name_surname')}
 							required
-							id="phoneInput"
+							id="nameInput"
 						/>
-						<label for="phoneInput" style="color: gray">{$_('login.mobile')}</label>
+						<label for="nameInput" style="color: gray">{$_('login.name_surname')}</label>
 					</div>
-				</div>
-				<!-- <div
-					id="recap"
-					style="background: white;
-					border-radius: 6px;
-					padding: 0"
-				></div> -->
-			{/if}
-			{#if type !== 'pass_recovery'}
-				<div class="form-floating p-0" style="z-index: 0;">
-					<input
-						class="form-control"
-						bind:value={password}
-						type="password"
-						placeholder={$_('login.pass')}
-						required
-						id="passwInput"
-					/>
-					<label for="passwInput" style="color: gray">{$_('login.pass')}</label>
-				</div>
-			{/if}
-			{#if type == 'register'}
-				<div
-					class="p-0"
-					style="margin-top: -15px; margin-bottom: -10px; padding-left: 5px !important; transition-duration: .2s"
-				>
-					{#if !password || password.length < 6}
-						<span
-							style="font-size: small; color: gray"
-							in:slide={{ duration: 200 }}
-							out:slide={{ duration: 200 }}
-						>
-							Şifrə ən az 6 simvoldan ibarət olmalıdır
-						</span>
-					{/if}
-				</div>
-
-				<div class="d-flex align-items-center gap-2" style="padding: 5px 0px 0px 0px!important">
-					<label class="switch">
+				{/if}
+				{#if method == 'email'}
+					<div class="form-floating p-0">
 						<input
-							type="checkbox"
-							bind:checked={whatsappNotifications}
-							on:click={() => {
-								whatsappNumber = phoneNumber;
+							class="form-control"
+							bind:value={email}
+							on:input={() => {
+								if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+									disabled = false;
+								} else {
+									disabled = true;
+								}
 							}}
+							type="text"
+							placeholder={$_('login.email')}
+							required
+							id="emailInput"
+							style="min-width: 270px"
 						/>
-						<span class="slider round"></span>
-					</label>
-					<span>WhatsApp ilə bildiriş al</span>
-				</div>
-				{#if whatsappNotifications}
-					<div class="p-0 input-group" in:slideIn>
+						<label for="emailInput" style="color: gray">{$_('login.email')}</label>
+					</div>
+				{:else if method == 'mobile'}
+					<div class="p-0 input-group">
 						<Select
 							class="form-control"
 							items={selectItems}
@@ -480,65 +374,161 @@
 						></Select>
 						<div class="form-floating p-0">
 							<input
-								class="form-control whatsapp"
+								class="form-control"
 								style="margin-left: -5px"
-								bind:value={whatsappNumber}
+								bind:value={phoneNumber}
 								on:input={handleInput}
 								type="text"
 								placeholder={$_('login.mobile')}
 								required
-								id="wpInput"
+								id="phoneInput"
 							/>
-							<label for="wpInput" style="color: gray">WhatsApp No</label>
+							<label for="phoneInput" style="color: gray">{$_('login.mobile')}</label>
 						</div>
 					</div>
+					<!-- <div
+					id="recap"
+					style="background: white;
+					border-radius: 6px;
+					padding: 0"
+				></div> -->
 				{/if}
-			{/if}
-			{#if showError}
-				<span style="color:#c40f0f">{$_('login.error')} <br />{$_('login.try_again')}</span>
-			{/if}
-			{#if type == 'pass_recovery'}
-				<button
-					class="btn"
-					style="padding: 0.5rem;
-					border-radius: 10px;
-					background: var(--primaryColor);
-					color: white;
-					border: 0px;
-					font-size: 1.05rem;
-					cursor: pointer;">Sorğu göndər</button
-				>
-			{:else}
-				<button
-					class="btn"
-					id="btnLogin"
-					disabled={disabled ||
-						password.length < 6 ||
-						(type == 'register' && (!displayName || displayName.length < 3))}
-					type="submit"
-					style="padding: 0.5rem;
+				{#if type !== 'pass_recovery'}
+					<div class="form-floating p-0" style="z-index: 0;">
+						<input
+							class="form-control"
+							bind:value={password}
+							type="password"
+							placeholder={$_('login.pass')}
+							required
+							id="passwInput"
+						/>
+						<label for="passwInput" style="color: gray">{$_('login.pass')}</label>
+					</div>
+				{/if}
+				{#if type == 'register'}
+					<div
+						class="p-0"
+						style="margin-top: -15px; margin-bottom: -10px; padding-left: 5px !important; transition-duration: .2s"
+					>
+						{#if !password || password.length < 6}
+							<span
+								style="font-size: small; color: gray"
+								in:slide={{ duration: 200 }}
+								out:slide={{ duration: 200 }}
+							>
+								Şifrə ən az 6 simvoldan ibarət olmalıdır
+							</span>
+						{/if}
+					</div>
+
+					<div class="d-flex align-items-center gap-2" style="padding: 5px 0px 0px 0px!important">
+						<label class="switch">
+							<input
+								type="checkbox"
+								bind:checked={whatsappNotifications}
+								on:click={() => {
+									whatsappNumber = phoneNumber;
+								}}
+							/>
+							<span class="slider round"></span>
+						</label>
+						<span>WhatsApp ilə bildiriş al</span>
+					</div>
+					{#if whatsappNotifications}
+						<div class="p-0 input-group" in:slideIn>
+							<Select
+								class="form-control"
+								items={selectItems}
+								--width="80px"
+								--border-top-left-radius="10px"
+								--border-focused="1px solid var(--primaryColor)"
+								--item-is-active-bg="var(--primaryColor)"
+								--item-hover-bg="#d9e1d7"
+								bind:value={selecedItem}
+								clearable={false}
+							></Select>
+							<div class="form-floating p-0">
+								<input
+									class="form-control whatsapp"
+									style="margin-left: -5px"
+									bind:value={whatsappNumber}
+									on:input={handleInput}
+									type="text"
+									placeholder={$_('login.mobile')}
+									required
+									id="wpInput"
+								/>
+								<label for="wpInput" style="color: gray">WhatsApp No</label>
+							</div>
+						</div>
+					{/if}
+				{/if}
+				{#if showError}
+					<span style="color:#c40f0f">{$_('login.error')} <br />{$_('login.try_again')}</span>
+				{/if}
+				{#if type == 'pass_recovery'}
+					<button
+						on:click|preventDefault={passRecovery}
+						class="btn d-flex align-items-center"
+						style="padding: 0.5rem;
+							border-radius: 10px;
+							background: var(--primaryColor);
+							color: white;
+							border: 0px;
+							font-size: 1.05rem;
+							cursor: pointer;"
+						disabled={$dataLoading ||
+							(method == 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) ||
+							(method == 'mobile' && !isValidNumber(selecedItem.value + phoneNumber))}
+					>
+						<span class="mx-auto">Sorğu göndər</span>
+						<span class="material-symbols-outlined"> chevron_right </span>
+						{#if $dataLoading}
+							<div class="loader"></div>
+						{/if}
+					</button>
+				{:else}
+					<button
+						class="btn"
+						id="btnLogin"
+						disabled={disabled ||
+							password.length < 6 ||
+							(type == 'register' && (!displayName || displayName.length < 3))}
+						type="submit"
+						style="padding: 0.5rem;
 					border-radius: 10px;
 					background: var(--primaryColor);
 					color: white;
 					border: 0px;
 					font-size: 1.05rem;
 					cursor: pointer;"
-					>{type == 'login' ? $_('login.login') : $_('login.register')}
-					{#if $dataLoading}
-						<div class="loader"></div>
+						>{type == 'login' ? $_('login.login') : $_('login.register')}
+						{#if $dataLoading}
+							<div class="loader"></div>
+						{/if}
+					</button>
+					{#if type == 'login'}
+						<button
+							class="btn p-0"
+							style="color: var(--primaryText)"
+							on:click|preventDefault={() => {
+								type = 'pass_recovery';
+								showError = false;
+							}}>{$_('login.forgot_pass')}</button
+						>
 					{/if}
-				</button>
-				{#if type == 'login'}
-					<button
-						class="btn p-0"
-						style="color: var(--primaryText)"
-						on:click|preventDefault={() => {
-							type = 'pass_recovery';
-						}}>{$_('login.forgot_pass')}</button
-					>
 				{/if}
-			{/if}
-		</form>
+			</form>
+		{:else}
+			<div class="mt-2 px-0" in:slideIn>
+				<span>6 rəqəmli şifrəni daxil edin</span>
+
+				<input type="text" class="form-control mt-3" />
+
+				<button class="btn btn-primary mt-3 w-100">Daxil et</button>
+			</div>
+		{/if}
 
 		<hr style="margin-top: 1rem" />
 
@@ -552,7 +542,10 @@
 		>
 			<span>{type == 'login' ? $_('login.no_account') : $_('login.yes_account')}</span>
 			<button
-				on:click={() => (type = type == 'login' ? 'register' : 'login')}
+				on:click={() => {
+					type = type == 'login' ? 'register' : 'login';
+					showPassRecoveryInput = false;
+				}}
 				class="btn btn-outline-primary w-100"
 			>
 				{type == 'login' ? $_('login.register') : $_('login.login_account')}

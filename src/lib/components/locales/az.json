@@ -159,7 +159,8 @@
 		"error": "Xəta! İstifadəçi adı vəya şifrə yanlışdır.",
 		"try_again": "Zəhmət olmasa yenidən cəhd edin",
 		"contact": "Əlaqə vasitəsi",
-		"message": "Mesajınız"
+		"message": "Mesajınız",
+		"forgot_pass": "Şifrəmi unutmuşam"
 	},
 	"usage": {
 		"header": "İstifadə Qaydaları",

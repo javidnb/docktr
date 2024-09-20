@@ -57,7 +57,8 @@
 		let body = {
 			uid: '1TgHpEOspfZmDhanm8m1XLgm29u1',
 			body: 'test message',
-			url: 'https://sehiyye.net/messages'
+			url: 'https://sehiyye.net/messages',
+			sms: true
 		};
 		const response = await fetch('https://sehiyye.net/api/pushNotification', {
 			method: 'POST',
@@ -75,6 +76,18 @@
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' }, // Make sure the content type is JSON
 			body: JSON.stringify(body) // Convert body to JSON string
+		});
+
+		const result = await response.json();
+		console.log(result);
+	}
+
+	async function passReset() {
+		let body = { phoneNumber: '994502803233', getToken: true };
+		const response = await fetch('https://tekoplast.az/docktr/api/?authToken', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(body)
 		});
 
 		const result = await response.json();
@@ -264,6 +277,7 @@
 			<button class="btn btn-outline-primary m-3 ms-2" on:click={pushNoti}>Push Notify</button>
 			<button class="btn btn-outline-primary m-3 ms-2" on:click={smsNoti}>SMS Notify</button>
 			<button class="btn btn-outline-primary m-3 ms-2" on:click={emailNoti}>Email Notify</button>
+			<button class="btn btn-outline-primary m-3 ms-2" on:click={passReset}>Pass Reset</button>
 			<div class="container">
 				<div class="row p-3" style="max-height: calc(100vh - 47px); overflow-y: scroll;">
 					<svelte:component this={component} />

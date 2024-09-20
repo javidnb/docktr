@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { session } from '$lib/session';
-	import { onMount } from 'svelte';
 	import Select from 'svelte-select';
 	import { _ } from 'svelte-i18n';
 	import { parsePhoneNumber } from 'libphonenumber-js';
+	import { putData } from '$lib/store/dataStore';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	let userData = $session.user;
 
@@ -11,14 +12,10 @@
 		? parsePhoneNumber(userData.whatsapp).formatNational().slice(1)
 		: null;
 	let whatsappNotifications = whatsappNumber ? true : false;
-	let inAppNotifications = userData?.inAppNotifs ? true : false;
+	let inAppNotifs = userData?.inAppNotifs ? true : false;
 	let emailNotifs = userData?.emailNotifs;
 	let email = emailNotifs?.length ? true : false;
-
-	onMount(() => {
-		console.log($session);
-	});
-
+	let disabled = false;
 	let selectItems = [
 		{ value: '+994', label: '+994' },
 		{ value: '+90', label: '+90' }
@@ -26,6 +23,44 @@
 
 	let selecedItem = selectItems[0];
 	let dataLoading: boolean = false;
+
+	async function updateData() {
+		if (checkDisabled() == true) {
+			toast.push('Məlumatlar düzgün daxil edilməyib', {
+				duration: 2000,
+				theme: {
+					'--toastColor': 'mintcream',
+					'--toastBackground': 'rgb(176 24 24)',
+					'--toastBarBackground': '#5b1010'
+				}
+			});
+		} else {
+			dataLoading = true;
+			let result;
+			let updatedData = {
+				inAppNotifs,
+				whatsapp: whatsappNotifications
+					? parsePhoneNumber(selecedItem.value + whatsappNumber).number
+					: null,
+				emailNotifs: email ? emailNotifs : null
+			};
+			if (userData?.uid) {
+				result = await putData('users', 'uid', userData?.uid, updatedData, true);
+				if (result) {
+					$session.user = { ...$session.user, ...updatedData };
+					toast.push($_('actions.success'), {
+						duration: 2000,
+						theme: {
+							'--toastColor': 'mintcream',
+							'--toastBackground': 'rgb(91 144 77)',
+							'--toastBarBackground': '#1d5b3c'
+						}
+					});
+				}
+				dataLoading = false;
+			}
+		}
+	}
 
 	function handleWPInput(event: Event) {
 		const target = event.target as HTMLInputElement;
@@ -39,8 +74,20 @@
 			let num = parsePhoneNumber(whatsappNumber, country);
 			if (num.isValid()) {
 				whatsappNumber = num.formatNational().slice(1);
+				disabled = false;
 			}
 		}
+	}
+
+	function checkDisabled() {
+		const emailValid =
+			(email && emailNotifs && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailNotifs)) || !email;
+		const whatsappValid =
+			whatsappNotifications && whatsappNumber && whatsappNumber.length > 3
+				? parsePhoneNumber(selecedItem.value + whatsappNumber).isValid()
+				: !whatsappNotifications;
+		disabled = !(emailValid && whatsappValid);
+		return disabled;
 	}
 </script>
 
@@ -50,7 +97,7 @@
 >
 	<span>Proqram daxili bildirişlər</span>
 	<label class="switch">
-		<input type="checkbox" bind:checked={inAppNotifications} />
+		<input type="checkbox" bind:checked={inAppNotifs} />
 		<span class="slider round"></span>
 	</label>
 </div>
@@ -65,9 +112,18 @@
 			type="checkbox"
 			bind:checked={whatsappNotifications}
 			on:click={() => {
-				if (!whatsappNumber && userData?.phoneNumber) {
-					whatsappNumber = parsePhoneNumber(userData?.phoneNumber).formatNational().slice(1);
-				}
+				setTimeout(() => {
+					if (whatsappNotifications) {
+						disabled = true;
+					} else {
+						disabled = false;
+					}
+					if (!whatsappNumber && userData?.phoneNumber) {
+						whatsappNumber = parsePhoneNumber(userData?.phoneNumber).formatNational().slice(1);
+						disabled = false;
+					}
+					if (whatsappNumber) disabled = false;
+				}, 5);
 			}}
 		/>
 		<span class="slider round"></span>
@@ -116,6 +172,9 @@
 				if (!emailNotifs && userData?.email) {
 					emailNotifs = userData.email;
 				}
+				setTimeout(() => {
+					checkDisabled();
+				}, 5);
 			}}
 		/>
 		<span class="slider round"></span>
@@ -132,6 +191,13 @@
 			placeholder={$_('login.mobile')}
 			required
 			id="emailInput"
+			on:input={() => {
+				if (emailNotifs && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailNotifs)) {
+					disabled = false;
+				} else {
+					disabled = true;
+				}
+			}}
 		/>
 		<label for="emailInput" style="color: gray">Email</label>
 	</div>
@@ -139,10 +205,8 @@
 
 <button
 	class="btn btn-primary mt-3 btnLoader w-100"
-	on:click={() => {
-		dataLoading = true;
-	}}
-    disabled={dataLoading}
+	on:click={updateData}
+	disabled={dataLoading || disabled}
 >
 	<span>{$_('actions.update')}</span>
 	{#if dataLoading}

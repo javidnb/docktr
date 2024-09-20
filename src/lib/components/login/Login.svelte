@@ -32,7 +32,6 @@
 	let displayName: string;
 	let disabled = true;
 	let showError: boolean = false; // display login error
-	let showConfimationInput: boolean = false;
 
 	export let type: string = 'login';
 	let method: string = 'mobile';
@@ -49,11 +48,11 @@
 	$: if ($loginModal == false) {
 		disabled = false;
 		showError = false;
+		type = 'login';
 	}
 
 	onMount(() => {
 		showError = false;
-		showConfimationInput = false;
 		if (browser) {
 			const asyncFunction = async () => {};
 			asyncFunction();
@@ -275,7 +274,6 @@
 		loginModal.set(false);
 		disabled = false;
 		showError = false;
-		showConfimationInput = false;
 	}
 
 	// PHONE NUMBER INPUT FORMATTING
@@ -319,7 +317,11 @@
 				border-radius: 6px;
 				color: #465543;"
 		>
-			{type == 'login' ? $_('login.login_header') : $_('login.register')}
+			{type == 'login'
+				? $_('login.login_header')
+				: type == 'pass_recovery'
+					? $_('login.forgot_pass')
+					: $_('login.register')}
 		</h5>
 		<div class="d-flex px-0 gap-2 socials w-100" style="padding: 1rem 1.5rem;">
 			<button
@@ -421,17 +423,19 @@
 					padding: 0"
 				></div> -->
 			{/if}
-			<div class="form-floating p-0" style="z-index: 0;">
-				<input
-					class="form-control"
-					bind:value={password}
-					type="password"
-					placeholder={$_('login.pass')}
-					required
-					id="passwInput"
-				/>
-				<label for="passwInput" style="color: gray">{$_('login.pass')}</label>
-			</div>
+			{#if type !== 'pass_recovery'}
+				<div class="form-floating p-0" style="z-index: 0;">
+					<input
+						class="form-control"
+						bind:value={password}
+						type="password"
+						placeholder={$_('login.pass')}
+						required
+						id="passwInput"
+					/>
+					<label for="passwInput" style="color: gray">{$_('login.pass')}</label>
+				</div>
+			{/if}
 			{#if type == 'register'}
 				<div
 					class="p-0"
@@ -493,7 +497,18 @@
 			{#if showError}
 				<span style="color:#c40f0f">{$_('login.error')} <br />{$_('login.try_again')}</span>
 			{/if}
-			{#if !showConfimationInput}
+			{#if type == 'pass_recovery'}
+				<button
+					class="btn"
+					style="padding: 0.5rem;
+					border-radius: 10px;
+					background: var(--primaryColor);
+					color: white;
+					border: 0px;
+					font-size: 1.05rem;
+					cursor: pointer;">Sorğu göndər</button
+				>
+			{:else}
 				<button
 					class="btn"
 					id="btnLogin"
@@ -513,10 +528,20 @@
 						<div class="loader"></div>
 					{/if}
 				</button>
+				{#if type == 'login'}
+					<button
+						class="btn p-0"
+						style="color: var(--primaryText)"
+						on:click|preventDefault={() => {
+							type = 'pass_recovery';
+						}}>{$_('login.forgot_pass')}</button
+					>
+				{/if}
 			{/if}
 		</form>
 
 		<hr style="margin-top: 1rem" />
+
 		<div
 			style="display: flex;
 			flex-direction: column;

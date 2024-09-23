@@ -29,6 +29,7 @@
 	let showError: boolean = false; // display login error
 	let showRecoveryError: boolean = false;
 	let showPassRecoveryInput: boolean = false;
+	let inputType: string = 'password';
 
 	export let type: string = 'login';
 	let method: string = 'mobile';
@@ -420,15 +421,41 @@
 				{/if}
 				{#if type !== 'pass_recovery'}
 					<div class="form-floating p-0" style="z-index: 0;">
-						<input
-							class="form-control"
-							bind:value={password}
-							type="password"
-							placeholder={$_('login.pass')}
-							required
-							id="passwInput"
-						/>
+						{#if inputType == 'password'}
+							<input
+								class="form-control"
+								bind:value={password}
+								type="password"
+								placeholder={$_('login.pass')}
+								required
+								id="passwInput"
+							/>
+						{:else}
+							<input
+								class="form-control"
+								bind:value={password}
+								type="text"
+								placeholder={$_('login.pass')}
+								required
+								id="passwInput"
+							/>
+						{/if}
 						<label for="passwInput" style="color: gray">{$_('login.pass')}</label>
+						<!-- svelte-ignore a11y-click-events-have-key-events -->
+						<!-- svelte-ignore a11y-no-static-element-interactions -->
+						<span
+							class="material-symbols-outlined"
+							style="position: absolute; right: 10px; top: 17px; cursor: pointer"
+							on:click={() => {
+								if (inputType == 'password') {
+									inputType = 'text';
+								} else {
+									inputType = 'password';
+								}
+							}}
+						>
+							visibility
+						</span>
 					</div>
 				{/if}
 				{#if type == 'register'}

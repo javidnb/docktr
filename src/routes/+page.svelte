@@ -8,6 +8,7 @@
 	import { goto } from '$app/navigation';
 	import { session } from '$lib/session';
 	import Legal from './appointments/Legal.svelte';
+	import Usage from './usage/Usage.svelte';
 </script>
 
 <div style="overflow-x: hidden;">
@@ -174,18 +175,7 @@
 									style="max-height: 300px; overflow-y: scroll"
 								>
 									<div class="accordion-body">
-										<div class="d-flex flex-column">
-											<div class="fw-500">{$_('usage.register')}</div>
-											<div>{$_('usage.register_details')}</div>
-											<div class="fw-500 mt-3">{$_('usage.get_appointment')}</div>
-											<div>{$_('usage.get_appointment_details')}</div>
-											<div class="fw-500 mt-3">{$_('usage.payment')}</div>
-											<div>{$_('usage.payment_details')}</div>
-											<div class="fw-500 mt-3">{$_('usage.join_appointment')}</div>
-											<div>{$_('usage.join_appointment_details')}</div>
-											<div class="fw-500 mt-3">{$_('usage.check_appointment')}</div>
-											<div>{$_('usage.check_appointment_details')}</div>
-										</div>
+										<Usage />
 									</div>
 								</div>
 							</div>

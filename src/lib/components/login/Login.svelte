@@ -639,10 +639,11 @@
 						type="text"
 						class="form-control mt-3"
 						style="min-width: 250px;"
+						maxlength="6"
 					/>
 					<button
 						on:click|preventDefault={() => passRecovery(true)}
-						disabled={$dataLoading}
+						disabled={$dataLoading || confimationCode?.length != 6}
 						class="btn btn-primary mt-3 w-100"
 					>
 						<span>Daxil et</span>
@@ -655,7 +656,7 @@
 
 			{#if showRecoveryError}
 				<div class="d-flex flex-column gap-1 p-0">
-					<span style="color:#c40f0f"
+					<span style="color:#c40f0f; text-align: center"
 						>{@html uid ? 'Xətalı kod<br/>Kodu düzgün daxil edin' : 'İstifadəçi tapılmadı'}</span
 					>
 					<button

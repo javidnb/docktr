@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
+	import Usage from './Usage.svelte';
 </script>
 
 <section>
@@ -11,18 +12,7 @@
 <div class="container">
 	<div class="col">
 		<div class="row my-3">
-			<div class="d-flex flex-column">
-				<div class="fw-500">{$_('usage.register')}</div>
-				<div>{$_('usage.register_details')}</div>
-				<div class="fw-500">{$_('usage.get_appointment')}</div>
-				<div>{$_('usage.get_appointment_details')}</div>
-				<div class="fw-500">{$_('usage.payment')}</div>
-				<div>{$_('usage.payment_details')}</div>
-				<div class="fw-500">{$_('usage.join_appointment')}</div>
-				<div>{$_('usage.join_appointment_details')}</div>
-				<div class="fw-500">{$_('usage.check_appointment')}</div>
-				<div>{$_('usage.check_appointment_details')}</div>
-			</div>
+			<Usage />
 		</div>
 		<div class="row mt-3 mb-5">
 			<span
@@ -34,10 +24,3 @@
 		</div>
 	</div>
 </div>
-
-<style>
-	.fw-500 {
-		font-weight: 500;
-		margin-top: 1rem;
-	}
-</style>

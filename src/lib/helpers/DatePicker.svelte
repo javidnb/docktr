@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { selectedAppointmentDate } from '$lib/store/dataStore';
-	import { monthNames } from './dateFormatter';
 	export let showDatePicker: boolean = false;
 	export let selectedDay: any = null;
 	// Function to get dates starting from tomorrow
@@ -49,6 +48,21 @@
 		selectedAppointmentDate.set(selectedTime);
 		showDatePicker = false;
 	}
+
+	export const monthNames = [
+		'Yanvar',
+		'Fevral',
+		'Mart',
+		'Aprel',
+		'May',
+		'Iyun',
+		'Iyul',
+		'Avqust',
+		'Sentyabr',
+		'Oktyabr',
+		'Noyabr',
+		'Dekabr'
+	];
 </script>
 
 <div class="container datePickerContainer">
@@ -65,7 +79,16 @@
 						}}
 					>
 						<span style="font-size: small">{day}</span>
-						<span style="font-weight: 500;">{new Date(date).getDate()} {monthNames[new Date(date).getMonth()].slice(0,3)}</span>
+						{#if date}
+							{@const [dayNum, monthName] = date.split(' ')}
+							{@const monthIndex = monthNames.findIndex((m) => m.slice(0, 3) === monthName)}
+							{@const year = new Date().getFullYear()}
+							{@const validDate = new Date(year, monthIndex, parseInt(dayNum))}
+							<span style="font-weight: 500;">
+								{validDate.getDate()}
+								{monthNames[validDate.getMonth()].slice(0, 3)}
+							</span>
+						{/if}
 					</button>
 				{/each}
 			</div>

@@ -22,6 +22,7 @@
 
 	let email: string = '';
 	let password: string = '';
+	let repeatPassword: string = '';
 	let phoneNumber: string = '';
 	let whatsappNumber: string = '';
 	let displayName: string;
@@ -454,9 +455,48 @@
 								}
 							}}
 						>
-							visibility
+							{inputType == 'password' ? 'visibility' : 'visibility_off'}
 						</span>
 					</div>
+					{#if type == 'register'}
+						<div class="form-floating p-0" style="z-index: 0;">
+							{#if inputType == 'password'}
+								<input
+									class="form-control"
+									bind:value={repeatPassword}
+									type="password"
+									placeholder="Şifrəni Təkrarla"
+									required
+									id="passwInput"
+								/>
+							{:else}
+								<input
+									class="form-control"
+									bind:value={repeatPassword}
+									type="text"
+									placeholder="Şifrəni Təkrarla"
+									required
+									id="passwInput"
+								/>
+							{/if}
+							<label for="passwInput" style="color: gray">Şifrəni Təkrarla</label>
+							<!-- svelte-ignore a11y-click-events-have-key-events -->
+							<!-- svelte-ignore a11y-no-static-element-interactions -->
+							<span
+								class="material-symbols-outlined"
+								style="position: absolute; right: 10px; top: 17px; cursor: pointer"
+								on:click={() => {
+									if (inputType == 'password') {
+										inputType = 'text';
+									} else {
+										inputType = 'password';
+									}
+								}}
+							>
+								{inputType == 'password' ? 'visibility' : 'visibility_off'}
+							</span>
+						</div>
+					{/if}
 				{/if}
 				{#if type == 'register'}
 					<div
@@ -561,15 +601,16 @@
 						id="btnLogin"
 						disabled={disabled ||
 							password.length < 6 ||
-							(type == 'register' && (!displayName || displayName.length < 3))}
+							(type == 'register' && (!displayName || displayName.length < 3)) ||
+							(type == 'register' && password != repeatPassword)}
 						type="submit"
 						style="padding: 0.5rem;
-					border-radius: 10px;
-					background: var(--primaryColor);
-					color: white;
-					border: 0px;
-					font-size: 1.05rem;
-					cursor: pointer;"
+							border-radius: 10px;
+							background: var(--primaryColor);
+							color: white;
+							border: 0px;
+							font-size: 1.05rem;
+							cursor: pointer;"
 						>{type == 'login' ? $_('login.login') : $_('login.register')}
 						{#if $dataLoading}
 							<div class="loader"></div>

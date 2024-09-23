@@ -17,6 +17,7 @@
 	import Documents from '$lib/components/profile/Documents.svelte';
 	import Favourites from '$lib/components/profile/Favourites.svelte';
 	import NotificationSettings from '$lib/components/profile/NotificationSettings.svelte';
+	import PasswordReset from '$lib/components/profile/PasswordReset.svelte';
 
 	let userEmail: any = '';
 	let component: any = $mobile ? null : ProfDetails;
@@ -111,6 +112,18 @@
 				<span class="material-symbols-outlined"> notifications </span>
 				{$_('profile.notifications')}
 			</button>
+			<button
+				on:click={() => {
+					changeComponent(PasswordReset, true);
+					if ($session.user) mobileHeader.set($_('profile.notifications'));
+				}}
+				class="btn btn-outline-primary d-flex align-items-center gap-2 w-100 mb-3"
+				data-bs-toggle="collapse"
+				data-bs-target="#settings"
+			>
+				<span class="material-symbols-outlined"> key </span>
+				Şifrəni dəyiş
+			</button>
 		</div>
 	</div>
 </section>
@@ -166,6 +179,15 @@
 									<span class="material-symbols-outlined"> notifications </span>{$_(
 										'profile.notifications'
 									)}
+								</button>
+								<button
+									class="list-group-item w-100"
+									on:click={() => {
+										changeComponent(PasswordReset);
+									}}
+									class:active={component == PasswordReset}
+								>
+									<span class="material-symbols-outlined"> notifications </span>Şifrəni dəyiş
 								</button>
 								{#if $session.user}
 									<a

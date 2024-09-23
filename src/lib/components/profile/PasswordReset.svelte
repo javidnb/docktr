@@ -59,7 +59,7 @@
 			}
 		}}
 	>
-		visibility
+		{type == 'password' ? 'visibility' : 'visibility_off'}
 	</span>
 </div>
 
@@ -97,7 +97,7 @@
 		}}
 		style="position: absolute; right: 10px; top: 17px; cursor: pointer"
 	>
-		visibility
+		{type == 'password' ? 'visibility' : 'visibility_off'}
 	</span>
 </div>
 

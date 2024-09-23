@@ -55,10 +55,19 @@
 			gtag('js', new Date());
 
 			gtag('config', 'G-GDF5WMF98Y');
+
+			if (window.zipy && window.zipy.getCurrentSessionURL) {
+				gtag('event', 'zipy_event', {
+					zipy_session_url: window.zipy.getCurrentSessionURL()
+				});
+			}
 		</script>
 		<!-- %sveltekit.head% -->
 	</head>
-	<body data-sveltekit-preload-data="hover" style="background-color: rgb(240 240 240 / 45%); max-width: 100vw; overflow-x: hidden">
+	<body
+		data-sveltekit-preload-data="hover"
+		style="background-color: rgb(240 240 240 / 45%); max-width: 100vw; overflow-x: hidden"
+	>
 		<div style="display: contents">%sveltekit.body%</div>
 
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

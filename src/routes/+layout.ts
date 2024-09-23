@@ -11,6 +11,13 @@ export async function load({ url, data }) {
 			initializeFirebase();
 			const zipy = await import('zipyai');
 			zipy.init('a88ea600');
+			if (data?.uusData) {
+				zipy.identify(data.uusData.uid, {
+					displayName: data.uusData.displayName,
+					email: data.uusData.email,
+					phoneNumber: data.uusData.phoneNumber
+				});
+			}
 		} catch (ex) {
 			console.error(ex);
 		}

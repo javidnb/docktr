@@ -4,6 +4,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { appointmentsLoading, dataLoading, getUser } from '$lib/store/dataStore.js';
 import { redirect } from '@sveltejs/kit';
 import { locale } from 'svelte-i18n';
+import zipy from 'zipyai';
 
 export async function load({ url, data }) {
 	if (browser) {
@@ -39,6 +40,8 @@ export async function load({ url, data }) {
 			});
 		});
 	}
+
+	zipy.init('a88ea600');
 
 	return {
 		getAuthUser: getAuthUser,

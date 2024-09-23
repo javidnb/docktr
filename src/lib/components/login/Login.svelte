@@ -5,7 +5,8 @@
 		signInWithEmailAndPassword,
 		type UserCredential,
 		createUserWithEmailAndPassword,
-		updateProfile
+		updateProfile,
+		signInWithCustomToken
 	} from 'firebase/auth';
 	import { getToken } from 'firebase/messaging';
 	import { onMount } from 'svelte';
@@ -16,6 +17,8 @@
 	import Select from 'svelte-select';
 	import { parsePhoneNumber, isValidNumber } from 'libphonenumber-js';
 	import { slide } from 'svelte/transition';
+	import { goto } from '$app/navigation';
+	import PasswordReset from '../profile/PasswordReset.svelte';
 
 	let email: string = '';
 	let password: string = '';
@@ -24,6 +27,7 @@
 	let displayName: string;
 	let disabled = true;
 	let showError: boolean = false; // display login error
+	let showRecoveryError: boolean = false;
 	let showPassRecoveryInput: boolean = false;
 
 	export let type: string = 'login';
@@ -44,6 +48,7 @@
 		showError = false;
 		type = 'login';
 		showPassRecoveryInput = false;
+		showRecoveryError = false;
 	}
 
 	onMount(() => {
@@ -253,25 +258,43 @@
 		}
 	}
 
-	async function passRecovery() {
+	let confimationCode: string | null = null;
+	let uid: string | null = null;
+	let changePassword: boolean = false;
+	async function passRecovery(confirm?: boolean) {
 		dataLoading.set(true);
-		let body: any = { getToken: true };
-		if (method == 'mobile') {
-			body.phoneNumber = parsePhoneNumber(selecedItem.value + phoneNumber).number;
+		showRecoveryError = false;
+		let body: any;
+		if (confirm) {
+			body = { code: confimationCode, uid };
 		} else {
-			body.email = email;
+			body = { getToken: true };
+			if (method == 'mobile') {
+				body.phoneNumber = parsePhoneNumber(selecedItem.value + phoneNumber).number;
+			} else {
+				body.email = email;
+			}
 		}
 		const response = await fetch('https://sehiyye.net/api/authToken', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(body)
 		});
-
 		const result = await response.json();
 		console.log(result);
 		if (result.success) {
-			showPassRecoveryInput = true;
+			if (confirm) {
+				await signInWithCustomToken(auth, result.success);
+				changePassword = true;
+			} else {
+				uid = result.uid;
+				showPassRecoveryInput = true;
+			}
 		}
+		if (result.noUser || result.error) {
+			showRecoveryError = true;
+		}
+
 		dataLoading.set(false);
 	}
 </script>
@@ -302,6 +325,7 @@
 						password = '';
 						disabled = true;
 						showError = false;
+						showRecoveryError = false;
 					}}
 					class="btn btn-outline-primary d-flex flex-row gap-2"
 					class:active={method == 'mobile'}
@@ -316,6 +340,7 @@
 						password = '';
 						disabled = true;
 						showError = false;
+						showRecoveryError = false;
 					}}
 					style="min-width: 150px"
 					class="btn btn-outline-primary bg-white d-flex flex-row gap-2"
@@ -469,7 +494,7 @@
 				{/if}
 				{#if type == 'pass_recovery'}
 					<button
-						on:click|preventDefault={passRecovery}
+						on:click|preventDefault={() => passRecovery()}
 						class="btn d-flex align-items-center"
 						style="padding: 0.5rem;
 							border-radius: 10px;
@@ -482,12 +507,27 @@
 							(method == 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) ||
 							(method == 'mobile' && !isValidNumber(selecedItem.value + phoneNumber))}
 					>
-						<span class="mx-auto">Sorğu göndər</span>
 						<span class="material-symbols-outlined"> chevron_right </span>
+						<span class="mx-auto">Sorğu göndər</span>
 						{#if $dataLoading}
 							<div class="loader"></div>
 						{/if}
 					</button>
+					{#if showRecoveryError}
+						<span style="color:#c40f0f"
+							>{uid ? 'Xətalı kod, yenidən cəhd edin' : 'İstifadəçi tapılmadı'}</span
+						>
+						<span>Hesabınıza bərpa edə bilməzsəniz,</span>
+						<button
+							class="btn btn-outline-primary d-flex align-items-center justify-content-center"
+							on:click|preventDefault={() => {
+								loginModal.set(false);
+								goto('/contact');
+							}}
+						>
+							Bizə yazın
+						</button>
+					{/if}
 				{:else}
 					<button
 						class="btn"
@@ -522,12 +562,45 @@
 			</form>
 		{:else}
 			<div class="mt-2 px-0" in:slideIn>
-				<span>6 rəqəmli şifrəni daxil edin</span>
-
-				<input type="text" class="form-control mt-3" />
-
-				<button class="btn btn-primary mt-3 w-100">Daxil et</button>
+				{#if changePassword}
+					<PasswordReset />
+				{:else}
+					<span>6 rəqəmli kodu daxil edin</span>
+					<input
+						bind:value={confimationCode}
+						type="text"
+						class="form-control mt-3"
+						style="min-width: 250px;"
+					/>
+					<button
+						on:click|preventDefault={() => passRecovery(true)}
+						disabled={$dataLoading}
+						class="btn btn-primary mt-3 w-100"
+					>
+						<span>Daxil et</span>
+						{#if $dataLoading}
+							<div class="loader"></div>
+						{/if}
+					</button>
+				{/if}
 			</div>
+
+			{#if showRecoveryError}
+				<div class="d-flex flex-column gap-1 p-0">
+					<span style="color:#c40f0f"
+						>{@html uid ? 'Xətalı kod<br/>Kodu düzgün daxil edin' : 'İstifadəçi tapılmadı'}</span
+					>
+					<button
+						class="btn btn-outline-primary d-flex align-items-center justify-content-center mt-3 mb-1"
+						on:click|preventDefault={() => {
+							loginModal.set(false);
+							goto('/contact');
+						}}
+					>
+						Bizə yazın
+					</button>
+				</div>
+			{/if}
 		{/if}
 
 		<hr style="margin-top: 1rem" />

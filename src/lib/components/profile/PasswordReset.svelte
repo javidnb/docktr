@@ -11,7 +11,11 @@
 
 	async function updatePass() {
 		dataLoading.set(true);
-		if (auth.currentUser && password) await updatePassword(auth.currentUser, password);
+		try {
+			if (auth.currentUser && password) await updatePassword(auth.currentUser, password);
+		} catch {
+			dataLoading.set(false);
+		}
 		dataLoading.set(false);
 		toast.push($_('actions.success'), {
 			duration: 2000,

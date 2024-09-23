@@ -4,12 +4,13 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { appointmentsLoading, dataLoading, getUser } from '$lib/store/dataStore.js';
 import { redirect } from '@sveltejs/kit';
 import { locale } from 'svelte-i18n';
-import zipy from 'zipyai';
 
 export async function load({ url, data }) {
 	if (browser) {
 		try {
 			initializeFirebase();
+			const zipy = await import('zipyai');
+			zipy.init('a88ea600');
 		} catch (ex) {
 			console.error(ex);
 		}
@@ -40,8 +41,6 @@ export async function load({ url, data }) {
 			});
 		});
 	}
-
-	zipy.init('a88ea600');
 
 	return {
 		getAuthUser: getAuthUser,

@@ -201,7 +201,7 @@ export async function getUser(user: any) {
 	let time = new Date().getTime();
 	const response = await fetch(`https://tekoplast.az/docktr/api/?user&id=${usr.uid}&t=${time}`);
 	const result = await response.json();
-	if (result?.doctor) goto('./doctor');
+	if (result?.doctor) goto('/doctor');
 	if (result) {
 		getAppointments(result);
 	}

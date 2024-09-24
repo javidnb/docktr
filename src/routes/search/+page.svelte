@@ -153,11 +153,10 @@
 	<div class="h-100 pb-3">
 		{#if $searchQuery}
 			<div
-				class="d-flex flex-column row-gap-3 pb-3"
+				class="d-flex flex-column row-gap-3 py-3"
 				style="position: absolute;
                     top: 58px;
                     z-index: 99;
-                    padding-top: 1rem;
                     width: 100%;"
 			>
 				{#if filteredResults.length}
@@ -195,7 +194,7 @@
 									on:click={() => selectedBranch.set({ value: item.id })}
 									href="/doctors"
 									class="hover card mx-3 d-flex align-items-center"
-									style="flex: 1; min-width: unset; margin:0!important; width: 125px; transition-duration: .2s"
+									style="flex: 1; min-width: min(45%, 200px); margin:0!important; width: 125px; transition-duration: .2s"
 								>
 									{#if item.icon}
 										<img style="width: 55px;" src="{item.icon}?tr=w-100" alt="icon" />
@@ -271,7 +270,11 @@
 								on:click={() => selectedBranch.set({ value: item.id })}
 								href="/doctors"
 								class="hover card mx-3 d-flex align-items-center"
-								style="flex: 1; min-width: unset; margin:0!important; width: 125px"
+								style="flex: 1 1 0%;
+								min-width: min(45%, 200px);
+								margin: 0px !important;
+								width: 125px;
+								transition-duration: 0.2s;"
 							>
 								{#if item.icon}
 									<img style="width: 55px;" src="{item.icon}?tr=w-100" alt="icon" />

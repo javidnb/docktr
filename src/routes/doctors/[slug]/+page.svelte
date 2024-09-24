@@ -401,6 +401,20 @@
 											</ul>
 										</div>
 									{/if}
+									{#if doctor?.education}
+										<div class="card p-3 mt-3" style="color: #54744c">
+											<div class="d-flex align-items-center gap-1">
+												<span class="material-symbols-outlined"> school </span>
+												<h6 class="mb-0">{$_('doctor.education')}</h6>
+											</div>
+
+											<ul class="list-group list-group-flush mt-1">
+												{#each JSON.parse(doctor?.education) as edu}
+													<li class="list-group-item">{edu}</li>
+												{/each}
+											</ul>
+										</div>
+									{/if}
 									{#if doctor?.certificates}
 										<div class="card p-3 mt-3" style="color: #54744c">
 											<div class="d-flex align-items-center gap-1">

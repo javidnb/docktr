@@ -35,6 +35,9 @@
 			appointmentsLoading.set(false);
 			dataLoading.set(false);
 		}
+		setTimeout(() => {
+			dataLoading.set(false);
+		}, 5000);
 		// fetchData();
 	});
 

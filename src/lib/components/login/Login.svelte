@@ -31,6 +31,7 @@
 	let showRecoveryError: boolean = false;
 	let showPassRecoveryInput: boolean = false;
 	let inputType: string = 'password';
+	let numberInput: any;
 
 	export let type: string = 'login';
 	let method: string = 'mobile';
@@ -232,7 +233,7 @@
 
 	// PHONE NUMBER INPUT FORMATTING
 	function handleInput(event: Event) {
-		const target = event.target as HTMLInputElement;
+		const target = event.target ? (event.target as HTMLInputElement) : numberInput;
 		target.value = target.value.replace(/[^0-9]/g, '');
 		if (target.classList?.contains('whatsapp')) {
 			whatsappNumber = target.value;
@@ -397,6 +398,7 @@
 							--item-hover-bg="#d9e1d7"
 							bind:value={selecedItem}
 							clearable={false}
+							on:change={handleInput}
 						></Select>
 						<div class="form-floating p-0">
 							<input
@@ -408,6 +410,7 @@
 								placeholder={$_('login.mobile')}
 								required
 								id="phoneInput"
+								bind:this={numberInput}
 							/>
 							<label for="phoneInput" style="color: gray">{$_('login.mobile')}</label>
 						</div>

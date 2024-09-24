@@ -80,10 +80,12 @@
 		<h1 class="display-4 pcOnly">{$_('nav.account')}</h1>
 		<h1
 			class="display-4 mobileOnly"
-			class:ps-5={$mobileComponent}
+			class:ps-4-5={$mobileComponent}
 			style="white-space: nowrap;
 					overflow-x: clip;
-					max-width: 100%;"
+					max-width: 100%;
+					font-size: clamp(1rem, 6.2vw, 1.5rem) !important;
+    				line-height: 32px;"
 		>
 			{$mobileHeader}
 		</h1>
@@ -115,14 +117,14 @@
 			<button
 				on:click={() => {
 					changeComponent(PasswordReset, true);
-					if ($session.user) mobileHeader.set($_('profile.notifications'));
+					if ($session.user) mobileHeader.set($_('login.change_pass'));
 				}}
 				class="btn btn-outline-primary d-flex align-items-center gap-2 w-100 mb-3"
 				data-bs-toggle="collapse"
 				data-bs-target="#settings"
 			>
 				<span class="material-symbols-outlined"> key </span>
-				Şifrəni dəyiş
+				{$_('login.change_pass')}
 			</button>
 		</div>
 	</div>
@@ -448,6 +450,9 @@
 	}
 	.display-4 {
 		transition-duration: 0.2s;
+	}
+	.ps-4-5 {
+		padding-left: 2.5rem!important;
 	}
 	.btnSettings:active,
 	.btnSettings:focus {

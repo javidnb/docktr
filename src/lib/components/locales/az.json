@@ -160,7 +160,8 @@
 		"try_again": "Zəhmət olmasa yenidən cəhd edin",
 		"contact": "Əlaqə vasitəsi",
 		"message": "Mesajınız",
-		"forgot_pass": "Şifrəni unutmuşam"
+		"forgot_pass": "Şifrəni unutmuşam",
+		"change_pass": "Şifrəni dəyiş"
 	},
 	"usage": {
 		"header": "İstifadə Qaydaları",

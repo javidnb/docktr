@@ -4,7 +4,7 @@
 	--primaryColor: #a1c398;
 	--primaryText: #639057;
 	--bs-nav-pills-link-active-bg: var(--primaryColor) !important;
-	--bs-btn-disabled-bg: #b5d1ad!important;
+	--bs-btn-disabled-bg: #b5d1ad !important;
 }
 html,
 body {
@@ -116,7 +116,7 @@ body {
 	}
 
 	.jumboHeader h1 {
-		font-size: 1.8rem !important;
+		font-size: clamp(1rem, 6.2vw, 1.5rem) !important;
 		margin-bottom: 0 !important;
 		padding-block: 0.5rem;
 	}
@@ -165,7 +165,9 @@ body {
 	box-shadow: 0px 0px 5px 0px #a1c398a1;
 	color: #678b5e;
 }
-.btn-outline-primary:hover, .btn-outline-primary:disabled, .btn:disabled  {
+.btn-outline-primary:hover,
+.btn-outline-primary:disabled,
+.btn:disabled {
 	background: var(--primaryColor);
 	color: white;
 }

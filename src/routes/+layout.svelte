@@ -47,7 +47,7 @@
 </script>
 
 <div style="min-height: 100dvh; display: flex; flex-direction: column">
-	{#if curPage !== '/doctor' && curPage !== '/search' && curPage !== '/admin'}
+	{#if curPage !== '/doctor' && curPage !== '/search' && curPage !== '/admin' && !curPage?.includes('/appointments/')}
 		<Nav />
 
 		<!-- <section style="position: absolute; width: 100%; z-index: -1">
@@ -65,7 +65,7 @@
 		</div>
 	{/key}
 
-	{#if curPage !== '/messages' && curPage !== '/doctor' && curPage !== '/search' && curPage !== '/admin'}
+	{#if curPage !== '/messages' && curPage !== '/doctor' && curPage !== '/search' && curPage !== '/admin' && !curPage?.includes('/appointments/')}
 		<section
 			class="py-3 footer pcOnly"
 			style="border-top: 1px solid rgb(236, 236, 236);

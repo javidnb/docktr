@@ -187,21 +187,6 @@
 		});
 	}
 
-	function joinCall(appointment: any) {
-		ongoingAppointment.set(appointment);
-		dataLoading.set(true);
-		appointmentId = appointment.id;
-		// joinVideoCall.set(true);
-		if ($session.user) {
-			if (appointment.userId == $session.user.uid) {
-				selectedUser.set($doctors.find((doc) => doc.id == appointment.doctorId)?.uid);
-			} else {
-				selectedUser.set(appointment.userId);
-			}
-		}
-		goto(`./appointments/${appointmentId}`);
-	}
-
 	function checkTime(appointment: any) {
 		const now: any = new Date();
 		const startTime: any = new Date(appointment.startTime);
@@ -539,7 +524,9 @@
 									{#if appointment.status == 2 && new Date(appointment?.startTime) > new Date()}
 										<button
 											class="btn btn-outline-primary mt-auto mb-2 d-flex align-items-center"
-											on:click={() => joinCall(appointment)}
+											on:click={() => {
+												goto(`./appointments/${appointment.id}`);
+											}}
 										>
 											<span class="material-symbols-outlined">schedule</span>
 											{#if appointment.remainingTime}
@@ -562,7 +549,9 @@
 										</button>
 									{:else if appointment.status == 2 && appointment.purchased == 1}
 										<button
-											on:click={() => joinCall(appointment)}
+											on:click={() => {
+												goto(`./appointments/${appointment.id}`);
+											}}
 											class="btn btn-outline-primary mt-4 py-2 d-flex align-items-center btnJoinCall"
 											style="background: var(--primaryColor); color: white;"
 										>

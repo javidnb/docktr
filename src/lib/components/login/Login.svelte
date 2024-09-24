@@ -302,9 +302,9 @@
 </script>
 
 <div class="login-form" style="max-width: 100%; overflow-x:hidden; transition-duration: .2s">
-	<div class="col pb-4" style="margin-top: 0; padding-top:0">
+	<div class="formContainer">
 		<h5
-			class="text-center mb-0 mt-3"
+			class="text-center my-0"
 			style="padding-block: .5rem;
 				background: white;
 				box-shadow: 0px 0px 6px #0000000a;
@@ -318,7 +318,7 @@
 					: $_('login.register')}
 		</h5>
 		{#if !showPassRecoveryInput}
-			<div class="d-flex px-0 gap-2 socials w-100" style="padding: 1rem 1.5rem;">
+			<div class="d-flex flex-wrap px-0 gap-2 socials w-100" style="padding: 1rem 1.5rem;">
 				<button
 					on:click={() => {
 						method = 'mobile';
@@ -382,7 +382,6 @@
 							placeholder={$_('login.email')}
 							required
 							id="emailInput"
-							style="min-width: 270px"
 						/>
 						<label for="emailInput" style="color: gray">{$_('login.email')}</label>
 					</div>
@@ -402,7 +401,7 @@
 						<div class="form-floating p-0">
 							<input
 								class="form-control"
-								style="margin-left: -5px"
+								style="margin-left: -5px; width: calc(100% + 5px)"
 								bind:value={phoneNumber}
 								on:input={handleInput}
 								type="text"
@@ -543,7 +542,7 @@
 							<div class="form-floating p-0">
 								<input
 									class="form-control whatsapp"
-									style="margin-left: -5px"
+									style="margin-left: -5px; width: calc(100% + 5px)"
 									bind:value={whatsappNumber}
 									on:input={handleInput}
 									type="text"
@@ -702,10 +701,18 @@
 		place-content: center;
 	}
 
-	.login-form div {
+	.formContainer {
 		background-color: #f7f7f7;
-		padding: 1rem 2rem;
-		margin-top: 0rem;
+		padding: 1.5rem 2rem;
+		margin-top: 0;
+		max-width: 100%;
+		overflow-x: hidden;
+	}
+
+	@media screen and (max-width: 768px) {
+		.formContainer {
+			padding: 15px !important;
+		}
 	}
 
 	.login-form div form {

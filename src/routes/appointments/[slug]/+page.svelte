@@ -1,14 +1,62 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { appointments } from '$lib/store/dataStore';
+	import VideoCall from '$lib/components/VideoCall.svelte';
+	import { session } from '$lib/session';
+	import {
+		appointments,
+		dataLoading,
+		doctors,
+		ongoingAppointment,
+		selectedUser
+	} from '$lib/store/dataStore';
 	import { onMount } from 'svelte';
 
+	let app = $appointments.find((a) => a.id == $page.params.slug);
+	let appointmentId: number | null = null;
 	onMount(() => {
-		if ($appointments.find((a) => a.id == $page.params.slug)) {
-			console.log($appointments.find((a) => a.id == $page.params.slug));
+		if (app) {
+			appointmentId = app.id;
+			ongoingAppointment.set(app);
+			dataLoading.set(true);
+			if ($session.user) {
+				if (app.userId == $session.user.uid) {
+					selectedUser.set($doctors.find((doc) => doc.id == app.doctorId)?.uid);
+				} else {
+					selectedUser.set(app.userId);
+				}
+			}
+			dataLoading.set(false);
 		} else {
 			goto('../appointments');
 		}
 	});
 </script>
+
+<div class="d-flex justify-content-center">
+	<button
+		class="btn"
+		on:click={() => {
+			goto('/appointments');
+		}}
+	>
+		<img
+			src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/logo.png"
+			alt="Sehiyye logo"
+			style="width: 150px; margin-top: 1rem; cursor: pointer"
+		/>
+	</button>
+</div>
+
+<div class="d-flex justify-content-center">
+	<div class="lds-ellipsis" style="position: fixed; top: 50%; transform: translateY(-50%)">
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+	</div>
+</div>
+
+{#if appointmentId}
+	<VideoCall {appointmentId} />
+{/if}

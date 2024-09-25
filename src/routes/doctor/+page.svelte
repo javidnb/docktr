@@ -331,7 +331,7 @@
 			<div class="img-responsive">
 				<button
 					class="btn"
-					on:click={() => {
+					on:click|preventDefault={() => {
 						goto('../');
 					}}
 				>

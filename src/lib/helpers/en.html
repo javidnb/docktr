@@ -1,0 +1,232 @@
+<p class="MsoNormal">
+	<span style="font-size: 13.5pt; font-family: 'Segoe UI', sans-serif"
+		>"VS Enerji Servis" MMC y&uuml;ksək gərginlikli (HV) &ouml;t&uuml;r&uuml;c&uuml; xətlərin və
+		fiber optik kabel qurğularının m&uuml;həndisliyi, satınalması və tikintisi (EPC) &uuml;zrə
+		ixtisaslaşmışdır.</span
+	>
+</p>
+<p class="MsoNormal" style="line-height: normal">
+	<span style="font-size: 13.5pt; font-family: 'Segoe UI', sans-serif"
+		>Bizim təcr&uuml;bəmiz Optik Torpaq Naqili (OPGW), Yeraltı Fiber Optik Kabel (UGFOC) və
+		Yer&uuml;st&uuml; Fiber Optik Kabel (OFAC) sistemlərini əhatə edir. Y&uuml;ksək keyfiyyətli iş
+		təqdim etməyə sadiq qalaraq, hər bir layihədə etibarlılığı və səmərəliliyi təmin etmək
+		&uuml;&ccedil;&uuml;n qabaqcıl m&uuml;həndislik təcr&uuml;bələrindən istifadə edirik.
+		&Ccedil;ətin &ouml;t&uuml;rmə və kommunikasiya infrastruktur ehtiyaclarını &ouml;dəmək
+		&uuml;&ccedil;&uuml;n uyğunlaşdırılmış innovativ həllər təmin etmək &uuml;&ccedil;&uuml;n "VS
+		Enerji Servis" MMC-yə etibar edin.</span
+	>
+</p>
+<p class="MsoNormal">
+	<span style="font-size: 13.5pt; font-family: 'Segoe UI', sans-serif">Vsenergy.az</span>
+</p>
+
+<script>
+	var route = 'slider';
+	var tableData = [];
+	var id = null;
+
+	$(document).ready(function () {
+		// NAVIGATION
+		$('.btnHome').click(function () {
+			if (route !== 'slider') {
+				$('.loading').show();
+				route = 'slider';
+				$('.list-group-item').removeClass('active');
+				$(this).addClass('active');
+				getData();
+			}
+		});
+
+		$('.btnNews').click(function () {
+			if (route !== 'blogs') {
+				$('.loading').show();
+				route = 'blogs';
+				$('.list-group-item').removeClass('active');
+				$(this).addClass('active');
+				getData();
+			}
+		});
+
+		$('.btnProjects').click(function () {
+			if (route !== 'projects') {
+				route = 'projects';
+				$('.list-group-item').removeClass('active');
+				$(this).addClass('active');
+			}
+		});
+
+		// OPEN DIALOG
+		$('.newEntry').click(function () {
+			$('#title_az').val('');
+			tinyMCE.get('text_az').setContent('');
+			$('#fileToUpload').val('');
+			id = null;
+			$('.fileUp').show();
+			$('.dialogHeader').text('Yeni yazı');
+			openDialog();
+		});
+
+		// CLOSE DIALOG
+		$('#overlay').click(function () {
+			closeDialog();
+		});
+
+		// OPEN POST EDIT DIALOG
+		$(document).on('click', '.editBtn', function () {
+			id = $(this).attr('id');
+			$('.fileUp').hide();
+			$('.dialogHeader').text('Düzəliş');
+
+			if (tableData.find((t) => t.id == id)) {
+				let data = tableData.find((t) => t.id == id);
+				$('#title_az').val(data.title_az);
+				tinyMCE.get('text_az').setContent(data.text_az || data.subtitle_az);
+				openDialog();
+			} else {
+				$('.loading').show();
+				$.ajax({
+					url: `api.php?${route}&id=${id}`,
+					type: 'GET',
+					dataType: 'json',
+					success: function (res) {
+						$('#title_az').val(res[0].title_az);
+						tinyMCE.get('text_az').setContent(res[0].text_az || res[0].subtitle_az);
+						openDialog();
+						tableData.push(res[0]);
+						$('.loading').hide();
+					},
+					error: function (err) {
+						console.log(err);
+						$('.loading').hide();
+					}
+				});
+			}
+		});
+
+		// ADD POST
+		$('#btnSubmit').click(function () {
+			if (!$('#title_az').val() || !tinyMCE.get('text_az').getContent()) {
+				$('#errors').text('Boşluqları doldurun');
+				$('#errors').show();
+			} else {
+				$('.loading').show();
+				$('#errors').hide();
+				$('#btnSubmit').text('Gözləyin...');
+				$('#btnSubmit').prop('disabled', true);
+				var formData = new FormData();
+				var imageSrc = null;
+				formData.append('type', route);
+				if (id) formData.append('id', id);
+				formData.append('title_az', $('#title_az').val());
+				formData.append('title_en', $('#title_en').val());
+				formData.append('title_ru', $('#title_ru').val());
+				formData.append('text_az', tinyMCE.get('text_az').getContent());
+				formData.append('text_ru', tinyMCE.get('text_en').getContent());
+				formData.append('text_en', tinyMCE.get('text_ru').getContent());
+				if (!id) formData.append('fileToUpload', $('#fileToUpload')[0].files[0]);
+				$.ajax({
+					url: '../insert.php',
+					type: 'POST',
+					dataType: 'json',
+					data: formData,
+					contentType: false,
+					processData: false,
+					cache: false,
+					success: function (item) {
+						getData();
+					},
+					error: function (error) {
+						$('#btnSubmit').text('Əlavə et');
+						$('#btnSubmit').prop('disabled', false);
+						$('#errors').text(error.responseText);
+						$('#errors').show();
+					}
+				});
+			}
+		});
+
+		// DELETE POST
+		$(document).on('click', '.deleteBtn', function () {
+			$('.loading').show();
+			var formData = new FormData();
+			var id = this.id;
+			formData.append('type', route);
+			formData.append('id', id);
+			$.ajax({
+				url: '../remove.php',
+				type: 'POST',
+				dataType: 'json',
+				data: formData,
+				contentType: false,
+				processData: false,
+				success: function () {
+					$('tr#' + id).remove();
+					$('.loading').hide();
+				},
+				error: function () {
+					$('.loading').hide();
+				}
+			});
+		});
+	});
+
+	function openDialog() {
+		$('#overlay').fadeIn('fast');
+		$('dialog').fadeIn('fast');
+	}
+
+	function closeDialog() {
+		$('#overlay').fadeOut('fast');
+		$('dialog').fadeOut('fast');
+
+		setTimeout(() => {
+			$('#btnSubmit').text('Əlavə et');
+			$('#btnSubmit').prop('disabled', false);
+			$('#errors').hide();
+		}, 500);
+	}
+
+	function getData() {
+		$.ajax({
+			url: 'api.php?' + route,
+			type: 'GET',
+			dataType: 'json',
+			success: function (data) {
+				var tableBody = $('table tbody');
+				tableBody.empty();
+				tableData = data;
+				data.forEach(function (item) {
+					var titleRow =
+						route == 'blogs'
+							? `<a href='https://vsenergy.az/xeber/${item.slug}' target='_blank' style='text-decoration:none;font-weight:500; color: #1c4453'>${item.title_az}</a>`
+							: `${item.title_az}`;
+					var row = `
+                        <tr id="${item.id}">
+                            <td style='place-content:center; text-align: center'><img style='max-width: 100%; max-height: 84px' src='https://ik.imagekit.io/d2nwsj0ktvh/Web/uploads/${item.image}?tr=w-220'></td>
+                            <td style='place-content: center; font-weight: 500!important'>
+                                ${titleRow}
+                            </td>
+                            <td style='padding: 10px; display: block; text-overflow: ellipsis; word-wrap: break-word; overflow: hidden; max-height: 100px; line-height: 1.5em; border: 0px; background-color: white'>${route == 'slider' ? item.subtitle_az : item.text_az}</td>
+                            <td style='place-content: center; text-align: center;'><a class='editBtn ${route}' id='${item.id}'>
+                                 <span class='material-symbols-outlined'>edit</span>
+                            </a></td>
+                            <td style='place-content: center; text-align: center; min-width: 50px'><a class='deleteBtn' id='${item.id}'>
+                                 <span class='material-symbols-outlined'>delete</span>
+                            </a></td>
+                        </tr>
+                    `;
+					tableBody.append(row);
+					closeDialog();
+					$('.title').text(
+						route == 'blogs' ? 'Xəbərlər' : route == 'projects' ? 'Layihələr' : 'Ana Səhifə'
+					);
+					$('.loading').hide();
+				});
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				$('.loading').hide();
+				route = route == 'slider' ? 'blogs' : 'slider';
+			}
+		});
+	}
+</script>

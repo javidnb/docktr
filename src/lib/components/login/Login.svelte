@@ -18,6 +18,7 @@
 	import { parsePhoneNumber, isValidNumber } from 'libphonenumber-js';
 	import { slide } from 'svelte/transition';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import PasswordReset from '../profile/PasswordReset.svelte';
 
 	let email: string = '';
@@ -32,6 +33,7 @@
 	let showPassRecoveryInput: boolean = false;
 	let inputType: string = 'password';
 	let numberInput: any;
+	$: curPage = $page.route.id;
 
 	export let type: string = 'login';
 	let method: string = 'mobile';

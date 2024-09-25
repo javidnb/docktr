@@ -219,7 +219,7 @@
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<!-- svelte-ignore a11y-no-static-element-interactions -->
 			<div
-				class="d-flex w-100 gap-3 mb-3 p-0 justify-content-between cursor-pointer"
+				class="d-flex w-100 gap-1 mb-3 p-0 justify-content-between cursor-pointer"
 				style="max-width: 705px"
 				on:click={() => {
 					allowAll = !allowAll;
@@ -282,7 +282,7 @@
 					{#each [0, 30] as minute}
 						{#if !(hour === 18 && minute === 30)}
 							<button
-								class="btn btn-outline-primary flex-1 btnDay"
+								class="btn btn-outline-primary flex-1 btnDay align-items-center"
 								class:active={checkActive(`${selectedDay} ${hour}:${minute}`)}
 								style="max-width: 80px;"
 								on:click={(e) => {
@@ -354,8 +354,19 @@
 	.dateSelector::-webkit-scrollbar {
 		display: none;
 	}
+	@media screen and (max-width: 992px) {
+		.btnDay:active {
+			background-color: white !important;
+			color: var(--primaryColor) !important;
+		}
+		.btnDay:hover {
+			background-color: unset !important;
+			color: unset !important;
+		}
+	}
 	.btnDay.active {
 		background-color: var(--primaryColor) !important;
+		border-radius: 6px !important;
 	}
 	.blur {
 		filter: opacity(0.7);

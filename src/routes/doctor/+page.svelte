@@ -12,20 +12,27 @@
 		selectedUser,
 		joinVideoCall,
 		mobile,
-		appointments
+		appointments,
+		doctors,
+		putData
 	} from '$lib/store/dataStore';
 	import { goto } from '$app/navigation';
 	import History from '$lib/components/profile/History.svelte';
 	import Chat from '$lib/components/chat/Chat.svelte';
 	import Documents from '$lib/components/profile/Documents.svelte';
 	import ContactForm from '../contact/ContactForm.svelte';
+	import NotificationSettings from '$lib/components/profile/NotificationSettings.svelte';
+	import PasswordReset from '$lib/components/profile/PasswordReset.svelte';
+	import DatePicker from '$lib/helpers/DatePicker.svelte';
+	import { toast } from '@zerodevx/svelte-toast';
 
-	let component = Appointments;
+	let component: any = Appointments;
 	let isCollapsed = false;
 	export let data;
 	let pageTitle: string = $_('nav.appointments');
 	let dataLoading = writable(true);
-	let usr: any;
+	let accountDisabled: boolean = false;
+	let doc = $doctors.find((d) => d.id == $session.user?.doctor);
 
 	onMount(() => {
 		appointmentsLoading.set(true);
@@ -45,6 +52,13 @@
 		dataLoading.set(false);
 	}
 
+	$: if (
+		$doctors.find((d) => d.id == $session.user?.doctor) &&
+		$doctors.find((d) => d.id == $session.user?.doctor)?.disableAppointments
+	) {
+		accountDisabled = true;
+	}
+
 	// async function fetchData() {
 	// 	dataLoading.set(true);
 	// 	try {
@@ -61,6 +75,47 @@
 
 	function toggleCollapse() {
 		isCollapsed = !isCollapsed;
+	}
+
+	async function activateAccount() {
+		dataLoading.set(true);
+		try {
+			if ($session.user?.doctor)
+				await putData('doctors', 'id', $session.user?.doctor, { disableAppointments: false });
+			let doc = $doctors.find((d) => d.id == $session.user?.doctor);
+			if (doc) {
+				doctors.update((currentItems) =>
+					currentItems.map((item) =>
+						item.id === $session.user?.doctor
+							? {
+									...item,
+									disableAppointments: false
+								}
+							: item
+					)
+				);
+			}
+			accountDisabled = false;
+			toast.push('Hesabınız aktivdir!', {
+				duration: 2000,
+				theme: {
+					'--toastColor': 'mintcream',
+					'--toastBackground': 'rgb(91 144 77)',
+					'--toastBarBackground': '#1d5b3c'
+				}
+			});
+			dataLoading.set(false);
+		} catch {
+			toast.push('Xəta!', {
+				duration: 2000,
+				theme: {
+					'--toastColor': 'mintcream',
+					'--toastBackground': 'rgb(176 24 24)',
+					'--toastBarBackground': '#5b1010'
+				}
+			});
+			dataLoading.set(false);
+		}
 	}
 </script>
 
@@ -144,6 +199,7 @@
 						<span class="material-symbols-outlined"> history </span>
 						<span class="navtext">{$_('doctor.history')}</span>
 					</button>
+
 					<button
 						class="btn d-flex flex-row align-items-center gap-2"
 						on:click={() => {
@@ -157,14 +213,59 @@
 						<span class="material-symbols-outlined"> mail </span>
 						<span class="navtext">{$_('nav.contact')}</span>
 					</button>
-					<button
-						class="btn d-flex flex-row align-items-center gap-2 mt-auto"
-						data-bs-toggle={$mobile ? 'collapse' : ''}
-						data-bs-target={$mobile ? '#sideCollapse' : ''}
-					>
-						<span class="material-symbols-outlined"> settings </span>
-						<span class="navtext">Ayarlar</span>
-					</button>
+					<div class="mt-auto">
+						<div
+							class="collapse w-100 p-0"
+							id="settings"
+							style="border-block: 1px solid #00000038;"
+						>
+							<button
+								class="btn btn-outline-primary btnSettings d-flex align-items-center gap-2 w-100"
+								data-bs-toggle="collapse"
+								data-bs-target="#settings"
+								on:click={() => {
+									component = DatePicker;
+									pageTitle = 'Randevu saatları';
+								}}
+							>
+								<span class="material-symbols-outlined"> schedule </span>
+								Randevu saatları
+							</button>
+							<button
+								class="btn btn-outline-primary btnSettings d-flex align-items-center gap-2 w-100"
+								data-bs-toggle="collapse"
+								data-bs-target="#settings"
+								on:click={() => {
+									component = NotificationSettings;
+									pageTitle = $_('profile.notifications');
+								}}
+							>
+								<span class="material-symbols-outlined"> notifications </span>
+								{$_('profile.notifications')}
+							</button>
+							<button
+								class="btn btn-outline-primary btnSettings d-flex align-items-center gap-2 w-100"
+								data-bs-toggle="collapse"
+								data-bs-target="#settings"
+								on:click={() => {
+									component = PasswordReset;
+									pageTitle = $_('login.change_pass');
+								}}
+							>
+								<span class="material-symbols-outlined"> key </span>
+								{$_('login.change_pass')}
+							</button>
+						</div>
+						<button
+							class="btn d-flex flex-row align-items-center gap-2 mt-auto w-100"
+							data-bs-toggle="collapse"
+							data-bs-target="#settings"
+						>
+							<span class="material-symbols-outlined"> settings </span>
+							<span class="navtext">Ayarlar</span>
+						</button>
+					</div>
+
 					<button
 						on:click={() => {
 							logout();
@@ -177,25 +278,49 @@
 				</div>
 			</div>
 			<div class="content" style="background-color: #f8f8f8; min-height: 100dvh">
-				{#if $selectedUser && component == Chat}
-					<button
-						class="btn btn-outline-primary mb-3 px-3 d-flex btnClose pcOnly"
-						style="width: fit-content; position: absolute; top: 5px;"
-						on:click={() => {
-							selectedUser.set(null);
-						}}
-						><span class="material-symbols-outlined">arrow_back_ios</span>
-						<span class="s-FdJNS9dGDztw">{$_('actions.back')}</span></button
+				{#if accountDisabled}
+					<div
+						class="d-flex flex-column gap-3 w-100 h-100 align-items-center justify-content-center"
 					>
-				{/if}
-				<h5 class="ps-5 title">
-					{pageTitle}
-				</h5>
-				<div class="container">
-					<div class="row pt-2" style="max-height: 100vh; overflow-y: scroll;">
-						<svelte:component this={component} />
+						<h5>Hesabınız deaktiv edilib</h5>
+						<button
+							class="btn btn-primary px-5"
+							style="position: relative;"
+							on:click={activateAccount}
+							disabled={$dataLoading}
+							>Hesabı Aktivləşdir
+							{#if $dataLoading}
+								<div class="loader"></div>
+							{/if}
+						</button>
 					</div>
-				</div>
+				{:else}
+					{#if $selectedUser && component == Chat}
+						<button
+							class="btn btn-outline-primary mb-3 px-3 d-flex btnClose pcOnly"
+							style="width: fit-content; position: absolute; top: 5px;"
+							on:click={() => {
+								selectedUser.set(null);
+							}}
+							><span class="material-symbols-outlined">arrow_back_ios</span>
+							<span class="s-FdJNS9dGDztw">{$_('actions.back')}</span></button
+						>
+					{/if}
+					<h5 class="ps-5 title">
+						{pageTitle}
+					</h5>
+					<div class="container">
+						<div
+							class="row pt-2"
+							style="max-height: 100vh; overflow-y: scroll;"
+							class:thePadding={component == DatePicker ||
+								component == NotificationSettings ||
+								component == PasswordReset}
+						>
+							<svelte:component this={component} />
+						</div>
+					</div>
+				{/if}
 			</div>
 		</div>
 	{:else}
@@ -300,6 +425,16 @@
 		border-radius: 0;
 	}
 
+	.btnSettings {
+		background-color: unset;
+		color: black;
+		box-shadow: none;
+	}
+
+	.thePadding {
+		padding-inline: 1rem;
+	}
+
 	@media screen and (max-width: 992px) {
 		.title {
 			height: 58px;
@@ -330,6 +465,10 @@
 		}
 		.content {
 			flex: 1;
+		}
+		.thePadding {
+			padding: 1rem 2rem !important;
+			margin-top: 1rem !important;
 		}
 	}
 

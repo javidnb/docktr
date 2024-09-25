@@ -95,128 +95,132 @@
 	}
 </script>
 
-<div
-	class="d-flex align-items-center justify-content-between"
-	style="padding: 5px 0px 0px 0px!important"
->
-	<span>Proqram daxili bildirişlər</span>
-	<label class="switch">
-		<input type="checkbox" bind:checked={inAppNotifs} />
-		<span class="slider round"></span>
-	</label>
-</div>
-
-<div
-	class="d-flex align-items-center justify-content-between mt-2"
-	style="padding: 5px 0px 0px 0px!important"
->
-	<span>WhatsApp ilə bildiriş al</span>
-	<label class="switch">
-		<input
-			type="checkbox"
-			bind:checked={whatsappNotifications}
-			on:click={() => {
-				setTimeout(() => {
-					if (whatsappNotifications) {
-						disabled = true;
-					} else {
-						disabled = false;
-					}
-					if (!whatsappNumber && userData?.phoneNumber) {
-						whatsappNumber = parsePhoneNumber(userData?.phoneNumber).formatNational().slice(1);
-						disabled = false;
-					}
-					if (whatsappNumber) disabled = false;
-				}, 5);
-			}}
-		/>
-		<span class="slider round"></span>
-	</label>
-</div>
-
-{#if whatsappNotifications}
-	<div class="p-0 input-group mt-3">
-		<Select
-			class="form-control"
-			items={selectItems}
-			--width="80px"
-			--border-top-left-radius="10px"
-			--border-focused="1px solid var(--primaryColor)"
-			--item-is-active-bg="var(--primaryColor)"
-			--item-hover-bg="#d9e1d7"
-			bind:value={selecedItem}
-			clearable={false}
-		></Select>
-		<div class="form-floating p-0">
-			<input
-				class="form-control whatsapp"
-				style="margin-left: -5px"
-				bind:value={whatsappNumber}
-				type="text"
-				placeholder={$_('login.mobile')}
-				required
-				id="wpInput"
-				on:input={handleWPInput}
-			/>
-			<label for="wpInput" style="color: gray">WhatsApp No</label>
+<div class="d-flex justify-content-center w-100 p-0">
+	<div style="max-width: 705px; width: 100%">
+		<div
+			class="d-flex align-items-center justify-content-between"
+			style="padding: 5px 0px 0px 0px!important"
+		>
+			<span>Proqram daxili bildirişlər</span>
+			<label class="switch">
+				<input type="checkbox" bind:checked={inAppNotifs} />
+				<span class="slider round"></span>
+			</label>
 		</div>
-	</div>
-{/if}
 
-<div
-	class="d-flex align-items-center justify-content-between mt-2"
-	style="padding: 5px 0px 0px 0px!important"
->
-	<span>Email ilə bildiriş al</span>
-	<label class="switch">
-		<input
-			type="checkbox"
-			bind:checked={email}
-			on:click={() => {
-				if (!emailNotifs && userData?.email) {
-					emailNotifs = userData.email;
-				}
-				setTimeout(() => {
-					checkDisabled();
-				}, 5);
-			}}
-		/>
-		<span class="slider round"></span>
-	</label>
+		<div
+			class="d-flex align-items-center justify-content-between mt-2"
+			style="padding: 5px 0px 0px 0px!important"
+		>
+			<span>WhatsApp ilə bildiriş al</span>
+			<label class="switch">
+				<input
+					type="checkbox"
+					bind:checked={whatsappNotifications}
+					on:click={() => {
+						setTimeout(() => {
+							if (whatsappNotifications) {
+								disabled = true;
+							} else {
+								disabled = false;
+							}
+							if (!whatsappNumber && userData?.phoneNumber) {
+								whatsappNumber = parsePhoneNumber(userData?.phoneNumber).formatNational().slice(1);
+								disabled = false;
+							}
+							if (whatsappNumber) disabled = false;
+						}, 5);
+					}}
+				/>
+				<span class="slider round"></span>
+			</label>
+		</div>
+
+		{#if whatsappNotifications}
+			<div class="p-0 input-group mt-3">
+				<Select
+					class="form-control"
+					items={selectItems}
+					--width="80px"
+					--border-top-left-radius="10px"
+					--border-focused="1px solid var(--primaryColor)"
+					--item-is-active-bg="var(--primaryColor)"
+					--item-hover-bg="#d9e1d7"
+					bind:value={selecedItem}
+					clearable={false}
+				></Select>
+				<div class="form-floating p-0">
+					<input
+						class="form-control whatsapp"
+						style="margin-left: -5px"
+						bind:value={whatsappNumber}
+						type="text"
+						placeholder={$_('login.mobile')}
+						required
+						id="wpInput"
+						on:input={handleWPInput}
+					/>
+					<label for="wpInput" style="color: gray">WhatsApp No</label>
+				</div>
+			</div>
+		{/if}
+
+		<div
+			class="d-flex align-items-center justify-content-between mt-2"
+			style="padding: 5px 0px 0px 0px!important"
+		>
+			<span>Email ilə bildiriş al</span>
+			<label class="switch">
+				<input
+					type="checkbox"
+					bind:checked={email}
+					on:click={() => {
+						if (!emailNotifs && userData?.email) {
+							emailNotifs = userData.email;
+						}
+						setTimeout(() => {
+							checkDisabled();
+						}, 5);
+					}}
+				/>
+				<span class="slider round"></span>
+			</label>
+		</div>
+
+		{#if email}
+			<div class="form-floating p-0 mt-2">
+				<input
+					class="form-control whatsapp"
+					style="margin-left: -5px"
+					bind:value={emailNotifs}
+					type="text"
+					placeholder={$_('login.mobile')}
+					required
+					id="emailInput"
+					on:input={() => {
+						if (emailNotifs && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailNotifs)) {
+							disabled = false;
+						} else {
+							disabled = true;
+						}
+					}}
+				/>
+				<label for="emailInput" style="color: gray">Email</label>
+			</div>
+		{/if}
+
+		<button
+			class="btn btn-primary mt-3 btnLoader w-100"
+			on:click={updateData}
+			disabled={dataLoading || disabled}
+		>
+			<span>{$_('actions.update')}</span>
+			{#if dataLoading}
+				<div class="loader"></div>
+			{/if}
+		</button>
+	</div>
 </div>
-
-{#if email}
-	<div class="form-floating p-0 mt-2">
-		<input
-			class="form-control whatsapp"
-			style="margin-left: -5px"
-			bind:value={emailNotifs}
-			type="text"
-			placeholder={$_('login.mobile')}
-			required
-			id="emailInput"
-			on:input={() => {
-				if (emailNotifs && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailNotifs)) {
-					disabled = false;
-				} else {
-					disabled = true;
-				}
-			}}
-		/>
-		<label for="emailInput" style="color: gray">Email</label>
-	</div>
-{/if}
-
-<button
-	class="btn btn-primary mt-3 btnLoader w-100"
-	on:click={updateData}
-	disabled={dataLoading || disabled}
->
-	<span>{$_('actions.update')}</span>
-	{#if dataLoading}
-		<div class="loader"></div>
-	{/if}
-</button>
 
 <style>
 	/* Chechbox */

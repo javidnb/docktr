@@ -6,7 +6,7 @@ export type User = {
 	photoURL?: string | null;
 	phoneNumber?: any;
 	uid?: string | null;
-	doctor?: boolean;
+	doctor?: number | null;
 	admin?: boolean;
 	fcmToken?: string;
 	accessToken?: string;

@@ -16,10 +16,13 @@ export async function load({ cookies }: { cookies: Cookies }) {
 			uusData = await uus.json();
 			session.set({ user: uusData, loggedIn: true });
 			if (init) {
-				let res = await getAppointments(usr);
-				bookings = res;
-				appointments.set(res);
-				appointmentsLoading.set(false);
+				let res = await getAppointments(uusData);
+				if (res) {
+					bookings = res;
+					appointments.set(res);
+					appointmentsLoading.set(false);
+				}
+
 				init = false;
 			}
 		} else if (usr.user.uid) {
@@ -27,10 +30,13 @@ export async function load({ cookies }: { cookies: Cookies }) {
 			uusData = await uus.json();
 			session.set({ user: uusData, loggedIn: true });
 			if (init) {
-				let res = await getAppointments(usr.user);
-				bookings = res;
-				appointments.set(res);
-				appointmentsLoading.set(false);
+				let res = await getAppointments(uusData);
+				if (res) {
+					bookings = res;
+					appointments.set(res);
+					appointmentsLoading.set(false);
+				}
+
 				init = false;
 			}
 		} else {

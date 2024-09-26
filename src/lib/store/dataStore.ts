@@ -274,8 +274,8 @@ async function getAppointments(user: any) {
 		}
 		return response;
 	} catch (error) {
+		getAppointments(user);
 		console.error(error);
-		appointmentsLoading.set(false);
 		dataLoading.set(false);
 		return null;
 	}

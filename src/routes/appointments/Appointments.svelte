@@ -8,7 +8,6 @@
 		loginModal,
 		putData,
 		joinVideoCall,
-		ongoingAppointment,
 		selectedUser,
 		reviewModal,
 		slideIn,

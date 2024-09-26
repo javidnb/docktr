@@ -8,6 +8,7 @@
 
 	export let showDatePicker: boolean = false;
 	export let selectedDay: any = null;
+	export let editHours: boolean = false;
 
 	let daysOfWeek: any = [];
 	let availableHours: any = [];
@@ -65,7 +66,7 @@
 	}
 
 	onMount(() => {
-		if ($session.user && $session.user.doctor) {
+		if ($session.user && $session.user.doctor && editHours) {
 			doctor = true;
 			let doc = $doctors.find((d) => d.id == $session.user?.doctor);
 			if (doc && doc.availableHours) {
@@ -213,7 +214,11 @@
 	</div>
 {/if}
 
-<div class="container datePickerContainer" class:blur={!accountActive} style="position: relative;">
+<div
+	class="container datePickerContainer"
+	class:blur={doctor && !accountActive}
+	style="position: relative;"
+>
 	{#if doctor}
 		<div class="row justify-content-center">
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -304,7 +309,7 @@
 			</div>
 		</div>
 	</div>
-	{#if !accountActive}
+	{#if doctor && !accountActive && editHours}
 		<div
 			class="overlay"
 			style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"

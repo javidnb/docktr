@@ -17,7 +17,6 @@
 		putData
 	} from '$lib/store/dataStore';
 	import { goto } from '$app/navigation';
-	import History from '$lib/components/profile/History.svelte';
 	import Chat from '$lib/components/chat/Chat.svelte';
 	import Documents from '$lib/components/profile/Documents.svelte';
 	import ContactForm from '../contact/ContactForm.svelte';
@@ -32,25 +31,16 @@
 	let pageTitle: string = $_('nav.appointments');
 	let dataLoading = writable(true);
 	let accountDisabled: boolean = false;
-	let doc = $doctors.find((d) => d.id == $session.user?.doctor);
+	let props = {};
 
 	onMount(() => {
-		appointmentsLoading.set(true);
-		if (data.user) {
+		if (data.user && $appointmentsLoading) {
 			dataLoading.set(true);
 		} else {
-			appointmentsLoading.set(false);
 			dataLoading.set(false);
 		}
-		setTimeout(() => {
-			dataLoading.set(false);
-		}, 5000);
 		// fetchData();
 	});
-
-	$: if ($appointments?.length) {
-		dataLoading.set(false);
-	}
 
 	$: if (
 		$doctors.find((d) => d.id == $session.user?.doctor) &&
@@ -186,19 +176,6 @@
 						<span class="material-symbols-outlined"> draft </span>
 						<span class="navtext">{$_('doctor.documents')}</span>
 					</button>
-					<button
-						class="btn d-flex flex-row align-items-center gap-2"
-						on:click={() => {
-							component = History;
-							pageTitle = $_('doctor.history');
-						}}
-						class:active={component == History}
-						data-bs-toggle={$mobile ? 'collapse' : ''}
-						data-bs-target={$mobile ? '#sideCollapse' : ''}
-					>
-						<span class="material-symbols-outlined"> history </span>
-						<span class="navtext">{$_('doctor.history')}</span>
-					</button>
 
 					<button
 						class="btn d-flex flex-row align-items-center gap-2"
@@ -224,6 +201,7 @@
 								data-bs-toggle="collapse"
 								data-bs-target="#settings"
 								on:click={() => {
+									props = { editHours: true };
 									component = DatePicker;
 									pageTitle = 'Randevu saatları';
 								}}
@@ -277,50 +255,52 @@
 					</button>
 				</div>
 			</div>
-			<div class="content" style="background-color: #f8f8f8; min-height: 100dvh">
-				{#if accountDisabled}
-					<div
-						class="d-flex flex-column gap-3 w-100 h-100 align-items-center justify-content-center"
+			<div
+				class="content"
+				style="background-color: #f8f8f8; min-height: 100dvh; max-height: 100dvh; overflow-y: scroll"
+			>
+				{#if $selectedUser && component == Chat}
+					<button
+						class="btn btn-outline-primary mb-3 px-3 d-flex btnClose pcOnly"
+						style="width: fit-content; position: absolute; top: 5px;"
+						on:click={() => {
+							selectedUser.set(null);
+						}}
+						><span class="material-symbols-outlined">arrow_back_ios</span>
+						<span class="s-FdJNS9dGDztw">{$_('actions.back')}</span></button
 					>
-						<h5>Hesabınız deaktiv edilib</h5>
-						<button
-							class="btn btn-primary px-5"
-							style="position: relative;"
-							on:click={activateAccount}
-							disabled={$dataLoading}
-							>Hesabı Aktivləşdir
-							{#if $dataLoading}
-								<div class="loader"></div>
-							{/if}
-						</button>
-					</div>
-				{:else}
-					{#if $selectedUser && component == Chat}
-						<button
-							class="btn btn-outline-primary mb-3 px-3 d-flex btnClose pcOnly"
-							style="width: fit-content; position: absolute; top: 5px;"
-							on:click={() => {
-								selectedUser.set(null);
-							}}
-							><span class="material-symbols-outlined">arrow_back_ios</span>
-							<span class="s-FdJNS9dGDztw">{$_('actions.back')}</span></button
-						>
-					{/if}
-					<h5 class="ps-5 title">
-						{pageTitle}
-					</h5>
-					<div class="container">
-						<div
-							class="row pt-2"
-							style="max-height: 100vh; overflow-y: scroll;"
-							class:thePadding={component == DatePicker ||
-								component == NotificationSettings ||
-								component == PasswordReset}
-						>
-							<svelte:component this={component} />
-						</div>
-					</div>
 				{/if}
+				<h5 class="ps-5 title">
+					{pageTitle}
+				</h5>
+				<div class="container">
+					{#if accountDisabled}
+						<div
+							class="card mt-3 p-3 flex-column gap-2 w-100 h-100 align-items-center justify-content-center"
+						>
+							<h5>Hesabınız deaktiv edilib</h5>
+							<button
+								class="btn btn-primary px-5"
+								style="position: relative;"
+								on:click={activateAccount}
+								disabled={$dataLoading}
+								>Hesabı Aktivləşdir
+								{#if $dataLoading}
+									<div class="loader"></div>
+								{/if}
+							</button>
+						</div>
+					{/if}
+					<div
+						class="row pt-2"
+						style="max-height: 100dvh!important; overflow-y: scroll;"
+						class:thePadding={component == DatePicker ||
+							component == NotificationSettings ||
+							component == PasswordReset}
+					>
+						<svelte:component this={component} {...props} />
+					</div>
+				</div>
 			</div>
 		</div>
 	{:else}

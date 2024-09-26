@@ -199,7 +199,7 @@
 							<button
 								class="btn btn-outline-primary btnSettings d-flex align-items-center gap-2 w-100"
 								data-bs-toggle="collapse"
-								data-bs-target="#settings"
+								data-bs-target={$mobile ? '#sideCollapse' : '#settings'}
 								on:click={() => {
 									props = { editHours: true };
 									component = DatePicker;
@@ -212,7 +212,7 @@
 							<button
 								class="btn btn-outline-primary btnSettings d-flex align-items-center gap-2 w-100"
 								data-bs-toggle="collapse"
-								data-bs-target="#settings"
+								data-bs-target={$mobile ? '#sideCollapse' : '#settings'}
 								on:click={() => {
 									component = NotificationSettings;
 									pageTitle = $_('profile.notifications');
@@ -224,7 +224,7 @@
 							<button
 								class="btn btn-outline-primary btnSettings d-flex align-items-center gap-2 w-100"
 								data-bs-toggle="collapse"
-								data-bs-target="#settings"
+								data-bs-target={$mobile ? '#sideCollapse' : '#settings'}
 								on:click={() => {
 									component = PasswordReset;
 									pageTitle = $_('login.change_pass');
@@ -270,10 +270,16 @@
 						<span class="s-FdJNS9dGDztw">{$_('actions.back')}</span></button
 					>
 				{/if}
-				<h5 class="ps-5 title">
+				<h5
+					class="ps-5 title"
+					style="position: fixed;
+						width: 100%;
+						top: 0;
+						z-index: 99;"
+				>
 					{pageTitle}
 				</h5>
-				<div class="container">
+				<div class="container" style="margin-top:60px">
 					{#if accountDisabled}
 						<div
 							class="card mt-3 p-3 flex-column gap-2 w-100 h-100 align-items-center justify-content-center"

@@ -1,6 +1,12 @@
 <script lang="ts">
 	import { session } from '$lib/session';
-	import { dataLoading, doctors, putData, selectedAppointmentDate } from '$lib/store/dataStore';
+	import {
+		dataLoading,
+		doctors,
+		mobile,
+		putData,
+		selectedAppointmentDate
+	} from '$lib/store/dataStore';
 	import { onMount } from 'svelte';
 	import { jsDateToSQL } from './dateFormatter';
 	import { _ } from 'svelte-i18n';
@@ -207,7 +213,9 @@
 			</label>
 		</div>
 		<span
-			style="font-size: small; color: gray; width: 100%; max-width: 705px; margin-block: -20px 15px"
+			style="font-size: small; color: gray; width: 100%; max-width: 705px; margin-block: {$mobile
+				? '-10px'
+				: '-20px'} 15px"
 		>
 			(aktiv: yeni randevu qəbul edilir. deaktiv: randevu qəbulu dayandırılır)
 		</span>
@@ -220,27 +228,29 @@
 	style="position: relative;"
 >
 	{#if doctor}
-		<div class="row justify-content-center">
-			<!-- svelte-ignore a11y-click-events-have-key-events -->
-			<!-- svelte-ignore a11y-no-static-element-interactions -->
-			<div
-				class="d-flex w-100 gap-1 mb-3 p-0 justify-content-between cursor-pointer"
-				style="max-width: 705px"
-				on:click={() => {
-					allowAll = !allowAll;
-				}}
-			>
-				<span>Bütün saatlarda randevu qəbul et</span>
-				<label class="switch">
-					<input
-						type="checkbox"
-						bind:checked={allowAll}
-						on:click={() => {
-							allowAll = !allowAll;
-						}}
-					/>
-					<span class="slider round"></span>
-				</label>
+		<div class="d-flex w-100 justify-content-center">
+			<div class="row w-100 justify-content-center" style="max-width: 705px;">
+				<!-- svelte-ignore a11y-click-events-have-key-events -->
+				<!-- svelte-ignore a11y-no-static-element-interactions -->
+				<div
+					class="d-flex w-100 gap-1 mb-3 p-0 justify-content-between cursor-pointer"
+					style="max-width: 705px"
+					on:click={() => {
+						allowAll = !allowAll;
+					}}
+				>
+					<span>Bütün saatlarda randevu qəbul et</span>
+					<label class="switch">
+						<input
+							type="checkbox"
+							bind:checked={allowAll}
+							on:click={() => {
+								allowAll = !allowAll;
+							}}
+						/>
+						<span class="slider round"></span>
+					</label>
+				</div>
 			</div>
 		</div>
 	{/if}

@@ -16,7 +16,6 @@
 	}
 
 	$: if ($selectedAppointmentDate.start && $selectedAppointmentDate.end) {
-		console.log($selectedAppointmentDate);
 		let data = `${new Date($selectedAppointmentDate.end).getDate()}
 		${monthNames[new Date($selectedAppointmentDate.end).getMonth()]}
 		 , 
@@ -98,7 +97,7 @@
 			</div>
 		{:else}
 			<h4 class="px-3 pt-2">Randevu tarixini seçin</h4>
-			<DatePicker bind:showDatePicker />
+			<DatePicker bind:showDatePicker appointmentDate={confirmationData?.data ?? null}/>
 		{/if}
 	</Modal>
 </div>

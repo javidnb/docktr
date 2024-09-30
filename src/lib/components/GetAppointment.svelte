@@ -27,11 +27,18 @@
 	let disabled: boolean = false;
 	let payment: boolean = false;
 	let showTermsError: boolean = false;
+	let docAppointments: any = [];
 
 	onMount(async () => {
 		init = true;
 		selectedAppointmentDate.set({ day: null, time: null, start: null, end: null });
 		appointmentModal.set(false);
+
+		let time = new Date().getTime();
+		let response = await fetch(
+			`https://tekoplast.az/docktr/api/?appointments&id=${doc.id}&type=doctor&t=${time}&upcoming=true`
+		);
+		docAppointments = await response.json();
 	});
 
 	onDestroy(() => {
@@ -182,7 +189,7 @@
 			</div>
 			{#if !$selectedAppointmentDate.day}
 				<div class="row">
-					<DatePicker />
+					<DatePicker {doc} {docAppointments} />
 				</div>
 			{:else}
 				<div class="row d-flex h-100">
@@ -194,7 +201,8 @@
 							<span>{$_('legal.1')}</span>
 							<span
 								style="max-width: 527px;
-    							margin-block: 5px;">
+    							margin-block: 5px;"
+							>
 								{$_('legal.2')}
 							</span>
 						</div>

@@ -134,6 +134,7 @@
 		"docs": "Analizlərim və Reseptlərim",
 		"doctors": "Həkimlərim",
 		"logout": "Hesabdan Çıxış",
+		"confirm_logout": "Hesabdan çıxmaq istəyirsiniz?",
 		"notifications": "Bildirişlər"
 	},
 	"call": {

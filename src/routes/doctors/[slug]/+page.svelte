@@ -723,4 +723,7 @@
 	.branch button {
 		color: var(--primaryText);
 	}
+	.branch button:hover {
+		color: white;
+	}
 </style>

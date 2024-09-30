@@ -447,8 +447,8 @@
 								>
 									<span class="material-symbols-outlined">calendar_month</span>
 									<span
-										>{new Date(appointment.endTime).getDate()}
-										{monthNames[new Date(appointment.endTime).getMonth()]}</span
+										>{new Date(appointment.startTime).getDate()}
+										{monthNames[new Date(appointment.startTime).getMonth()]}</span
 									>
 								</div>
 
@@ -551,7 +551,7 @@
 											on:click={() => {
 												goto(`./appointments/${appointment.id}`);
 											}}
-											class="btn btn-outline-primary mt-4 py-2 d-flex align-items-center btnJoinCall"
+											class="btn btn-outline-primary my-auto py-2 d-flex align-items-center btnJoinCall"
 											style="background: var(--primaryColor); color: white;"
 										>
 											<span class="material-symbols-outlined">video_call</span>

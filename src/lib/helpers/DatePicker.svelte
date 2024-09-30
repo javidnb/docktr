@@ -14,7 +14,11 @@
 
 	export let showDatePicker: boolean = false;
 	export let selectedDay: any = null;
+	export let selectedWeekDay: any = 1;
 	export let editHours: boolean = false;
+	export let doc: any = null;
+	export let appointmentDate: any = null;
+	export let docAppointments: any = null;
 
 	let daysOfWeek: any = [];
 	let availableHours: any = [];
@@ -23,18 +27,20 @@
 	let accountActive: boolean = false;
 	let allowAll: boolean = false;
 
+	// for users to get new appoinment
 	function getDatesFromTomorrow(numDays: any) {
 		const daysOfWeek = [];
 		let currentDate = new Date();
 		for (let i = 0; i < numDays; i++) {
 			currentDate.setDate(currentDate.getDate() + 1);
-			const day = getAzerbaijaniDay(currentDate.getDay());
+			const day = getAzerbaijaniDay(currentDate.getDay() == 0 ? 6 : currentDate.getDay() - 1);
 			const date = formatDate(currentDate);
-			daysOfWeek.push({ day, date });
+			daysOfWeek.push({ day, date, weekday: currentDate.getDay() == 0 ? 7 : currentDate.getDay() });
 		}
 		return daysOfWeek;
 	}
 
+	// for doctors to set available hours during week
 	function getWeekDays() {
 		const daysOfWeek = [];
 		const currentDate = new Date();
@@ -71,27 +77,73 @@
 		return azerbaijaniDays[dayIndex];
 	}
 
-	onMount(() => {
+	onMount(async () => {
 		if ($session.user && $session.user.doctor && editHours) {
 			doctor = true;
-			let doc = $doctors.find((d) => d.id == $session.user?.doctor);
-			if (doc && doc.availableHours) {
-				availableHours = JSON.parse(doc.availableHours);
+			let docktr = $doctors.find((d) => d.id == $session.user?.doctor);
+			if (docktr && docktr.availableHours) {
+				availableHours = JSON.parse(docktr.availableHours);
 			} else {
 				allowAll = true;
 			}
-			if (doc && doc.disableAppointments) {
-				accountActive = doc.disableAppointments == true ? false : true;
+			if (docktr && docktr.disableAppointments) {
+				accountActive = docktr.disableAppointments == true ? false : true;
 			} else {
 				accountActive = true;
 			}
 		}
+
 		if (doctor) {
 			daysOfWeek = getWeekDays();
 			selectedDay = daysOfWeek[0].date;
+			selectedWeekDay = daysOfWeek[0].weekday;
 		} else {
-			daysOfWeek = getDatesFromTomorrow(7);
-			selectedDay = daysOfWeek[0].date;
+			try {
+				let time = new Date().getTime();
+				let response;
+				console.log(doc);
+				console.log("doc appointments", docAppointments);
+				if (doc && docAppointments) {
+
+					if (doc.availableHours) {
+						JSON.parse(doc.availableHours).forEach((dateString: any) => {
+							const date = new Date(dateString);
+							const dayOfWeek = date.getDay().toString(); // Get day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+							const datePart = dateString.split(' ')[0]; // Get the date part from the date string
+							const time = dateString.split(' ')[1]; // Get the time part from the date string
+
+							// Check if the dayOfWeek key already exists in the result object
+							if (!availableHours[dayOfWeek]) {
+								availableHours[dayOfWeek] = { date: datePart, hours: [] };
+							}
+
+							// Push the time into the hours array
+							availableHours[dayOfWeek].hours.push(time);
+						});
+						console.log('dd: ', availableHours);
+
+						daysOfWeek = getDatesFromTomorrow(7).filter((day: any) => availableHours[day.weekday]);
+					} else {
+						daysOfWeek = getDatesFromTomorrow(7);
+					}
+
+				}
+
+				if (appointmentDate?.startTime) {
+					selectedDay = daysOfWeek[new Date(appointmentDate.startTime).getDay() + 1].date;
+					selectedWeekDay = daysOfWeek[new Date(appointmentDate.startTime).getDay() + 1].weekday;
+				} else {
+					selectedDay = daysOfWeek[0].date;
+					selectedWeekDay = daysOfWeek[0].weekday;
+				}
+				return response;
+			} catch (error) {
+				daysOfWeek = getDatesFromTomorrow(7);
+				selectedDay = daysOfWeek[0].date;
+				selectedWeekDay = daysOfWeek[0].weekday;
+				dataLoading.set(false);
+				return null;
+			}
 		}
 	});
 
@@ -111,7 +163,7 @@
 			if (index !== -1) {
 				availableHours.splice(index, 1);
 			} else {
-				availableHours.push(jsDateToSQL(selectedTime.start));
+				availableHours.push(jsDateToSQL(selectedTime.start, true));
 			}
 		} else {
 			selectedAppointmentDate.set(selectedTime);
@@ -190,6 +242,7 @@
 </script>
 
 {#if doctor}
+	<!-- DOC CONFIGURATION THINGS -->
 	<div class="d-flex flex-column align-items-center">
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -227,6 +280,7 @@
 	class:blur={doctor && !accountActive}
 	style="position: relative;"
 >
+	<!-- DOC CONFIGURATION THINGS -->
 	{#if doctor}
 		<div class="d-flex w-100 justify-content-center">
 			<div class="row w-100 justify-content-center" style="max-width: 705px;">
@@ -254,30 +308,37 @@
 			</div>
 		</div>
 	{/if}
+	<!-- DAYS SELECTOR -->
 	<div class="row" style="position: sticky; top: .5rem; border-bottom: 1px solid #ececec">
 		<div class="col">
 			<div
 				class="d-flex pb-2 px-1 gap-2 dateSelector"
+				class:mh-105={daysOfWeek.length < 4}
 				style={doctor ? 'max-width:705px; margin-inline:auto' : ''}
 			>
-				{#each daysOfWeek as { day, date }}
+				{#each daysOfWeek as { day, date, weekday }}
 					<button
 						class="btn btn-outline-primary d-flex flex-column h-100 align-items-center justify-content-center flex-1"
 						style="min-height: 75px;"
 						class:active={selectedDay == date}
 						on:click={() => {
 							selectedDay = date;
+							selectedWeekDay = weekday;
+							console.log(selectedWeekDay);
 						}}
 					>
 						<span style={doctor ? '' : 'font-size: small'}>{day}</span>
 						{#if date && !doctor}
-							{@const [dayNum, monthName] = date.split(' ')}
-							{@const monthIndex = monthNames.findIndex((m) => m.slice(0, 3) === monthName)}
-							{@const year = new Date().getFullYear()}
-							{@const validDate = new Date(year, monthIndex, parseInt(dayNum))}
 							<span style="font-weight: 500;">
-								{validDate.getDate()}
-								{monthNames[validDate.getMonth()].slice(0, 3)}
+								{#if date}
+									{@const parsedDate = new Date(
+										new Date().getFullYear(),
+										new Date(date).getMonth(),
+										new Date(date).getDate()
+									)}
+									{parsedDate.getDate()}
+									{monthNames[parsedDate.getMonth()].slice(0, 3)}
+								{/if}
 							</span>
 						{/if}
 					</button>
@@ -285,6 +346,7 @@
 			</div>
 		</div>
 	</div>
+	<!-- HOURS SELECTOR -->
 	<div class="row">
 		<div class="col d-flex justify-content-center">
 			<div
@@ -293,29 +355,51 @@
 					? ''
 					: 'max-height: calc(100dvh - 430px);'}"
 			>
-				{#each Array.from({ length: 10 }, (_, i) => i + 9) as hour}
-					{#each [0, 30] as minute}
-						{#if !(hour === 18 && minute === 30)}
-							<button
-								class="btn btn-outline-primary flex-1 btnDay align-items-center"
-								class:active={checkActive(`${selectedDay} ${hour}:${minute}`)}
-								style="max-width: 80px;"
-								on:click={(e) => {
-									const target = e.currentTarget;
-									target.classList.toggle('active');
-									selectTime(
-										`${selectedDay} - ${hour}:${minute}`,
-										`${hour.toString().padStart(2, '0')}:${minute === 0 ? '00' : '30'}`,
-										`${selectedDay} ${hour}:${minute}`
-									);
-									allowAll = false;
-								}}
-							>
-								{hour.toString().padStart(2, '0')}:{minute === 0 ? '00' : '30'}
-							</button>
-						{/if}
+				{#if availableHours.length && !doctor}
+					{#each availableHours[selectedWeekDay].hours as hour}
+						<button
+							class="btn btn-outline-primary flex-1 btnDay align-items-center"
+							class:active={checkActive(`${selectedDay} ${hour}`)}
+							style="max-width: 80px;"
+							on:click={(e) => {
+								const target = e.currentTarget;
+								target.classList.toggle('active');
+								selectTime(
+									`${selectedDay} - ${hour}`,
+									`${hour.toString().padStart(2, '0')}}`,
+									`${selectedDay} ${hour}`
+								);
+								allowAll = false;
+							}}
+						>
+							{hour.toString().padStart(2, '0')}
+						</button>
 					{/each}
-				{/each}
+				{:else}
+					{#each Array.from({ length: 10 }, (_, i) => i + 9) as hour}
+						{#each [0, 30] as minute}
+							{#if !(hour === 18 && minute === 30)}
+								<button
+									class="btn btn-outline-primary flex-1 btnDay align-items-center"
+									class:active={checkActive(`${selectedDay} ${hour}:${minute}`)}
+									style="max-width: 80px;"
+									on:click={(e) => {
+										const target = e.currentTarget;
+										target.classList.toggle('active');
+										selectTime(
+											`${selectedDay} - ${hour}:${minute}`,
+											`${hour.toString().padStart(2, '0')}:${minute === 0 ? '00' : '30'}`,
+											`${selectedDay} ${hour}:${minute}`
+										);
+										allowAll = false;
+									}}
+								>
+									{hour.toString().padStart(2, '0')}:{minute === 0 ? '00' : '30'}
+								</button>
+							{/if}
+						{/each}
+					{/each}
+				{/if}
 			</div>
 		</div>
 	</div>
@@ -368,6 +452,14 @@
 	}
 	.dateSelector::-webkit-scrollbar {
 		display: none;
+	}
+	.mh-105 {
+		max-height: 105px !important;
+	}
+	@media screen and (min-width: 992px) {
+		.datePickerContainer {
+			min-width: min(705px, 90dvw);
+		}
 	}
 	@media screen and (max-width: 992px) {
 		.btnDay:active {

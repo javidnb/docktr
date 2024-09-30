@@ -36,7 +36,7 @@ export function formatDate(date: any, dateOnly?: boolean) {
 	return `${day} ${month} ${year}, ${hours}:${minutes}`;
 }
 
-export function jsDateToSQL(date: any) {
+export function jsDateToSQL(date: any, hoursOnly?: boolean) {
 	const year = date.getFullYear();
 	const month = String(date.getMonth() + 1).padStart(2, '0');
 	const day = String(date.getDate()).padStart(2, '0');
@@ -44,7 +44,9 @@ export function jsDateToSQL(date: any) {
 	const minutes = String(date.getMinutes()).padStart(2, '0');
 	const seconds = String(date.getSeconds()).padStart(2, '0');
 
-	return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+	return hoursOnly
+		? `${year}-${month}-${day} ${hours}:${minutes}`
+		: `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
 export function timestamp(tm: any) {

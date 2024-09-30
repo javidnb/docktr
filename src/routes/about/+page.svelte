@@ -25,7 +25,9 @@
 			</div>
 			<div class="col-12 col-md-2">
 				<img
-					style="max-width: 100%; border-radius: 6px; max-height: 350px"
+					style="width: 100%; border-radius: 6px; max-height: 350px; aspect-ratio: 1 / 1.1;
+					object-fit: cover;
+					object-position: center;"
 					src="https://ik.imagekit.io/d2nwsj0ktvh/about1_geR7iRjqu.jpg"
 					alt="About"
 				/>
@@ -37,7 +39,9 @@
 			</div>
 			<div class="col-12 col-md-2">
 				<img
-					style="max-width: 100%; border-radius: 6px; max-height: 350px"
+					style="width: 100%; border-radius: 6px; max-height: 350px; aspect-ratio: 1 / 1.1;
+					object-fit: cover;
+					object-position: center;"
 					src="https://ik.imagekit.io/d2nwsj0ktvh/about2_xriv_VUbE.jpg"
 					alt="About"
 				/>
@@ -49,7 +53,9 @@
 			</div>
 			<div class="col-12 col-md-2">
 				<img
-					style="max-width: 100%; border-radius: 6px; max-height: 350px"
+					style="width: 100%; border-radius: 6px; max-height: 350px; aspect-ratio: 1 / 1.1;
+					object-fit: cover;
+					object-position: center;"
 					src="https://ik.imagekit.io/d2nwsj0ktvh/about3_IKJnzDjr3.jpg"
 					alt="About"
 				/>

@@ -18,9 +18,12 @@
 	import Favourites from '$lib/components/profile/Favourites.svelte';
 	import NotificationSettings from '$lib/components/profile/NotificationSettings.svelte';
 	import PasswordReset from '$lib/components/profile/PasswordReset.svelte';
+	import Confirm from '$lib/helpers/Confirm.svelte';
+	import { goto } from '$app/navigation';
 
 	let userEmail: any = '';
 	let component: any = $mobile ? null : ProfDetails;
+	let showModal: boolean = false;
 
 	// $: dataLoading.set($session.user ? false : true);
 
@@ -192,15 +195,16 @@
 									<span class="material-symbols-outlined"> notifications </span>Şifrəni dəyiş
 								</button>
 								{#if $session.user}
-									<a
+									<button
 										class="list-group-item mt-auto bg-secondary text-white"
-										on:click={logout}
-										href="../"
+										on:click={() => {
+											showModal = true;
+										}}
 										style="margin: 1rem; border-radius: 10px!important"
 									>
 										<span class="material-symbols-outlined"> logout </span>
 										<span class="mx-auto" style="padding-right: 1rem;">{$_('profile.logout')}</span>
-									</a>
+									</button>
 								{/if}
 							</ul>
 						{/if}
@@ -281,7 +285,9 @@
 								<button
 									class="card btn btn-outline-primary d-flex flex-row w-100"
 									style="border-radius: 20px!important;"
-									on:click={logout}
+									on:click={() => {
+										showModal = true;
+									}}
 								>
 									<span class="material-symbols-outlined"> logout </span>{$_('profile.logout')}
 								</button>
@@ -416,6 +422,20 @@
 	</div>
 {/if}
 
+{#if showModal}
+	<Confirm
+		message={$_('profile.confirm_logout')}
+		onConfirm={() => {
+			showModal = false;
+			logout();
+			goto('/');
+		}}
+		onCancel={() => {
+			showModal = false;
+		}}
+	/>
+{/if}
+
 <style>
 	.kont {
 		background-color: #fbfbfb;
@@ -452,7 +472,7 @@
 		transition-duration: 0.2s;
 	}
 	.ps-4-5 {
-		padding-left: 2.5rem!important;
+		padding-left: 2.5rem !important;
 	}
 	.btnSettings:active,
 	.btnSettings:focus {

@@ -190,57 +190,48 @@
 						<span class="material-symbols-outlined"> mail </span>
 						<span class="navtext">{$_('nav.contact')}</span>
 					</button>
-					<div class="mt-auto">
-						<div
-							class="collapse w-100 p-0"
-							id="settings"
-							style="border-block: 1px solid #00000038;"
-						>
-							<button
-								class="btn btn-outline-primary btnSettings d-flex align-items-center gap-2 w-100"
-								data-bs-toggle="collapse"
-								data-bs-target={$mobile ? '#sideCollapse' : '#settings'}
-								on:click={() => {
-									props = { editHours: true };
-									component = DatePicker;
-									pageTitle = 'Randevu saatları';
-								}}
-							>
-								<span class="material-symbols-outlined"> schedule </span>
-								Randevu saatları
-							</button>
-							<button
-								class="btn btn-outline-primary btnSettings d-flex align-items-center gap-2 w-100"
-								data-bs-toggle="collapse"
-								data-bs-target={$mobile ? '#sideCollapse' : '#settings'}
-								on:click={() => {
-									component = NotificationSettings;
-									pageTitle = $_('profile.notifications');
-								}}
-							>
-								<span class="material-symbols-outlined"> notifications </span>
-								{$_('profile.notifications')}
-							</button>
-							<button
-								class="btn btn-outline-primary btnSettings d-flex align-items-center gap-2 w-100"
-								data-bs-toggle="collapse"
-								data-bs-target={$mobile ? '#sideCollapse' : '#settings'}
-								on:click={() => {
-									component = PasswordReset;
-									pageTitle = $_('login.change_pass');
-								}}
-							>
-								<span class="material-symbols-outlined"> key </span>
-								{$_('login.change_pass')}
-							</button>
-						</div>
+
+					<div class="mt-auto py-3" style="border-block: 1px solid gray;  background: #0000000a">
+						<span
+							style="color: rgb(0 81 36); margin-left: 1rem; font-size: smaller">
+							Ayarlar
+						</span>
 						<button
-							class="btn d-flex flex-row align-items-center gap-2 mt-auto w-100"
+							class="btn btn-outline-primary btnSettings d-flex align-items-center gap-2 w-100 mt-1"
 							data-bs-toggle="collapse"
-							data-bs-target="#settings"
+							data-bs-target={$mobile ? '#sideCollapse' : '#settings'}
+							on:click={() => {
+								props = { editHours: true };
+								component = DatePicker;
+								pageTitle = 'Randevu saatları';
+							}}
 						>
-							<span class="material-symbols-outlined"> settings </span>
-							<span class="navtext">Ayarlar</span>
+							<span class="material-symbols-outlined"> schedule </span>
+							Randevu saatları
+						</button>
+						<button
+							class="btn btn-outline-primary btnSettings d-flex align-items-center gap-2 w-100"
+							data-bs-toggle="collapse"
+							data-bs-target={$mobile ? '#sideCollapse' : '#settings'}
+							on:click={() => {
+								component = NotificationSettings;
+								pageTitle = $_('profile.notifications');
+							}}
+						>
+							<span class="material-symbols-outlined"> notifications </span>
+							{$_('profile.notifications')}
+						</button>
+						<button
+							class="btn btn-outline-primary btnSettings d-flex align-items-center gap-2 w-100"
+							data-bs-toggle="collapse"
+							data-bs-target={$mobile ? '#sideCollapse' : '#settings'}
+							on:click={() => {
+								component = PasswordReset;
+								pageTitle = $_('login.change_pass');
+							}}
+						>
+							<span class="material-symbols-outlined"> key </span>
+							{$_('login.change_pass')}
 						</button>
 					</div>
 
@@ -315,18 +306,13 @@
 			style="height: 100dvh; background: #f0f0f0; "
 		>
 			<div class="img-responsive">
-				<button
-					class="btn"
-					on:click|preventDefault={() => {
-						goto('../');
-					}}
-				>
+				<a class="btn" href="../">
 					<img
 						src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/logo.png"
 						alt="Sehiyye logo"
 						style="width: 150px; margin-top: 1rem; cursor: pointer"
 					/>
-				</button>
+				</a>
 			</div>
 
 			{#if !$dataLoading || !$appointmentsLoading}

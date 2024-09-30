@@ -557,6 +557,9 @@ input:checked + .slider:before {
 	background-position: center;
 	border-radius: 20px;
 }
+.btnBack:active {
+	background-color: unset!important;
+}
 @media screen and (max-width: 992px) {
 	.docImageContainer img {
 		display: none !important;
@@ -566,6 +569,8 @@ input:checked + .slider:before {
 	}
 	.btnBack {
 		display: flex !important;
+		top: 6px!important;
+		color: var(--primaryText)!important;
 	}
 	.commentor {
 		flex-direction: column;

@@ -309,9 +309,9 @@
 
 {#if !showDocs && user}
 	<button
-		class="btn btn-outline-primary mobileOnly"
+		class="btn btnBack btn-outline-primary mobileOnly"
 		style="position: absolute;
-		top: 10px;
+		top: 10px!important;
 		left: 5px;
 		color: rgb(41, 71, 41);
 		border: none !important;

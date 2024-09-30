@@ -64,9 +64,9 @@
 	>
 		{#if $mobileComponent}
 			<button
-				class="btn mobileOnly"
+				class="btn btnBack mobileOnly"
 				style="position: absolute;
-					top: 10px;
+					top: 10px!important;
 					left: 5px;
 					color: rgb(41 71 41);
 					border: none;

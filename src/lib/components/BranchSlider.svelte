@@ -23,10 +23,11 @@
 					goto(`./doctors`);
 				}}
 				class="card align-items-center"
+				style="max-width: 140px"
 			>
 				<div class="card-body d-flex flex-column align-items-center">
 					{#if item.icon}
-						<img style="width: 55px;" src='{item.icon}?tr=w-100' alt="icon" />
+						<img style="width: 55px;" src="{item.icon}?tr=w-100" alt="icon" />
 					{:else}
 						<span
 							class="material-symbols-outlined"
@@ -41,7 +42,8 @@
 					<span
 						class="card-link"
 						style="text-decoration: none; text-align: center;
-                margin-block: auto; color: black; font-weight: 500; color: var(--primaryText); font-family: Montserrat, sans-serif; line-height: 1.2">{item.name}</span
+                margin-block: auto; color: black; font-weight: 500; color: var(--primaryText); font-family: Montserrat, sans-serif; line-height: 1.2"
+						>{item.name}</span
 					>
 					<span
 						class="btn btn-primary btnBranch"

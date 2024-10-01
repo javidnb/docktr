@@ -76,7 +76,7 @@
 					class="form-control"
 					bind:value={repeatPassword}
 					type="password"
-					placeholder={$_('login.pass')}
+					placeholder={$_('login.new_pass')}
 					required
 					id="passwInput"
 				/>

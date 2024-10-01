@@ -47,6 +47,12 @@ export const nationality: any = [
 	{ value: 'iran', label: 'İran' }
 ];
 
+export const countryNos = [
+	{ value: '+994', label: '+994' },
+	{ value: '+90', label: '+90' },
+	{ value: '+98', label: '+98' }
+];
+
 const charMap: any = {
 	ç: 'c',
 	ğ: 'g',

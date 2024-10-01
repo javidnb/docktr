@@ -3,7 +3,7 @@
 	import Select from 'svelte-select';
 	import { _ } from 'svelte-i18n';
 	import { parsePhoneNumber } from 'libphonenumber-js';
-	import { putData } from '$lib/store/dataStore';
+	import { putData, countryNos } from '$lib/store/dataStore';
 	import { toast } from '@zerodevx/svelte-toast';
 
 	let userData = $session.user;
@@ -16,12 +16,8 @@
 	let emailNotifs = userData?.emailNotifs;
 	let email = emailNotifs?.length ? true : false;
 	let disabled = false;
-	let selectItems = [
-		{ value: '+994', label: '+994' },
-		{ value: '+90', label: '+90' }
-	];
 
-	let selecedItem = selectItems[0];
+	let selecedItem = countryNos[0];
 	let dataLoading: boolean = false;
 
 	async function updateData() {
@@ -74,8 +70,7 @@
 		}
 
 		if (whatsappNotifications && whatsappNumber && whatsappNumber.length > 3) {
-			const country = selecedItem.value == '+994' ? 'AZ' : 'TR';
-			let num = parsePhoneNumber(whatsappNumber, country);
+			let num = parsePhoneNumber(selecedItem.value+whatsappNumber);
 			if (num.isValid()) {
 				whatsappNumber = num.formatNational().slice(1);
 				disabled = false;
@@ -101,7 +96,7 @@
 			class="d-flex align-items-center justify-content-between"
 			style="padding: 5px 0px 0px 0px!important"
 		>
-			<span>Proqram daxili bildirişlər</span>
+			<span>Proqram daxili bildiriş al</span>
 			<label class="switch">
 				<input type="checkbox" bind:checked={inAppNotifs} />
 				<span class="slider round"></span>
@@ -140,12 +135,16 @@
 			<div class="p-0 input-group mt-3">
 				<Select
 					class="form-control"
-					items={selectItems}
+					items={countryNos}
+					floatingConfig={{
+						strategy: 'fixed'
+					}}
 					--width="80px"
 					--border-top-left-radius="10px"
 					--border-focused="1px solid var(--primaryColor)"
 					--item-is-active-bg="var(--primaryColor)"
 					--item-hover-bg="#d9e1d7"
+					--list-z-index="9"
 					bind:value={selecedItem}
 					clearable={false}
 				></Select>
@@ -159,6 +158,7 @@
 						required
 						id="wpInput"
 						on:input={handleWPInput}
+						maxlength="11"
 					/>
 					<label for="wpInput" style="color: gray">WhatsApp No</label>
 				</div>
@@ -167,7 +167,7 @@
 
 		<div
 			class="d-flex align-items-center justify-content-between mt-2"
-			style="padding: 5px 0px 0px 0px!important"
+			style="padding: 5px 0px 0px 0px!important; z-index:0"
 		>
 			<span>Email ilə bildiriş al</span>
 			<label class="switch">

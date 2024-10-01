@@ -10,7 +10,7 @@
 	} from 'firebase/auth';
 	import { getToken } from 'firebase/messaging';
 	import { onMount } from 'svelte';
-	import { dataLoading, loginModal, putData, slideIn } from '$lib/store/dataStore';
+	import { dataLoading, loginModal, putData, slideIn, countryNos } from '$lib/store/dataStore';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { _ } from 'svelte-i18n';
 	import { browser } from '$app/environment';
@@ -40,12 +40,7 @@
 
 	let whatsappNotifications: boolean = false; // enable wp when registering
 
-	let selectItems = [
-		{ value: '+994', label: '+994' },
-		{ value: '+90', label: '+90' }
-	];
-
-	let selecedItem = selectItems[0];
+	let selecedItem = countryNos[0];
 
 	// on modal close
 	$: if ($loginModal == false) {
@@ -71,8 +66,7 @@
 
 		// MOBILE NUMBER LOGIN
 		if (method == 'mobile') {
-			const country = selecedItem.value == '+994' ? 'AZ' : 'TR';
-			email = parsePhoneNumber(phoneNumber, country).number.slice(1) + '@sehiyye.online';
+			email = parsePhoneNumber(selecedItem.value+phoneNumber).number.slice(1) + '@sehiyye.online';
 		}
 		// EMAIL LOGIN
 		if (type == 'register') {
@@ -243,9 +237,8 @@
 			phoneNumber = target.value;
 		}
 
-		if (phoneNumber.length > 3) {
-			const country = selecedItem.value == '+994' ? 'AZ' : 'TR';
-			let num = parsePhoneNumber(phoneNumber, country);
+		if (phoneNumber.length > 8) {
+			let num = parsePhoneNumber(selecedItem.value+phoneNumber);
 			if (num.isValid()) {
 				phoneNumber = num.formatNational().slice(1);
 				disabled = false;
@@ -255,8 +248,7 @@
 		}
 
 		if (whatsappNotifications && whatsappNumber.length > 3) {
-			const country = selecedItem.value == '+994' ? 'AZ' : 'TR';
-			let num = parsePhoneNumber(whatsappNumber, country);
+			let num = parsePhoneNumber(selecedItem.value+whatsappNumber);
 			if (num.isValid()) {
 				whatsappNumber = num.formatNational().slice(1);
 			}
@@ -392,7 +384,7 @@
 					<div class="p-0 input-group">
 						<Select
 							class="form-control"
-							items={selectItems}
+							items={countryNos}
 							--width="80px"
 							--border-top-left-radius="10px"
 							--border-focused="1px solid var(--primaryColor)"
@@ -535,7 +527,7 @@
 						<div class="p-0 input-group" in:slideIn>
 							<Select
 								class="form-control"
-								items={selectItems}
+								items={countryNos}
 								--width="80px"
 								--border-top-left-radius="10px"
 								--border-focused="1px solid var(--primaryColor)"

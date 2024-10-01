@@ -191,9 +191,8 @@
 						<span class="navtext">{$_('nav.contact')}</span>
 					</button>
 
-					<div class="mt-auto py-3" style="border-block: 1px solid gray;  background: #0000000a">
-						<span
-							style="color: rgb(0 81 36); margin-left: 1rem; font-size: smaller">
+					<div class="pt-2 mt-2" style="border-top: 1px solid gray;  background: #0000000a">
+						<span style="color: rgb(0 81 36); margin-left: 1rem; font-size: smaller">
 							Ayarlar
 						</span>
 						<button
@@ -239,7 +238,7 @@
 						on:click={() => {
 							logout();
 						}}
-						class="btn mb-2 d-flex flex-row align-items-center gap-2 cursor-pointer"
+						class="btn mb-2 d-flex flex-row align-items-center gap-2 cursor-pointer mt-auto"
 					>
 						<span class="material-symbols-outlined"> logout </span>
 						<span class="navtext">Çıxış</span>
@@ -262,7 +261,7 @@
 					>
 				{/if}
 				<h5
-					class="ps-5 title"
+					class="ps-5 title headerTitle"
 					style="position: fixed;
 						width: 100%;
 						top: 0;
@@ -306,13 +305,18 @@
 			style="height: 100dvh; background: #f0f0f0; "
 		>
 			<div class="img-responsive">
-				<a class="btn" href="../">
+				<button
+					class="btn"
+					on:click={() => {
+						goto('../');
+					}}
+				>
 					<img
 						src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/logo.png"
 						alt="Sehiyye logo"
 						style="width: 150px; margin-top: 1rem; cursor: pointer"
 					/>
-				</a>
+				</button>
 			</div>
 
 			{#if !$dataLoading || !$appointmentsLoading}
@@ -441,6 +445,9 @@
 		.thePadding {
 			padding: 1rem 2rem !important;
 			margin-top: 1rem !important;
+		}
+		.headerTitle {
+			width: calc(100% - 190px) !important;
 		}
 	}
 

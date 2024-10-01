@@ -7,20 +7,22 @@ import { locale } from 'svelte-i18n';
 
 export async function load({ url, data }) {
 	if (browser) {
-		try {
-			initializeFirebase();
-			const zipy = await import('zipyai');
-			zipy.init('a88ea600');
-			if (data?.uusData) {
-				zipy.identify(data.uusData.uid, {
-					displayName: data.uusData.displayName,
-					email: data.uusData.email,
-					phoneNumber: data.uusData.phoneNumber
-				});
+		initializeFirebase();
+		setTimeout(async () => {
+			try {
+				const zipy = await import('zipyai');
+				zipy.init('a88ea600');
+				if (data?.uusData) {
+					zipy.identify(data.uusData.uid, {
+						displayName: data.uusData.displayName,
+						email: data.uusData.email,
+						phoneNumber: data.uusData.phoneNumber
+					});
+				}
+			} catch (ex) {
+				console.error(ex);
 			}
-		} catch (ex) {
-			console.error(ex);
-		}
+		}, 1000);
 	}
 
 	if (data?.uusData && data?.uusData?.lang) {

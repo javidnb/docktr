@@ -52,13 +52,15 @@ function clearUserData() {
 }
 
 export async function logout() {
-	try {
-		await signOut(auth);
-		clearUserData();
-		dataLoading.set(false);
-	} catch (error) {
-		console.error('Error signing out:', error);
-		clearUserData();
-		dataLoading.set(false);
+	if (auth) {
+		try {
+			await signOut(auth);
+			clearUserData();
+			dataLoading.set(false);
+		} catch (error) {
+			console.error('Error signing out:', error);
+			clearUserData();
+			dataLoading.set(false);
+		}
 	}
 }

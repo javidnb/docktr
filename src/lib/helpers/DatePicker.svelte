@@ -178,10 +178,14 @@
 	}
 
 	function checkActive(date: any) {
-		return availableHours[selectedWeekDay]?.find((a: any) => a == date) ? true : false;
+		if (doctor) return availableHours[selectedWeekDay]?.find((a: any) => a == date) ? true : false;
+		return false;
 	}
 
 	async function updateData() {
+		Object.keys(availableHours).forEach((key) => {
+			availableHours[key].sort();
+		});
 		let data = {
 			availableHours: allowAll ? '' : JSON.stringify(availableHours),
 			disableAppointments: !accountActive
@@ -377,8 +381,15 @@
 							{#if !(hour === 18 && minute === 30)}
 								<button
 									class="btn btn-outline-primary flex-1 btnDay align-items-center"
+									class:active={checkActive(
+										`${hour.toString().padStart(2, '0')}:${minute === 0 ? '00' : '30'}`
+									) ||
+										allowAll ||
+										$classChange == 0}
 									style="max-width: 102px;"
 									on:click={(e) => {
+										// const target = e.currentTarget;
+										// target.classList.toggle('active');
 										selectTime(
 											`${selectedDay} - ${hour}:${minute}`,
 											`${hour.toString().padStart(2, '0')}:${minute === 0 ? '00' : '30'}`,

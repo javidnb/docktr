@@ -28,6 +28,7 @@
 	let payment: boolean = false;
 	let showTermsError: boolean = false;
 	let docAppointments: any = [];
+	let showDatePicker: boolean = false;
 
 	onMount(async () => {
 		init = true;
@@ -39,6 +40,7 @@
 			`https://tekoplast.az/docktr/api/?appointments&id=${doc.id}&type=doctor&t=${time}&upcoming=true`
 		);
 		docAppointments = await response.json();
+		showDatePicker = true;
 	});
 
 	onDestroy(() => {
@@ -188,9 +190,18 @@
 				{/if}
 			</div>
 			{#if !$selectedAppointmentDate.day}
-				<div class="row">
-					<DatePicker {doc} {docAppointments} />
-				</div>
+				{#if showDatePicker}
+					<div class="row">
+						<DatePicker {doc} {docAppointments} />
+					</div>
+				{:else}
+					<div class="lds-ellipsis mt-auto mx-auto">
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+				{/if}
 			{:else}
 				<div class="row d-flex h-100">
 					<div class="d-flex flex-column ps-3">

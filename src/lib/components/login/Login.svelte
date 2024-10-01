@@ -247,7 +247,7 @@
 			}
 		}
 
-		if (whatsappNotifications && whatsappNumber.length > 3) {
+		if (whatsappNotifications && whatsappNumber.length > 8) {
 			let num = parsePhoneNumber(selecedItem.value+whatsappNumber);
 			if (num.isValid()) {
 				whatsappNumber = num.formatNational().slice(1);

@@ -43,7 +43,6 @@
 
 			// TODO BUNU NULL ELEYIREM AMMA DB`ya empty string dusur
 
-			console.log(updatedData);
 			if (userData?.uid) {
 				result = await putData('users', 'uid', userData?.uid, updatedData, true);
 				if (result) {
@@ -69,7 +68,7 @@
 			whatsappNumber = target.value;
 		}
 
-		if (whatsappNotifications && whatsappNumber && whatsappNumber.length > 3) {
+		if (whatsappNotifications && whatsappNumber && whatsappNumber.length > 8) {
 			let num = parsePhoneNumber(selecedItem.value+whatsappNumber);
 			if (num.isValid()) {
 				whatsappNumber = num.formatNational().slice(1);
@@ -82,7 +81,7 @@
 		const emailValid =
 			(email && emailNotifs && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailNotifs)) || !email;
 		const whatsappValid =
-			whatsappNotifications && whatsappNumber && whatsappNumber.length > 3
+			whatsappNotifications && whatsappNumber && whatsappNumber.length > 8
 				? parsePhoneNumber(selecedItem.value + whatsappNumber).isValid()
 				: !whatsappNotifications;
 		disabled = !(emailValid && whatsappValid);

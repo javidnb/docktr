@@ -106,24 +106,20 @@
 				let response;
 				if (doc && docAppointments) {
 					if (doc.availableHours) {
-						// console.log(JSON.parse(doc.availableHours));
-						// JSON.parse(doc.availableHours).forEach((dateString: any) => {
-						// 	const date = new Date(dateString);
-						// 	const dayOfWeek = date.getDay().toString(); // Get day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
-						// 	const datePart = dateString.split(' ')[0]; // Get the date part from the date string
-						// 	const time = dateString.split(' ')[1]; // Get the time part from the date string
-
-						// 	// Check if the dayOfWeek key already exists in the result object
-						// 	if (!availableHours[dayOfWeek]) {
-						// 		availableHours[dayOfWeek] = { date: datePart, hours: [] };
-						// 	}
-
-						// 	// Push the time into the hours array
-						// 	availableHours[dayOfWeek].hours.push(time);
-						// });
 						availableHours = JSON.parse(doc.availableHours);
-						console.log(getDatesFromTomorrow(7));
-						console.log(availableHours);
+
+						docAppointments.forEach((d: any) => {
+							let wday = new Date(d.startTime).getDay();
+							const index = availableHours[wday].findIndex(
+								(item: any) =>
+									item ==
+									`${new Date(d.startTime).getHours().toString().padStart(2, '0')}:${new Date(d.startTime).getMinutes().toString().length == 2 ? new Date(d.startTime).getMinutes() : new Date(d.startTime).getMinutes().toString() + 0}`
+							);
+							if (index !== -1) {
+								availableHours[wday].splice(index, 1);
+								availableHours = { ...availableHours };
+							}
+						});
 						daysOfWeek = getDatesFromTomorrow(7).filter((day: any) => availableHours[day.weekday]);
 					} else {
 						daysOfWeek = getDatesFromTomorrow(7);
@@ -244,7 +240,7 @@
 
 {#if doctor}
 	<!-- DOC CONFIGURATION THINGS -->
-	<div class="d-flex flex-column align-items-center px-0">
+	<div class="d-flex flex-column align-items-center">
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<!-- svelte-ignore a11y-no-static-element-interactions -->
 		<div
@@ -353,7 +349,7 @@
 		<div class="col d-flex justify-content-center">
 			<div
 				class="d-flex flex-wrap gap-3 pb-2 pt-4 px-1 justify-content-between timeSelector"
-				style="max-width: 705px; overflow-y: scroll; max-height: calc(100dvh - 450px);"
+				style="max-width: 705px; overflow-y: scroll; max-height: calc(100dvh - 450px); min-height: 70px;"
 			>
 				{#if availableHours && Object.keys(availableHours).length !== 0 && !doctor && doc}
 					{#each availableHours[selectedWeekDay] || [] as hour}
@@ -416,7 +412,7 @@
 </div>
 
 {#if doctor}
-	<div class="d-flex justify-content-center w-100 px-0">
+	<div class="d-flex justify-content-center w-100">
 		<button
 			class="btn btn-primary w-100 mt-3"
 			style="max-width: 705px; position: relative"

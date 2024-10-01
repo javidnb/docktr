@@ -522,7 +522,7 @@
 									<!-- Section 5: Join Appointment Button -->
 									{#if appointment.status == 2 && new Date(appointment?.startTime) > new Date()}
 										<button
-											class="btn btn-outline-primary mt-auto mb-2 d-flex align-items-center"
+											class="btn btn-outline-primary my-auto d-flex align-items-center"
 											on:click={() => {
 												goto(`./appointments/${appointment.id}`);
 											}}

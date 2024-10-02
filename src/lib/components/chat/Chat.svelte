@@ -368,10 +368,10 @@
 						<div
 							class="loader"
 							style="background-color: var(--primaryColor);
-						top: 0;
-						right: 10px;
-						position: relative;
-						margin-inline: auto;"
+							top: 0;
+							right: 10px;
+							position: relative;
+							margin-inline: auto;"
 						></div>
 					{/if}
 

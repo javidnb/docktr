@@ -12,7 +12,8 @@
 		reviewModal,
 		slideIn,
 		cancelAppointment,
-		zoomIn
+		zoomIn,
+		users
 	} from '$lib/store/dataStore';
 	import { onMount } from 'svelte';
 	import { monthNames } from '$lib/helpers/dateFormatter';
@@ -299,6 +300,19 @@
 			});
 		}
 	}
+
+	// THIS FUNCTION IS FOR ADDING USER DETAILS FOR MESSAGES
+	function checkUsers(appointment: any) {
+		if (!$users.find((u: any) => u.uid == appointment.userId)) {
+			let dd = $users;
+			dd.push({
+				uid: appointment.userId,
+				displayName: appointment.displayName,
+				photoURL: appointment.photoURL
+			});
+			users.set(dd);
+		}
+	}
 </script>
 
 <div
@@ -391,8 +405,11 @@
 													<span>{appointment.email}</span>
 												</div>
 
-												<button class="btn btn-outline-primary w-100 mt-auto"
-													>{$_('nav.messages')}</button
+												<button
+													on:click={() => {
+														checkUsers(appointment);
+													}}
+													class="btn btn-outline-primary w-100 mt-auto">{$_('nav.messages')}</button
 												>
 											</div>
 										</div>

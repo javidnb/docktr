@@ -269,24 +269,29 @@
 						z-index: 99;"
 				>
 					{pageTitle}
+					{#if component!=Appointments}
 					<button
 						on:click={() => {
-							history.back();
+							component = Appointments;
+							pageTitle = $_('nav.appointments');
+							selectedUser.set(null);
 						}}
 						class="btnBack mobileOnly btn"
 						type="button"
 						style="position: absolute;
-						top: 10px;
+						top: 10px !important;
 						left: 5px;
-						color: rgb(41 71 41);
+						color: rgb(213, 228, 209) !important;
 						border: none;
 						text-align: center;
 						width: 56px;
 						padding-left: 20px;
-						height: 40px;"
+						height: 40px;
+						z-index:99"
 					>
 						<span class="material-symbols-outlined"> arrow_back_ios </span>
 					</button>
+					{/if}
 				</h5>
 				<div class="container" style="margin-top:60px">
 					{#if accountDisabled}

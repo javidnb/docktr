@@ -12,9 +12,7 @@
 		reviewModal,
 		slideIn,
 		cancelAppointment,
-
 		zoomIn
-
 	} from '$lib/store/dataStore';
 	import { onMount } from 'svelte';
 	import { monthNames } from '$lib/helpers/dateFormatter';
@@ -29,6 +27,7 @@
 	import 'svooltip/styles.css';
 	import ReviewCall from '$lib/components/ReviewCall.svelte';
 	import Modal from '$lib/helpers/Modal.svelte';
+	import { page } from '$app/stores';
 
 	export let showLatestAppointment = false;
 	let confirmationData: any = {};
@@ -39,6 +38,7 @@
 	let pastAppointmentsActive: boolean = false; // for showing active in the nav
 	let startX = 0;
 	let endX = 0;
+	$: curPage = $page.route.id;
 
 	// $: if (!$session.user) appointments.set([]);
 
@@ -310,7 +310,7 @@
 >
 	<div class="mb-5 pb-5 row-gap-3" in:zoomIn>
 		{#if !showLatestAppointment}
-			<ul class="nav nav-tabs pc-mt">
+			<ul class="nav nav-tabs" class:pc-mt={curPage !== '/doctor'}>
 				<li class="nav-item">
 					<button
 						class="nav-link"

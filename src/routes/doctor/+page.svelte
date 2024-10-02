@@ -32,12 +32,19 @@
 	let dataLoading = writable(true);
 	let accountDisabled: boolean = false;
 	let props = {};
+	let pageHeight: any = null;
 
 	onMount(() => {
 		if (data.user && $appointmentsLoading) {
 			dataLoading.set(true);
 		} else {
 			dataLoading.set(false);
+		}
+		if (window.visualViewport) {
+			pageHeight = window.visualViewport?.height;
+			window.visualViewport.addEventListener('resize', () => {
+				pageHeight = window.visualViewport?.height;
+			});
 		}
 		// fetchData();
 	});
@@ -136,7 +143,12 @@
 				id="sideCollapse"
 				class:collapsed={isCollapsed}
 			>
-				<div class="d-flex flex-column sidenavContent">
+				<div
+					class="d-flex flex-column sidenavContent"
+					style={pageHeight && $mobile
+						? `height: ${parseInt(pageHeight) - 59}px`
+						: 'height: 100dvh'}
+				>
 					<div class="d-flex justify-content-center title gap-2">
 						<!-- svelte-ignore a11y-click-events-have-key-events -->
 						<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
@@ -269,16 +281,16 @@
 						z-index: 99;"
 				>
 					{pageTitle}
-					{#if component!=Appointments}
-					<button
-						on:click={() => {
-							component = Appointments;
-							pageTitle = $_('nav.appointments');
-							selectedUser.set(null);
-						}}
-						class="btnBack mobileOnly btn"
-						type="button"
-						style="position: absolute;
+					{#if component != Appointments}
+						<button
+							on:click={() => {
+								component = Appointments;
+								pageTitle = $_('nav.appointments');
+								selectedUser.set(null);
+							}}
+							class="btnBack mobileOnly btn"
+							type="button"
+							style="position: absolute;
 						top: 10px !important;
 						left: 5px;
 						color: rgb(213, 228, 209) !important;
@@ -288,9 +300,9 @@
 						padding-left: 20px;
 						height: 40px;
 						z-index:99"
-					>
-						<span class="material-symbols-outlined"> arrow_back_ios </span>
-					</button>
+						>
+							<span class="material-symbols-outlined"> arrow_back_ios </span>
+						</button>
 					{/if}
 				</h5>
 				<div class="container" style="margin-top:60px">

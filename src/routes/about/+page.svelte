@@ -3,7 +3,25 @@
 </script>
 
 <section>
-	<div class="jumbotron jumboHeader" style="padding-block: 1rem; background-color: #e2e9ef">
+	<button
+		class="btn btnBack mobileOnly"
+		style="position: absolute;
+				top:8px!important;
+				left: 5px;
+				color: rgb(41 71 41);
+				border: none;
+				text-align: center;
+				width: 56px;
+				padding-left: 20px;
+				height: 40px;"
+		on:click={() => {
+			history.back();
+		}}><span class="material-symbols-outlined"> arrow_back_ios </span></button
+	>
+	<div
+		class="jumbotron jumboHeader mobile-left-padding"
+		style="padding-block: 1rem; background-color: #e2e9ef"
+	>
 		<h1 class="display-4">{$_('nav.about')}</h1>
 	</div>
 </section>

@@ -4,10 +4,12 @@
 	import { dataLoading, loginModal } from '$lib/store/dataStore';
 	import { _ } from 'svelte-i18n';
 	import { toast } from '@zerodevx/svelte-toast';
+	import { page } from '$app/stores';
 
 	let password: string | null = null;
 	let repeatPassword: string | null = null;
 	let type: string = 'password';
+	$: curPage = $page.route.id;
 
 	async function updatePass() {
 		dataLoading.set(true);
@@ -38,7 +40,7 @@
 					class="form-control"
 					bind:value={password}
 					type="password"
-					placeholder={$_('login.pass')}
+					placeholder={$_('login.new_pass')}
 					required
 					id="passwInput"
 				/>
@@ -47,12 +49,12 @@
 					class="form-control"
 					bind:value={password}
 					type="text"
-					placeholder={$_('login.pass')}
+					placeholder={$_('login.new_pass')}
 					required
 					id="passwInput"
 				/>
 			{/if}
-			<label for="passwInput" style="color: gray">{$_('login.pass')}</label>
+			<label for="passwInput" style="color: gray">{$_('login.new_pass')}</label>
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<span
 				class="material-symbols-outlined"
@@ -85,7 +87,7 @@
 					class="form-control"
 					bind:value={repeatPassword}
 					type="text"
-					placeholder={$_('login.pass')}
+					placeholder={$_('login.new_pass')}
 					required
 					id="passwInput"
 				/>

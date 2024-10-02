@@ -202,11 +202,11 @@
 							on:click={() => {
 								props = { editHours: true };
 								component = DatePicker;
-								pageTitle = 'Randevu saatları';
+								pageTitle = 'Görüş saatları';
 							}}
 						>
 							<span class="material-symbols-outlined"> schedule </span>
-							Randevu saatları
+							Görüş saatları
 						</button>
 						<button
 							class="btn btn-outline-primary btnSettings d-flex align-items-center gap-2 w-100"
@@ -260,6 +260,7 @@
 						<span class="s-FdJNS9dGDztw">{$_('actions.back')}</span></button
 					>
 				{/if}
+
 				<h5
 					class="ps-5 title headerTitle"
 					style="position: fixed;
@@ -268,6 +269,24 @@
 						z-index: 99;"
 				>
 					{pageTitle}
+					<button
+						on:click={() => {
+							history.back();
+						}}
+						class="btnBack mobileOnly btn"
+						type="button"
+						style="position: absolute;
+						top: 10px;
+						left: 5px;
+						color: rgb(41 71 41);
+						border: none;
+						text-align: center;
+						width: 56px;
+						padding-left: 20px;
+						height: 40px;"
+					>
+						<span class="material-symbols-outlined"> arrow_back_ios </span>
+					</button>
 				</h5>
 				<div class="container" style="margin-top:60px">
 					{#if accountDisabled}

@@ -1,11 +1,10 @@
 <script async script lang="ts">
-	import { doctors, selectedBranch, mobile, slideIn, zoomOut, zoomIn } from '$lib/store/dataStore';
+	import { doctors, selectedBranch, mobile, slideIn, zoomIn } from '$lib/store/dataStore';
 	import DoctorCard from '$lib/components/DoctorCard.svelte';
 	import { diseases } from '$lib/store/diseases';
 	import { _ } from 'svelte-i18n';
 	import Select from 'svelte-select';
 	import { writable } from 'svelte/store';
-	import { scale } from 'svelte/transition';
 
 	$: filteredDocs = $doctors;
 
@@ -68,7 +67,7 @@
 
 <section>
 	<div class="jumbotron jumboHeader" style="padding-block: 1rem; background-color: #e2e9ef">
-		<h1 class="display-4">{$_('nav.docs')}</h1>
+		<h1 class="display-4" in:zoomIn>{$_('nav.docs')}</h1>
 	</div>
 </section>
 
@@ -209,10 +208,7 @@
 			</div>
 		</div>
 		<div style="overflow-x: hidden;">
-			<div
-				class="row row-gap-3 p-1"
-				in:zoomIn
-			>
+			<div class="row row-gap-3 p-1" in:slideIn>
 				{#if !$doctors.length}
 					{#each [1, 2, 3] as doctor}
 						<div class="col col-md-6 col-lg-4">

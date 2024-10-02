@@ -267,7 +267,7 @@
 				? '-10px'
 				: '-20px'} 15px"
 		>
-			(aktiv: yeni randevu qəbul edilir. deaktiv: randevu qəbulu dayandırılır)
+			(aktiv: yeni görüş qəbul edilir. deaktiv: yeni görüş qəbulu dayandırılır)
 		</span>
 	</div>
 {/if}
@@ -291,7 +291,7 @@
 						availableHours = {};
 					}}
 				>
-					<span>Bütün saatlarda randevu qəbul et</span>
+					<span>Bütün saatlarda görüş qəbul et</span>
 					<label class="switch">
 						<input
 							type="checkbox"
@@ -372,7 +372,7 @@
 						</button>
 					{/each}
 				{:else}
-					{#each Array.from({ length: 10 }, (_, i) => i + 9) as hour}
+					{#each Array.from({ length: 15 }, (_, i) => i + 9) as hour}
 						{#each [0, 30] as minute}
 							{#if !(hour === 18 && minute === 30)}
 								<button

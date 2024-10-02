@@ -11,7 +11,10 @@
 		selectedUser,
 		reviewModal,
 		slideIn,
-		cancelAppointment
+		cancelAppointment,
+
+		zoomIn
+
 	} from '$lib/store/dataStore';
 	import { onMount } from 'svelte';
 	import { monthNames } from '$lib/helpers/dateFormatter';
@@ -305,7 +308,7 @@
 	on:touchend={handleTouch}
 	style="overflow-x: hidden;"
 >
-	<div class="mb-5 pb-5 row-gap-3" in:slideIn>
+	<div class="mb-5 pb-5 row-gap-3" in:zoomIn>
 		{#if !showLatestAppointment}
 			<ul class="nav nav-tabs pc-mt">
 				<li class="nav-item">

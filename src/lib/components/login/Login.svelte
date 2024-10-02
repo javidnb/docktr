@@ -66,7 +66,7 @@
 
 		// MOBILE NUMBER LOGIN
 		if (method == 'mobile') {
-			email = parsePhoneNumber(selecedItem.value+phoneNumber).number.slice(1) + '@sehiyye.online';
+			email = parsePhoneNumber(selecedItem.value + phoneNumber).number.slice(1) + '@sehiyye.online';
 		}
 		// EMAIL LOGIN
 		if (type == 'register') {
@@ -238,7 +238,7 @@
 		}
 
 		if (phoneNumber.length > 8) {
-			let num = parsePhoneNumber(selecedItem.value+phoneNumber);
+			let num = parsePhoneNumber(selecedItem.value + phoneNumber);
 			if (num.isValid()) {
 				phoneNumber = num.formatNational().slice(1);
 				disabled = false;
@@ -248,7 +248,7 @@
 		}
 
 		if (whatsappNotifications && whatsappNumber.length > 8) {
-			let num = parsePhoneNumber(selecedItem.value+whatsappNumber);
+			let num = parsePhoneNumber(selecedItem.value + whatsappNumber);
 			if (num.isValid()) {
 				whatsappNumber = num.formatNational().slice(1);
 			}
@@ -730,5 +730,9 @@
 	}
 	.socials .active .material-symbols-outlined {
 		color: white !important;
+	}
+
+	.btn-outline-primary:focus-visible {
+		box-shadow: 0px 0px 5px #00000012;
 	}
 </style>

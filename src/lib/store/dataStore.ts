@@ -81,7 +81,7 @@ export function latinize(str: string) {
 export const pageId: any = writable(null);
 export const nextPageId: any = writable(null);
 
-export function slideIn(node: HTMLElement, { duration = 50 }: { duration?: number } = {}) {
+export function slideIn(node: HTMLElement, { duration = 80 }: { duration?: number } = {}) {
 	return {
 		duration,
 		css: (t: number) => {
@@ -94,7 +94,7 @@ export function slideIn(node: HTMLElement, { duration = 50 }: { duration?: numbe
 	};
 }
 
-export function zoomOut(node: HTMLElement, { duration = 50 }: { duration?: number } = {}) {
+export function zoomIn(node: HTMLElement, { duration = 80 }: { duration?: number } = {}) {
 	return {
 		duration,
 		css: (t: number) => {
@@ -107,6 +107,26 @@ export function zoomOut(node: HTMLElement, { duration = 50 }: { duration?: numbe
 		}
 	};
 }
+
+export function zoomOut(node: HTMLElement, { duration = 50 }: { duration?: number } = {}) {
+	return {
+		duration,
+		css: (t: number) => {
+			// Scale from 1 to 0.97 as t goes from 0 to 1
+			const scale = 1 - 0.03 * t;
+			return `
+				transform: scale(${scale});
+			`;
+		},
+		tick: (t: number) => {
+			// At the end of the animation, ensure the final scale is applied
+			if (t === 1) {
+				node.style.transform = `scale(0.97)`;
+			}
+		}
+	};
+}
+
 
 export const mobile = writable();
 

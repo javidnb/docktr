@@ -3,11 +3,10 @@
 	import { goto } from '$app/navigation';
 	import {
 		cancelAppointment,
-		comission,
 		doctors,
 		mobile,
 		selectedBranch,
-		selectedUser
+		selectedUser,
 	} from '$lib/store/dataStore';
 	import { diseases } from '$lib/store/diseases';
 	import { onMount } from 'svelte';
@@ -230,7 +229,10 @@
 		</ol>
 	</Modal>
 
-	<section class="pt-3 pb-5" style="background-color: rgb(249 249 249);">
+	<section
+		class="pt-3 pb-5"
+		style="background-color: rgb(249 249 249);"
+	>
 		<div class="container pb-3">
 			<div class="row px-3">
 				<div class="col-md-8">

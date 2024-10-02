@@ -4,7 +4,7 @@
 	import { _ } from 'svelte-i18n';
 	import Modal from '$lib/helpers/Modal.svelte';
 	import Gpt from '$lib/components/Gpt.svelte';
-	import { loginModal, mobile, showGPT, zoomOut } from '$lib/store/dataStore';
+	import { loginModal, mobile, showGPT, zoomIn, zoomOut } from '$lib/store/dataStore';
 	import { goto } from '$app/navigation';
 	import { session } from '$lib/session';
 	import Legal from './appointments/Legal.svelte';
@@ -24,7 +24,7 @@
 					background-blend-mode: overlay;"
 			>
 				<div class="container">
-					<div class="row justify-content-center" in:zoomOut>
+					<div class="row justify-content-center" in:zoomIn>
 						<div class="col col-md-8 d-flex align-items-center flex-column text-center">
 							<div style="min-height: 180px;">
 								<img

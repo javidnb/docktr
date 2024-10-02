@@ -1,10 +1,11 @@
 <script async script lang="ts">
-	import { doctors, selectedBranch, mobile, slideIn } from '$lib/store/dataStore';
+	import { doctors, selectedBranch, mobile, slideIn, zoomOut, zoomIn } from '$lib/store/dataStore';
 	import DoctorCard from '$lib/components/DoctorCard.svelte';
 	import { diseases } from '$lib/store/diseases';
 	import { _ } from 'svelte-i18n';
 	import Select from 'svelte-select';
 	import { writable } from 'svelte/store';
+	import { scale } from 'svelte/transition';
 
 	$: filteredDocs = $doctors;
 
@@ -208,7 +209,10 @@
 			</div>
 		</div>
 		<div style="overflow-x: hidden;">
-			<div class="row row-gap-3 p-1" in:slideIn>
+			<div
+				class="row row-gap-3 p-1"
+				in:zoomIn
+			>
 				{#if !$doctors.length}
 					{#each [1, 2, 3] as doctor}
 						<div class="col col-md-6 col-lg-4">

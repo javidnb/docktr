@@ -72,6 +72,10 @@ body {
 	border: none;
 }
 
+.no-wrap {
+	white-space: nowrap;
+}
+
 @media screen and (min-width: 992px) {
 	.homeNav .active {
 		background-color: var(--primaryColor) !important;
@@ -558,7 +562,7 @@ input:checked + .slider:before {
 	border-radius: 20px;
 }
 .btnBack:active {
-	background-color: unset!important;
+	background-color: unset !important;
 }
 @media screen and (max-width: 992px) {
 	.docImageContainer img {
@@ -569,8 +573,8 @@ input:checked + .slider:before {
 	}
 	.btnBack {
 		display: flex !important;
-		top: 6px!important;
-		color: var(--primaryText)!important;
+		top: 6px !important;
+		color: var(--primaryText) !important;
 	}
 	.commentor {
 		flex-direction: column;

@@ -32,11 +32,14 @@
 	let files: any = [];
 	let inputFocused: boolean = false;
 	let mainContainer: HTMLDivElement | null = null;
+	let doctor: boolean = false;
 
 	$: if ($selectedUser) {
 		userId = $selectedUser;
 		let doc = $doctors.find((u: any) => u.uid == $selectedUser);
 		let usr: any = $users.find((u: any) => u.uid == userId);
+
+		if (doc) doctor = true;
 
 		if (doc && usr) {
 			usr.photoURL = doc.img;
@@ -564,21 +567,39 @@
 		<div class="input-group d-flex mt-auto bg-white" id="msgContainer">
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-			<button class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
-				<span class="material-symbols-outlined"> attach_file </span>
-			</button>
-			<!-- <label
-				for="fileInput"
+			<button
+				class="btn btn-outline-secondary d-flex align-items-center justify-content-center dropdown-toggle"
+				data-bs-toggle="dropdown"
+				aria-expanded="false"
 				style="min-width: 60px; border:1px solid rgb(222 226 230); border-right: none"
-				class="btn btn-outline-secondary d-flex align-items-center justify-content-center"
-				id="btnAttach"
-				use:tooltip={{
-					content: $_('actions.add_file'),
-					placement: 'top-start'
-				}}
 			>
 				<span class="material-symbols-outlined"> attach_file </span>
-			</label> -->
+			</button>
+			<ul class="dropdown-menu px-3 py-2 d-flex gap-2 {$mobile ? 'flex-column w-100' : ''}">
+				<label
+					for="fileInput"
+					style="min-width: 60px; border:1px solid rgb(222 226 230);"
+					class="btn btn-outline-secondary d-flex align-items-center justify-content-center flex-column w-100"
+					id="btnAttach"
+				>
+					<span class="material-symbols-outlined"> attach_file </span>
+					<span class="no-wrap">{$_('actions.send_file')}</span>
+				</label>
+				<button
+					class="btn btn-outline-secondary d-flex align-items-center justify-content-center flex-column w-100"
+					style="min-width: 60px; border:1px solid rgb(222 226 230);"
+				>
+					<span class="material-symbols-outlined"> science </span>
+					<span class="no-wrap">Analiz Formu</span>
+				</button>
+				<button
+					class="btn btn-outline-secondary d-flex align-items-center justify-content-center flex-column w-100"
+					style="min-width: 60px; border:1px solid rgb(222 226 230);"
+				>
+					<span class="material-symbols-outlined"> receipt_long </span>
+					<span class="no-wrap">Resept Formu</span>
+				</button>
+			</ul>
 			<input
 				class="form-control d-none"
 				id="fileInput"
@@ -756,6 +777,9 @@
 		color: unset;
 		width: 100%;
 		flex-direction: column;
+	}
+	.dropdown-menu:not(.show) {
+		display: none !important;
 	}
 	.sent .fileCard {
 		align-self: end;

@@ -2,7 +2,13 @@
 	import { diseases } from '$lib/store/diseases';
 	import { goto } from '$app/navigation';
 	import { writable } from 'svelte/store';
-	import { doctors, selectedSymptoms, selectedBranch, searchQuery } from '$lib/store/dataStore';
+	import {
+		doctors,
+		selectedSymptoms,
+		selectedBranch,
+		searchQuery,
+		zoomIn
+	} from '$lib/store/dataStore';
 	import { _ } from 'svelte-i18n';
 	import { onMount } from 'svelte';
 	import BranchSlider from '$lib/components/BranchSlider.svelte';
@@ -150,7 +156,7 @@
     color: white;"><span class="material-symbols-outlined"> search </span></span
 		>
 	</div>
-	<div class="h-100 pb-3">
+	<div class="h-100 pb-3" in:zoomIn>
 		{#if $searchQuery}
 			<div
 				class="d-flex flex-column row-gap-3 py-3"

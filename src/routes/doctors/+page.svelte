@@ -72,7 +72,7 @@
 </section>
 
 <section class="pb-5 pt-1">
-	<div class="container pb-5">
+	<div class="container pb-5" in:zoomIn>
 		<div
 			class="row py-2 px-1 my-1"
 			style="position: sticky; top:0; z-index: 99; background: #f9f9f9"
@@ -208,7 +208,7 @@
 			</div>
 		</div>
 		<div style="overflow-x: hidden;">
-			<div class="row row-gap-3 p-1" in:slideIn>
+			<div class="row row-gap-3 p-1" >
 				{#if !$doctors.length}
 					{#each [1, 2, 3] as doctor}
 						<div class="col col-md-6 col-lg-4">

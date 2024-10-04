@@ -12,9 +12,9 @@
 		selectedUser,
 		joinVideoCall,
 		mobile,
-		appointments,
 		doctors,
-		putData
+		putData,
+		drAvlblHrs
 	} from '$lib/store/dataStore';
 	import { goto } from '$app/navigation';
 	import Chat from '$lib/components/chat/Chat.svelte';
@@ -24,6 +24,7 @@
 	import PasswordReset from '$lib/components/profile/PasswordReset.svelte';
 	import DatePicker from '$lib/helpers/DatePicker.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
+	import Confirm from '$lib/helpers/Confirm.svelte';
 
 	let component: any = Appointments;
 	let isCollapsed = false;
@@ -112,6 +113,55 @@
 				}
 			});
 			dataLoading.set(false);
+		}
+	}
+
+	async function updateDrAvblHours() {
+		let availableHours: any = $drAvlblHrs;
+		Object.keys(availableHours.hours).forEach((key) => {
+			availableHours.hours[key].sort();
+		});
+		let data = {
+			availableHours: availableHours.allowAll ? '' : JSON.stringify(availableHours.hours),
+			disableAppointments: !availableHours.accountActive
+		};
+		try {
+			if ($session.user?.doctor) await putData('doctors', 'id', $session.user?.doctor, data);
+			let doc = $doctors.find((d) => d.id == $session.user?.doctor);
+			if (doc) {
+				doctors.update((currentItems) =>
+					currentItems.map((item) =>
+						item.id === $session.user?.doctor
+							? {
+									...item,
+									availableHours: availableHours.allowAll
+										? ''
+										: JSON.stringify(availableHours.hours),
+									disableAppointments: !availableHours.accountActive
+								}
+							: item
+					)
+				);
+			}
+			drAvlblHrs.set(null);
+			toast.push('Uğurlu!', {
+				duration: 2000,
+				theme: {
+					'--toastColor': 'mintcream',
+					'--toastBackground': 'rgb(91 144 77)',
+					'--toastBarBackground': '#1d5b3c'
+				}
+			});
+		} catch {
+			drAvlblHrs.set(null);
+			toast.push('Xəta!', {
+				duration: 2000,
+				theme: {
+					'--toastColor': 'mintcream',
+					'--toastBackground': 'rgb(176 24 24)',
+					'--toastBarBackground': '#5b1010'
+				}
+			});
 		}
 	}
 </script>
@@ -325,7 +375,9 @@
 					{/if}
 					<div
 						class="row pt-2"
-						style="max-height: 100dvh!important; overflow-y: scroll;"
+						style="overflow-y: scroll; {pageHeight && $mobile
+							? `max-height: ${parseInt(pageHeight)}px!important`
+							: 'max-height: 100dvh!important'}"
 						class:thePadding={component == DatePicker ||
 							component == NotificationSettings ||
 							component == PasswordReset}
@@ -382,6 +434,17 @@
 			<!-- <span style="color: gray; margin-top: -20px; margin-bottom: 2rem">Yüklənir ..</span> -->
 		</div>
 	</div>
+{/if}
+
+{#if $drAvlblHrs}
+	<Confirm
+		message={$_('actions.save_changes')}
+		onConfirm={updateDrAvblHours}
+		onCancel={() => {
+			console.log($drAvlblHrs);
+			drAvlblHrs.set(null);
+		}}
+	/>
 {/if}
 
 <style>

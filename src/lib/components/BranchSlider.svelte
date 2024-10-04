@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { diseases } from '$lib/store/diseases';
-	import { doctors, selectedBranch } from '$lib/store/dataStore';
+	import { doctors, selectedBranch, zoomIn } from '$lib/store/dataStore';
 	import { _ } from 'svelte-i18n';
 
 	let branches = diseases
@@ -14,7 +14,7 @@
 	branches.sort((a, b) => b.doctorCount - a.doctorCount);
 </script>
 
-<div class="branches" style="display: flex;">
+<div class="branches" style="display: flex;" in:zoomIn>
 	{#each branches as item}
 		{#if item.id}
 			<button

@@ -19,13 +19,15 @@
 	<div class="card-body d-flex flex-column align-items-center">
 		<div class="row">
 			<div class="col-5 d-flex flex-column">
-				<img
-					src={props.img
-						? props.img
-						: 'https://ik.imagekit.io/d2nwsj0ktvh/docktr/uploads/docplaceholder.jpg'}
-					alt="Some Doc"
-					style="max-width: max(150px,100%);"
-				/>
+				<div style="min-height: 100px;" >
+					<img
+						src={props.img
+							? props.img
+							: 'https://ik.imagekit.io/d2nwsj0ktvh/docktr/uploads/docplaceholder.jpg'}
+						alt="Some Doc"
+						style="max-width: max(150px,100%);"
+					/>
+				</div>
 
 				<div
 					style="color: #rgb(99 141 88)"

@@ -3,12 +3,12 @@
 	import {
 		dataLoading,
 		doctors,
+		drAvlblHrs,
 		mobile,
 		putData,
 		selectedAppointmentDate
 	} from '$lib/store/dataStore';
-	import { onMount } from 'svelte';
-	import { jsDateToSQL } from './dateFormatter';
+	import { onDestroy, onMount } from 'svelte';
 	import { _ } from 'svelte-i18n';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { writable } from 'svelte/store';
@@ -23,11 +23,14 @@
 
 	let daysOfWeek: any = [];
 	let availableHours: any = {};
+	let availableHoursOrigin: any = {}; // for checking if there is a change
 	let classChange = writable(1);
 
 	let doctor: boolean = false;
 	let accountActive: boolean = false;
+	let accountActiveOrigin: boolean = false;
 	let allowAll: boolean = false;
+	let pageHeight: any = null;
 
 	// for users to get new appoinment
 	function getDatesFromTomorrow(numDays: any) {
@@ -80,18 +83,28 @@
 	}
 
 	onMount(async () => {
+		if (window.visualViewport) {
+			pageHeight = window.visualViewport?.height;
+			window.visualViewport.addEventListener('resize', () => {
+				pageHeight = window.visualViewport?.height;
+			});
+		}
+
 		if ($session.user && $session.user.doctor && editHours) {
 			doctor = true;
 			let docktr = $doctors.find((d) => d.id == $session.user?.doctor);
 			if (docktr && docktr.availableHours) {
 				availableHours = JSON.parse(docktr.availableHours);
+				availableHoursOrigin = availableHours;
 			} else {
 				allowAll = true;
 			}
 			if (docktr && docktr.disableAppointments) {
 				accountActive = docktr.disableAppointments == true ? false : true;
+				accountActiveOrigin = accountActive;
 			} else {
 				accountActive = true;
+				accountActiveOrigin = accountActive;
 			}
 		}
 
@@ -103,10 +116,10 @@
 		} else {
 			// USER GETTING APPOINTMENT FROM DOC
 			try {
-				let response;
 				if (doc && docAppointments) {
 					if (doc.availableHours) {
 						availableHours = JSON.parse(doc.availableHours);
+						availableHoursOrigin = availableHours;
 
 						docAppointments.forEach((d: any) => {
 							let wday = new Date(d.startTime).getDay();
@@ -138,6 +151,14 @@
 				selectedDay = daysOfWeek[0].date;
 				selectedWeekDay = daysOfWeek[0].weekday;
 				dataLoading.set(false);
+			}
+		}
+	});
+
+	onDestroy(() => {
+		if (doctor && !doc) {
+			if (availableHoursOrigin !== availableHours || accountActiveOrigin !== accountActive) {
+				drAvlblHrs.set({ hours: availableHours, allowAll, accountActive });
 			}
 		}
 	});
@@ -321,7 +342,7 @@
 						class:active={selectedDay == date}
 						on:click={() => {
 							selectedDay = date;
-							selectedWeekDay = weekday;
+							selectedWeekDay = weekday == 0 ? 7 : weekday;
 							classChange.set($classChange + 1);
 						}}
 					>
@@ -349,7 +370,9 @@
 		<div class="col d-flex justify-content-center">
 			<div
 				class="d-flex flex-wrap gap-3 pb-2 pt-4 px-1 justify-content-between timeSelector"
-				style="max-width: 705px; overflow-y: scroll; max-height: calc(100dvh - 450px); min-height: 70px;"
+				style="max-width: 705px; overflow-y: scroll; max-height: {pageHeight
+					? `${parseInt(pageHeight) - 450}px`
+					: `calc(100dvh - 450px)`}; min-height: 70px;"
 			>
 				{#if availableHours && Object.keys(availableHours).length !== 0 && !doctor && doc}
 					{#each availableHours[selectedWeekDay] || [] as hour}
@@ -415,11 +438,11 @@
 	<div class="d-flex justify-content-center w-100">
 		<button
 			class="btn btn-primary w-100 mt-3"
-			style="max-width: 705px; position: relative"
+			style="max-width: 705px; position: relative; background: #980202!important"
 			on:click={updateData}
 			disabled={$dataLoading}
 		>
-			{$_('actions.update')}
+			{$_('actions.save')}
 			{#if $dataLoading}
 				<div class="loader"></div>
 			{/if}

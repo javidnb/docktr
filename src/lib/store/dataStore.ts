@@ -31,6 +31,7 @@ export const mobileComponent: any = writable(null);
 export const mobileHeader: any = writable('Menyu');
 export const limitDashboardData = writable(true); // this is for admin page, to get only limited data in homepage
 export const comission = writable(15);
+export const drAvlblHrs:any = writable(null);
 
 export const langs: any = [
 	{ value: 'aze', label: 'Azərbaycanca' },

@@ -184,7 +184,7 @@
 
 	{#if selectedUserFiles.length}
 		<div class="mt-3">
-			<DocumentsByUser files={selectedUserFiles} />
+			<DocumentsByUser files={selectedUserFiles} newFile={true} />
 		</div>
 	{/if}
 {/if}

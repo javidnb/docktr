@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
 	import ContactForm from './ContactForm.svelte';
+	import { zoomIn } from '$lib/store/dataStore';
 </script>
 
 <section>
@@ -26,7 +27,7 @@
 	</div>
 </section>
 
-<div class="container d-flex justify-content-center">
+<div class="container d-flex justify-content-center" in:zoomIn>
 	<div class="col col-md-8">
 		<div class="row mb-5">
 			<div class="d-flex justify-content-center mt-3" style="height: 136px;">

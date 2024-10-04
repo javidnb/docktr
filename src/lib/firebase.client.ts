@@ -62,5 +62,7 @@ export async function logout() {
 			clearUserData();
 			dataLoading.set(false);
 		}
+	} else {
+		clearUserData();
 	}
 }

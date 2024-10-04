@@ -564,7 +564,10 @@
 		<div class="input-group d-flex mt-auto bg-white" id="msgContainer">
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-			<label
+			<button class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
+				<span class="material-symbols-outlined"> attach_file </span>
+			</button>
+			<!-- <label
 				for="fileInput"
 				style="min-width: 60px; border:1px solid rgb(222 226 230); border-right: none"
 				class="btn btn-outline-secondary d-flex align-items-center justify-content-center"
@@ -575,7 +578,7 @@
 				}}
 			>
 				<span class="material-symbols-outlined"> attach_file </span>
-			</label>
+			</label> -->
 			<input
 				class="form-control d-none"
 				id="fileInput"

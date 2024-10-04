@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { dataLoading } from '$lib/store/dataStore';
 	export let message: string;
 	export let no: string = $_('actions.close');
 	export let yes: string = $_('actions.confirm');
@@ -19,13 +20,24 @@
 	<div class="modal-content">
 		<h5>{@html message}</h5>
 		<div class="d-flex gap-2 mt-3">
-			<button class="btn btn-secondary flex-1 d-flex align-items-center" on:click={cancel}>
+			<button
+				class="btn btn-secondary flex-1 d-flex align-items-center"
+				on:click={cancel}
+				disabled={$dataLoading}
+			>
 				<span class="material-symbols-outlined"> close </span>
 				<span class="mx-auto">{no}</span>
 			</button>
-			<button class="btn btn-primary flex-1 d-flex align-items-center" on:click={confirm}>
+			<button
+				class="btn btn-primary flex-1 d-flex align-items-center"
+				on:click={confirm}
+				disabled={$dataLoading}
+			>
 				<span class="material-symbols-outlined"> check </span>
 				<span class="mx-auto">{yes}</span>
+				{#if $dataLoading}
+					<div class="loader"></div>
+				{/if}
 			</button>
 		</div>
 	</div>
@@ -42,7 +54,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		z-index:99999;
+		z-index: 99999;
 	}
 	.modal-content {
 		background: white;

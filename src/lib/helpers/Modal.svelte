@@ -24,7 +24,7 @@
 	}}
 	class:fullScreen
 	style={fullScreen
-		? 'margin:0; height: calc(100dvh - 130px); overflow-y: hidden; width: 100%; min-width: 100%; padding: 1rem'
+		? 'position: absolute; top: 50%!important; max-width: 705px; transform: translateY(-50%)!important;'
 		: ''}
 >
 	<!-- <button

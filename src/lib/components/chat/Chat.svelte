@@ -21,6 +21,8 @@
 	import { writable } from 'svelte/store';
 	import DocumentsByUser from '../DocumentsByUser.svelte';
 	import Confirm from '$lib/helpers/Confirm.svelte';
+	import Modal from '$lib/helpers/Modal.svelte';
+	import Receipt from '../Receipt.svelte';
 
 	let messages: any = [];
 	let newMessage = '';
@@ -33,13 +35,18 @@
 	let inputFocused: boolean = false;
 	let mainContainer: HTMLDivElement | null = null;
 	let doctor: boolean = false;
+	let receiptForm: boolean = false;
+	let receiptType: string | null = null;
+	let receiptData: any = null;
 
 	$: if ($selectedUser) {
 		userId = $selectedUser;
 		let doc = $doctors.find((u: any) => u.uid == $selectedUser);
 		let usr: any = $users.find((u: any) => u.uid == userId);
 
-		if (doc) doctor = true;
+		if ($session.user?.uid && $doctors.find((u: any) => u.uid == $session.user?.uid)) {
+			doctor = true;
+		}
 
 		if (doc && usr) {
 			usr.photoURL = doc.img;
@@ -109,13 +116,6 @@
 
 	// Send a new message
 	const sendMessage = async () => {
-		// let data = {
-		// 	uid: userId,
-		// 	doc: $doctors.find((u: any) => u.uid == $selectedUser) ? true : false,
-		// 	name: $session.user?.displayName || 'Yeni mesaj',
-		// 	msg: 'https://sehiyye.online/messages'
-		// };
-		// console.log(data);
 		let msg = newMessage;
 		newMessage = '';
 		let file = null;
@@ -456,7 +456,43 @@
 						{#if message.message}
 							<span class:px-2={message.file} class:pb-2={message.file}>{message.message}</span>
 						{/if}
-						{#if message.file}
+						{#if message.file && message.file.type}
+							<!-- svelte-ignore a11y-click-events-have-key-events -->
+							<!-- svelte-ignore a11y-no-static-element-interactions -->
+							<!-- svelte-ignore a11y-missing-attribute -->
+							<a
+								class="fileCard"
+								on:click={() => {
+									receiptForm = true;
+									receiptType = message.file.type;
+									receiptData = message.file.data;
+								}}
+								target="_blank"
+								class:mt-0={message.file}
+							>
+								<span
+									style="font-size: 30px; color: #30552e"
+									class="material-symbols-outlined my-auto"
+								>
+									description
+								</span>
+								<span
+									style="padding-inline: 5px;
+										font-size: smaller;
+										overflow-wrap: break-word;
+										max-height: 28px;
+										overflow-y: hidden;
+										line-height: normal;
+										text-decoration: none;
+										color: unset;
+										margin-bottom: 10px;
+										max-width: 80%"
+								>
+									{message.file.type == 'lab' ? 'Analiz Formu' : 'Resept Formu'}
+								</span>
+							</a>
+						{/if}
+						{#if message.file && !message.file.type}
 							<a
 								class="fileCard"
 								class:h-200={checkFileExtension(message.file.name)}
@@ -503,7 +539,7 @@
 								{/if}
 							</a>
 						{/if}
-						{#if message.file && checkFileExtension(message.file.name)}
+						{#if message.file && !message.file.type && checkFileExtension(message.file.name)}
 							<div
 								class="d-flex px-3"
 								style="justify-content: space-between;
@@ -567,14 +603,25 @@
 		<div class="input-group d-flex mt-auto bg-white" id="msgContainer">
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-			<button
-				class="btn btn-outline-secondary d-flex align-items-center justify-content-center dropdown-toggle"
-				data-bs-toggle="dropdown"
-				aria-expanded="false"
-				style="min-width: 60px; border:1px solid rgb(222 226 230); border-right: none"
-			>
-				<span class="material-symbols-outlined"> attach_file </span>
-			</button>
+			{#if doctor}
+				<button
+					class="btn btn-outline-secondary d-flex align-items-center justify-content-center dropdown-toggle"
+					data-bs-toggle="dropdown"
+					aria-expanded="false"
+					style="min-width: 60px; border:1px solid rgb(222 226 230); border-right: none"
+				>
+					<span class="material-symbols-outlined"> attach_file </span>
+				</button>
+			{:else}
+				<label
+					for="fileInput"
+					style="min-width: 60px; border:1px solid rgb(222 226 230); border-right: none"
+					class="btn btn-outline-secondary d-flex align-items-center justify-content-center"
+					id="btnAttach"
+				>
+					<span class="material-symbols-outlined"> attach_file </span>
+				</label>
+			{/if}
 			<ul class="dropdown-menu px-3 py-2 d-flex gap-2 {$mobile ? 'flex-column w-100' : ''}">
 				<label
 					for="fileInput"
@@ -588,6 +635,10 @@
 				<button
 					class="btn btn-outline-secondary d-flex align-items-center justify-content-center flex-column w-100"
 					style="min-width: 60px; border:1px solid rgb(222 226 230);"
+					on:click={() => {
+						receiptForm = true;
+						receiptType = 'lab';
+					}}
 				>
 					<span class="material-symbols-outlined"> science </span>
 					<span class="no-wrap">Analiz Formu</span>
@@ -595,6 +646,10 @@
 				<button
 					class="btn btn-outline-secondary d-flex align-items-center justify-content-center flex-column w-100"
 					style="min-width: 60px; border:1px solid rgb(222 226 230);"
+					on:click={() => {
+						receiptForm = true;
+						receiptType = 'receipt';
+					}}
 				>
 					<span class="material-symbols-outlined"> receipt_long </span>
 					<span class="no-wrap">Resept Formu</span>
@@ -722,6 +777,12 @@
 			confirmDelete = false;
 		}}
 	/>
+{/if}
+
+{#if receiptForm}
+	<Modal bind:showModal={receiptForm} fullScreen>
+		<Receipt {receiptType} {receiptData} bind:showModal={receiptForm} />
+	</Modal>
 {/if}
 
 <style>

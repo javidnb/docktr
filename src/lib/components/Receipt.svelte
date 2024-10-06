@@ -12,13 +12,18 @@
 	export let receiptData: any = null;
 	export let showModal = true;
 	let doctor = $doctors.find((u: any) => u.uid == $session.user?.uid);
+	let doctorName = receiptData
+		? $doctors.find((u: any) => u.uid == receiptData.fromUser)?.name
+		: null;
 
 	let inputs: string[] = [''];
 	const messagesCollection = collection(db, 'messages');
 
 	onMount(() => {
 		if (receiptData) {
-			inputs = receiptData;
+			console.log(receiptData);
+			console.log(doctorName);
+			inputs = receiptData.file.data;
 		}
 	});
 
@@ -74,7 +79,7 @@
 			<h5 class="text-center">{receiptType == 'lab' ? 'Analiz Formu' : 'Resept Formu'}</h5>
 		</div>
 		<div class="row py-2" style="border-block: 1px solid #ececec;">
-			<div class="col">{doctor?.name}</div>
+			<div class="col">{doctorName ? doctorName : doctor?.name}</div>
 			<div class="col">
 				<span class="no-wrap text-end w-100 d-inline-block">{formatDate(new Date())}</span>
 			</div>

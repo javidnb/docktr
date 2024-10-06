@@ -465,7 +465,7 @@
 								on:click={() => {
 									receiptForm = true;
 									receiptType = message.file.type;
-									receiptData = message.file.data;
+									receiptData = message;
 								}}
 								target="_blank"
 								class:mt-0={message.file}

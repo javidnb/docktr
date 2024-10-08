@@ -39,7 +39,8 @@
 		"order_by_name": "Ada görə",
 		"order_by_price": "Qiymətə görə",
 		"documents": "Dokumentlər",
-		"history": "Keçmiş Görüşlər"
+		"history": "Keçmiş Görüşlər",
+		"balance": "Balansım"
 	},
 	"titles": {
 		"1": "Dr.",

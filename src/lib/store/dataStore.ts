@@ -19,7 +19,7 @@ export const selectedSymptoms: any = writable([]);
 export const showBtnEndCall = writable(false);
 export const joinVideoCall = writable(false);
 export const ongoingAppointment = writable<any>();
-export const users:any = writable([]);
+export const users: any = writable([]);
 export const selectedUser = writable();
 export const hideNav = writable(false);
 export const appointmentsLoading = writable(false);
@@ -31,7 +31,9 @@ export const mobileComponent: any = writable(null);
 export const mobileHeader: any = writable('Menyu');
 export const limitDashboardData = writable(true); // this is for admin page, to get only limited data in homepage
 export const comission = writable(15);
-export const drAvlblHrs:any = writable(null);
+export const drAvlblHrs: any = writable(null);
+export const pageTitleElement: any = writable(null);
+export const payments: any = writable([]);
 
 export const langs: any = [
 	{ value: 'aze', label: 'Azərbaycanca' },
@@ -127,7 +129,6 @@ export function zoomOut(node: HTMLElement, { duration = 50 }: { duration?: numbe
 		}
 	};
 }
-
 
 export const mobile = writable();
 

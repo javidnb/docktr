@@ -1,131 +1,95 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { getMessaging, getToken } from 'firebase/messaging';
-	import { app } from '$lib/firebase.client';
 	import { session } from '$lib/session';
-	import { appointments, dataLoading, putData, doctors, loginModal } from '$lib/store/dataStore';
-	import { toast } from '@zerodevx/svelte-toast';
+	import {
+		appointments,
+		dataLoading,
+		doctors,
+		loginModal,
+		pageTitleElement,
+		payments
+	} from '$lib/store/dataStore';
 	import { formatDate } from '$lib/helpers/dateFormatter';
 
-	const messaging = getMessaging(app);
-	let hideBtn: boolean = false;
-	let inputToken = '';
+	let pageHeight: any = null;
 
-	$: apps = $appointments.sort(
-		(a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime()
-	);
+	// TODO FILTER ONLY ENDED APPOINTMENTS
+	$: apps = groupByPaymentId($appointments);
 
 	$: if (!$session.user) {
 		loginModal.set(true);
 	} else loginModal.set(false);
 
+	$: if ($payments) {
+		apps = groupByPaymentId($appointments);
+	}
+
 	onMount(async () => {
-		console.log($appointments);
+		console.log(apps);
+		if (window.visualViewport) {
+			pageHeight = window.visualViewport?.height;
+			window.visualViewport.addEventListener('resize', () => {
+				pageHeight = window.visualViewport?.height;
+			});
+		}
+		if ($session.user?.doctor) {
+			try {
+				let time = new Date().getTime();
+				const response = await fetch(
+					`https://tekoplast.az/docktr/api/?payments&uid=${$session.user.doctor}&t=${time}`
+				);
+				let result = await response.json();
+				payments.set(result);
+			} catch (error) {
+				return;
+			}
+		}
 	});
 
-	function registerCM() {
-		dataLoading.set(true);
-		navigator.serviceWorker
-			.register('/service-worker.js', {
-				type: 'module'
-			})
-			.then((registration) => {
-				if (registration.active) {
-					getToken(messaging, {
-						vapidKey:
-							'BJmtPB9yoTqRrplyE77d1lPptyYd1nn-1evh8lqs2QIg28Kb4Hlq-8qUa1zglHUhgT0VP6dJ3C2bm_pQyQWa79Y',
-						serviceWorkerRegistration: registration
-					})
-						.then(async (currentToken) => {
-							if (currentToken) {
-								console.log('Token is: ' + currentToken);
-								inputToken = currentToken;
+	function groupByPaymentId(data: any[]): {
+		[key: string]: { sum: number; data: any[]; payment?: any };
+	} {
+		const result = data.reduce(
+			(acc: { [key: string]: { sum: number; data: any[]; payment?: any } }, item: any) => {
+				const key =
+					item.paymentId === 0 || item.paymentId === null ? '0' : item.paymentId.toString();
 
-								let tokens: any = $session.user?.fcmToken
-									? JSON.parse($session.user?.fcmToken)
-									: [];
-								if (!tokens?.includes(currentToken) && $session.user?.uid) {
-									tokens.push(currentToken);
-									await putData('users', 'uid', $session.user?.uid, {
-										fcmToken: JSON.stringify(tokens)
-									});
-									hideBtn = true;
-								}
-								dataLoading.set(false);
-								// Send the token to your server and update the UI if necessary
-								// ...
-							} else {
-								// Show permission request UI
-								toast.push('Xəta!', {
-									duration: 2000,
-									theme: {
-										'--toastColor': 'mintcream',
-										'--toastBackground': 'rgb(176 24 24)',
-										'--toastBarBackground': '#5b1010'
-									}
-								});
-								dataLoading.set(false);
-								// ...
-							}
-						})
-						.catch((err) => {
-							console.log(err);
-							toast.push('Xəta!', {
-								duration: 2000,
-								theme: {
-									'--toastColor': 'mintcream',
-									'--toastBackground': 'rgb(176 24 24)',
-									'--toastBarBackground': '#5b1010'
-								}
-							});
-							// ...
-						});
+				if (!acc[key]) {
+					acc[key] = { sum: 0, data: [] };
 				}
-			});
-	}
 
-	async function sendMsg() {
-		let requestData = {
-			tokens: JSON.stringify($session.user?.fcmToken),
-			title: null,
-			body: null,
-			url: null
-		};
-		const response = await fetch(`https://tekoplast.az/docktr/api/?pushNotification`, {
-			method: 'POST',
-			cache: 'no-store',
-			body: JSON.stringify({ ...requestData })
-		});
+				const amount = item.amount || 0;
+				const comission = item.comission || 0;
+				const calculatedValue = amount - comission;
 
-		if (response.ok) {
-			toast.push('Uğurlu!', {
-				duration: 2000,
-				theme: {
-					'--toastColor': 'mintcream',
-					'--toastBackground': 'rgb(91 144 77)',
-					'--toastBarBackground': '#1d5b3c'
+				acc[key].sum += calculatedValue;
+				acc[key].data.push(item);
+
+				// Fetch the entire payment data based on paymentId from $payments store
+				if (key !== '0') {
+					const payment = $payments.find((p: any) => p.id === parseInt(key));
+					acc[key].payment = payment || null;
 				}
-			});
-			dataLoading.set(false);
-		} else {
-			toast.push('Xəta!', {
-				duration: 2000,
-				theme: {
-					'--toastColor': 'mintcream',
-					'--toastBackground': 'rgb(176 24 24)',
-					'--toastBarBackground': '#5b1010'
-				}
-			});
-			dataLoading.set(false);
+
+				return acc;
+			},
+			{}
+		);
+
+		// Ensure the "0" key (no payment) is at the start
+		const reorderedResult: { [key: string]: { sum: number; data: any[]; payment?: any } } = {};
+
+		if (result['0']) {
+			reorderedResult['0'] = result['0'];
 		}
-	}
 
-	function requestNotificationPermission() {
-		Notification.requestPermission().then((permission) => {
-			if (permission === 'granted') {
-				console.log('Notification permission granted.');
+		Object.keys(result).forEach((key) => {
+			if (key !== '0') {
+				reorderedResult[key] = result[key];
 			}
 		});
+
+		return reorderedResult;
 	}
 </script>
 
@@ -147,55 +111,97 @@
 	<button class="btn btn-primary w-50 mt-3" on:click={sendMsg}>send notification</button>
 </section> -->
 
-<section>
+<section
+	class="pb-3"
+	style="{pageHeight && $pageTitleElement.offsetHeight
+		? `max-height: ${pageHeight - $pageTitleElement.offsetHeight - 30}px`
+		: ''}; overflow-y: scroll "
+>
 	<div class="d-flex flex-column gap-3">
-		{#each apps as appointment}
-			<div
-				class="card py-2 px-3 d-flex flex-row gap-3"
-				style="background-color: white; box-shadow: 0px 0px 5px #00000012"
-			>
-				<div>
-					<img
-						src={$doctors.find((d) => d.id == appointment.doctorId)?.img}
-						style="max-height: 80px; 
-						aspect-ratio: 1.5/1;
-						max-width: 100px; 
-						border-radius: 6px; 
-						object-fit: cover;
-						object-position: top"
-						alt="dok pic"
-					/>
-				</div>
-				<div class="d-flex flex-column justify-content-center">
-					<a
-						href="/doctors/{$doctors.find((d) => d.id == appointment.doctorId)?.slug}"
-						style="font-size: 1.2rem;
+		{#if Object.entries(apps).length}
+			{#each Object.entries(apps) as [paymentId, appoinmentss]}
+				<div class="card row-gap-2 p-2">
+					<div
+						class="d-flex w-100 ps-3 py-2 gap-2 align-items-center"
+						style="background: #ececec;
+    						border-radius: 12px;"
+					>
+						<span class="textBox">{(appoinmentss.sum / 1.7).toFixed(2)} USD</span>
+						{#if appoinmentss.payment}
+							<span class="textBox">{formatDate(new Date(appoinmentss.payment.date))}</span>
+							<div class="ms-auto me-3">
+								<a
+									href={appoinmentss.payment.receipt}
+									target="_blank"
+									class="btn btn-primary card p-2 cursor-pointer flex-row gap-2 justify-content-center align-items-center"
+									style="min-width: 150px; border-radius: 12px"
+								>
+									<span class="material-symbols-outlined"> download </span>
+									<span>Endir</span>
+								</a>
+							</div>
+						{/if}
+					</div>
+					{#each appoinmentss.data as appointment}
+						<div
+							class="card py-2 px-3 d-flex flex-row gap-3"
+							style="background-color: white; box-shadow: 0px 0px 5px #00000012"
+						>
+							<div class="d-flex align-items-center">
+								{#if appointment.photoURL}
+									<img
+										src={appointment.photoURL}
+										style="max-height: 60px; aspect-ratio: 1/1; object-fit: cover; object-position: center; max-width: 120px; border-radius: 100%; object-fit: cover"
+										alt="user pic"
+									/>
+								{:else}
+									<div
+										style="width: 60px; height: 60px; color: var(--primaryText); border-radius: 100%; border: 3px solid var(--primaryColor); display: flex; align-items: center; justify-content: center;"
+									>
+										<span class="material-symbols-outlined icon-fill" style="font-size: 3rem"
+											>person</span
+										>
+									</div>
+								{/if}
+							</div>
+							<div class="d-flex flex-column justify-content-center">
+								<span
+									style="font-size: 1.2rem;
 								text-decoration: none;
 								color: #37592e;
 								font-weight: 500;"
-					>
-						{$doctors.find((d) => d.id == appointment.doctorId)?.name}
-					</a>
-					<span style="font-size: small">{formatDate(new Date(appointment.startTime))}</span>
+								>
+									{appointment.displayName}
+								</span>
+								<span>{formatDate(new Date(appointment.startTime))}</span>
+								{#if appointment.amount}
+									<span>{((appointment.amount - appointment.comission) / 1.7).toFixed(2)} USD</span>
+								{/if}
+							</div>
+							<div
+								class="d-flex align-items-center ms-auto"
+								style="color: {appointment.paymentId ? 'var(--primaryColor)' : 'rgb(199 215 108)'}"
+							>
+								<span class="material-symbols-outlined icon-fill">
+									{appointment.paymentId ? 'check_circle' : 'pending'}
+								</span>
+							</div>
+						</div>
+					{/each}
 				</div>
-				<div
-					class="d-flex align-items-center ms-auto"
-					style="color: {(appointment.status == 1 || appointment.status == 2) &&
-					appointment.purchased == 1
-						? 'var(--primaryColor)'
-						: new Date(appointment.startTime) > new Date()
-							? 'rgb(76 55 55)'
-							: '#bd3939'}"
-				>
-					<span class="material-symbols-outlined icon-fill">
-						{(appointment.status == 1 || appointment.status == 2) && appointment.purchased == 1
-							? 'check_circle'
-							: new Date(appointment.startTime) > new Date()
-								? 'pending'
-								: 'error'}
-					</span>
-				</div>
+			{/each}
+		{:else}
+			<div class="py-2">
+				<span>Ödəniş tarixçəsi boşdur</span>
 			</div>
-		{/each}
+		{/if}
 	</div>
 </section>
+
+<style>
+	.textBox {
+		background-color: white;
+		border-radius: 12px;
+		padding: .5rem 1rem;
+	}
+</style>

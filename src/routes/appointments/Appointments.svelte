@@ -626,10 +626,6 @@
 	</div>
 </div>
 
-{#if $joinVideoCall}
-	<VideoCall {appointmentId} />
-{/if}
-
 <ConfirmationModal bind:confirmationData {showDatePicker} on:confirmed={appointmentConfirmed} />
 
 {#if $reviewModal}

@@ -373,13 +373,13 @@
 						class:active={curPage == '/profile'}
 						on:click={() => {
 							mobileComponent.set(null);
-							mobileHeader.set($_('nav.menu'));
+							mobileHeader.set($_('nav.account'));
 							goto('/profile');
 						}}
 						><span class="material-symbols-outlined" class:icon-fill={curPage == '/profile'}>
 							menu
 						</span>
-						<span class="navLinkText">{$_('nav.menu')}</span></button
+						<span class="navLinkText">{$_('nav.account')}</span></button
 					>
 				</li>
 

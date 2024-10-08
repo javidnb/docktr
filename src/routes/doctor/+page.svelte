@@ -14,7 +14,8 @@
 		mobile,
 		doctors,
 		putData,
-		drAvlblHrs
+		drAvlblHrs,
+		pageTitleElement
 	} from '$lib/store/dataStore';
 	import { goto } from '$app/navigation';
 	import Chat from '$lib/components/chat/Chat.svelte';
@@ -25,6 +26,7 @@
 	import DatePicker from '$lib/helpers/DatePicker.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
 	import Confirm from '$lib/helpers/Confirm.svelte';
+	import History from '$lib/components/profile/History.svelte';
 
 	let component: any = Appointments;
 	let isCollapsed = false;
@@ -242,6 +244,20 @@
 					<button
 						class="btn d-flex flex-row align-items-center gap-2"
 						on:click={() => {
+							component = History;
+							pageTitle = $_('doctor.balance');
+						}}
+						class:active={component == History}
+						data-bs-toggle={$mobile ? 'collapse' : ''}
+						data-bs-target={$mobile ? '#sideCollapse' : ''}
+					>
+						<span class="material-symbols-outlined"> account_balance_wallet </span>
+						<span class="navtext">{$_('doctor.balance')}</span>
+					</button>
+
+					<button
+						class="btn d-flex flex-row align-items-center gap-2"
+						on:click={() => {
 							component = ContactForm;
 							pageTitle = $_('nav.contact');
 						}}
@@ -325,6 +341,7 @@
 
 				<h5
 					class="ps-5 title headerTitle"
+					bind:this={$pageTitleElement}
 					style="position: fixed;
 						width: 100%;
 						top: 0;

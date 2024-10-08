@@ -191,36 +191,37 @@
 >
 	{#if files.length}
 		{#each files as file}
-			<button
-				class="fileCard w-100"
-				on:click={() => {
-					window.open(file.file.url, '_blank');
-				}}
-				data-bs-toggle="collapse"
-				data-bs-target="#endCall"
-				style="border:none"
-			>
-				{#if checkFileExtension(file.file?.name)}
-					<div
-						style="display: flex; align-items-center-justify-content-center; width: 100%; max-height: 400px; overflow: hidden"
-					>
-						<img
-							style="width: 100%;
+			{#if !file.file.type}
+				<button
+					class="fileCard w-100"
+					on:click={() => {
+						window.open(file.file.url, '_blank');
+					}}
+					data-bs-toggle="collapse"
+					data-bs-target="#endCall"
+					style="border:none"
+				>
+					{#if checkFileExtension(file.file?.name)}
+						<div
+							style="display: flex; align-items-center-justify-content-center; width: 100%; max-height: 400px; overflow: hidden"
+						>
+							<img
+								style="width: 100%;
 							object-fit: cover;
 							object-position: center;
 							border-radius: 6px"
-							src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/uploads/{file.file.url
-								.split('/')
-								.pop()}?tr=h-400"
-							alt="Attachment"
-						/>
-					</div>
-				{:else}
-					<span style="font-size: 30px;" class="material-symbols-outlined my-auto">
-						description
-					</span>
-					<span
-						style="padding-inline: 5px;
+								src="https://ik.imagekit.io/d2nwsj0ktvh/docktr/uploads/{file.file.url
+									.split('/')
+									.pop()}?tr=h-400"
+								alt="Attachment"
+							/>
+						</div>
+					{:else}
+						<span style="font-size: 30px;" class="material-symbols-outlined my-auto">
+							description
+						</span>
+						<span
+							style="padding-inline: 5px;
 			font-size: smaller;
 			overflow-wrap: break-word;
 			max-height: 28px;
@@ -230,11 +231,40 @@
 			color: unset;
 			margin-bottom: 10px;
 			max-width: 80%"
-					>
-						{file.file?.name || ''}
+						>
+							{file.file?.name || ''}
+						</span>
+					{/if}
+				</button>
+			{:else}
+				<button
+					class="fileCard w-100"
+					on:click={() => {
+						window.open(file.file.url, '_blank');
+					}}
+					data-bs-toggle="collapse"
+					data-bs-target="#endCall"
+					style="border:none"
+				>
+					<span style="font-size: 30px;" class="material-symbols-outlined my-auto">
+						description
 					</span>
-				{/if}
-			</button>
+					<span
+						style="padding-inline: 5px;
+							font-size: smaller;
+							overflow-wrap: break-word;
+							max-height: 28px;
+							overflow-y: hidden;
+							line-height: normal;
+							text-decoration: none;
+							color: unset;
+							margin-bottom: 10px;
+							max-width: 80%"
+					>
+						{file.file?.type || ''}
+					</span>
+				</button>
+			{/if}
 		{/each}
 	{:else}
 		<span>{$_('other.no_file')}</span>

@@ -279,6 +279,9 @@
 		hideNav.set(false);
 		stream = null;
 
+		toggleFullscreen();
+		reviewModal.set(true);
+
 		// Clear video references to ensure they are reset
 		if (localVideoRef) localVideoRef.srcObject = null;
 		if (remoteVideoRef) remoteVideoRef.srcObject = null;

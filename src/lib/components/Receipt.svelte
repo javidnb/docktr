@@ -76,7 +76,7 @@
 <div class="p-3 pb-4">
 	<div class="container">
 		<div class="row">
-			<h5 class="text-center">{receiptType == 'lab' ? 'Analiz Formu' : 'Resept Formu'}</h5>
+			<h5 class="text-center">{receiptType == 'lab' ? 'Analiz Tələb Formu' : 'Resept Formu'}</h5>
 		</div>
 		<div class="row py-2" style="border-block: 1px solid #ececec;">
 			<div class="col">{doctorName ? doctorName : doctor?.name}</div>

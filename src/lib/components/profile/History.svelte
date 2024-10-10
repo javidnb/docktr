@@ -1,15 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { session } from '$lib/session';
-	import {
-		appointments,
-		dataLoading,
-		doctors,
-		loginModal,
-		pageTitleElement,
-		payments
-	} from '$lib/store/dataStore';
+	import { appointments, loginModal, pageTitleElement, payments } from '$lib/store/dataStore';
 	import { formatDate } from '$lib/helpers/dateFormatter';
+	import { _ } from 'svelte-i18n';
 
 	let pageHeight: any = null;
 
@@ -47,15 +41,18 @@
 	});
 
 	function groupByPaymentId(data: any[]): {
-		[key: string]: { sum: number; data: any[]; payment?: any };
+		[key: string]: { sum: number; data: any[]; payment?: any; showDetails?: any };
 	} {
 		const result = data.reduce(
-			(acc: { [key: string]: { sum: number; data: any[]; payment?: any } }, item: any) => {
+			(
+				acc: { [key: string]: { sum: number; data: any[]; payment?: any; showDetails?: any } },
+				item: any
+			) => {
 				const key =
 					item.paymentId === 0 || item.paymentId === null ? '0' : item.paymentId.toString();
 
 				if (!acc[key]) {
-					acc[key] = { sum: 0, data: [] };
+					acc[key] = { sum: 0, showDetails: key == 0 ? true : false, data: [] };
 				}
 
 				const amount = item.amount || 0;
@@ -122,72 +119,93 @@
 			{#each Object.entries(apps) as [paymentId, appoinmentss]}
 				<div class="card row-gap-2 p-2">
 					<div
-						class="d-flex w-100 ps-3 py-2 gap-2 align-items-center"
+						class="d-flex flex-1 w-100 px-3 py-2 gap-2 align-items-center flex-wrap"
 						style="background: #ececec;
     						border-radius: 12px;"
 					>
-						<span class="textBox">{(appoinmentss.sum / 1.7).toFixed(2)} USD</span>
+						<div class="d-flex flex-1 gap-2 flex-wrap">
+							<span class="textBox">{(appoinmentss.sum / 1.7).toFixed(2)} USD</span>
+							{#if appoinmentss.payment}
+								<span class="textBox">{formatDate(new Date(appoinmentss.payment.date))}</span>
+							{/if}
+						</div>
+
 						{#if appoinmentss.payment}
-							<span class="textBox">{formatDate(new Date(appoinmentss.payment.date))}</span>
-							<div class="ms-auto me-3">
+							<div class="d-flex flex-1 gap-2">
+								<button
+									on:click={() => {
+										appoinmentss.showDetails = !appoinmentss.showDetails;
+									}}
+									class="btn btn-outline-primary card p-2 cursor-pointer flex-row flex-1 w-100 gap-2 justify-content-center align-items-center"
+									style=" border-radius: 12px"
+								>
+									<span class="material-symbols-outlined"> info </span>
+									<span>{$_('actions.details')}</span>
+								</button>
 								<a
 									href={appoinmentss.payment.receipt}
 									target="_blank"
-									class="btn btn-primary card p-2 cursor-pointer flex-row gap-2 justify-content-center align-items-center"
-									style="min-width: 150px; border-radius: 12px"
+									class="btn btn-outline-primary card p-2 cursor-pointer flex-row flex-1 w-100 gap-2 justify-content-center align-items-center"
+									style=" border-radius: 12px"
 								>
 									<span class="material-symbols-outlined"> download </span>
-									<span>Endir</span>
+									<span>{$_('actions.download')}</span>
 								</a>
 							</div>
 						{/if}
 					</div>
-					{#each appoinmentss.data as appointment}
-						<div
-							class="card py-2 px-3 d-flex flex-row gap-3"
-							style="background-color: white; box-shadow: 0px 0px 5px #00000012"
-						>
-							<div class="d-flex align-items-center">
-								{#if appointment.photoURL}
-									<img
-										src={appointment.photoURL}
-										style="max-height: 60px; aspect-ratio: 1/1; object-fit: cover; object-position: center; max-width: 120px; border-radius: 100%; object-fit: cover"
-										alt="user pic"
-									/>
-								{:else}
-									<div
-										style="width: 60px; height: 60px; color: var(--primaryText); border-radius: 100%; border: 3px solid var(--primaryColor); display: flex; align-items: center; justify-content: center;"
-									>
-										<span class="material-symbols-outlined icon-fill" style="font-size: 3rem"
-											>person</span
+					{#if appoinmentss.showDetails}
+						{#each appoinmentss.data as appointment}
+							<div
+								class="card py-2 px-3 d-flex flex-row gap-3"
+								style="background-color: white; box-shadow: 0px 0px 5px #00000012"
+							>
+								<div class="d-flex align-items-center">
+									{#if appointment.photoURL}
+										<img
+											src={appointment.photoURL}
+											style="max-height: 60px; aspect-ratio: 1/1; object-fit: cover; object-position: center; max-width: 120px; border-radius: 100%; object-fit: cover"
+											alt="user pic"
+										/>
+									{:else}
+										<div
+											style="width: 60px; height: 60px; color: var(--primaryText); border-radius: 100%; border: 3px solid var(--primaryColor); display: flex; align-items: center; justify-content: center;"
 										>
-									</div>
-								{/if}
-							</div>
-							<div class="d-flex flex-column justify-content-center">
-								<span
-									style="font-size: 1.2rem;
+											<span class="material-symbols-outlined icon-fill" style="font-size: 3rem"
+												>person</span
+											>
+										</div>
+									{/if}
+								</div>
+								<div class="d-flex flex-column justify-content-center">
+									<span
+										style="font-size: 1.2rem;
 								text-decoration: none;
 								color: #37592e;
 								font-weight: 500;"
+									>
+										{appointment.displayName}
+									</span>
+									<span>{formatDate(new Date(appointment.startTime))}</span>
+									{#if appointment.amount}
+										<span
+											>{((appointment.amount - appointment.comission) / 1.7).toFixed(2)} USD</span
+										>
+									{/if}
+								</div>
+								<div
+									class="d-flex align-items-center ms-auto"
+									style="color: {appointment.paymentId
+										? 'var(--primaryColor)'
+										: 'rgb(199 215 108)'}"
 								>
-									{appointment.displayName}
-								</span>
-								<span>{formatDate(new Date(appointment.startTime))}</span>
-								{#if appointment.amount}
-									<span>{((appointment.amount - appointment.comission) / 1.7).toFixed(2)} USD</span>
-								{/if}
+									<span class="material-symbols-outlined icon-fill">
+										{appointment.paymentId ? 'check_circle' : 'pending'}
+									</span>
+								</div>
 							</div>
-							<div
-								class="d-flex align-items-center ms-auto"
-								style="color: {appointment.paymentId ? 'var(--primaryColor)' : 'rgb(199 215 108)'}"
-							>
-								<span class="material-symbols-outlined icon-fill">
-									{appointment.paymentId ? 'check_circle' : 'pending'}
-								</span>
-							</div>
-						</div>
-					{/each}
+						{/each}
+					{/if}
 				</div>
 			{/each}
 		{:else}
@@ -202,6 +220,10 @@
 	.textBox {
 		background-color: white;
 		border-radius: 12px;
-		padding: .5rem 1rem;
+		padding: 0.5rem 1rem;
+		white-space: nowrap;
+		flex: 1;
+		display: flex;
+		justify-content: center;
 	}
 </style>

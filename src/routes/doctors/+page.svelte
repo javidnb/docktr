@@ -6,11 +6,13 @@
 	import Select from 'svelte-select';
 	import { writable } from 'svelte/store';
 
-	$: filteredDocs = $doctors;
+	$: filteredDocs = $doctors.filter((d) => d.disableAppointments !== 1);
 
 	let diss = diseases
 		.map((branch) => {
-			const doctorCount = $doctors.filter((doctor) => doctor.branches.includes(branch.id)).length;
+			const doctorCount = $doctors
+				.filter((d) => d.disableAppointments !== 1)
+				.filter((doctor) => doctor.branches.includes(branch.id)).length;
 			return { ...branch, doctorCount };
 		})
 		.filter((b) => b.doctorCount > 0)
@@ -32,7 +34,7 @@
 	function filterDocs() {
 		filterNo = 0;
 		if ($doctors.length) {
-			let docs = $doctors;
+			let docs = $doctors.filter((d) => d.disableAppointments !== 1);
 			if ($selectedBranch) {
 				docs = docs.filter((doc: any) => doc.branches.includes($selectedBranch.value));
 				filterNo += 1;
@@ -208,7 +210,7 @@
 			</div>
 		</div>
 		<div style="overflow-x: hidden;">
-			<div class="row row-gap-3 p-1" >
+			<div class="row row-gap-3 p-1">
 				{#if !$doctors.length}
 					{#each [1, 2, 3] as doctor}
 						<div class="col col-md-6 col-lg-4">

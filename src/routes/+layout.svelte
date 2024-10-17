@@ -41,7 +41,9 @@
 		if (!usr) appointmentsLoading.set(false);
 	});
 
-	$: if ($session?.user?.lang) locale.set($session.user?.lang);
+	$: if ($session?.user?.lang) {
+		locale.set($session.user?.lang);
+	}
 	// $: if ($session.user?.doctor) goto('./doctor');
 	$: curPage = $page.route.id;
 </script>

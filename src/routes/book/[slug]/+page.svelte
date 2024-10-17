@@ -8,7 +8,7 @@
 	$: doctor = $doctors.find((d) => d.slug == $page.params.slug);
 </script>
 
-{#if doctor}
+{#if doctor && !doctor.disableAppointments}
 	<button
 		on:click={() => {
 			if ($selectedAppointmentDate.day) {

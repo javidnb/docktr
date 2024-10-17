@@ -31,13 +31,13 @@
 		if ($session?.user) {
 			userEmail = $session.user.email;
 		}
-		mobileHeader.set($_('nav.menu'));
+		mobileHeader.set($_('nav.account'));
 	});
 
 	function changeComponent(comp: any, mobile?: boolean) {
 		if (mobile) {
 			mobileComponent.set(comp);
-			mobileHeader.set($_('nav.menu'));
+			mobileHeader.set($_('nav.account'));
 		} else {
 			component = comp;
 		}

@@ -39,6 +39,7 @@
 		if ($session.user?.uid && local != newLocale) {
 			await putData('users', 'uid', $session.user?.uid, { lang: newLocale }, true);
 		}
+		locale.set(newLocale);
 	};
 	let curPage: string | null = '/';
 	$: curPage = $page.route.id;

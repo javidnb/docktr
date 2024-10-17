@@ -32,6 +32,8 @@
 	let allowAll: boolean = false;
 	let pageHeight: any = null;
 
+	let dataUpdated: boolean = false;
+
 	// for users to get new appoinment
 	function getDatesFromTomorrow(numDays: any) {
 		const daysOfWeek = [];
@@ -156,10 +158,12 @@
 	});
 
 	onDestroy(() => {
-		if (doctor && !doc) {
+		if (doctor && !doc && !dataUpdated) {
 			if (availableHoursOrigin !== availableHours || accountActiveOrigin !== accountActive) {
 				drAvlblHrs.set({ hours: availableHours, allowAll, accountActive });
 			}
+		} else {
+			drAvlblHrs.set(null);
 		}
 	});
 
@@ -223,6 +227,7 @@
 					)
 				);
 			}
+			dataUpdated = true;
 			toast.push('Uğurlu!', {
 				duration: 2000,
 				theme: {

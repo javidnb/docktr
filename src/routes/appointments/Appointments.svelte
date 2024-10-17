@@ -31,6 +31,7 @@
 	import { page } from '$app/stores';
 
 	export let showLatestAppointment = false;
+
 	let confirmationData: any = {};
 	let showDatePicker: boolean = false;
 	let upcomingAppointments: any, pastAppointments: any;
@@ -101,7 +102,7 @@
 		return () => clearInterval(interval);
 	});
 
-	function openAppConfirmModal(appointment: any, showDP?: boolean) {
+	function openAppConfirmModal(appointment: any, showDP?: boolean, cancelModal?: boolean) {
 		let data = `${new Date(appointment.endTime).getDate()}
 		${monthNames[new Date(appointment.endTime).getMonth()]}
 		 , 
@@ -115,7 +116,9 @@
 				? new Date(appointment.endTime).getMinutes()
 				: new Date(appointment.endTime).getMinutes() + '0'
 		}`;
-		data += '<br/> tarixli randevunu təsdiq edirsiniz?';
+		data += cancelModal
+			? '<br/> tarixli görüşü ləğv et?'
+			: '<br/> tarixli randevunu təsdiq edirsiniz?';
 		showDatePicker = showDP == true ? true : false;
 		confirmationData = {
 			text: data,
@@ -123,21 +126,29 @@
 				startTime: appointment.startTime,
 				endTime: appointment.endTime,
 				appointmentId: appointment.id
-			}
+			},
+			cancelModal
 		};
 		confirmationModal.set(true);
 	}
 
 	async function appointmentConfirmed(event: CustomEvent) {
 		dataLoading.set(true);
-		let data = event.detail.data.changed
-			? {
-					status: 2,
-					startTime: jsDateToSQL(event.detail.data.startTime),
-					endTime: jsDateToSQL(event.detail.data.endTime),
-					changed: true
-				}
-			: { status: 2 };
+		console.log(event.detail.confData);
+		let data;
+		if (event.detail.confData.cancelModal) {
+			// APPOINTMENT CANCELLED BY DOC
+			data = { status: 10 };
+		} else {
+			data = event.detail.data.changed
+				? {
+						status: 2,
+						startTime: jsDateToSQL(event.detail.data.startTime),
+						endTime: jsDateToSQL(event.detail.data.endTime),
+						changed: true
+					}
+				: { status: 2 };
+		}
 
 		let result = await putData('appointments', 'id', event.detail.data.appointmentId, data);
 		if (result) {
@@ -491,6 +502,16 @@
 														: 'Randevu saatı təsdiq edilib.'}</span
 												>
 											</span>
+										{:else if appointment.status == 10}
+											<div class="d-flex my-auto py-2 gap-1 w-100" style="color: rgb(175 0 0)">
+												<span class="material-symbols-outlined icon-fill">cancel</span>
+												<span class="mx-auto">Görüş həkim tərəfindən ləğv edilib</span>
+											</div>
+											<span
+												style="text-align: center;
+													font-size: smaller;
+													color: gray;">Yeni görüş vaxtı təyin etmək üçün tezliklə sizinlə əlaqə saxlanılacaq</span
+											>
 										{/if}
 									{/if}
 
@@ -498,19 +519,26 @@
 									{#if $session?.user?.doctor}
 										<!-- Doctor Actions -->
 										{#if appointment.status == 1}
-											<button
+											<!-- <button
 												class="btn btn-outline-primary mt-1 d-flex align-items-center"
 												on:click={() => openAppConfirmModal(appointment, true)}
 											>
 												<span class="material-symbols-outlined">schedule_send</span>
 												<span class="mx-auto">Vaxtı dəyiş</span>
-											</button>
+											</button> -->
 											<button
-												class="btn btn-outline-primary mt-3 d-flex align-items-center"
+												class="btn btn-primary mt-1 d-flex align-items-center"
 												on:click={() => openAppConfirmModal(appointment)}
 											>
 												<span class="material-symbols-outlined">check</span>
-												<span class="mx-auto">Təsdiq et</span>
+												<span class="mx-auto">Görüşü təsdiq et</span>
+											</button>
+											<button
+												class="btn btn-outline-primary mt-3 d-flex align-items-center"
+												on:click={() => openAppConfirmModal(appointment, false, true)}
+											>
+												<span class="material-symbols-outlined">cancel</span>
+												<span class="mx-auto">Görüşü ləğv et</span>
 											</button>
 										{/if}
 									{:else}
@@ -626,7 +654,17 @@
 	</div>
 </div>
 
-<ConfirmationModal bind:confirmationData {showDatePicker} on:confirmed={appointmentConfirmed} />
+{#if $confirmationModal}
+	<ConfirmationModal
+		bind:confirmationData
+		{showDatePicker}
+		on:confirmed={appointmentConfirmed}
+		on:cancelled={() => {
+			showDatePicker = false;
+			confirmationModal.set(false);
+		}}
+	/>
+{/if}
 
 {#if $reviewModal}
 	<Modal bind:showModal={$reviewModal}>

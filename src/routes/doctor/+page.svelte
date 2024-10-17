@@ -50,6 +50,14 @@
 			});
 		}
 		// fetchData();
+
+		// BACK BUTTON
+		window.addEventListener('popstate', handlePopState);
+
+		// Clean up the event listener when the component is destroyed
+		return () => {
+			window.removeEventListener('popstate', handlePopState);
+		};
 	});
 
 	$: if (
@@ -166,6 +174,12 @@
 			});
 		}
 	}
+
+	// CUSTOM BACK BUTTON
+	function handlePopState(event: PopStateEvent) {
+		event.stopPropagation();
+		component = Appointments;
+	}
 </script>
 
 {#if !$dataLoading}
@@ -259,14 +273,14 @@
 						class="btn d-flex flex-row align-items-center gap-2"
 						on:click={() => {
 							component = ContactForm;
-							pageTitle = $_('nav.contact');
+							pageTitle = $_('actions.contact_us');
 						}}
 						class:active={component == ContactForm}
 						data-bs-toggle={$mobile ? 'collapse' : ''}
 						data-bs-target={$mobile ? '#sideCollapse' : ''}
 					>
 						<span class="material-symbols-outlined"> mail </span>
-						<span class="navtext">{$_('nav.contact')}</span>
+						<span class="navtext">{$_('actions.contact_us')}</span>
 					</button>
 
 					<div class="pt-2 mt-2" style="border-top: 1px solid gray;  background: #0000000a">
@@ -453,7 +467,7 @@
 	</div>
 {/if}
 
-{#if $drAvlblHrs}
+{#if $drAvlblHrs && $session.user}
 	<Confirm
 		message={$_('actions.save_changes')}
 		onConfirm={updateDrAvblHours}

@@ -6,7 +6,7 @@
 		doctors,
 		mobile,
 		selectedBranch,
-		selectedUser,
+		selectedUser
 	} from '$lib/store/dataStore';
 	import { diseases } from '$lib/store/diseases';
 	import { onMount } from 'svelte';
@@ -211,7 +211,9 @@
 		class="jumbotron jumboHeader mobile-left-padding"
 		style="padding-block: 1rem; background-color: #e2e9ef"
 	>
-		<h1 class="display-4">{$_('titles.' + doctor?.title)} {doctor?.name || ''}</h1>
+		{#if doctor}
+			<h1 class="display-4">{$_('titles.' + doctor?.title)} {doctor?.name || ''}</h1>
+		{/if}
 		<!-- <p>
 			It uses utility classes for typography and spacing to space content out within the larger
 			container.
@@ -229,10 +231,7 @@
 		</ol>
 	</Modal>
 
-	<section
-		class="pt-3 pb-5"
-		style="background-color: rgb(249 249 249);"
-	>
+	<section class="pt-3 pb-5" style="background-color: rgb(249 249 249);">
 		<div class="container pb-3">
 			<div class="row px-3">
 				<div class="col-md-8">
@@ -314,15 +313,17 @@
 							style="position: sticky; top: 0; background: #f9f9f9; z-index: 99; margin-bottom: -2rem"
 						>
 							{#if !existingAppointment}
-								<button
-									class="btn btn-outline-primary d-flex justify-content-center align-items-center btnRandevu w-100"
-									on:click={() => {
-										goto('/book/' + doctor.slug);
-									}}
-									><span class="material-symbols-outlined">local_library</span><span
-										style="margin-inline: auto;">{$_('appointment.get')}</span
-									></button
-								>
+								{#if !doctor.disableAppointments}
+									<button
+										class="btn btn-outline-primary d-flex justify-content-center align-items-center btnRandevu w-100"
+										on:click={() => {
+											goto('/book/' + doctor.slug);
+										}}
+										><span class="material-symbols-outlined">local_library</span><span
+											style="margin-inline: auto;">{$_('appointment.get')}</span
+										></button
+									>
+								{/if}
 							{:else}
 								<div
 									class="card p-4 mt-auto"
@@ -468,13 +469,15 @@
 					{#if !$mobile}
 						<div class="row px-3">
 							{#if !existingAppointment}
-								<button
-									class="btn btn-outline-primary d-flex justify-content-center align-items-center btnRandevu w-100"
-									on:click={openModal}
-									><span class="material-symbols-outlined">local_library</span><span
-										style="margin-inline: auto;">{$_('appointment.get')}</span
-									></button
-								>
+								{#if !doctor.disableAppointments}
+									<button
+										class="btn btn-outline-primary d-flex justify-content-center align-items-center btnRandevu w-100"
+										on:click={openModal}
+										><span class="material-symbols-outlined">local_library</span><span
+											style="margin-inline: auto;">{$_('appointment.get')}</span
+										></button
+									>
+								{/if}
 							{:else}
 								<div
 									class="card p-4 mt-auto"

@@ -6,7 +6,9 @@
 
 	let branches = diseases
 		.map((branch) => {
-			const doctorCount = $doctors.filter((doctor) => doctor.branches.includes(branch.id)).length;
+			const doctorCount = $doctors
+				.filter((d) => d.disableAppointments !== 1)
+				.filter((doctor) => doctor.branches.includes(branch.id)).length;
 			return { ...branch, doctorCount };
 		})
 		.filter((b) => b.doctorCount > 0);

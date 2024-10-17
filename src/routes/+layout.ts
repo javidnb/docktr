@@ -5,6 +5,8 @@ import { appointmentsLoading, dataLoading, getUser } from '$lib/store/dataStore.
 import { redirect } from '@sveltejs/kit';
 import { locale } from 'svelte-i18n';
 
+let init: boolean = true;
+
 export async function load({ url, data }) {
 	if (browser) {
 		initializeFirebase();
@@ -25,10 +27,13 @@ export async function load({ url, data }) {
 		}, 1000);
 	}
 
-	if (data?.uusData && data?.uusData?.lang) {
-		locale.set(data.uusData.lang);
-	} else {
-		locale.set('az');
+	if (init) {
+		if (data?.uusData && data?.uusData?.lang) {
+			locale.set(data.uusData.lang);
+		} else {
+			locale.set('az');
+		}
+		init = false;
 	}
 
 	if (data?.uusData && data.uusData?.doctor && url.pathname == '/') {

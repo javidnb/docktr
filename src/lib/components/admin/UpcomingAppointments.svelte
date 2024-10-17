@@ -39,7 +39,7 @@
 
 <div class="d-flex gap-3 flex-wrap">
 	{#each $contactMessages as msg}
-		<div class="card p-3 gap-1" style="color: #4a5e44">
+		<div class="card p-3 gap-1" style="color: #4a5e44; min-width: unset">
 			<div style="border-bottom: 1px solid #ececec; padding-bottom: 10px">
 				<div class="d-flex gap-2 align-items-center">
 					<span class="material-symbols-outlined icon-fill">stethoscope</span>

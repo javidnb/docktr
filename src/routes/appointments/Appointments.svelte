@@ -572,7 +572,7 @@
 										<button
 											class="btn btn-outline-primary my-auto d-flex align-items-center"
 											on:click={() => {
-												goto(`./appointments/${appointment.id}`);
+												if ($session.user?.admin) goto(`./appointments/${appointment.id}`);
 											}}
 										>
 											<span class="material-symbols-outlined">schedule</span>

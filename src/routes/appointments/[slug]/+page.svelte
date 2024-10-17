@@ -1,24 +1,25 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import ReviewCall from '$lib/components/ReviewCall.svelte';
 	import VideoCall from '$lib/components/VideoCall.svelte';
-	import Modal from '$lib/helpers/Modal.svelte';
 	import { session } from '$lib/session';
 	import {
 		appointments,
 		dataLoading,
 		doctors,
 		ongoingAppointment,
-		reviewModal,
 		selectedUser
 	} from '$lib/store/dataStore';
 	import { onMount } from 'svelte';
 
-	let app = $appointments.find((a) => a.id == $page.params.slug);
+	$: app = $appointments.find((a) => a.id == $page.params.slug);
+
+	$: if (app.ended) goto('/appointments');
+
 	let appointmentId: number | null = null;
 	onMount(() => {
 		if (app) {
+			console.log(app);
 			appointmentId = app.id;
 			ongoingAppointment.set(app);
 			dataLoading.set(true);
@@ -62,12 +63,4 @@
 
 {#if appointmentId}
 	<VideoCall {appointmentId} />
-{/if}
-
-{#if $reviewModal}
-	<Modal bind:showModal={$reviewModal}>
-		<div class="p-3" style="background-color: rgb(240 240 240 / 45%);">
-			<ReviewCall />
-		</div>
-	</Modal>
 {/if}

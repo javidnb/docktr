@@ -10,7 +10,6 @@
 		joinVideoCall,
 		selectedUser,
 		reviewModal,
-		slideIn,
 		cancelAppointment,
 		zoomIn,
 		users
@@ -21,7 +20,6 @@
 	import ConfirmationModal from '$lib/helpers/AppointConfirmation.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { jsDateToSQL } from '$lib/helpers/dateFormatter';
-	import VideoCall from '$lib/components/VideoCall.svelte';
 	import { _ } from 'svelte-i18n';
 	import { goto } from '$app/navigation';
 	import { tooltip } from 'svooltip';

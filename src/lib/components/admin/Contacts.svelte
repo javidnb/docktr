@@ -8,7 +8,6 @@
 
 	let contactMessages: any = writable([]);
 
-
 	onMount(() => {
 		if (browser) {
 			const receivedContactMsgs = localStorage.getItem('receivedContactMsgs');
@@ -38,9 +37,9 @@
 	}
 </script>
 
-<div class="d-flex gap-3 flex-column">
+<div class="d-flex gap-3 flex-wrap">
 	{#each $contactMessages as msg}
-		<div class="card p-3">
+		<div class="card p-3 flex-1" style="min-width: 45%; max-width: max(50%, 400px)">
 			<div class="d-flex flex-wrap gap-3">
 				<div style="color: #52694b">
 					{#if msg.name}
@@ -72,7 +71,14 @@
 				</div>
 			</div>
 			<hr class="w-100" />
-			<span class="px-3">{msg.message}</span>
+			<span
+				class="px-3"
+				style="height: 100%;
+				display: flex;
+				align-items: self-end;"
+			>
+				{msg.message}
+			</span>
 		</div>
 	{/each}
 </div>

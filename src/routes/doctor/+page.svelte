@@ -27,6 +27,7 @@
 	import { toast } from '@zerodevx/svelte-toast';
 	import Confirm from '$lib/helpers/Confirm.svelte';
 	import History from '$lib/components/profile/History.svelte';
+	import DocProfile from '../doctors/[slug]/DocProfile.svelte';
 
 	let component: any = Appointments;
 	let isCollapsed = false;
@@ -267,6 +268,20 @@
 					>
 						<span class="material-symbols-outlined"> account_balance_wallet </span>
 						<span class="navtext">{$_('doctor.balance')}</span>
+					</button>
+
+					<button
+						class="btn d-flex flex-row align-items-center gap-2"
+						on:click={() => {
+							component = DocProfile;
+							pageTitle = $_('nav.account');
+						}}
+						class:active={component == DocProfile}
+						data-bs-toggle={$mobile ? 'collapse' : ''}
+						data-bs-target={$mobile ? '#sideCollapse' : ''}
+					>
+						<span class="material-symbols-outlined"> account_circle </span>
+						<span class="navtext">{$_('nav.account')}</span>
 					</button>
 
 					<button

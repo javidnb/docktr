@@ -351,7 +351,9 @@
 							classChange.set($classChange + 1);
 						}}
 					>
-						<span style={doctor ? '' : 'font-size: small'}>{day}</span>
+						<span style={doctor ? '' : 'font-size: small'}
+							>{doctor ? (weekday == 0 ? '7. ' : weekday + '. ') : ''}{day}</span
+						>
 						{#if date && !doctor}
 							<span style="font-weight: 500;">
 								{#if date}

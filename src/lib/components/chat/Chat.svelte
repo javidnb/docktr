@@ -45,6 +45,7 @@
 	let receiptForm: boolean = false;
 	let receiptType: string | null = null;
 	let receiptData: any = null;
+	let prevPageTitle: string | null = null;
 	$: curPage = $page.route.id;
 
 	$: if ($selectedUser) {
@@ -62,6 +63,7 @@
 			usr.displayName = doc.name;
 		}
 		user.set(usr);
+		prevPageTitle = $pageTitle;
 		pageTitle.set($user?.displayName);
 		getMessages();
 	}
@@ -335,7 +337,10 @@
 		height: 40px;
 		box-shadow: unset;
 		z-index: 999;"
-		on:click={() => selectedUser.set(null)}
+		on:click={() => {
+			selectedUser.set(null);
+			pageTitle.set(prevPageTitle);
+		}}
 	>
 		<span class="material-symbols-outlined">arrow_back_ios</span>
 	</button>
@@ -810,7 +815,7 @@
 		padding: 8px;
 		margin: 4px;
 		border-radius: 10px;
-		max-width: calc(100dvw - 100px);
+		max-width: calc(100dvw - 115px) !important;
 		background: #dddada;
 		box-shadow: 0px 0px 5px #00000012;
 		/* max-width: 0%; */

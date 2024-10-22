@@ -390,7 +390,7 @@
 					style="position: fixed;
 						width: 100%;
 						top: 0;
-						z-index: 99;"
+						z-index: 102;"
 				>
 					{$pageTitle}
 					{#if component != Appointments}
@@ -399,19 +399,23 @@
 								component = Appointments;
 								pageTitle.set($_('nav.appointments'));
 								selectedUser.set(null);
+								const collapseElement = document.getElementById('sideCollapse');
+								if (collapseElement && collapseElement.classList.contains('show')) {
+									collapseElement.classList.remove('show');
+								}
 							}}
 							class="btnBack mobileOnly btn"
 							type="button"
 							style="position: absolute;
-						top: 10px !important;
-						left: 5px;
-						color: rgb(213, 228, 209) !important;
-						border: none;
-						text-align: center;
-						width: 56px;
-						padding-left: 20px;
-						height: 40px;
-						z-index:99"
+							top: 10px !important;
+							left: 5px;
+							color: rgb(213, 228, 209) !important;
+							border: none;
+							text-align: center;
+							width: 56px;
+							padding-left: 20px;
+							height: 40px;
+							z-index:101"
 						>
 							<span class="material-symbols-outlined"> arrow_back_ios </span>
 						</button>
@@ -584,7 +588,7 @@
 			position: absolute;
 			top: 14px;
 			left: 0;
-			z-index: 99;
+			z-index: 100;
 			padding-top: 44px;
 		}
 		.sidenavContent {

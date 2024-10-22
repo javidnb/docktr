@@ -15,6 +15,7 @@
 		doctors,
 		putData,
 		drAvlblHrs,
+		pageTitle,
 		pageTitleElement
 	} from '$lib/store/dataStore';
 	import { goto } from '$app/navigation';
@@ -28,17 +29,18 @@
 	import Confirm from '$lib/helpers/Confirm.svelte';
 	import History from '$lib/components/profile/History.svelte';
 	import DocProfile from '../doctors/[slug]/DocProfile.svelte';
+	import Messages from './Messages.svelte';
 
 	let component: any = Appointments;
 	let isCollapsed = false;
 	export let data;
-	let pageTitle: string = $_('nav.appointments');
 	let dataLoading = writable(true);
 	let accountDisabled: boolean = false;
 	let props = {};
 	let pageHeight: any = null;
 
 	onMount(() => {
+		pageTitle.set($_('nav.appointments'));
 		if (data.user && $appointmentsLoading) {
 			dataLoading.set(true);
 		} else {
@@ -232,7 +234,7 @@
 						class="btn d-flex flex-row align-items-center gap-2"
 						on:click={() => {
 							component = Appointments;
-							pageTitle = $_('nav.appointments');
+							pageTitle.set($_('nav.appointments'));
 							selectedUser.set(null);
 						}}
 						class:active={component == Appointments}
@@ -242,11 +244,25 @@
 						<span class="material-symbols-outlined"> home </span>
 						<span class="navtext">Görüşlər</span>
 					</button>
+
+					<button
+						class="btn d-flex flex-row align-items-center gap-2"
+						on:click={() => {
+							component = Messages;
+							pageTitle.set($_('nav.messages'));
+						}}
+						class:active={component == Messages}
+						data-bs-toggle={$mobile ? 'collapse' : ''}
+						data-bs-target={$mobile ? '#sideCollapse' : ''}
+					>
+						<span class="material-symbols-outlined"> mail </span>
+						<span class="navtext">{$_('nav.messages')}</span>
+					</button>
 					<button
 						class="btn d-flex flex-row align-items-center gap-2"
 						on:click={() => {
 							component = Documents;
-							pageTitle = $_('doctor.documents');
+							pageTitle.set($_('doctor.documents'));
 						}}
 						class:active={component == Documents}
 						data-bs-toggle={$mobile ? 'collapse' : ''}
@@ -260,7 +276,7 @@
 						class="btn d-flex flex-row align-items-center gap-2"
 						on:click={() => {
 							component = History;
-							pageTitle = $_('doctor.balance');
+							pageTitle.set($_('doctor.balance'));
 						}}
 						class:active={component == History}
 						data-bs-toggle={$mobile ? 'collapse' : ''}
@@ -274,7 +290,7 @@
 						class="btn d-flex flex-row align-items-center gap-2"
 						on:click={() => {
 							component = DocProfile;
-							pageTitle = $_('nav.account');
+							pageTitle.set($_('nav.account'));
 						}}
 						class:active={component == DocProfile}
 						data-bs-toggle={$mobile ? 'collapse' : ''}
@@ -288,7 +304,7 @@
 						class="btn d-flex flex-row align-items-center gap-2"
 						on:click={() => {
 							component = ContactForm;
-							pageTitle = $_('actions.contact_us');
+							pageTitle.set($_('actions.contact_us'));
 						}}
 						class:active={component == ContactForm}
 						data-bs-toggle={$mobile ? 'collapse' : ''}
@@ -309,7 +325,7 @@
 							on:click={() => {
 								props = { editHours: true };
 								component = DatePicker;
-								pageTitle = 'Görüş saatları';
+								pageTitle.set('Görüş saatları');
 							}}
 						>
 							<span class="material-symbols-outlined"> schedule </span>
@@ -321,7 +337,7 @@
 							data-bs-target={$mobile ? '#sideCollapse' : '#settings'}
 							on:click={() => {
 								component = NotificationSettings;
-								pageTitle = $_('profile.notifications');
+								pageTitle.set($_('profile.notifications'));
 							}}
 						>
 							<span class="material-symbols-outlined"> notifications </span>
@@ -333,7 +349,7 @@
 							data-bs-target={$mobile ? '#sideCollapse' : '#settings'}
 							on:click={() => {
 								component = PasswordReset;
-								pageTitle = $_('login.change_pass');
+								pageTitle.set($_('login.change_pass'));
 							}}
 						>
 							<span class="material-symbols-outlined"> key </span>
@@ -376,12 +392,12 @@
 						top: 0;
 						z-index: 99;"
 				>
-					{pageTitle}
+					{$pageTitle}
 					{#if component != Appointments}
 						<button
 							on:click={() => {
 								component = Appointments;
-								pageTitle = $_('nav.appointments');
+								pageTitle.set($_('nav.appointments'));
 								selectedUser.set(null);
 							}}
 							class="btnBack mobileOnly btn"

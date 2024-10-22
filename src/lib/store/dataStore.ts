@@ -32,6 +32,7 @@ export const mobileHeader: any = writable('Menyu');
 export const limitDashboardData = writable(true); // this is for admin page, to get only limited data in homepage
 export const comission = writable(15);
 export const drAvlblHrs: any = writable(null);
+export const pageTitle: any = writable(null);
 export const pageTitleElement: any = writable(null);
 export const payments: any = writable([]);
 

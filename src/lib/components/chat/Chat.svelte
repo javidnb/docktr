@@ -12,9 +12,15 @@
 	} from 'firebase/firestore';
 	import { db, initializeFirebase } from '$lib/firebase.client';
 	import { session } from '$lib/session';
-	import { selectedUser, users, mobile, doctors, sendNotification } from '$lib/store/dataStore';
+	import {
+		selectedUser,
+		users,
+		mobile,
+		doctors,
+		sendNotification,
+		pageTitle
+	} from '$lib/store/dataStore';
 	import { timestamp } from '$lib/helpers/dateFormatter';
-	import { tooltip } from 'svooltip';
 	import 'svooltip/styles.css';
 	import { _ } from 'svelte-i18n';
 	import { toast } from '@zerodevx/svelte-toast';
@@ -23,6 +29,7 @@
 	import Confirm from '$lib/helpers/Confirm.svelte';
 	import Modal from '$lib/helpers/Modal.svelte';
 	import Receipt from '../Receipt.svelte';
+	import { page } from '$app/stores';
 
 	let messages: any = [];
 	let newMessage = '';
@@ -38,9 +45,11 @@
 	let receiptForm: boolean = false;
 	let receiptType: string | null = null;
 	let receiptData: any = null;
+	$: curPage = $page.route.id;
 
 	$: if ($selectedUser) {
 		userId = $selectedUser;
+		console.log(userId);
 		let doc = $doctors.find((u: any) => u.uid == $selectedUser);
 		let usr: any = $users.find((u: any) => u.uid == userId);
 
@@ -53,6 +62,7 @@
 			usr.displayName = doc.name;
 		}
 		user.set(usr);
+		pageTitle.set($user?.displayName);
 		getMessages();
 	}
 
@@ -79,7 +89,8 @@
 		if (mainContainer && event?.target && $mobile) {
 			if (event.target) {
 				const viewportHeight = (event?.target as VisualViewport).height;
-				mainContainer.style.height = `${viewportHeight - 30}px`;
+				mainContainer.style.height =
+					curPage == '/doctor' ? `${viewportHeight - 100}px` : `${viewportHeight - 30}px`;
 			}
 		}
 	}
@@ -316,7 +327,7 @@
 		style="position: absolute;
 		top: 10px!important;
 		left: 5px;
-		color: rgb(41, 71, 41);
+		color: rgb(213, 228, 209) !important;
 		border: none !important;
 		text-align: center;
 		width: 56px;
@@ -332,6 +343,7 @@
 		class="d-flex flex-column mainContainer"
 		style="position: relative"
 		class:minimizedChat={inputFocused && !window.visualViewport}
+		class:docMsgContainer={curPage == '/doctor'}
 	>
 		<div
 			class="chat mb-3 d-flex flex-column gap-1"
@@ -344,6 +356,7 @@
 				top: 0px;
 				background: #f8f8f8;
 				border-bottom: 1px solid #ececec; z-index:99"
+				class:pcOnly={curPage == '/doctor'}
 			>
 				<div class="d-flex align-items-center w-100 pt-1 py-2 mobile-left-padding">
 					{#if $user?.displayName}
@@ -887,5 +900,9 @@
 			left: 0;
 			width: 100%;
 		} */
+		.docMsgContainer {
+			height: calc(100dvh - 90px);
+			transition-duration: 0.2s;
+		}
 	}
 </style>

@@ -250,6 +250,7 @@
 						on:click={() => {
 							component = Messages;
 							pageTitle.set($_('nav.messages'));
+							selectedUser.set(null);
 						}}
 						class:active={component == Messages}
 						data-bs-toggle={$mobile ? 'collapse' : ''}
@@ -263,6 +264,7 @@
 						on:click={() => {
 							component = Documents;
 							pageTitle.set($_('doctor.documents'));
+							selectedUser.set(null);
 						}}
 						class:active={component == Documents}
 						data-bs-toggle={$mobile ? 'collapse' : ''}
@@ -277,6 +279,7 @@
 						on:click={() => {
 							component = History;
 							pageTitle.set($_('doctor.balance'));
+							selectedUser.set(null);
 						}}
 						class:active={component == History}
 						data-bs-toggle={$mobile ? 'collapse' : ''}
@@ -291,6 +294,7 @@
 						on:click={() => {
 							component = DocProfile;
 							pageTitle.set($_('nav.account'));
+							selectedUser.set(null);
 						}}
 						class:active={component == DocProfile}
 						data-bs-toggle={$mobile ? 'collapse' : ''}
@@ -303,10 +307,13 @@
 					<button
 						class="btn d-flex flex-row align-items-center gap-2"
 						on:click={() => {
-							component = ContactForm;
+							component = Appointments;
+							setTimeout(() => {
+								selectedUser.set('1TgHpEOspfZmDhanm8m1XLgm29u1');
+							}, 5);
 							pageTitle.set($_('actions.contact_us'));
 						}}
-						class:active={component == ContactForm}
+						class:active={$selectedUser == '1TgHpEOspfZmDhanm8m1XLgm29u1' && component !== Messages}
 						data-bs-toggle={$mobile ? 'collapse' : ''}
 						data-bs-target={$mobile ? '#sideCollapse' : ''}
 					>

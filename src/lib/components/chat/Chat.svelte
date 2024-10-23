@@ -65,6 +65,7 @@
 		user.set(usr);
 		prevPageTitle = $pageTitle;
 		pageTitle.set($user?.displayName);
+		if ($selectedUser == '1TgHpEOspfZmDhanm8m1XLgm29u1') pageTitle.set($_('actions.contact_us'));
 		getMessages();
 	}
 

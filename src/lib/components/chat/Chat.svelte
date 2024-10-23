@@ -50,7 +50,6 @@
 
 	$: if ($selectedUser) {
 		userId = $selectedUser;
-		console.log(userId);
 		let doc = $doctors.find((u: any) => u.uid == $selectedUser);
 		let usr: any = $users.find((u: any) => u.uid == userId);
 

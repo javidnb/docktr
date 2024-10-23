@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { db, initializeFirebase } from '$lib/firebase.client';
 	import { session } from '$lib/session';
+	import { selectedUser } from '$lib/store/dataStore';
 	import {
 		addDoc,
 		collection,
-		getDocs,
 		query,
 		where,
 		type CollectionReference,
@@ -24,7 +24,7 @@
 
 	onMount(() => {
 		const initialize = async () => {
-			if (userId && (!files || !files.length)) {
+			if (userId) {
 				await initializeFirebase();
 				if (db) {
 					let messagesCollection: CollectionReference;
@@ -124,9 +124,9 @@
 		}
 		let msgData = {
 			fromUser: $session.user?.uid,
-			toUser: userId,
+			toUser: userId ?? $selectedUser,
 			message: '',
-			participants: [$session.user?.uid, userId].sort(),
+			participants: [$session.user?.uid, userId ?? $selectedUser].sort(),
 			timestamp: new Date(),
 			file
 		};

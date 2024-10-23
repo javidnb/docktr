@@ -21,7 +21,6 @@
 	import { goto } from '$app/navigation';
 	import Chat from '$lib/components/chat/Chat.svelte';
 	import Documents from '$lib/components/profile/Documents.svelte';
-	import ContactForm from '../contact/ContactForm.svelte';
 	import NotificationSettings from '$lib/components/profile/NotificationSettings.svelte';
 	import PasswordReset from '$lib/components/profile/PasswordReset.svelte';
 	import DatePicker from '$lib/helpers/DatePicker.svelte';

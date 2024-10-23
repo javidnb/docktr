@@ -196,21 +196,6 @@
 </button>
 
 <div style="position: relative">
-	<section>
-		<div
-			class="jumbotron jumboHeader mobile-left-padding"
-			style="padding-block: 1rem; background-color: #e2e9ef"
-		>
-			{#if doctor}
-				{#if editMode}
-					<input class="form-control" bind:value={docName} />
-				{:else}
-					<h1 class="display-4">{$_('titles.' + doctor?.title)} {doctor?.name || ''}</h1>
-				{/if}
-			{/if}
-		</div>
-	</section>
-
 	{#if doctor}
 		<section class="pt-3 pb-5" style="background-color: rgb(249 249 249);">
 			<div class="container pb-3">
@@ -251,6 +236,8 @@
                                             science
                                         </span><span>17 il iş təcrübəsi</span>
                                     </div> -->
+
+									<h3 style="color: var(--primaryText)">{$_('titles.' + doctor?.title)} {doctor?.name || ''}</h3>
 
 									{#if doctor?.hospital}
 										<div class="d-flex align-items-center gap-1">

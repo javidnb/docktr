@@ -140,7 +140,7 @@
 				class="btnUser"
 				style="border-radius: 8px!important"
 				on:click={() => {
-					selectedUser.set(uid);
+					selectedUser.set(uid);					
 				}}
 			>
 				<div class="d-flex align-items-center" style="overflow: hidden;">
@@ -184,7 +184,7 @@
 
 	{#if selectedUserFiles.length}
 		<div class="mt-3">
-			<DocumentsByUser files={selectedUserFiles} newFile={true} />
+			<DocumentsByUser files={selectedUserFiles} newFile={true} userId={$selectedUser} />
 		</div>
 	{/if}
 {/if}

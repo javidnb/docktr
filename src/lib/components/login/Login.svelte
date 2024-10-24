@@ -70,6 +70,14 @@
 		}
 		// EMAIL LOGIN
 		if (type == 'register') {
+			if (
+				password.length < 6 ||
+				(type == 'register' && (!displayName || displayName.length < 3)) ||
+				(type == 'register' && password != repeatPassword)
+			) {
+				showError = true;
+				return;
+			}
 			createUserWithEmailAndPassword(auth, email, password)
 				.then(async (userCredential: UserCredential) => {
 					// Signed up
@@ -499,7 +507,7 @@
 						class="p-0"
 						style="margin-top: -15px; margin-bottom: -10px; padding-left: 5px !important; transition-duration: .2s"
 					>
-						{#if !password || password.length < 6}
+						{#if !password || password.length < 6 || repeatPassword.length < 6}
 							<span
 								style="font-size: small; color: gray"
 								in:slide={{ duration: 200 }}
@@ -595,10 +603,7 @@
 					<button
 						class="btn"
 						id="btnLogin"
-						disabled={disabled ||
-							password.length < 6 ||
-							(type == 'register' && (!displayName || displayName.length < 3)) ||
-							(type == 'register' && password != repeatPassword)}
+						{disabled}
 						type="submit"
 						style="padding: 0.5rem;
 							border-radius: 10px;
@@ -668,27 +673,29 @@
 			{/if}
 		{/if}
 
-		<hr style="margin-top: 1rem" />
+		{#if curPage !== '/doctor'}
+			<hr style="margin-top: 1rem" />
 
-		<div
-			style="display: flex;
+			<div
+				style="display: flex;
 			flex-direction: column;
 			gap: .5rem;
 			align-items: center;
 			padding: 0;
 			margin-top: -.5rem;"
-		>
-			<span>{type == 'login' ? $_('login.no_account') : $_('login.yes_account')}</span>
-			<button
-				on:click={() => {
-					type = type == 'login' ? 'register' : 'login';
-					showPassRecoveryInput = false;
-				}}
-				class="btn btn-outline-primary w-100"
 			>
-				{type == 'login' ? $_('login.register') : $_('login.login_account')}
-			</button>
-		</div>
+				<span>{type == 'login' ? $_('login.no_account') : $_('login.yes_account')}</span>
+				<button
+					on:click={() => {
+						type = type == 'login' ? 'register' : 'login';
+						showPassRecoveryInput = false;
+					}}
+					class="btn btn-outline-primary w-100"
+				>
+					{type == 'login' ? $_('login.register') : $_('login.login_account')}
+				</button>
+			</div>
+		{/if}
 	</div>
 </div>
 

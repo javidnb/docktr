@@ -11,11 +11,11 @@ export async function load({ cookies }: { cookies: Cookies }) {
 
 	if (user) {
 		let usr = JSON.parse(user);
-		if (usr.uid) {
+		if (usr?.uid) {
 			let uus = await fetch(`https://tekoplast.az/docktr/api/?user&id=${usr.uid}&t=${time}`);
 			uusData = await uus.json();
-			session.set({ user: uusData, loggedIn: true });
-			if (init) {
+			session.set({ user: uusData ? uusData : usr, loggedIn: true });
+			if (init && uusData) {
 				let res = await getAppointments(uusData);
 				if (res) {
 					bookings = res;
@@ -25,11 +25,11 @@ export async function load({ cookies }: { cookies: Cookies }) {
 
 				init = false;
 			}
-		} else if (usr.user.uid) {
+		} else if (usr?.user?.uid) {
 			let uus = await fetch(`https://tekoplast.az/docktr/api/?user&id=${usr.user.uid}&t=${time}`);
 			uusData = await uus.json();
-			session.set({ user: uusData, loggedIn: true });
-			if (init) {
+			session.set({ user: uusData ? uusData : usr.user, loggedIn: true });
+			if (init && uusData) {
 				let res = await getAppointments(uusData);
 				if (res) {
 					bookings = res;

@@ -233,12 +233,29 @@ export async function getUser(user: any) {
 	if (result?.doctor) goto('/doctor');
 	if (result) {
 		getAppointments(result);
+		session.set({
+			user: result,
+			loggedIn: true,
+			loading: false
+		});
+	} else {
+		session.set({
+			user: usr,
+			loggedIn: true,
+			loading: false
+		});
+		let data = {
+			uid: usr.uid,
+			displayName: usr.displayName,
+			email: !usr.email.endsWith('@sehiyye.online') ? usr.email : null,
+			phoneNumber: usr.email.endsWith('@sehiyye.online')
+				? '+' + usr.email.substring(0, usr.email.length - 15)
+				: null,
+			photoURL: usr?.photoURL,
+			fcmToken: usr?.fcmToken || null
+		};
+		postData('users', data);
 	}
-	session.set({
-		user: result,
-		loggedIn: true,
-		loading: false
-	});
 	dataLoading.set(false);
 	return response;
 
